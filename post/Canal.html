@@ -20,17 +20,18 @@
     var CONFIG = {"hostname":"bjpotter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Canal一、数据库复制和同步的基本概念 作用：实现了数据在多个数据库实例之间的保持一致和同步。应用程序能够获得高可用性、灾备性和读取负载均衡等好处。   主从复制（Master-Slave Replication）：主从复制是最常见的数据库复制方法之一。在主从复制中，有一个主数据库（Master）和一个或多个从数据库（Slaves）。主数据库是数据的源头，它负责接收来自应用程序的写操作，并将这些">
+  <meta name="description" content="Canal数据库复制和同步的基本概念 作用：实现了数据在多个数据库实例之间的保持一致和同步。应用程序能够获得高可用性、灾备性和读取负载均衡等好处。   主从复制（Master-Slave Replication）：主从复制是最常见的数据库复制方法之一。在主从复制中，有一个主数据库（Master）和一个或多个从数据库（Slaves）。主数据库是数据的源头，它负责接收来自应用程序的写操作，并将这些写操">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Canal">
 <meta property="og:url" content="https://bjpotter.github.io/post/Canal.html">
 <meta property="og:site_name" content="Potter&#39;s 个人博客">
-<meta property="og:description" content="Canal一、数据库复制和同步的基本概念 作用：实现了数据在多个数据库实例之间的保持一致和同步。应用程序能够获得高可用性、灾备性和读取负载均衡等好处。   主从复制（Master-Slave Replication）：主从复制是最常见的数据库复制方法之一。在主从复制中，有一个主数据库（Master）和一个或多个从数据库（Slaves）。主数据库是数据的源头，它负责接收来自应用程序的写操作，并将这些">
+<meta property="og:description" content="Canal数据库复制和同步的基本概念 作用：实现了数据在多个数据库实例之间的保持一致和同步。应用程序能够获得高可用性、灾备性和读取负载均衡等好处。   主从复制（Master-Slave Replication）：主从复制是最常见的数据库复制方法之一。在主从复制中，有一个主数据库（Master）和一个或多个从数据库（Slaves）。主数据库是数据的源头，它负责接收来自应用程序的写操作，并将这些写操">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://camo.githubusercontent.com/63881e271f889d4a424c55cea2f9c2065f63494fecac58432eac415f6e47e959/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139313130343130313733353934372e706e67">
-<meta property="article:published_time" content="2023-08-21T09:39:59.496Z">
-<meta property="article:modified_time" content="2024-01-17T00:58:21.142Z">
+<meta property="article:published_time" content="2023-10-25T16:33:58.000Z">
+<meta property="article:modified_time" content="2024-01-17T02:00:43.136Z">
 <meta property="article:author" content="potter">
+<meta property="article:tag" content="Canal">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://camo.githubusercontent.com/63881e271f889d4a424c55cea2f9c2065f63494fecac58432eac415f6e47e959/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139313130343130313733353934372e706e67">
 
@@ -195,15 +196,24 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2023-08-21 17:39:59" itemprop="dateCreated datePublished" datetime="2023-08-21T17:39:59+08:00">2023-08-21</time>
+              <time title="创建时间：2023-10-26 00:33:58" itemprop="dateCreated datePublished" datetime="2023-10-26T00:33:58+08:00">2023-10-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-01-17 08:58:21" itemprop="dateModified" datetime="2024-01-17T08:58:21+08:00">2024-01-17</time>
+                <time title="修改时间：2024-01-17 10:00:43" itemprop="dateModified" datetime="2024-01-17T10:00:43+08:00">2024-01-17</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Canal/" itemprop="url" rel="index"><span itemprop="name">Canal</span></a>
+                </span>
+            </span>
 
           
 
@@ -216,7 +226,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Canal"><a href="#Canal" class="headerlink" title="Canal"></a>Canal</h1><h4 id="一、数据库复制和同步的基本概念"><a href="#一、数据库复制和同步的基本概念" class="headerlink" title="一、数据库复制和同步的基本概念"></a>一、数据库复制和同步的基本概念</h4><blockquote>
+        <h1 id="Canal"><a href="#Canal" class="headerlink" title="Canal"></a>Canal</h1><h4 id="数据库复制和同步的基本概念"><a href="#数据库复制和同步的基本概念" class="headerlink" title="数据库复制和同步的基本概念"></a>数据库复制和同步的基本概念</h4><blockquote>
 <p>作用：实现了数据在多个数据库实例之间的保持一致和同步。应用程序能够获得高可用性、灾备性和读取负载均衡等好处。</p>
 </blockquote>
 <ol>
@@ -226,10 +236,10 @@
 <li>增量复制（Incremental Replication）：增量复制是一种常见的复制方式，其中只有发生了更改的部分数据会被复制和同步。这种方式可以减少网络传输的数据量，并提高复制效率。增量复制通常使用日志来跟踪数据的更改，只传输和应用这些更改。</li>
 <li>数据延迟（Data Latency）：在数据库复制和同步中，主数据库和从数据库之间可能存在一定的延迟。这是因为数据在传输和应用过程中需要一定的时间。数据延迟可能会导致从数据库上的数据不是实时的，在某些情况下可能会有一定的时间窗口内的数据不一致。</li>
 </ol>
-<h4 id="二、canal作用及原理"><a href="#二、canal作用及原理" class="headerlink" title="二、canal作用及原理"></a>二、canal作用及原理</h4><p><img src="https://camo.githubusercontent.com/63881e271f889d4a424c55cea2f9c2065f63494fecac58432eac415f6e47e959/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139313130343130313733353934372e706e67"></p>
+<h4 id="canal作用及原理"><a href="#canal作用及原理" class="headerlink" title="canal作用及原理"></a>canal作用及原理</h4><p><img src="https://camo.githubusercontent.com/63881e271f889d4a424c55cea2f9c2065f63494fecac58432eac415f6e47e959/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139313130343130313733353934372e706e67"></p>
 <p>canal作用：根据Mysql数据库增量日志进行解析，提供增量数据的订阅和消费。</p>
 <p>canal原理：canal模拟Mysql slave交互协议，伪装成slave发送dump报文，主数据库master收到dump请求后，推送binary log给canal。</p>
-<h4 id="三、数据库准备"><a href="#三、数据库准备" class="headerlink" title="三、数据库准备"></a>三、数据库准备</h4><p>1.开启binlog,&#x2F;etc&#x2F;my.cnf 中配置如下</p>
+<h4 id="数据库准备"><a href="#数据库准备" class="headerlink" title="数据库准备"></a>数据库准备</h4><p>1.开启binlog,&#x2F;etc&#x2F;my.cnf 中配置如下</p>
 <pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">mysqld</span><span class="token punctuation">]</span></span>
 <span class="token key attr-name">server-id</span><span class="token punctuation">=</span><span class="token value attr-value">1</span>
 <span class="token key attr-name">log_bin</span><span class="token punctuation">=</span><span class="token value attr-value">mysql-bin</span>
@@ -253,7 +263,7 @@ FLUSH <span class="token keyword">PRIVILEGES</span><span class="token punctuatio
 
 
 
-<h4 id="四、安装Server"><a href="#四、安装Server" class="headerlink" title="四、安装Server"></a>四、安装Server</h4><blockquote>
+<h4 id="安装Server"><a href="#安装Server" class="headerlink" title="安装Server"></a>安装Server</h4><blockquote>
 <p>下载：canal.deployer-1.1.6.tar.gz</p>
 </blockquote>
 <p>1.conf&#x2F;example&#x2F;instance.properties配置修改</p>
@@ -277,7 +287,7 @@ FLUSH <span class="token keyword">PRIVILEGES</span><span class="token punctuatio
 <p>2.启动</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> bin/startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<h4 id="五、安装RDB适配器"><a href="#五、安装RDB适配器" class="headerlink" title="五、安装RDB适配器"></a>五、安装RDB适配器</h4><blockquote>
+<h4 id="安装RDB适配器"><a href="#安装RDB适配器" class="headerlink" title="安装RDB适配器"></a>安装RDB适配器</h4><blockquote>
 <p>下载：canal.adapter-1.1.7-SNAPSHOT.tar.gz</p>
 </blockquote>
 <h5 id="1-修改启动器配置-application-yml-这里以mysql目标库为例-将bootstrap-yml注释掉"><a href="#1-修改启动器配置-application-yml-这里以mysql目标库为例-将bootstrap-yml注释掉" class="headerlink" title="1.修改启动器配置: application.yml, 这里以mysql目标库为例,将bootstrap.yml注释掉"></a>1.修改启动器配置: application.yml, 这里以mysql目标库为例,将bootstrap.yml注释掉</h5><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">srcDataSources:
@@ -322,6 +332,9 @@ dbMapping:
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Canal/" rel="tag"># Canal</a>
+          </div>
 
         
 
@@ -329,12 +342,12 @@ dbMapping:
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/post/cs.html" rel="prev" title="分布式相关">
-      <i class="fa fa-chevron-left"></i> 分布式相关
+    <a href="/post/kafka.html" rel="prev" title="Kafka">
+      <i class="fa fa-chevron-left"></i> Kafka
     </a></div>
       <div class="post-nav-item">
-    <a href="/post/springboot.html" rel="next" title="SpringBoot">
-      SpringBoot <i class="fa fa-chevron-right"></i>
+    <a href="/post/Apach%20Flink.html" rel="next" title="Apach Flink">
+      Apach Flink <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -394,7 +407,7 @@ dbMapping:
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Canal"><span class="nav-number">1.</span> <span class="nav-text">Canal</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%8D%E5%88%B6%E5%92%8C%E5%90%8C%E6%AD%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">一、数据库复制和同步的基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E3%80%81canal%E4%BD%9C%E7%94%A8%E5%8F%8A%E5%8E%9F%E7%90%86"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">二、canal作用及原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%95%B0%E6%8D%AE%E5%BA%93%E5%87%86%E5%A4%87"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">三、数据库准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%89%E8%A3%85Server"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">四、安装Server</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%AE%89%E8%A3%85RDB%E9%80%82%E9%85%8D%E5%99%A8"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">五、安装RDB适配器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E4%BF%AE%E6%94%B9%E5%90%AF%E5%8A%A8%E5%99%A8%E9%85%8D%E7%BD%AE-application-yml-%E8%BF%99%E9%87%8C%E4%BB%A5mysql%E7%9B%AE%E6%A0%87%E5%BA%93%E4%B8%BA%E4%BE%8B-%E5%B0%86bootstrap-yml%E6%B3%A8%E9%87%8A%E6%8E%89"><span class="nav-number">1.0.0.5.1.</span> <span class="nav-text">1.修改启动器配置: application.yml, 这里以mysql目标库为例,将bootstrap.yml注释掉</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E4%BF%AE%E6%94%B9conf-x2F-rdb-x2F-mytest-user-yml%E6%96%87%E4%BB%B6"><span class="nav-number">1.0.0.5.2.</span> <span class="nav-text">2.修改conf&#x2F;rdb&#x2F;mytest_user.yml文件</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Canal"><span class="nav-number">1.</span> <span class="nav-text">Canal</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%8D%E5%88%B6%E5%92%8C%E5%90%8C%E6%AD%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">数据库复制和同步的基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#canal%E4%BD%9C%E7%94%A8%E5%8F%8A%E5%8E%9F%E7%90%86"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">canal作用及原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%87%86%E5%A4%87"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">数据库准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Server"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">安装Server</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85RDB%E9%80%82%E9%85%8D%E5%99%A8"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">安装RDB适配器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E4%BF%AE%E6%94%B9%E5%90%AF%E5%8A%A8%E5%99%A8%E9%85%8D%E7%BD%AE-application-yml-%E8%BF%99%E9%87%8C%E4%BB%A5mysql%E7%9B%AE%E6%A0%87%E5%BA%93%E4%B8%BA%E4%BE%8B-%E5%B0%86bootstrap-yml%E6%B3%A8%E9%87%8A%E6%8E%89"><span class="nav-number">1.0.0.5.1.</span> <span class="nav-text">1.修改启动器配置: application.yml, 这里以mysql目标库为例,将bootstrap.yml注释掉</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E4%BF%AE%E6%94%B9conf-x2F-rdb-x2F-mytest-user-yml%E6%96%87%E4%BB%B6"><span class="nav-number">1.0.0.5.2.</span> <span class="nav-text">2.修改conf&#x2F;rdb&#x2F;mytest_user.yml文件</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -412,10 +425,16 @@ dbMapping:
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
