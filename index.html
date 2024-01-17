@@ -179,7 +179,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82.html" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/post/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82.html" class="post-title-link" itemprop="url">数仓分层</a>
         </h2>
 
         <div class="post-meta">
@@ -188,8 +188,9 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+              <time title="创建时间：2024-01-17 10:45:31 / 修改时间：10:54:03" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
             </span>
 
           
@@ -203,7 +204,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="数仓分层"><a href="#数仓分层" class="headerlink" title="数仓分层"></a>数仓分层</h1><h2 id="一、数仓分层"><a href="#一、数仓分层" class="headerlink" title="一、数仓分层"></a>一、数仓分层</h2><h3 id="1-数仓概念"><a href="#1-数仓概念" class="headerlink" title="1.数仓概念"></a>1.数仓概念</h3><h4 id="1-1-什么是数据仓库"><a href="#1-1-什么是数据仓库" class="headerlink" title="1.1 什么是数据仓库"></a>1.1 什么是数据仓库</h4><blockquote>
+          <h2 id="一、数仓分层"><a href="#一、数仓分层" class="headerlink" title="一、数仓分层"></a>一、数仓分层</h2><h3 id="1-数仓概念"><a href="#1-数仓概念" class="headerlink" title="1.数仓概念"></a>1.数仓概念</h3><h4 id="1-1-什么是数据仓库"><a href="#1-1-什么是数据仓库" class="headerlink" title="1.1 什么是数据仓库"></a>1.1 什么是数据仓库</h4><blockquote>
 <p>数据仓库，英文名称为<code>Data Warehouse</code>，可简写为<code>DW</code>或<code>DWH</code>,是为企业所有级别的决策制定过程，提供所有类型数据支持的战略集合。<strong>它出于分析性报告和决策支持目的而创建</strong>。</p>
 </blockquote>
 <h4 id="1-2-数据仓库作用"><a href="#1-2-数据仓库作用" class="headerlink" title="1.2 数据仓库作用"></a>1.2 数据仓库作用</h4><blockquote>
@@ -280,11 +281,12 @@
 <h3 id="4-服务数据层"><a href="#4-服务数据层" class="headerlink" title="4.服务数据层"></a>4.服务数据层</h3><blockquote>
 <p>DWS</p>
 <ol>
-<li><p>DWS 层有 3-5 张宽表（处理 100-200 个指标 70%以上的需求）<br>   具体宽表名称：用户行为宽表，用户购买商品明细行为宽表，商品宽表，购物车宽表，物流宽表、登录注册、售后等。</p>
+<li><p>DWS 层有 3-5 张宽表（处理 100-200 个指标 70%以上的需求）</p>
+<p>  具体宽表名称：用户行为宽表，用户购买商品明细行为宽表，商品宽表，购物车宽表，物流宽表、登录注册、售后等。</p>
 </li>
-<li><p>哪个宽表最宽？大概有多少个字段？<br>  最宽的是用户行为宽表。大概有 60-100 个字段</p>
+<li><p>哪个宽表最宽？大概有多少个字段？<br>最宽的是用户行为宽表。大概有 60-100 个字段</p>
 </li>
-<li><p>具体用户行为宽表字段名称<br>  评论、打赏、收藏、关注–商品、关注–人、点赞、分享、好价爆料、文章发布、活跃、签到、补签卡、幸运屋、礼品、金币、电商点击、gmv</p>
+<li><p>具体用户行为宽表字段名称<br>评论、打赏、收藏、关注–商品、关注–人、点赞、分享、好价爆料、文章发布、活跃、签到、补签卡、幸运屋、礼品、金币、电商点击、gmv</p>
 </li>
 </ol>
 </blockquote>
@@ -295,21 +297,21 @@
 </blockquote>
 <h3 id="6-应用数据层"><a href="#6-应用数据层" class="headerlink" title="6.应用数据层"></a>6.应用数据层</h3><blockquote>
 <ol>
-<li><p>如何分析用户活跃？<br>  在启动日志中统计不同设备 id 出现次数。</p>
+<li><p>如何分析用户活跃？<br> 在启动日志中统计不同设备 id 出现次数。</p>
 </li>
-<li><p>如何分析用户新增?<br>  用活跃用户表 left join 用户新增表，用户新增表中 mid 为空的即为用户新增。</p>
+<li><p>如何分析用户新增?<br> 用活跃用户表 left join 用户新增表，用户新增表中 mid 为空的即为用户新增。</p>
 </li>
-<li><p>如何分析用户 1 天留存？<br>  留存用户&#x3D;前一天新增 join 今天活跃<br>  用户留存率&#x3D;留存用户&#x2F;前一天新增</p>
+<li><p>如何分析用户 1 天留存？<br> 留存用户&#x3D;前一天新增 join 今天活跃<br> 用户留存率&#x3D;留存用户&#x2F;前一天新增</p>
 </li>
-<li><p>如何分析沉默用户？<br>  (登录时间为 7 天前,且只出现过一次)<br>  按照设备 id 对日活表分组，登录次数为 1，且是在一周前登录。</p>
+<li><p>如何分析沉默用户？<br> (登录时间为 7 天前,且只出现过一次)<br> 按照设备 id 对日活表分组，登录次数为 1，且是在一周前登录。</p>
 </li>
-<li><p>如何分析本周回流用户？<br>  本周活跃 left join 本周新增 left join 上周活跃，且本周新增 id 和上周活跃 id 都为 null。</p>
+<li><p>如何分析本周回流用户？<br> 本周活跃 left join 本周新增 left join 上周活跃，且本周新增 id 和上周活跃 id 都为 null。</p>
 </li>
-<li><p>如何分析流失用户？<br>  (登录时间为 7 天前)<br>  按照设备 id 对日活表分组，且七天内没有登录过。</p>
+<li><p>如何分析流失用户？<br> (登录时间为 7 天前)<br> 按照设备 id 对日活表分组，且七天内没有登录过。</p>
 </li>
-<li><p>如何分析最近连续 3 周活跃用户数？<br>  按照设备 id 对周活进行分组，统计次数大于 3 次。</p>
+<li><p>如何分析最近连续 3 周活跃用户数？<br> 按照设备 id 对周活进行分组，统计次数大于 3 次。</p>
 </li>
-<li><p>如何分析最近七天内连续三天活跃用户数？<br>  1）查询出最近 7 天的活跃用户，并对用户活跃日期进行排名<br>  2）计算用户活跃日期及排名之间的差值<br>  3）对同用户及差值分组，统计差值个数<br>  4）将差值相同个数大于等于 3 的数据取出，然后去重，即为连续 3 天及以上活跃的用户<br> 7天连续收藏、点赞、购买、加购、付款、浏览、商品点击、退货、1 个月连续 7 天、连续两周</p>
+<li><p>如何分析最近七天内连续三天活跃用户数？<br> 1）查询出最近 7 天的活跃用户，并对用户活跃日期进行排名<br> 2）计算用户活跃日期及排名之间的差值<br> 3）对同用户及差值分组，统计差值个数<br> 4）将差值相同个数大于等于 3 的数据取出，然后去重，即为连续 3 天及以上活跃的用户<br> 7天连续收藏、点赞、购买、加购、付款、浏览、商品点击、退货、1 个月连续 7 天、连续两周</p>
 </li>
 </ol>
 </blockquote>
@@ -1604,7 +1606,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/flume.html" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/post/flume.html" class="post-title-link" itemprop="url">flume</a>
         </h2>
 
         <div class="post-meta">
@@ -1613,8 +1615,9 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+              <time title="创建时间：2024-01-17 10:45:31 / 修改时间：10:56:14" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
             </span>
 
           
@@ -1628,7 +1631,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h1><blockquote>
+          <blockquote>
 <p>Apache Flume 是一个分布式、高可靠、高可用的用来收集、聚合、转移不同来源的大量日志数据到中央数据仓库的工具</p>
 </blockquote>
 <h2 id="一、系统要求"><a href="#一、系统要求" class="headerlink" title="一、系统要求"></a>一、系统要求</h2><ol>
@@ -2065,7 +2068,7 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/kafka.html" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/post/kafka.html" class="post-title-link" itemprop="url">kafka</a>
         </h2>
 
         <div class="post-meta">
@@ -2074,8 +2077,9 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+              <time title="创建时间：2024-01-17 10:45:31 / 修改时间：10:56:38" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
             </span>
 
           
@@ -2089,7 +2093,7 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h1><h2 id="一、Kafka基本概念"><a href="#一、Kafka基本概念" class="headerlink" title="一、Kafka基本概念"></a>一、Kafka基本概念</h2><h3 id="什么是kafka"><a href="#什么是kafka" class="headerlink" title="什么是kafka"></a>什么是kafka</h3><p>Kafka 是由 <code>Linkedin</code> 公司开发的，它是一个分布式的，支持多分区、多副本，基于 Zookeeper 的分布式消息流平台，它同时也是一款开源的<strong>基于发布订阅模式的消息引擎系统</strong>。</p>
+          <h2 id="一、Kafka基本概念"><a href="#一、Kafka基本概念" class="headerlink" title="一、Kafka基本概念"></a>一、Kafka基本概念</h2><h3 id="什么是kafka"><a href="#什么是kafka" class="headerlink" title="什么是kafka"></a>什么是kafka</h3><p>Kafka 是由 <code>Linkedin</code> 公司开发的，它是一个分布式的，支持多分区、多副本，基于 Zookeeper 的分布式消息流平台，它同时也是一款开源的<strong>基于发布订阅模式的消息引擎系统</strong>。</p>
 <h3 id="概念一-生产者（Producer）、消费者（Consumer-、消费者群组（Consumer-Group）"><a href="#概念一-生产者（Producer）、消费者（Consumer-、消费者群组（Consumer-Group）" class="headerlink" title="概念一:生产者（Producer）、消费者（Consumer)、消费者群组（Consumer Group）"></a>概念一:生产者（Producer）、消费者（Consumer)、消费者群组（Consumer Group）</h3><p>生产者：向主题发布消息的客户端应用程序称为<code>生产者</code>（Producer），生产者用于持续不断的向某个主题发送消息。</p>
 <p>消费者：订阅主题消息的客户端程序称为<code>消费者</code>（Consumer），消费者用于处理生产者产生的消息。</p>
 <p>消费者群组：生产者与消费者的关系就如同餐厅中的厨师和顾客之间的关系一样，一个厨师对应多个顾客，也就是一个生产者对应多个消费者，<code>消费者群组</code>（Consumer Group）指的就是由一个或多个消费者组成的群体。</p>
@@ -2139,7 +2143,7 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/springboot.html" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/post/springboot.html" class="post-title-link" itemprop="url">springBoot</a>
         </h2>
 
         <div class="post-meta">
@@ -2148,8 +2152,9 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+              <time title="创建时间：2024-01-17 10:45:31 / 修改时间：10:57:04" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
             </span>
 
           
@@ -2596,7 +2601,7 @@ Identify and stop the process that is listening on port 8080 or configure this a
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/cs.html" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/post/cs.html" class="post-title-link" itemprop="url">分布式</a>
         </h2>
 
         <div class="post-meta">
@@ -2605,8 +2610,9 @@ Identify and stop the process that is listening on port 8080 or configure this a
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+              <time title="创建时间：2024-01-17 10:45:31 / 修改时间：10:55:37" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
             </span>
 
           
@@ -2620,7 +2626,7 @@ Identify and stop the process that is listening on port 8080 or configure this a
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="一、分布式唯一ID生成方案"><a href="#一、分布式唯一ID生成方案" class="headerlink" title="一、分布式唯一ID生成方案"></a>一、分布式唯一ID生成方案</h1><h4 id="1-唯一ID由来"><a href="#1-唯一ID由来" class="headerlink" title="1. 唯一ID由来"></a>1. 唯一ID由来</h4><blockquote>
+          <h4 id="1-唯一ID由来"><a href="#1-唯一ID由来" class="headerlink" title="1. 唯一ID由来"></a>1. 唯一ID由来</h4><blockquote>
 <p>分布式系统中，需要对大量的数据和消息进行唯一标识，如金融行业产品系统中，数据日益增长，对数据进行分库分表后，需要用唯一ID来标识一条数据，数据库的自增ID已经不能满足，此时就需要一个全局唯一ID标识。</p>
 </blockquote>
 <h4 id="2-唯一ID特点"><a href="#2-唯一ID特点" class="headerlink" title="2.唯一ID特点"></a>2.唯一ID特点</h4><blockquote>
