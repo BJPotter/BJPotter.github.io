@@ -165,7 +165,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Geoserver.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Git.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -179,7 +179,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/Geoserver.html" class="post-title-link" itemprop="url">离线安装GeoServer</a>
+            <a href="/post/Git.html" class="post-title-link" itemprop="url">git-简明指南</a>
         </h2>
 
         <div class="post-meta">
@@ -203,84 +203,66 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="离线安装GeoServer"><a href="#离线安装GeoServer" class="headerlink" title="离线安装GeoServer"></a>离线安装GeoServer</h2><blockquote>
-<p>前提：安装好java,配置好JAVA_HOME</p>
-</blockquote>
-<p>1.准备源码包</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">https://jaist.dl.sourceforge.net/project/geoserver/GeoServer/2.15.1/geoserver-2.15.1-bin.zip<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>2.解压</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">unzip</span> geoserver-2.15.1-bin.zip <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>3.修改端口</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> geoserver-2.15.1
-<span class="token function">vi</span> start.ini 
-jetty.port<span class="token operator">=</span><span class="token number">8181</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>4.启动程序</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> bin
-./startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>5.后台启动</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">nohup</span> /root/geoserver-2.15.1/bin/startup.sh <span class="token operator">&amp;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="geoserver跨域配置"><a href="#geoserver跨域配置" class="headerlink" title="geoserver跨域配置"></a>geoserver跨域配置</h2><p>1.查看对应的版本</p>
+          <ol>
+<li>创建新仓库</li>
+</ol>
 <blockquote>
-<p>启动程序后，默认用户名&#x2F;密码登陆进去，F12抓取一下Response Header,Server里面有版本号</p>
+<p>创建文件夹，打开执行git init,创建新的git仓库</p>
 </blockquote>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">Cache-Control: no-cache, no-store
-Content-Length: 0
-Date: Mon, 23 May 2022 07:56:02 GMT
-Expires: Thu, 01 Jan 1970 00:00:00 GMT
-Location: http://180.76.187.95:8181/geoserver/web/?0
-Pragma: no-cache
-Server: Jetty(9.4.12.v20180830)
-Set-Cookie: JSESSIONID=node012k3zcl8cf6121wuziii0dzvt75.node0;Path=/geoserver
-X-Frame-Options: SAMEORIGIN<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>2.下载jar包</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token comment">&lt;!-- https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-server --></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.eclipse.jetty<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>jetty-server<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>9.4.12.v20180830<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>3.上传jar包</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">上传路径 /root/geoserver-2.15.1/webapps/geoserver/WEB-INF/lib<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>4.修改配置</p>
-<pre class="line-numbers language-web.xml" data-language="web.xml"><code class="language-web.xml">vim &#x2F;root&#x2F;geoserver-2.15.1&#x2F;webapps&#x2F;geoserver&#x2F;WEB-INF&#x2F;web.xml<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-name</span><span class="token punctuation">></span></span>CORS<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-name</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-class</span><span class="token punctuation">></span></span>com.thetransactioncompany.cors.CORSFilter<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-class</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.allowOrigin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>*<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.supportedMethods<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>GET,POST,HEAD,PUT,DELETE<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.supportedHeaders<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>Accept,Origin,X-Requested-With,Content-Type,Last-Modified<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.exposedHeaders<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>Set-Cookie<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.supportsCredentials<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-mapping</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-name</span><span class="token punctuation">></span></span>CORS<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-name</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url-pattern</span><span class="token punctuation">></span></span>/*<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>url-pattern</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-mapping</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<ol start="2">
+<li>克隆仓库</li>
+</ol>
+<blockquote>
+<ol>
+<li>克隆本地仓库 git clone &#x2F;path&#x2F;repository</li>
+<li>克隆远程仓库 git clone username@host:&#x2F;path&#x2F;repository</li>
+</ol>
+</blockquote>
+<ol start="3">
+<li>工作流</li>
+</ol>
+<blockquote>
+<p>本地仓库由三棵树维护，第一个是工作目录，第二个是git add 以后进入暂存区域index,第三个是 git commit 以后进入head，但是还没到远端仓库</p>
+</blockquote>
+<ol start="4">
+<li>推送远程仓库</li>
+</ol>
+<blockquote>
+<p>git commit以后会进入本地仓库的head区域，执行git push origin master 会推送到远程仓库</p>
+<p>如果没有克隆仓库，但是你想连接远程的某个服务 git remote add origin <Server>,就可以推送上去了</Server></p>
+</blockquote>
+<ol start="5">
+<li>分支</li>
+</ol>
+<blockquote>
+<p>分支是用来绝缘开发的，当你创建完仓库后，master是默认分支，在其他分支上进行开发，完成后再合并到主分支</p>
+<p>创建一个分支： git checkout  -b feature_x</p>
+<p>切回主分支： git checkout master</p>
+<p>删除分支： git checkout -d feature_x</p>
+<p>将本地分支推送到远程仓库： git push origin <branch></branch></p>
+</blockquote>
+<ol start="6">
+<li>更新与合并</li>
+</ol>
+<blockquote>
+<p>将远程仓库更新到本地：git pull(git fetch 获取最新的版本到本地 + git merage 将最新的版本与本地的合并)</p>
+<p>如果本地和远程产生冲突，需要手动处理冲突的文件名，然后进行git add 冲突文件名</p>
+<p>查看分支的区别：git diff <source_branch> <target_branch></target_branch></source_branch></p>
+</blockquote>
+<ol start="7">
+<li>日志</li>
+</ol>
+<blockquote>
+<p>查看本地仓库的操作记录： git log</p>
+<p>查看具体某个人的操作记录： git log –author&#x3D;”xxxx”</p>
+</blockquote>
+<ol start="8">
+<li>替换本地改动</li>
+</ol>
+<blockquote>
+<p>替换本地改动： git checkout –<filename> 此命令会使head中最新的内容替换掉你的工作目录的文件（已经添加到暂存区的或新创建的文件都不会影响）</filename></p>
+<p>放弃本地改动与提交，可以从服务器上获取最新版，并将本地分支指向它，git fetch origin 获取远程最新的仓库，git reset –hard origin&#x2F;master</p>
+</blockquote>
 
       
     </div>
