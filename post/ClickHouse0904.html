@@ -20,28 +20,32 @@
     var CONFIG = {"hostname":"bjpotter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta property="og:type" content="website">
+  <meta name="description" content="ClickHouse一、什么是ClickHouse？ClickHouse是一个用于联机分析(OLAP【online analytical processing】)的列式数据库管理系统(DBMS) 1.什么是列式数据库？列式数据库是先将一列中的数据值连在一起存储起来，然后再存储下一列的数据，并以此类推的数据库。列阵式数据库完全为分析数据而存在，采用密集贮存数据的方式，不考虑少量数据的更新问题，是大数">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Potter&#39;s 个人博客">
-<meta property="og:url" content="https://bjpotter.github.io/page/3/index.html">
+<meta property="og:url" content="https://bjpotter.github.io/post/ClickHouse0904.html">
 <meta property="og:site_name" content="Potter&#39;s 个人博客">
+<meta property="og:description" content="ClickHouse一、什么是ClickHouse？ClickHouse是一个用于联机分析(OLAP【online analytical processing】)的列式数据库管理系统(DBMS) 1.什么是列式数据库？列式数据库是先将一列中的数据值连在一起存储起来，然后再存储下一列的数据，并以此类推的数据库。列阵式数据库完全为分析数据而存在，采用密集贮存数据的方式，不考虑少量数据的更新问题，是大数">
 <meta property="og:locale">
+<meta property="article:published_time" content="2024-01-17T02:45:31.541Z">
+<meta property="article:modified_time" content="2024-01-17T02:45:31.541Z">
 <meta property="article:author" content="potter">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://bjpotter.github.io/page/3/">
+<link rel="canonical" href="https://bjpotter.github.io/post/ClickHouse0904.html">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-Hans'
   };
 </script>
 
-  <title>Potter's 个人博客</title>
+  <title> | Potter's 个人博客</title>
   
 
 
@@ -159,13 +163,14 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Canal.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/ClickHouse0904.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -177,10 +182,9 @@
       <meta itemprop="name" content="Potter's 个人博客">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
-            <a href="/post/Canal.html" class="post-title-link" itemprop="url">Unbenannt</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -203,308 +207,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Canal"><a href="#Canal" class="headerlink" title="Canal"></a>Canal</h1><h4 id="一、数据库复制和同步的基本概念"><a href="#一、数据库复制和同步的基本概念" class="headerlink" title="一、数据库复制和同步的基本概念"></a>一、数据库复制和同步的基本概念</h4><blockquote>
-<p>作用：实现了数据在多个数据库实例之间的保持一致和同步。应用程序能够获得高可用性、灾备性和读取负载均衡等好处。</p>
-</blockquote>
-<ol>
-<li>主从复制（Master-Slave Replication）：主从复制是最常见的数据库复制方法之一。在主从复制中，有一个主数据库（Master）和一个或多个从数据库（Slaves）。主数据库是数据的源头，它负责接收来自应用程序的写操作，并将这些写操作记录为称为日志（Log）的格式。从数据库则通过读取这些日志，将主数据库的写操作进行重演，以保持数据的一致性。</li>
-<li>数据一致性（Data Consistency）：数据一致性是指主数据库和从数据库之间的数据保持一致。当在主数据库上进行写操作时，主数据库会将这些操作的日志记录下来，并将其发送给从数据库。从数据库会按照相同的顺序重现这些操作，确保数据的一致性。一致性的实现可以通过各种机制，例如基于事务日志（Transaction Log）或二进制日志（Binary Log）。</li>
-<li>数据传输（Data Transfer）：数据传输是指将主数据库的数据从一个位置传输到另一个位置。在数据库复制和同步过程中，数据传输通常通过网络进行。主数据库将写操作记录为日志，并通过网络传输给从数据库，从数据库接收日志并执行相应的操作。</li>
-<li>增量复制（Incremental Replication）：增量复制是一种常见的复制方式，其中只有发生了更改的部分数据会被复制和同步。这种方式可以减少网络传输的数据量，并提高复制效率。增量复制通常使用日志来跟踪数据的更改，只传输和应用这些更改。</li>
-<li>数据延迟（Data Latency）：在数据库复制和同步中，主数据库和从数据库之间可能存在一定的延迟。这是因为数据在传输和应用过程中需要一定的时间。数据延迟可能会导致从数据库上的数据不是实时的，在某些情况下可能会有一定的时间窗口内的数据不一致。</li>
-</ol>
-<h4 id="二、canal作用及原理"><a href="#二、canal作用及原理" class="headerlink" title="二、canal作用及原理"></a>二、canal作用及原理</h4><p><img src="https://camo.githubusercontent.com/63881e271f889d4a424c55cea2f9c2065f63494fecac58432eac415f6e47e959/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139313130343130313733353934372e706e67"></p>
-<p>canal作用：根据Mysql数据库增量日志进行解析，提供增量数据的订阅和消费。</p>
-<p>canal原理：canal模拟Mysql slave交互协议，伪装成slave发送dump报文，主数据库master收到dump请求后，推送binary log给canal。</p>
-<h4 id="三、数据库准备"><a href="#三、数据库准备" class="headerlink" title="三、数据库准备"></a>三、数据库准备</h4><p>1.开启binlog,&#x2F;etc&#x2F;my.cnf 中配置如下</p>
-<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">mysqld</span><span class="token punctuation">]</span></span>
-<span class="token key attr-name">server-id</span><span class="token punctuation">=</span><span class="token value attr-value">1</span>
-<span class="token key attr-name">log_bin</span><span class="token punctuation">=</span><span class="token value attr-value">mysql-bin</span>
-<span class="token key attr-name">binlog-format</span><span class="token punctuation">=</span><span class="token value attr-value">row</span>
-<span class="token key attr-name">bind-address</span><span class="token punctuation">=</span><span class="token value attr-value">0.0.0.0</span>
-<span class="token key attr-name">port</span><span class="token punctuation">=</span><span class="token value attr-value">3306</span>
-<span class="token key attr-name">basedir</span><span class="token punctuation">=</span><span class="token value attr-value">/usr/local/mysql</span>
-<span class="token key attr-name">datadir</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql</span>
-<span class="token key attr-name">socket</span><span class="token punctuation">=</span><span class="token value attr-value">/tmp/mysql.sock</span>
-<span class="token key attr-name">log-error</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql/mysql.err</span>
-<span class="token key attr-name">pid-file</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql/mysql.pid</span>
-<span class="token comment">#character config</span>
-<span class="token key attr-name">character_set_server</span><span class="token punctuation">=</span><span class="token value attr-value">utf8mb4</span>
-<span class="token key attr-name">symbolic-links</span><span class="token punctuation">=</span><span class="token value attr-value">0</span>
-<span class="token key attr-name">explicit_defaults_for_timestamp</span><span class="token punctuation">=</span><span class="token value attr-value">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>2.授权 canal 链接 MySQL 账号具有作为 MySQL slave 的权限, 如果已有账户可直接 grant</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">USER</span> canal IDENTIFIED <span class="token keyword">BY</span> <span class="token string">'canal'</span><span class="token punctuation">;</span>  
-<span class="token keyword">GRANT</span> <span class="token keyword">SELECT</span><span class="token punctuation">,</span> <span class="token keyword">REPLICATION</span> SLAVE<span class="token punctuation">,</span> <span class="token keyword">REPLICATION</span> CLIENT <span class="token keyword">ON</span> <span class="token operator">*</span><span class="token punctuation">.</span><span class="token operator">*</span> <span class="token keyword">TO</span> <span class="token string">'canal'</span><span class="token variable">@'%'</span><span class="token punctuation">;</span>
-FLUSH <span class="token keyword">PRIVILEGES</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h4 id="四、安装Server"><a href="#四、安装Server" class="headerlink" title="四、安装Server"></a>四、安装Server</h4><blockquote>
-<p>下载：canal.deployer-1.1.6.tar.gz</p>
-</blockquote>
-<p>1.conf&#x2F;example&#x2F;instance.properties配置修改</p>
-<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment">#position info，需要改成自己的数据库信息</span>
-<span class="token key attr-name">canal.instance.master.address</span> <span class="token punctuation">=</span> <span class="token value attr-value">127.0.0.1:3306 </span>
-<span class="token key attr-name">canal.instance.master.journal.name</span> <span class="token value attr-value">= </span>
-<span class="token key attr-name">canal.instance.master.position</span> <span class="token value attr-value">= </span>
-<span class="token key attr-name">canal.instance.master.timestamp</span> <span class="token value attr-value">= </span>
-<span class="token comment">#canal.instance.standby.address = </span>
-<span class="token comment">#canal.instance.standby.journal.name =</span>
-<span class="token comment">#canal.instance.standby.position = </span>
-<span class="token comment">#canal.instance.standby.timestamp = </span>
-<span class="token comment">#username/password，需要改成自己的数据库信息</span>
-<span class="token key attr-name">canal.instance.dbUsername</span> <span class="token punctuation">=</span> <span class="token value attr-value">canal  </span>
-<span class="token key attr-name">canal.instance.dbPassword</span> <span class="token punctuation">=</span> <span class="token value attr-value">canal</span>
-<span class="token key attr-name">canal.instance.defaultDatabaseName</span> <span class="token value attr-value">=</span>
-<span class="token key attr-name">canal.instance.connectionCharset</span> <span class="token punctuation">=</span> <span class="token value attr-value">UTF-8</span>
-<span class="token comment">#table regex</span>
-<span class="token key attr-name">canal.instance.filter.regex</span> <span class="token punctuation">=</span> <span class="token value attr-value">.\*\\\\..\*</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>2.启动</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> bin/startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h4 id="五、安装RDB适配器"><a href="#五、安装RDB适配器" class="headerlink" title="五、安装RDB适配器"></a>五、安装RDB适配器</h4><blockquote>
-<p>下载：canal.adapter-1.1.7-SNAPSHOT.tar.gz</p>
-</blockquote>
-<h5 id="1-修改启动器配置-application-yml-这里以mysql目标库为例-将bootstrap-yml注释掉"><a href="#1-修改启动器配置-application-yml-这里以mysql目标库为例-将bootstrap-yml注释掉" class="headerlink" title="1.修改启动器配置: application.yml, 这里以mysql目标库为例,将bootstrap.yml注释掉"></a>1.修改启动器配置: application.yml, 这里以mysql目标库为例,将bootstrap.yml注释掉</h5><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">srcDataSources:
-    defaultDS:
-      url: jdbc:mysql://192.168.67.24:3306/mytest?useUnicode=true
-      username: root
-      password: *******
-  canalAdapters:
-  - instance: example # canal instance Name or mq topic name
-    groups:
-    - groupId: g1
-      outerAdapters:
-      - name: rdb                                               # 指定为rdb类型同步
-        key: mysql1                                            # 指定adapter的唯一key, 与表映射配置中outerAdapterKey对应
-        properties:
-          jdbc.driverClassName: com.mysql.jdbc.Driver        # jdbc驱动名, 部分jdbc的jar包需要自行放致lib目录下
-          jdbc.url: jdbc:mysql://192.168.67.16:31185/mytest?useUnicode=true        # jdbc url
-          jdbc.username: dongzhimen                                 # jdbc username
-          jdbc.password: **********                                # jdbc password
-          druid.stat.enable: false                                           
-		  druid.stat.slowSqlMillis: 1000	<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h5 id="2-修改conf-x2F-rdb-x2F-mytest-user-yml文件"><a href="#2-修改conf-x2F-rdb-x2F-mytest-user-yml文件" class="headerlink" title="2.修改conf&#x2F;rdb&#x2F;mytest_user.yml文件"></a>2.修改conf&#x2F;rdb&#x2F;mytest_user.yml文件</h5><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">dataSourceKey: defaultDS
-destination: example
-outerAdapterKey: mysql1
-concurrent: true
-dbMapping:
-  mirrorDb: true
-  database: mytest<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<blockquote>
-<p>其中dbMapping.database的值代表源库和目标库的schema名称，即两库的schema要一模一样</p>
-</blockquote>
-<p>3.启动</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E5%8D%AB%E6%98%9F%E6%A6%82%E5%BF%B5.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E5%8D%AB%E6%98%9F%E6%A6%82%E5%BF%B5.html" class="post-title-link" itemprop="url">卫星概念</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-
-              <time title="Erstellt: 2024-01-17 10:08:17 / Geändert am: 10:21:50" itemprop="dateCreated datePublished" datetime="2024-01-17T10:08:17+08:00">2024-01-17</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="覆盖术语"><a href="#覆盖术语" class="headerlink" title="覆盖术语"></a>覆盖术语</h2><h3 id="Access-Duration"><a href="#Access-Duration" class="headerlink" title="Access Duration"></a>Access Duration</h3><blockquote>
-<p>Access Duration（访问时长）是指地面站或终端用户能够与卫星建立有效通信链接的时间段。</p>
-</blockquote>
-<p>访问时长（秒） &#x3D; 最大视距时间 - 最小视距时间</p>
-<p>其中，最大视距时间是指地面站与卫星之间的最大视距角对应的时间，而最小视距时间则是最小视距角对应的时间。</p>
-<p>视距角（Elevation Angle）可以通过以下近似公式计算：</p>
-<p>$$<br>Elevation ​ Angle&#x3D;arcsin(<br>R<br>e<br>​<br> &#x2F;(h+<br>R<br>e)<br>​</p>
-<p>​<br> )<br>$$</p>
-<h3 id="Gap-Duration"><a href="#Gap-Duration" class="headerlink" title="Gap Duration"></a>Gap Duration</h3><blockquote>
-<p>Gap Duration（间断时长）是指卫星与地面站或终端用户失去通信连接的时间段。</p>
-</blockquote>
-<p>这个间断可能是由于卫星进入不可见的地区、遮挡、信号弱等原因引起的。</p>
-<p>公式来表示 Gap Duration 可能取决于具体情境和所考虑的因素，通常它涉及到信号覆盖、天线指向、卫星轨道、地球自转等因素。以下是一个简化的表示：<br>$$<br>Gap Duration&#x3D;总时长−访问时长<br>$$<br>其中，</p>
-<ul>
-<li>总时长是指轨道周期的总时间，或者考虑其他限制条件的总时间。</li>
-<li>访问时长是在访问时卫星与地面站或终端用户保持有效通信的时长。</li>
-</ul>
-<h3 id="Coverage-Time"><a href="#Coverage-Time" class="headerlink" title="Coverage Time"></a>Coverage Time</h3><blockquote>
-<p>Coverage Time（覆盖时长）是指卫星在其轨道周期内能够提供通信覆盖的总时间。</p>
-</blockquote>
-<p>覆盖时长通常用来衡量卫星通信系统的服务可用性。在卫星通信中，特别是对于地球同步轨道的通信卫星，覆盖时长很重要，因为它决定了用户或地面站能够与卫星保持通信的时间。</p>
-<p>覆盖时长的计算涉及卫星的轨道参数以及地面站位置。下面是一个简化的表示：<br>$$<br>Coverage Time&#x3D;访问时长×访问次数<br>$$<br>其中，</p>
-<ul>
-<li>访问时长是指卫星与地面站或终端用户保持有效通信的时长，这可以通过前面提到的方法计算。</li>
-<li>访问次数是指在卫星轨道周期内，卫星通过地面站或终端用户的次数。</li>
-</ul>
-<h3 id="Revisit-Time"><a href="#Revisit-Time" class="headerlink" title="Revisit Time"></a>Revisit Time</h3><blockquote>
-<p>Revisit Time（重访时间）是指卫星从一个特定地点再次经过的时间间隔。</p>
-</blockquote>
-<p>在地球同步轨道的卫星系统中，重访时间通常是轨道周期的一部分，因为这些卫星的轨道周期与地球的自转周期同步。在低地球轨道（LEO）卫星系统中，重访时间可能较短，但轨道周期也相应较短。</p>
-<p>重访时间的计算涉及卫星轨道参数和特定地点的地理位置。下面是一个简化的表示：<br>$$<br>Revisit Time&#x3D;<br>轨道周期<br>&#x2F;<br>地点通过次数</p>
-<p>​<br>$$<br>其中，</p>
-<ul>
-<li>轨道周期是卫星完成一次完整轨道的时间。</li>
-<li>地点通过次数是指卫星在轨道周期内经过特定地点的次数。</li>
-</ul>
-<h3 id="N-Asset-Coverage"><a href="#N-Asset-Coverage" class="headerlink" title="N Asset Coverage"></a>N Asset Coverage</h3><blockquote>
-<p>“N重覆盖”通常涉及到在一个给定的时间间隔内，同一地区被卫星通信系统中的多颗卫星重复覆盖的次数。这是为了提高覆盖的频率，确保对特定地区的持续监测或通信。</p>
-</blockquote>
-<p>“N重覆盖”的概念主要在卫星遥感、地球观测和通信系统中应用较多。在这种情况下，可以使用下面的公式来估算N重覆盖的次数：<br>$$<br>N&#x3D;<br>T<br>总</p>
-<p>​<br>&#x2F;<br>T<br>覆盖<br>​</p>
-<p>​<br>$$</p>
-<p>其中：</p>
-<ul>
-<li><em>N</em> 是重复覆盖的次数。</li>
-<li><em>T</em>总 是总时间，通常是一天（24小时）或其他特定的时间周期。</li>
-<li><em>T</em>覆盖 是每次覆盖的时间。</li>
-</ul>
-<h3 id="Number-Of-Accesses"><a href="#Number-Of-Accesses" class="headerlink" title="Number Of Accesses"></a>Number Of Accesses</h3><blockquote>
-<p>“Number of Accesses”（访问次数）是指在一定时间内，卫星与地面站或终端用户之间建立有效通信链接的次数。</p>
-</blockquote>
-<p>访问次数的计算可以通过以下公式来估算：<br>$$<br>Number of Accesses&#x3D;<br>T<br>总<br>​<br>&#x2F;<br>T<br>访问<br>​</p>
-<p>​<br>$$</p>
-<p>其中：</p>
-<ul>
-<li>Number of Accesses Number of Accesses 是访问次数。</li>
-<li><em>T</em>总 是总时间，通常是一天（24小时）或其他特定的时间周期。</li>
-<li><em>T</em>访问 是每次访问的时长。</li>
-</ul>
-<h3 id="Number-Of-Gaps"><a href="#Number-Of-Gaps" class="headerlink" title="Number Of Gaps"></a>Number Of Gaps</h3><blockquote>
-<p>“Number of Gaps”（间断次数）是指在一定时间内，卫星与地面站或终端用户之间失去通信连接的次数。</p>
-</blockquote>
-<p>间断次数的计算可以通过以下公式来估算：<br>$$<br>Number of Gaps&#x3D;<br>T<br>总<br>​<br>&#x2F;<br>T<br>间断<br>​</p>
-<p>​<br> −Number of Accesses<br>$$<br>其中：</p>
-<ul>
-<li>Number of Gaps 是间断次数。</li>
-<li><em>T</em>总 是总时间，通常是一天（24小时）或其他特定的时间周期。</li>
-<li><em>T</em>间断 是每次间断的时长。</li>
-<li>Number of Accesses  是在总时间内的有效访问次数。</li>
-</ul>
-<h3 id="Access-Separation"><a href="#Access-Separation" class="headerlink" title="Access Separation"></a>Access Separation</h3><blockquote>
-<p>“Access Separation”（访问分离）是指两次连续访问之间的时间间隔，即卫星与地面站或用户终端之间的通信连接之间的空白时间。</p>
-</blockquote>
-<p>访问分离的概念对于卫星通信系统的规划和优化非常重要，因为它影响到不同访问之间的时间间隔，这可能影响到数据收集、通信任务的规划等。</p>
-<p>访问分离的计算通常使用下面的公式：<br>$$<br>Access Separation&#x3D;T<br>间隔<br>​<br> −T<br>访问<br>​<br>$$<br>其中：</p>
-<ul>
-<li>Access Separation 是访问分离，即两次连续访问之间的时间间隔。</li>
-<li><em>T</em>间隔 是两次连续访问之间的总时间间隔。</li>
-<li><em>T</em>访问 是每次访问的时长。</li>
-</ul>
-<h2 id="轨道参数要素"><a href="#轨道参数要素" class="headerlink" title="轨道参数要素"></a>轨道参数要素</h2><p>卫星轨道就是卫星在太空中运行的轨迹。具体来说就是卫星在太空中围绕着它的“主体”运行的时候所形成的路径，一般都是椭圆形的。通常情况下，这个轨道相对于其“主体”是固定的。卫星轨道平面与地球赤道平面的夹角叫“轨道倾角”，它是确定卫星轨道空间位置的一个重要参数。轨道倾角小于90度为顺行轨道，轨道倾角大于90度为逆行轨道；轨道倾角为0度则为赤道轨道；轨道倾角等于90度，则轨道平面通过地球南北极，亦称“极轨道”。人造地球卫星绕地球运行，当它从地球南半球向北半球运行时，穿过地球赤道平面的那一点叫“升交点”。所谓升交点赤经，就是从春分点到地心的连线与从升交点到地心的连线的夹角。近地点幅角、半长轴、偏心率、倾角、升交点赤经和近地点时间这六个参数合称为人造地球卫星轨道的六要素。人造地球卫星在轨道上的每一个位置都会在地球表面上有一个投影，这叫“星下点”。所有星下点连成的曲线叫“星下点轨迹”。由于地球自转，星下点轨迹不只一条。相邻两条轨迹在同一纬度上的间隔正好等于地球在卫星轨道周期内转过的角度。根据星下点轨迹，可以预报卫星什么时候从什么地方上空经过。在航天指挥中心大厅的大型屏幕上，常可以看到上面显示的一条条星下点轨迹。相对于地球表面，星下点轨迹不断在平移。 </p>
-<h2 id="星座"><a href="#星座" class="headerlink" title="星座"></a>星座</h2><h2 id="N重覆盖"><a href="#N重覆盖" class="headerlink" title="N重覆盖"></a>N重覆盖</h2><h2 id="星间链路"><a href="#星间链路" class="headerlink" title="星间链路"></a>星间链路</h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/ClickHouse.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/ClickHouse.html" class="post-title-link" itemprop="url">Clickhouse</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              <time title="Erstellt: 2023-09-01 18:04:13" itemprop="dateCreated datePublished" datetime="2023-09-01T18:04:13+08:00">2023-09-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2024-01-17 08:58:38" itemprop="dateModified" datetime="2024-01-17T08:58:38+08:00">2024-01-17</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="ClickHouse"><a href="#ClickHouse" class="headerlink" title="ClickHouse"></a>ClickHouse</h1><h2 id="一、什么是ClickHouse？"><a href="#一、什么是ClickHouse？" class="headerlink" title="一、什么是ClickHouse？"></a>一、什么是ClickHouse？</h2><p>ClickHouse是一个用于联机分析(OLAP【online analytical processing】)的列式数据库管理系统(DBMS)</p>
+        <h1 id="ClickHouse"><a href="#ClickHouse" class="headerlink" title="ClickHouse"></a>ClickHouse</h1><h2 id="一、什么是ClickHouse？"><a href="#一、什么是ClickHouse？" class="headerlink" title="一、什么是ClickHouse？"></a>一、什么是ClickHouse？</h2><p>ClickHouse是一个用于联机分析(OLAP【online analytical processing】)的列式数据库管理系统(DBMS)</p>
 <h3 id="1-什么是列式数据库？"><a href="#1-什么是列式数据库？" class="headerlink" title="1.什么是列式数据库？"></a>1.什么是列式数据库？</h3><p>列式数据库是先将一列中的数据值连在一起存储起来，然后再存储下一列的数据，并以此类推的数据库。列阵式数据库完全为分析数据而存在，采用密集贮存数据的方式，不考虑少量数据的更新问题，是大数据环境下，针对仓储式数据存储而产生的数据库。</p>
 <h3 id="2-列式数据库的优点"><a href="#2-列式数据库的优点" class="headerlink" title="2.列式数据库的优点"></a>2.列式数据库的优点</h3><p>自动索引：由于将列作为存储形式，每一列本身就可以作为索引，所以不需要多余的数据结构来为此列创建额外索引。</p>
 <p>利于数据压缩：由于大多数列数据基数是重复的，因此在列的存储上其实不需要巨大的数据量。其次相同的列数据属性一致，这为数据结构的优化和压缩提供了便利，并且对于数字列可以采取更有效率的算法进行压缩储存。</p>
@@ -1797,25 +1500,34 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
 </ol>
 <p>面直接讲metadata的表结构拷贝过去的方法，有一个致命的BUG。如果表是分布式表，直接将表结构拷贝，虽然clickHouse中表已经创建成功，但是在ZK上的表的唯一地址并不会自动创建。所以所有需要与ZK交互的表都变成： Read Only模式,不能插入数据</p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/post/Apach%20Flink.html" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/post/Flowable.html" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
       </footer>
+    
   </article>
   
   
   
-
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Vorherige Seite"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
-  </nav>
 
 
 
@@ -1867,6 +1579,7 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ClickHouse"><span class="nav-number">1.</span> <span class="nav-text">ClickHouse</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFClickHouse%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">一、什么是ClickHouse？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%88%97%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9F"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.什么是列式数据库？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%88%97%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.列式数据库的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%88%97%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E8%A1%8C%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.1.3.</span> <span class="nav-text">3.列式数据库与行式数据库的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E6%96%B9%E5%BC%8F%E4%B8%8D%E5%90%8C"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">3.1 存储数据方式不同</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F%E4%B8%8D%E5%90%8C"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">3.2 查询方式不同</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E4%B8%8D%E5%90%8C"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">3.3 应用场景不同</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-OLAP%E5%9C%BA%E6%99%AF%E7%9A%84%E5%85%B3%E9%94%AE%E7%89%B9%E5%BE%81"><span class="nav-number">1.1.4.</span> <span class="nav-text">4.OLAP场景的关键特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%88%97%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9B%B4%E9%80%82%E5%90%88OLAP%E5%9C%BA%E6%99%AF%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-number">1.1.5.</span> <span class="nav-text">5.列式数据库更适合OLAP场景的原因</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-%E8%BE%93%E5%85%A5-x2F-%E8%BE%93%E5%87%BA"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">5.1 输入&#x2F;输出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-CPU"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">5.2 CPU</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81ClickHouse%E7%89%B9%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">二、ClickHouse特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%9C%9F%E6%AD%A3%E7%9A%84%E5%88%97%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.真正的列式数据库管理系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.数据压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%95%B0%E6%8D%AE%E7%9A%84%E7%A3%81%E7%9B%98%E5%AD%98%E5%82%A8"><span class="nav-number">1.2.3.</span> <span class="nav-text">3.数据的磁盘存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%A4%9A%E6%A0%B8%E5%BF%83%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86"><span class="nav-number">1.2.4.</span> <span class="nav-text">4.多核心并行处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%84%E7%90%86"><span class="nav-number">1.2.5.</span> <span class="nav-text">5.多服务器分布式处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E6%94%AF%E6%8C%81SQL"><span class="nav-number">1.2.6.</span> <span class="nav-text">6.支持SQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E5%90%91%E9%87%8F%E5%BC%95%E6%93%8E"><span class="nav-number">1.2.7.</span> <span class="nav-text">7.向量引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E5%AE%9E%E6%97%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0"><span class="nav-number">1.2.8.</span> <span class="nav-text">8.实时的数据更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-%E7%B4%A2%E5%BC%95"><span class="nav-number">1.2.9.</span> <span class="nav-text">9.索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-%E9%80%82%E5%90%88%E5%9C%A8%E7%BA%BF%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.2.10.</span> <span class="nav-text">10.适合在线查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-%E6%94%AF%E6%8C%81%E8%BF%91%E4%BC%BC%E8%AE%A1%E7%AE%97"><span class="nav-number">1.2.11.</span> <span class="nav-text">11.支持近似计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-%E8%87%AA%E9%80%82%E5%BA%94%E8%BF%9E%E6%8E%A5%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.12.</span> <span class="nav-text">12.自适应连接算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-%E6%94%AF%E6%8C%81%E6%95%B0%E6%8D%AE%E5%A4%8D%E5%88%B6%E5%92%8C%E6%95%B0%E6%8D%AE%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="nav-number">1.2.13.</span> <span class="nav-text">13.支持数据复制和数据完整性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-%E8%A7%92%E8%89%B2%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6"><span class="nav-number">1.2.14.</span> <span class="nav-text">14.角色的访问控制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81clickHouse%E6%80%A7%E8%83%BD"><span class="nav-number">1.3.</span> <span class="nav-text">三、clickHouse性能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%8D%95%E4%B8%AA%E5%A4%A7%E6%9F%A5%E8%AF%A2%E7%9A%84%E5%90%9E%E5%90%90%E9%87%8F"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.单个大查询的吞吐量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A4%84%E7%90%86%E7%9F%AD%E6%9F%A5%E8%AF%A2%E7%9A%84%E5%BB%B6%E8%BF%9F%E6%97%B6%E9%97%B4"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.处理短查询的延迟时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%A4%84%E7%90%86%E5%A4%A7%E9%87%8F%E7%9F%AD%E6%9F%A5%E8%AF%A2%E7%9A%84%E5%90%9E%E5%90%90%E9%87%8F"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.处理大量短查询的吞吐量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%95%B0%E6%8D%AE%E7%9A%84%E5%86%99%E5%85%A5%E6%80%A7%E8%83%BD"><span class="nav-number">1.3.4.</span> <span class="nav-text">4.数据的写入性能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81clickHouse%E5%8D%95%E6%9C%BA%E5%AE%89%E8%A3%85"><span class="nav-number">1.4.</span> <span class="nav-text">四、clickHouse单机安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%B3%BB%E7%BB%9F%E8%A6%81%E6%B1%82"><span class="nav-number">1.4.1.</span> <span class="nav-text">1.系统要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-RPM%E5%AE%89%E8%A3%85CK%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-number">1.4.2.</span> <span class="nav-text">2.RPM安装CK服务端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E8%AE%BE%E7%BD%AERPM-repository"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">2.1 设置RPM repository</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-%E5%AE%89%E8%A3%85ClickHouse-server%E5%92%8Cclient"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">2.2 安装ClickHouse server和client</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%EF%BC%8C%E5%85%81%E8%AE%B8%E9%80%9A%E8%BF%87IPV4%E8%AE%BF%E9%97%AE"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">2.3 修改配置文件，允许通过IPV4访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-%E5%BC%80%E5%90%AFClickHouse-server"><span class="nav-number">1.4.2.4.</span> <span class="nav-text">2.4 开启ClickHouse server</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%B5%8B%E8%AF%95%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="nav-number">1.4.3.</span> <span class="nav-text">3.测试是否安装成功</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81clickhouse%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA"><span class="nav-number">1.5.</span> <span class="nav-text">五、clickhouse集群搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%9B%86%E7%BE%A4%E8%8A%82%E7%82%B9%E4%BF%A1%E6%81%AF"><span class="nav-number">1.5.1.</span> <span class="nav-text">1.集群节点信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-server%E5%92%8Ckepper%E6%89%80%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%A1%E6%81%AF"><span class="nav-number">1.5.1.1.</span> <span class="nav-text">1.1 server和kepper所在服务器信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-hosts%E9%85%8D%E7%BD%AE"><span class="nav-number">1.5.1.2.</span> <span class="nav-text">1.2 hosts配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%89%E8%A3%85ClickHouse-Server"><span class="nav-number">1.5.2.</span> <span class="nav-text">2.安装ClickHouse-Server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AE%89%E8%A3%85ClickHouse-Keeper"><span class="nav-number">1.5.3.</span> <span class="nav-text">3.安装ClickHouse-Keeper</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E9%85%8D%E7%BD%AEClickHouse-Keeper%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.5.4.</span> <span class="nav-text">4.配置ClickHouse-Keeper配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E9%85%8D%E7%BD%AEClickHouse-Server%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.5.5.</span> <span class="nav-text">5.配置ClickHouse-Server配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E5%AE%8F%E9%85%8D%E7%BD%AE"><span class="nav-number">1.5.6.</span> <span class="nav-text">6.宏配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E5%90%AF%E5%8A%A8%E5%B9%B6%E6%9F%A5%E7%9C%8B"><span class="nav-number">1.5.7.</span> <span class="nav-text">7.启动并查看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E9%AA%8C%E8%AF%81Keeper%E6%98%AF%E5%90%A6%E6%90%AD%E5%BB%BA%E6%88%90%E5%8A%9F"><span class="nav-number">1.5.8.</span> <span class="nav-text">8.验证Keeper是否搭建成功</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-%E5%88%9B%E5%BB%BA%E6%9C%AC%E5%9C%B0%E8%A1%A8%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8"><span class="nav-number">1.5.9.</span> <span class="nav-text">9.创建本地表和分布式表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#9-1-%E6%9C%AC%E5%9C%B0%E8%A1%A8%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8%E5%8C%BA%E5%88%AB"><span class="nav-number">1.5.9.1.</span> <span class="nav-text">9.1 本地表和分布式表区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-2-%E4%B8%8B%E8%BD%BD%E8%A1%A8%E6%95%B0%E6%8D%AE"><span class="nav-number">1.5.9.2.</span> <span class="nav-text">9.2 下载表数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-3-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.5.9.3.</span> <span class="nav-text">9.3 创建数据库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-4-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E8%A1%A8"><span class="nav-number">1.5.9.4.</span> <span class="nav-text">9.4 创建数据表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-5-%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="nav-number">1.5.9.5.</span> <span class="nav-text">9.5 导入数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-6-%E5%88%9B%E5%BB%BA%E6%9C%AC%E5%9C%B0%E8%A1%A8"><span class="nav-number">1.5.9.6.</span> <span class="nav-text">9.6 创建本地表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-7-%E5%88%9B%E5%BB%BA%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8"><span class="nav-number">1.5.9.7.</span> <span class="nav-text">9.7 创建分布式表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-8-%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="nav-number">1.5.9.8.</span> <span class="nav-text">9.8 分布式表插入数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-9-%E9%AA%8C%E8%AF%81"><span class="nav-number">1.5.9.9.</span> <span class="nav-text">9.9 验证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-10-%E5%85%B6%E4%BB%96%E8%A1%A8%E6%A6%82%E5%BF%B5"><span class="nav-number">1.5.9.10.</span> <span class="nav-text">9.10 其他表概念</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.6.</span> <span class="nav-text">六、接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">1.6.1.</span> <span class="nav-text">1.命令行客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">1.6.1.1.</span> <span class="nav-text">1.1 使用方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-%E6%9F%A5%E8%AF%A2%E5%8F%82%E6%95%B0"><span class="nav-number">1.6.1.2.</span> <span class="nav-text">1.2 查询参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-%E9%85%8D%E7%BD%AE"><span class="nav-number">1.6.1.3.</span> <span class="nav-text">1.3 配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-1-%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C"><span class="nav-number">1.6.1.4.</span> <span class="nav-text">1.3.1 通过命令行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-2-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.6.1.5.</span> <span class="nav-text">1.3.2 配置文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-JDBC%E9%A9%B1%E5%8A%A8"><span class="nav-number">1.6.2.</span> <span class="nav-text">2.JDBC驱动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1%E5%AE%98%E6%96%B9%E9%A9%B1%E5%8A%A8"><span class="nav-number">1.6.2.1.</span> <span class="nav-text">2.1官方驱动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2%E7%AC%AC%E4%B8%89%E6%96%B9%E9%A9%B1%E5%8A%A8"><span class="nav-number">1.6.2.2.</span> <span class="nav-text">2.2第三方驱动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-mybatis-plus%E6%95%B4%E5%90%88ClickHouse"><span class="nav-number">1.6.2.3.</span> <span class="nav-text">2.3 mybatis-plus整合ClickHouse</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-1-%E9%85%8D%E7%BD%AESpringBoot%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.6.2.3.1.</span> <span class="nav-text">2.3.1 配置SpringBoot配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-2-%E9%85%8D%E7%BD%AEDruidConfig"><span class="nav-number">1.6.2.3.2.</span> <span class="nav-text">2.3.2 配置DruidConfig</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-3-Mapper%E9%85%8D%E7%BD%AE"><span class="nav-number">1.6.2.3.3.</span> <span class="nav-text">2.3.3 Mapper配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-4-Entity%E9%85%8D%E7%BD%AE"><span class="nav-number">1.6.2.3.4.</span> <span class="nav-text">2.3.4 Entity配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-5-%E6%B5%8B%E8%AF%95%E7%B1%BB"><span class="nav-number">1.6.2.3.5.</span> <span class="nav-text">2.3.5 测试类</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">1.6.2.4.</span> <span class="nav-text">2.4 注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.6.3.</span> <span class="nav-text">3.输入输出格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-TabSeparated"><span class="nav-number">1.6.3.1.</span> <span class="nav-text">3.1 TabSeparated</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="nav-number">1.6.3.2.</span> <span class="nav-text">3.2 数据格式化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%BC%95%E6%93%8E"><span class="nav-number">1.7.</span> <span class="nav-text">七、引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%95%E6%93%8E"><span class="nav-number">1.7.1.</span> <span class="nav-text">1.数据库引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-mysql%E5%BC%95%E6%93%8E"><span class="nav-number">1.7.1.1.</span> <span class="nav-text">1.1 mysql引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-1-%E5%88%9B%E5%BB%BAmysql%E5%BC%95%E6%93%8E%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.7.1.1.1.</span> <span class="nav-text">1.1.1 创建mysql引擎的数据库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-2-mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.7.1.1.2.</span> <span class="nav-text">1.1.2 mysql数据库示例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%B4%A2%E5%BC%95"><span class="nav-number">1.7.2.</span> <span class="nav-text">2.索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%A1%A8%E5%BC%95%E6%93%8E"><span class="nav-number">1.7.3.</span> <span class="nav-text">3.表引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-%E5%BC%95%E6%93%8E%E5%88%86%E7%B1%BB"><span class="nav-number">1.7.3.1.</span> <span class="nav-text">3.1 引擎分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-MergeTree%E5%BC%95%E6%93%8E"><span class="nav-number">1.7.3.2.</span> <span class="nav-text">3.2 MergeTree引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-1-VersionedCollapsingMergeTree"><span class="nav-number">1.7.3.2.1.</span> <span class="nav-text">3.2.1 VersionedCollapsingMergeTree</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-2-GraphiteMergeTree"><span class="nav-number">1.7.3.2.2.</span> <span class="nav-text">3.2.2 GraphiteMergeTree</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-3-AggregatingMergeTree"><span class="nav-number">1.7.3.2.3.</span> <span class="nav-text">3.2.3 AggregatingMergeTree</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-4-CollapsingMergeTree"><span class="nav-number">1.7.3.2.4.</span> <span class="nav-text">3.2.4 CollapsingMergeTree</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-5-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%88%86%E5%8C%BA%E9%94%AE"><span class="nav-number">1.7.3.2.5.</span> <span class="nav-text">3.2.5 自定义分区键</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-6-MergeTree"><span class="nav-number">1.7.3.2.6.</span> <span class="nav-text">3.2.6 MergeTree</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-7-ReplacingMergeTree"><span class="nav-number">1.7.3.2.7.</span> <span class="nav-text">3.2.7 ReplacingMergeTree</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-8-%E6%95%B0%E6%8D%AE%E5%89%AF%E6%9C%AC"><span class="nav-number">1.7.3.2.8.</span> <span class="nav-text">3.2.8 数据副本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-9-SharedMergeTree"><span class="nav-number">1.7.3.2.9.</span> <span class="nav-text">3.2.9 SharedMergeTree</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-10-SummingMergeTree"><span class="nav-number">1.7.3.2.10.</span> <span class="nav-text">3.2.10 SummingMergeTree</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-%E6%97%A5%E5%BF%97%E5%BC%95%E6%93%8E%E7%B3%BB%E5%88%97"><span class="nav-number">1.7.3.3.</span> <span class="nav-text">3.3 日志引擎系列</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-1-Log"><span class="nav-number">1.7.3.3.1.</span> <span class="nav-text">3.3.1 Log</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-2-StripeLog"><span class="nav-number">1.7.3.3.2.</span> <span class="nav-text">3.3.2 StripeLog</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-3-TinyLog"><span class="nav-number">1.7.3.3.3.</span> <span class="nav-text">3.3.3 TinyLog</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-%E9%9B%86%E6%88%90%E7%9A%84%E8%A1%A8%E5%BC%95%E6%93%8E"><span class="nav-number">1.7.3.4.</span> <span class="nav-text">3.4 集成的表引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-4-1-Mysql%E5%BC%95%E6%93%8E"><span class="nav-number">1.7.3.4.1.</span> <span class="nav-text">3.4.1 Mysql引擎</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-4-2-JDBC"><span class="nav-number">1.7.3.4.2.</span> <span class="nav-text">3.4.2 JDBC</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-Special%E5%BC%95%E6%93%8E"><span class="nav-number">1.7.3.5.</span> <span class="nav-text">3.5 Special引擎</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-1-%E7%89%A9%E5%8C%96%E8%A7%86%E5%9B%BEMaterializedView"><span class="nav-number">1.7.3.6.</span> <span class="nav-text">3.5.1 物化视图MaterializedView</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95"><span class="nav-number">1.8.</span> <span class="nav-text">性能测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HA%E6%B5%8B%E8%AF%95"><span class="nav-number">1.9.</span> <span class="nav-text">HA测试</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
