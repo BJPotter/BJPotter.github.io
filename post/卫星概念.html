@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"bjpotter.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="覆盖术语简单覆盖 简单覆盖（Simple Coverage）用于表示某个网格点是否被卫星覆盖到，当前时间如果网格点被覆盖到则表示1，没有被覆盖到表示0  覆盖重数 覆盖重数（Number of Asset 或 N Assert Coverage)在一个给定的时间间隔内，同一地区被卫星通信系统中的多颗卫星重复覆盖的数量，取值范围为0~N，多重卫星覆盖主要为了提高覆盖的频率，确保对特定地区的持续监测或">
+<meta property="og:type" content="article">
+<meta property="og:title" content="卫星概念">
+<meta property="og:url" content="https://bjpotter.github.io/post/%E5%8D%AB%E6%98%9F%E6%A6%82%E5%BF%B5.html">
+<meta property="og:site_name" content="Potter&#39;s 个人博客">
+<meta property="og:description" content="覆盖术语简单覆盖 简单覆盖（Simple Coverage）用于表示某个网格点是否被卫星覆盖到，当前时间如果网格点被覆盖到则表示1，没有被覆盖到表示0  覆盖重数 覆盖重数（Number of Asset 或 N Assert Coverage)在一个给定的时间间隔内，同一地区被卫星通信系统中的多颗卫星重复覆盖的数量，取值范围为0~N，多重卫星覆盖主要为了提高覆盖的频率，确保对特定地区的持续监测或">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Orbit.svg/1000px-Orbit.svg.png">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Semimajoraxis.svg/1920px-Semimajoraxis.svg.png">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/OrbitalEccentricityDemo.svg/800px-OrbitalEccentricityDemo.svg.png">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Apogee_%28PSF%29_mul.svg/640px-Apogee_%28PSF%29_mul.svg.png">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/2/27/GPS24goldenSML.gif">
+<meta property="article:published_time" content="2024-01-19T14:36:45.587Z">
+<meta property="article:modified_time" content="2024-01-19T14:36:45.587Z">
+<meta property="article:author" content="potter">
+<meta property="article:tag" content="卫星概念">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Orbit.svg/1000px-Orbit.svg.png">
+
+<link rel="canonical" href="https://bjpotter.github.io/post/%E5%8D%AB%E6%98%9F%E6%A6%82%E5%BF%B5.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>卫星概念 | Potter's 个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Potter's 个人博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E5%8D%AB%E6%98%9F%E6%A6%82%E5%BF%B5.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          卫星概念
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-19 22:36:45" itemprop="dateCreated datePublished" datetime="2024-01-19T22:36:45+08:00">2024-01-19</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="覆盖术语"><a href="#覆盖术语" class="headerlink" title="覆盖术语"></a>覆盖术语</h1><h2 id="简单覆盖"><a href="#简单覆盖" class="headerlink" title="简单覆盖"></a>简单覆盖</h2><blockquote>
+<p>简单覆盖（Simple Coverage）用于表示某个网格点是否被卫星覆盖到，当前时间如果网格点被覆盖到则表示1，没有被覆盖到表示0</p>
+</blockquote>
+<h2 id="覆盖重数"><a href="#覆盖重数" class="headerlink" title="覆盖重数"></a>覆盖重数</h2><blockquote>
+<p>覆盖重数（Number of Asset 或 N Assert Coverage)在一个给定的时间间隔内，同一地区被卫星通信系统中的多颗卫星重复覆盖的数量，取值范围为0~N，多重卫星覆盖主要为了提高覆盖的频率，确保对特定地区的持续监测或通信。</p>
+</blockquote>
+<p>“N重覆盖”的概念主要在卫星遥感、地球观测和通信系统中应用较多。在这种情况下，可以使用下面的公式来估算N重覆盖的次数：<br>$$<br>N&#x3D;<br>T<br>总<br>&#x2F;<br>T<br>覆盖<br>$$</p>
+<p>其中：</p>
+<ul>
+<li><em>N</em> 是重复覆盖的次数。</li>
+<li><em>T</em>总 是总时间，通常是一天（24小时）或其他特定的时间周期。</li>
+<li><em>T</em>覆盖 是每次覆盖的时间。</li>
+</ul>
+<h2 id="覆盖时间"><a href="#覆盖时间" class="headerlink" title="覆盖时间"></a>覆盖时间</h2><blockquote>
+<p>Coverage Time（覆盖时长）表示网格点被覆盖的总时间（指卫星在其轨道周期内能够提供通信覆盖的总时间）</p>
+</blockquote>
+<p>覆盖时长通常用来衡量卫星通信系统的服务可用性。在卫星通信中，特别是对于地球同步轨道的通信卫星，覆盖时长很重要，因为它决定了用户或地面站能够与卫星保持通信的时间。</p>
+<p>覆盖时长的计算涉及卫星的轨道参数以及地面站位置。下面是一个简化的表示：<br>$$<br>Coverage\ Time\ &#x3D;\ 访问时长\ ×\ 访问次数<br>$$<br>其中，</p>
+<ul>
+<li>访问时长是指卫星与地面站或终端用户保持有效通信的时长。</li>
+<li>访问次数是指在卫星轨道周期内，卫星通过地面站或终端用户的次数。</li>
+</ul>
+<h2 id="重访时间"><a href="#重访时间" class="headerlink" title="重访时间"></a>重访时间</h2><blockquote>
+<p>重访时间（Revisit Time）表示不能提供的覆盖的时间间隔，又称为覆盖间隙。（指同一个卫星经过同一地点的时间间隔）</p>
+</blockquote>
+<p>在地球同步轨道的卫星系统中，重访时间通常是轨道周期的一部分，因为这些卫星的轨道周期与地球的自转周期同步。在低地球轨道（LEO）卫星系统中，重访时间可能较短，但轨道周期也相应较短。</p>
+<p>重访时间的计算涉及卫星轨道参数和特定地点的地理位置。下面是一个简化的表示：<br>$$<br>Revisit\ Time\ ≈ \frac{T}{N}<br>$$<br>其中，</p>
+<ul>
+<li>T:卫星一次完整轨道周期（轨道周期)。</li>
+<li>N:卫星轨道上经过地球上某一点的次数。</li>
+</ul>
+<h2 id="访问时长"><a href="#访问时长" class="headerlink" title="访问时长"></a>访问时长</h2><blockquote>
+<p>访问时间（Access Duration）是指一个卫星对于某一地点（或者说某一特定纬度和经度的网格点）持续进行观测或覆盖的时间段。</p>
+</blockquote>
+<p>访问时长的计算涉及到卫星的轨道参数、地球自转等因素，访问时间的计算公式可以通过以下步骤进行估算：</p>
+<p>$$<br>T_a ≈ \frac{2cos^-1(\frac{R_e}{R_e+h})}{v_r}<br>$$</p>
+<p>其中：</p>
+<p>$T_a$:表示访问时间</p>
+<p>$V_r$:地球自转速度</p>
+<p>$R_e$:地球半径</p>
+<p>$h$:卫星相对于地球表面的高度</p>
+<h2 id="访问次数"><a href="#访问次数" class="headerlink" title="访问次数"></a>访问次数</h2><blockquote>
+<p>访问次数（Number of Accesses）表示当前时刻的网格点的资源访问数量（卫星或者空间系统能够与地球上某一特定网格点建立通信或进行观测的次数）</p>
+</blockquote>
+<p>访问次数的计算可以通过以下公式来估算：<br>$$<br>Number\ of\ Accesses\ &#x3D;<br>T<br>总<br>&#x2F;<br>T<br>访问<br>$$</p>
+<p>其中：</p>
+<ul>
+<li>Number of Accesses 是访问次数。</li>
+<li><em>T</em>总 是总时间，通常是一天（24小时）或其他特定的时间周期。</li>
+<li><em>T</em>访问 是每次访问的时长。</li>
+</ul>
+<h2 id="访问分隔时长"><a href="#访问分隔时长" class="headerlink" title="访问分隔时长"></a>访问分隔时长</h2><blockquote>
+<p>访问分隔时长（Access Separation）表示多个网格在指定时间段内内具有多个访问时间段时，香花之间分隔的长度。</p>
+</blockquote>
+<p>访问分隔时长就好比是一天中，不同卫星或者地面站之间进行通信的时间安排。假设有多个卫星或地面站需要使用相同的通信频率或资源，为了避免它们在同一时间发生干扰，我们需要规定它们之间的通信时间表，并确保彼此之间有足够的时间间隔。这样，每个卫星或地面站在特定的时间段内独享通信资源，不会发生混淆或冲突，从而保证通信的顺利进行。这个时间间隔就是访问分隔时长。访问分离的概念对于卫星通信系统的规划和优化非常重要，因为它影响到不同访问之间的时间间隔，这可能影响到数据收集、通信任务的规划等。</p>
+<p>访问分离的计算通常使用下面的公式：<br>$$<br>Access\ Separation\ &#x3D;\ T_n+(N-1)*(T_a+T_x)<br>$$</p>
+<p>其中：</p>
+<p>$N$:在指定时间段内，多个网格点相对于卫星或空间系统的访问次数</p>
+<p>$T_a$:访问时长</p>
+<p>$T_n$:最小值</p>
+<p>$T_x$:最大值</p>
+<h2 id="覆盖间隙数"><a href="#覆盖间隙数" class="headerlink" title="覆盖间隙数"></a>覆盖间隙数</h2><blockquote>
+<p>覆盖间隙数(Number of Gaps)指的是卫星在地球上某个特定区域内的连续覆盖期间内，可能存在的不连续的覆盖区域或间隙的数量。通俗的说，在某些轨道上，卫星的轨迹可能无法提供连续的覆盖，导致地球上出现一些区域无法接收到卫星信号。这些无法接收信号的区域即为覆盖间隙。（卫星与地面站或终端用户之间失去通信连接的次数。）</p>
+</blockquote>
+<p><strong>覆盖间隙数影响因素:</strong></p>
+<ol>
+<li><strong>轨道特性</strong>:卫星轨道的高度、倾角等参数会影响其在地球表面的覆盖范围，从而影响覆盖间隙的数量。</li>
+<li><strong>天线特性</strong>:卫星通信系统中使用的地面站天线的特性也会影响覆盖情况。例如，天线的方向性和增益等参数。</li>
+<li><strong>信号传播特性</strong>:大气条件、地形等因素也可能导致信号传播的不均匀，从而在地球表面形成覆盖间隙。</li>
+</ol>
+<p><strong>减少覆盖间隙数的好处：</strong></p>
+<ol>
+<li><strong>持续性服务：</strong>对于需要实时或连续服务的应用，减少覆盖间隙数可以确保卫星信号在被覆盖区域内的连续性。这在移动通信、卫星导航等领域尤为重要。</li>
+<li><strong>用户体验：</strong>用户在接收到连续的信号时体验更好。较少的覆盖间隙意味着更少的中断，有助于提升用户体验。</li>
+<li><strong>实时应用支持：</strong> 一些实时应用，如紧急通信、天气监测等，要求系统能够在任何时候都提供服务。减少覆盖间隙有助于满足这些实时性要求。</li>
+</ol>
+<h1 id="覆盖间隙数的计算可以通过以下公式来估算：-Number-of-Gaps"><a href="#覆盖间隙数的计算可以通过以下公式来估算：-Number-of-Gaps" class="headerlink" title="覆盖间隙数的计算可以通过以下公式来估算：$$Number\ of\ Gaps"></a>覆盖间隙数的计算可以通过以下公式来估算：<br>$$<br>Number\ of\ Gaps</h1><p>T<br>总<br>&#x2F;<br>T<br>间断<br>−<br>Number\ of\ Accesses<br>$$<br>其中：</p>
+<ul>
+<li>Number of Gaps 是覆盖间隙数。</li>
+<li><em>T</em>总 是总时间，通常是一天（24小时）或其他特定的时间周期。</li>
+<li><em>T</em>间断 是每次间断的时长。</li>
+<li>Number of Accesses  是在总时间内的有效访问次数。</li>
+</ul>
+<h2 id="时间平均间隔"><a href="#时间平均间隔" class="headerlink" title="时间平均间隔"></a>时间平均间隔</h2><blockquote>
+<p>时间平均间隔（Time Average Gap）如果网格点的时间采样是随机的，得到的覆盖间隔的平均长度就是时间平均间隔。</p>
+</blockquote>
+<p>时间平均间隔是指在卫星系统进行对网格点的时间采样时，考虑到采样时间是随机的情况下，系统在不同时间点对这些网格点进行覆盖的平均时间间隔。如果这个时间平均间隔较短，表示系统能够频繁地对目标进行覆盖，这对于实时或高频率的监测和通信任务尤为重要。</p>
+<h2 id="响应时间"><a href="#响应时间" class="headerlink" title="响应时间"></a>响应时间</h2><blockquote>
+<p>响应时间（Response Time）用户提出覆盖请求后，卫星系统实际开始对请求区域进行覆盖的时间间隔。</p>
+</blockquote>
+<p>这个时间包括了用户请求的提交、系统对请求的处理和准备、卫星定位和调整轨道等步骤。较短的响应时间通常意味着卫星系统能够更及时地满足用户的需求，特别对于需要实时数据或通信的应用非常关键。</p>
+<p>响应时间的具体数值可能受到卫星系统设计、通信链路、轨道调整能力等多方面因素的影响。系统优化和性能改进往往需要综合考虑这些因素，以提高卫星系统的响应速度，满足用户的实时性需求。</p>
+<h1 id="轨道参数六要素"><a href="#轨道参数六要素" class="headerlink" title="轨道参数六要素"></a>轨道参数六要素</h1><blockquote>
+<p>卫星轨道就是卫星在太空中运行的轨迹。具体来说就是卫星在太空中围绕着它的“主体”运行的时候所形成的路径，一般都是椭圆形的。通常情况下，这个轨道相对于其“主体”是固定的。卫星轨道平面与地球赤道平面的夹角叫“轨道倾角”，它是确定卫星轨道空间位置的一个重要参数。轨道倾角小于90度为顺行轨道，轨道倾角大于90度为逆行轨道；轨道倾角为0度则为赤道轨道；轨道倾角等于90度，则轨道平面通过地球南北极，亦称“极轨道”。人造地球卫星绕地球运行，当它从地球南半球向北半球运行时，穿过地球赤道平面的那一点叫“升交点”。所谓升交点赤经，就是从春分点到地心的连线与从升交点到地心的连线的夹角。人造地球卫星在轨道上的每一个位置都会在地球表面上有一个投影，这叫“星下点”。所有星下点连成的曲线叫“星下点轨迹”。由于地球自转，星下点轨迹不只一条。相邻两条轨迹在同一纬度上的间隔正好等于地球在卫星轨道周期内转过的角度。根据星下点轨迹，可以预报卫星什么时候从什么地方上空经过。在航天指挥中心大厅的大型屏幕上，常可以看到上面显示的一条条星下点轨迹。相对于地球表面，星下点轨迹不断在平移。以下是人造地球卫星轨道的六要素</p>
+</blockquote>
+<h2 id="近地点幅角"><a href="#近地点幅角" class="headerlink" title="近地点幅角"></a>近地点幅角</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p><strong>近点幅角</strong>（ω）也叫近地点幅角，<strong>是描述卫星在轨道近地点和轨道升交点的夹角</strong>，通过调整近地点幅角，可以改变卫星的轨道形状和方向，在卫星轨道力学中，”近地点幅角”是描述卫星轨道的一个重要参数。它用来定义卫星在其轨道上通过近地点时的位置。以下是一些相关的概念：</p>
+<ol>
+<li><strong>近地点（Periapsis）：</strong> 卫星绕行星、恒星或其他天体运动的轨道上，离天体最近的点称为近地点。在地球轨道上，这通常称为近地点。</li>
+<li><strong>轨道平面（Orbital Plane）：</strong> 卫星绕行星运动的轨道通常被认为是一个平面，这个平面被称为轨道平面。</li>
+<li><strong>轨道长半轴（Semi-Major Axis）：</strong> 轨道的半长轴是椭圆轨道的半长直径。它是近地点和远地点之间的平均距离。</li>
+<li><strong>近地点幅角（Argument of Periapsis）：</strong> 这是描述卫星轨道的参数之一，通常用符号 “ω” 表示。近地点幅角是在轨道平面上从升交点（轨道与参考平面相交的点）到近地点的角度。这个角度决定了卫星在轨道上何时通过近地点，从而影响其轨道形状和位置。</li>
+</ol>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Orbit.svg/1000px-Orbit.svg.png" style="zoom: 50%;">
+
+
+
+<h3 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h3><p>在太空动力学，近心点幅角ω 可由下式计算：<br>$$<br>ω &#x3D; arccos\frac{ne} { |n|*|e| }<br>$$</p>
+<p>如果$e_z&lt;0$$,那么 $$ω&#x3D;2π-ω$</p>
+<p>此处：</p>
+<ul>
+<li>n是指向昇交点的向量（此处是z分量n为0）</li>
+<li>e是离心向量（指向近心点的方向）</li>
+</ul>
+<p>在赤道轨道上，无须精确的定义此一参数，他经常被假设如下：<br>$$<br>ω &#x3D; arccos\frac{e_x}{|e|}<br>$$</p>
+<p>此处：$e_x$是离心向量x分量e</p>
+<p>在原轨道的情况下，经常会假设近心点就在昇交点的方向下，也就是 ω &#x3D; 0</p>
+<h2 id="半长轴"><a href="#半长轴" class="headerlink" title="半长轴"></a><strong>半长轴</strong></h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>在卫星轨道力学中，”半长轴”（Semi-Major Axis）是描述卫星轨道形状的一个重要参数。<strong>它是椭圆轨道的半长直径，用来表示轨道的大小</strong>。以下是一些相关的概念：</p>
+<ol>
+<li><strong>轨道：</strong> 卫星绕行星、恒星或其他天体运动的路径称为轨道。轨道可以是椭圆形、圆形、抛物线或双曲线，具体取决于卫星的速度和天体的质量。</li>
+<li><strong>椭圆轨道：</strong> 当卫星的轨道是一个椭圆时，椭圆轨道可以通过两个主要参数来描述，即半长轴和半短轴。</li>
+<li><strong>半长轴（Semi-Major Axis）：</strong> 半长轴是椭圆轨道的半长直径，通常用符号 “a” 表示。它是轨道的平均半径，表示近地点和远地点之间的平均距离。在椭圆轨道中，距离卫星质心到椭圆的中心的距离等于半长轴的长度。</li>
+<li><strong>近地点和远地点：</strong> 近地点（Periapsis）是卫星轨道上离天体最近的点，而远地点（Apoapsis）是轨道上离天体最远的点。</li>
+<li><strong>轨道周期：</strong> 半长轴也与轨道周期相关。较大的半长轴通常对应于更长的轨道周期，而较小的半长轴对应于较短的轨道周期。</li>
+</ol>
+<p>卫星轨道的半长轴是卫星轨道参数的关键之一，它直接影响着卫星在轨道上的运动和周期。卫星的任务设计和规划通常会涉及对半长轴的优化，以满足特定的任务要求。</p>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Semimajoraxis.svg/1920px-Semimajoraxis.svg.png" style="zoom: 33%;">
+
+
+
+
+
+<h3 id="计算-1"><a href="#计算-1" class="headerlink" title="计算"></a>计算</h3><p>半长轴和轨道周期的关系，牛顿二体问题简化后的公式：<br>$$<br>T^2&#x3D;\frac{4π^2}{G(M+m)}a^3<br>$$<br>其中：</p>
+<ul>
+<li>T是周期，单位为年</li>
+<li>a是半长轴，单位为AU</li>
+<li>G是重力常数</li>
+<li>M是中心天体的质量（当中心天体质量远大于环绕天体时，m的质量可以忽略不计）</li>
+</ul>
+<h2 id="离心率（偏心率）"><a href="#离心率（偏心率）" class="headerlink" title="离心率（偏心率）"></a><strong>离心率（偏心率）</strong></h2><h3 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h3><p>在卫星轨道力学中，**”偏心率”（Eccentricity）是描述椭圆轨道形状的一个参数。偏心率决定了轨道的椭圆程度**，是一个在0到1之间的无单位值，其中0表示圆形轨道，而1表示抛物线轨道。以下是一些相关的概念：</p>
+<ol>
+<li><strong>轨道：</strong> 卫星绕行星、恒星或其他天体运动的路径称为轨道。轨道可以是椭圆形、圆形、抛物线或双曲线。</li>
+<li><strong>椭圆轨道：</strong> 当卫星的轨道是一个椭圆时，椭圆轨道可以通过偏心率来描述。椭圆轨道的偏心率决定了椭圆的形状，即离心率有多大。</li>
+<li><strong>偏心率（Eccentricity）：</strong> 偏心率通常用字母 “e” 表示，它是一个在0到1之间的值，表示椭圆轨道的离心程度。当偏心率为0时，轨道是一个圆形；当偏心率接近1时，轨道越来越椭圆。</li>
+<li><strong>近地点和远地点：</strong> 在椭圆轨道上，偏心率影响着近地点（Periapsis）和远地点（Apoapsis）之间的差距。较大的偏心率通常对应于较大的差距。</li>
+<li><strong>轨道周期：</strong> 偏心率还与轨道周期相关。较大的偏心率通常对应于较长的轨道周期，而较小的偏心率对应于较短的轨道周期。</li>
+</ol>
+<p>通过调整偏心率，可以改变卫星轨道的形状，从而影响卫星的运动特性。偏心率是轨道设计中一个重要的参数，工程师会根据卫星任务的需求来优化轨道的偏心率。</p>
+<p>在天文动力学，架构在标准假说下的任何轨道都必须是圆锥切面的形状。圆锥切面的离心率，<strong>轨道离心率</strong>是定义轨道形状的重要参数，而且定义了绝对的形状。离心率可以解释为形状从圆形偏离了多少的程度。</p>
+<p>架构在标准假说下，<strong>离心率</strong>（偏心率，e）是严格的定义了圆、椭圆、抛物线和双曲线，并且有如下的数值：</p>
+<ul>
+<li>圆轨道：e &#x3D; 0,</li>
+<li>椭圆轨道：0 &lt; e &lt; 1</li>
+<li>抛物线轨道：e &#x3D; 1,</li>
+<li>双曲线轨道：e &gt; 1,</li>
+</ul>
+<p>椭圆的离心率e是圆的角度投映。例如说，水星的离心率是（0.2056），简单的计算正弦的反函数可以得到投映的角度是11.86度，然后以那个数值的倾斜角度观察任何的圆形物体（例如从上面观看的咖啡杯），投射到你的眼中所看见的椭圆就会有相同的离心率。</p>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/OrbitalEccentricityDemo.svg/800px-OrbitalEccentricityDemo.svg.png" style="zoom:33%;">
+
+
+
+<h3 id="计算-2"><a href="#计算-2" class="headerlink" title="计算"></a>计算</h3><p>轨道离心率能够从轨道状态向量计算得知离心率向量的大小 e&#x3D;|e| 此处e是离心率向量</p>
+<p>对于椭圆轨道也能从距离的近地点和远地点计算得知：</p>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Apogee_%28PSF%29_mul.svg/640px-Apogee_%28PSF%29_mul.svg.png" style="zoom:33%;">
+$$
+e=\frac{d_a-d_p}{d_p-d_a}
+$$
+
+<p>其中：<br>$d_p$:是近地点距离</p>
+<p>$d_a$:是远地点距离</p>
+<h2 id="轨道倾角"><a href="#轨道倾角" class="headerlink" title="轨道倾角"></a><strong>轨道倾角</strong></h2><h3 id="概念-2"><a href="#概念-2" class="headerlink" title="概念"></a>概念</h3><p>轨道倾角是描述卫星轨道平面相对于参考平面的倾斜程度的一个重要参数，通常是参考平面和另一个平面或轴的方向之间的夹角。倾角测量的是轨道平面与参考平面（通常是地球的赤道面或黄道面）之间的夹角。（<strong>卫星轨道平面和地球赤道面的夹角</strong>）以下是一些相关的概念：</p>
+<ol>
+<li><strong>轨道平面：</strong> 轨道平面是卫星绕行星、恒星或其他天体运动的轨道形成的平面。这个平面通常是一个椭圆或圆。</li>
+<li><strong>倾角（Inclination）：</strong> 倾角是轨道平面与参考平面之间的夹角。它是一个在0到180度之间的角度，表示轨道相对于参考平面的倾斜程度。当倾角为0度时，轨道在参考平面内；当倾角为90度时，轨道垂直于参考平面；当倾角为180度时，轨道在参考平面的反方向内。</li>
+<li><strong>升交点（Ascending Node）：</strong> 升交点是轨道平面与参考平面相交的点，其中卫星由南到北穿越参考平面。</li>
+<li><strong>降交点（Descending Node）：</strong> 降交点是轨道平面与参考平面相交的点，其中卫星由北到南穿越参考平面。</li>
+<li><strong>赤道面和黄道面：</strong> 在地球轨道中，常用的参考平面包括地球的赤道面和黄道面。赤道面是与地球自转轴平行的平面，而黄道面是与地球公转轨道平面相交的平面。</li>
+</ol>
+<p>调整卫星轨道的倾角可以影响卫星对地球的观测特性，例如覆盖范围和观测时间。倾角的选择也可能受到任务需求和轨道设计的其他方面的影响。</p>
+<h3 id="计算-3"><a href="#计算-3" class="headerlink" title="计算"></a>计算</h3><p>轨道倾角i计算公式：<br>$$<br>i &#x3D; arccos\frac{h_z}{|h|}<br>$$</p>
+<p>其中：<br>$h_z$是$h$在$z$的方向上的分量</p>
+<p>$h$是垂直于轨道平面的轨道角动量向量</p>
+<h2 id="升交点经度"><a href="#升交点经度" class="headerlink" title="升交点经度"></a><strong>升交点经度</strong></h2><h3 id="概念-3"><a href="#概念-3" class="headerlink" title="概念"></a>概念</h3><p>卫星轨道力学中，”升交点赤经”（Right Ascension of Ascending Node，简称RAAN）是描述卫星轨道的一个重要参数。<strong>它表示轨道平面与参考平面（通常是地球的赤道面）的交点在参考平面上的角度</strong>，通常以度为单位。以下是一些相关的概念：</p>
+<ol>
+<li><strong>轨道平面：</strong> 卫星绕行星、恒星或其他天体运动的轨道形成的平面。</li>
+<li><strong>升交点：</strong> 升交点是轨道平面与参考平面相交的点。在轨道上，有两个升交点：一个是卫星由南向北穿过参考平面的点，另一个是卫星由北向南穿过参考平面的点。</li>
+<li><strong>升交点赤经（RAAN）：</strong> 升交点赤经是轨道平面与参考平面的交点在参考平面上的角度。它通常用度数表示，表示轨道平面相对于参考平面的方向。升交点赤经是相对于一些固定的星座背景，例如春分点的赤经。</li>
+<li><strong>赤经：</strong> 赤经是类似于经度的一个概念，用于表示天球上的位置。它是一个沿着赤道的角度度量。</li>
+</ol>
+<p>升交点赤经的值描述了轨道平面与参考平面的相对方向。通过调整升交点赤经，可以实现对轨道平面在天球上的位置的调整。这在卫星任务规划和设计中非常重要，因为不同的升交点赤经可以影响卫星在天球上的轨迹和可见性。</p>
+<h3 id="计算-4"><a href="#计算-4" class="headerlink" title="计算"></a>计算</h3><p>在天体力学及太空动力学中，升交点经度 (longitude of ascending node)（符号是☊ 或 Ω） 可以从轨道状态向量 [r,v] 计算如下：<br>$$<br>h &#x3D; r * v(r: 为天体的位置向量,v: 为天体的速度向量,h: 为天体的角动量向量)<br>$$<br>位置向量与速度向量构成轨道面，故其外积(角动量向量)在轨道面法线方向。<br>$$<br>n&#x3D;\vec{z} * h<br>$$<br>其中：<br>$\vec{z}$为参考平面Z轴单位向量。此单位向量垂直于参考平面。为参考面的法线。</p>
+<p>$n$为升交点向量。与升交点线 (line of ascending node) 平行。</p>
+<p>因升交点线为轨道面与参考面的交线，故升交点向量与两平面的法线(ℎ及z向量)都垂直。所以，可以由两平面的法线的外积推算出其方向。而它与参考面的 X 轴的夹角，便是升交点经度。<br>$$<br>cosΩ&#x3D;\frac{n*\vec{x}}{|n|},Ω&#x3D;arccos\frac{n_x}{|n|}(n_y&gt;&#x3D;0),Ω&#x3D;2π-arccos\frac{n_x}{|n|}(n_y&lt;0)<br>$$<br>$\vec{x}$为参考平面 $X$轴单位向量</p>
+<p>此处:<br>$$<br>n&#x3D;（n_x, n_y, n_z）<br>$$<br>是指向升交点的向量。参考平面是假设的xy平面，经度原点的位置在x轴的方向</p>
+<p>对无倾斜轨道（轨道倾斜角为0度）就无须定义Ω。计算时依惯例设为0，也就是说指向昇交点的向量<em><strong>n</strong></em>在参考平面上的方向就是x轴。</p>
+<h2 id="近地点时间"><a href="#近地点时间" class="headerlink" title="近地点时间"></a><strong>近地点时间</strong></h2><h3 id="概念-4"><a href="#概念-4" class="headerlink" title="概念"></a>概念</h3><p>“近地点时间”是描述卫星轨道的一个参数，<strong>它表示卫星在其轨道上通过近地点的时间</strong>。这个时间参数对于卫星轨道力学和卫星任务规划都是重要的。</p>
+<p>在卫星轨道中，有两个关键的时间参数，即近地点时间（Time of Periapsis Passage）和远地点时间（Time of Apoapsis Passage）。</p>
+<ol>
+<li><strong>近地点时间：</strong> 近地点时间是指卫星在轨道上通过近地点的具体时间。这个时间是相对于一些参考时刻或时刻起点而言的，通常以儒略日期（Julian Date）或其他时间标准表示。</li>
+<li><strong>远地点时间：</strong> 远地点时间是指卫星在轨道上通过远地点的时间。与近地点时间类似，它也是相对于某个参考时刻的时间。</li>
+</ol>
+<p>这两个时间参数对于卫星任务和轨道设计非常关键。通过调整卫星轨道的参数，可以实现对近地点和远地点的控制，从而影响卫星在轨道上的运动特性，比如覆盖范围、观测时间等。</p>
+<p>在卫星任务规划中，可以选择特定的近地点时间，以便卫星在轨道上的某个位置对地球进行观测。这样的调整可以使卫星在关注的区域上停留更长的时间，提高任务的效果。</p>
+<h3 id="计算-5"><a href="#计算-5" class="headerlink" title="计算"></a>计算</h3><p>近地点时间的计算涉及到轨道周期、轨道倾角以及轨道长半轴等轨道参数。下面是一个简化的计算公式，假设轨道是一个椭圆轨道：<br>$$<br>T_p&#x3D;T-\frac{Longitude of Ascending Node}{360}<br>$$</p>
+<p>其中：<br>$T_p$:近地点时间</p>
+<p>$T$:轨道周期</p>
+<p>$Longitude of Ascending Node$：升交点经度</p>
+<h2 id="TLE文件"><a href="#TLE文件" class="headerlink" title="TLE文件"></a>TLE文件</h2><blockquote>
+<p>TLE(Two-Line Orbital Element)两行轨道数据（两行轨道根数）<a target="_blank" rel="noopener" href="https://www.space-track.org/documentation#/tle">https://www.space-track.org/documentation#/tle</a></p>
+</blockquote>
+<h3 id="文件样例"><a href="#文件样例" class="headerlink" title="文件样例"></a>文件样例</h3><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">ISS (ZARYA)
+1 25544U 98067A   04236.56031392  .00020137  00000-0  16538-3 0  9993
+2 25544  51.6335 344.7760 0007976 126.2523 325.9359 15.70406856328906<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="TLE文件介绍"><a href="#TLE文件介绍" class="headerlink" title="TLE文件介绍"></a>TLE文件介绍</h3><table>
+<thead>
+<tr>
+<th><strong>Line 0</strong></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Columns</strong></td>
+<td><strong>Example</strong></td>
+<td><strong>Description</strong></td>
+</tr>
+<tr>
+<td>1-24</td>
+<td>ISS (ZARYA)</td>
+<td>卫星通用名称</td>
+</tr>
+<tr>
+<td><strong>Line 1</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Columns</strong></td>
+<td><strong>Example</strong></td>
+<td><strong>Description</strong></td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>行号</td>
+</tr>
+<tr>
+<td>3-7</td>
+<td>25544</td>
+<td>航天器NORAD编号</td>
+</tr>
+<tr>
+<td>8</td>
+<td>U</td>
+<td>数据集类别，U为不保密，C为保密，S为机密</td>
+</tr>
+<tr>
+<td>10-17</td>
+<td>98067A</td>
+<td>ISS (ZARYA)国际编号为1998-067A，98为发射年份，067为当年第67次发射，A为发射物体编号</td>
+</tr>
+<tr>
+<td>19-32</td>
+<td>04236.56031392</td>
+<td>TLE发布时间，04为历年，236.56031392为十进制表示的历日</td>
+</tr>
+<tr>
+<td>34-43</td>
+<td>.00020137</td>
+<td>每一天平均运动的变化，来评估轨道漂移的情况</td>
+</tr>
+<tr>
+<td>45-52</td>
+<td>00000-0</td>
+<td>Mean Motion的二阶时间导数</td>
+</tr>
+<tr>
+<td>54-61</td>
+<td>16538-3</td>
+<td>B*阻力系数</td>
+</tr>
+<tr>
+<td>63</td>
+<td>0</td>
+<td>定轨模型类型，太空军内部为1，公开使用为0，使用SGP4&#x2F;SDP4</td>
+</tr>
+<tr>
+<td>65-68</td>
+<td>999</td>
+<td>数据集编号，第999组TLE数据</td>
+</tr>
+<tr>
+<td>69</td>
+<td>3</td>
+<td>校验位</td>
+</tr>
+<tr>
+<td><strong>Line 2</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Columns</strong></td>
+<td><strong>Example</strong></td>
+<td><strong>Description</strong></td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>行号</td>
+</tr>
+<tr>
+<td>3-7</td>
+<td>25544</td>
+<td>航天器NORAD编号</td>
+</tr>
+<tr>
+<td>9-16</td>
+<td>51.6335</td>
+<td>轨道倾角</td>
+</tr>
+<tr>
+<td>18-25</td>
+<td>344.7760</td>
+<td>升交点赤经</td>
+</tr>
+<tr>
+<td>27-33</td>
+<td>0007976</td>
+<td>偏心率</td>
+</tr>
+<tr>
+<td>35-42</td>
+<td>126.2523</td>
+<td>近地点辐角</td>
+</tr>
+<tr>
+<td>44-51</td>
+<td>325.9359</td>
+<td>平近点角</td>
+</tr>
+<tr>
+<td>53-63</td>
+<td>15.70406856</td>
+<td>平均运动，每天环绕地球的圈数</td>
+</tr>
+<tr>
+<td>64-68</td>
+<td>32890</td>
+<td>发射以来的飞行圈数</td>
+</tr>
+<tr>
+<td>69</td>
+<td>6</td>
+<td>校验位</td>
+</tr>
+</tbody></table>
+<h1 id="轨迹计算"><a href="#轨迹计算" class="headerlink" title="轨迹计算"></a>轨迹计算</h1><h2 id="轨道理论模型"><a href="#轨道理论模型" class="headerlink" title="轨道理论模型"></a>轨道理论模型</h2><blockquote>
+<p>两体问题模型</p>
+<ol>
+<li><strong>开普勒问题解法：</strong>开普勒定律和开普勒方程的解析解。</li>
+<li><strong>Cowell’s Method：</strong>Cowell引入的数值积分法，用于模拟天体的轨道演化。</li>
+<li><strong>Encke’s Method：</strong>Encke引入的数值积分法，用于计算彗星轨道。</li>
+<li><strong>Gauss’s Method：</strong>高斯引入的方法，通过三次观测来确定天体轨道。</li>
+</ol>
+<p>多体问题模型</p>
+<ol>
+<li><strong>Simplified General Perturbations (SGP) 系列：</strong></li>
+</ol>
+<p>  SGP：一种用于计算地球轨道上人造卫星位置的简化模型。</p>
+<p>  SGP4：SGP的升级版本，更适用于近地轨道的卫星。</p>
+<p>  SGP8：SGP4的改进版本，考虑更多的扰动因素。</p>
+<ol start="2">
+<li><p><strong>N-body Simulation：</strong>多体问题的数值积分模拟，通过数值方法模拟多个天体的相互引力作用。</p>
+</li>
+<li><p><strong>Lambert’s Problem Solving：</strong>Lambert问题的解法，用于找到连接两个点的轨道。</p>
+</li>
+<li><p><strong>扰动理论：</strong></p>
+</li>
+</ol>
+<p>  平均场理论：考虑周期性摄动，通过平均近似来简化计算。</p>
+<p>  变分法：通过对轨道参数的微小变化进行分析。</p>
+</blockquote>
+<h2 id="轨道模型算法"><a href="#轨道模型算法" class="headerlink" title="轨道模型算法"></a>轨道模型算法</h2><blockquote>
+<p>SGP4（Simplified General Perturbations 4）是一种用于计算地球轨道上人造卫星位置的轨道理论模型。这个模型是为了预测卫星在地球轨道上的位置而设计的，主要用于卫星跟踪、导航和轨道计算等应用。以下是SGP4算法的一般步骤：</p>
+</blockquote>
+<ol>
+<li><strong>读取TLE数据：</strong> 输入SGP4模型的主要数据是卫星的两行轨道元素（Two-Line Element, TLE），它们包含了卫星的轨道参数。</li>
+<li><strong>提取轨道元素：</strong> 从TLE数据中提取出轨道的相关元素，包括轨道倾角、卫星轨道周期、升交点赤经等。</li>
+<li><strong>计算时间参数：</strong> 将当前时间转换为与TLE数据中的参考时刻相对应的时间。</li>
+<li><strong>计算平均运动：</strong> 使用TLE中提供的平均运动参数，计算卫星的平均运动。</li>
+<li><strong>计算摄动项：</strong> 考虑到多种扰动因素，包括地球引力、太阳引力、月球引力等，计算这些摄动项的影响。</li>
+<li><strong>积分运动方程：</strong> 使用数值积分的方法，例如牛顿法或常见的积分方法（如Runge-Kutta方法），将卫星的运动方程积分得到位置和速度。</li>
+<li><strong>修正轨道：</strong> 考虑地球的非球形引力、太阳辐射压力等效应，对轨道进行修正。</li>
+<li><strong>计算地心坐标：</strong> 将轨道元素转换为地心惯性坐标系下的位置和速度。</li>
+<li><strong>修正光行时：</strong> 由于信号传播的有限速度，需要考虑光行时修正，以获得观测者的视觉位置。</li>
+<li><strong>输出结果：</strong> 输出卫星的地心坐标，提供给用户进行进一步的处理或显示。</li>
+</ol>
+<blockquote>
+<p>开普勒问题解法</p>
+</blockquote>
+<ol>
+<li><strong>输入参数：</strong> 提供质点的质量、初始位置和速度，以及引力常数 $G$。</li>
+<li><strong>初始化：</strong> 设置初始时间 $t_0$、初始位置 $(x_0, y_0)$ 和初始速度 $(v_{x0}, v_{y0})$。</li>
+<li><strong>计算角动量：</strong> 计算角动量 $h$ 和开普勒常数 $k$。<br>$$ h &#x3D; \sqrt{v_{x0}^2 + v_{y0}^2} $$<br>$$k &#x3D; G \cdot (m_1 + m_2) $$</li>
+<li><strong>计算开普勒方程的初始值：</strong> 计算开普勒方程的初始值 $u_0$。<br>$$ u_0 &#x3D; \arctan\left(\frac{y_0 \cdot v_{x0} - x_0 \cdot v_{y0}}{x_0 \cdot v_{x0} + y_0 \cdot v_{y0}}\right) $$</li>
+<li><strong>数值积分：</strong> 使用数值积分方法（例如Euler法、Runge-Kutta法等）来逐步计算角度 $$u$$ 随时间的演化。<br>$$ \frac{du}{dt} &#x3D; \frac{k}{h^2} - \frac{1}{r} $$<br>其中，$r$ 是质点到中心的距离，可以通过以下公式计算:<br>$$ r &#x3D; \sqrt{(x - x_0)^2 + (y - y_0)^2} $$</li>
+<li><strong>计算质点位置：</strong> 使用极坐标转换将 $u$ 转换为质点的位置 $(x, y)$。<br>$$ x &#x3D; r \cdot \cos(u) $$<br>$$ y &#x3D; r \cdot \sin(u) $$</li>
+</ol>
+<blockquote>
+<p>数值积分法</p>
+</blockquote>
+<ol>
+<li><p><strong>输入参数：</strong> 初始位置 $\vec{r}_0$、初始速度 $\vec{v}_0$、质点质量 $m$、引力常数 $G$、积分时间步长 $\Delta t$ 和积分总时长 $T$。</p>
+</li>
+<li><p><strong>初始化：</strong> 设置初始时间 $t &#x3D; 0$，以及当前位置 $\vec{r} &#x3D; \vec{r}_0$ 和当前速度 $\vec{v} &#x3D; \vec{v}_0$。</p>
+</li>
+<li><p><strong>数值积分：</strong> 使用Euler法或Runge-Kutta法进行逐步积分，更新位置和速度。</p>
+<p><strong>Euler法：</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">for t in range(0, T, Δt):
+    v +&#x3D; (Δt * acceleration(t, r, v, m, G))
+    r +&#x3D; (Δt * v)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>Runge-Kutta法（4阶）：</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">for t in range(0, T, Δt):
+    k1 &#x3D; Δt * acceleration(t, r, v, m, G)
+    k2 &#x3D; Δt * acceleration(t + Δt&#x2F;2, r + v * Δt&#x2F;2, v + k1&#x2F;2, m, G)
+    k3 &#x3D; Δt * acceleration(t + Δt&#x2F;2, r + v * Δt&#x2F;2, v + k2&#x2F;2, m, G)
+    k4 &#x3D; Δt * acceleration(t + Δt, r + v * Δt, v + k3, m, G)
+    v +&#x3D; (k1 + 2*k2 + 2*k3 + k4) &#x2F; 6
+    r +&#x3D; Δt * v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p><strong>输出结果：</strong> 得到模拟的轨道位置和速度。</p>
+</li>
+</ol>
+<h1 id="星座"><a href="#星座" class="headerlink" title="星座"></a>星座</h1><h2 id="概念-5"><a href="#概念-5" class="headerlink" title="概念"></a>概念</h2><p>在卫星领域，星座（Satellite constellation）有时亦称卫星星系，通常指的是一组相互协同工作的卫星，共同组成一个网络以提供特定的服务或功能。这些卫星通常被设计成相互协同工作，以形成一个整体的卫星系统。星座的设计和运营需要综合考虑许多因素，以确保整个星座系统能够有效地提供所需的服务。</p>
+<p>以下是关于卫星星座的一些关键概念：</p>
+<ol>
+<li><strong>卫星星座：</strong> 卫星星座是指一组在轨卫星，它们一起工作以完成特定的任务。这个任务可能涉及覆盖广阔的地球区域、提供全球通信、执行科学观测等。卫星星座通常被设计成在空间中相对均匀分布，以实现更好的服务覆盖。</li>
+<li><strong>通信星座：</strong> 通信星座是一种常见的星座类型，旨在提供全球通信服务。这些星座中的卫星通常设计成在轨道上的不同位置，以确保在地球上的任何位置都能看到至少一个卫星。这样，用户就能够在全球范围内保持通信连接。</li>
+<li><strong>导航卫星星座：</strong> 导航星座是设计用于提供全球导航和定位服务的星座。全球卫星导航系统（如GPS、GLONASS、Galileo）就是由多颗卫星组成的星座，用于提供全球的位置信息。</li>
+<li><strong>科学观测星座：</strong> 一些星座被设计成执行科学观测任务，例如地球观测、天文学观测等。这些星座中的卫星通常配备有各种传感器和仪器，用于收集有关地球、太阳系或宇宙其他部分的数据。</li>
+<li><strong>轨道设计：</strong> 星座中的卫星通常被安排在特定的轨道上，以实现星座的整体性能。轨道的选择可以受到许多因素的影响，包括任务需求、地球覆盖要求以及卫星之间的协同工作。</li>
+</ol>
+<p>以下为GPS卫星：</p>
+<p>GPS星座要求24颗卫星平均分布在六个轨道平面上。可以观察到地球表面的某一点能接收到卫星信号数量是如何随时间变化的。</p>
+<p>例子中的接受信号点位于美国科罗拉多州戈尔登的位置39.7469°N 105.2108°W</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/2/27/GPS24goldenSML.gif"></p>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p>在卫星星座设计和管理中，涉及到一些算法和技术，用于优化轨道配置、卫星部署、通信管理等方面。以下是一些与卫星星座相关的算法：</p>
+<ol>
+<li><p><strong>轨道设计算法：</strong> 这些算法用于确定每颗卫星的轨道参数，包括半长轴、偏心率、倾角等，以确保整个星座可以达到设计目标，比如全球覆盖或特定区域的高分辨率覆盖。遗传算法、模拟退火算法等优化算法通常用于轨道设计。</p>
+</li>
+<li><p><strong>星座配置算法：</strong> 星座配置算法用于确定卫星的相对位置和轨道之间的相对角度，以最大程度地满足通信或观测的需求。这些算法通常考虑星座的均匀分布和相互之间的覆盖关系。</p>
+</li>
+<li><p><strong>星座管理算法：</strong> 管理星座中卫星的状态、位置和通信链路的切换等问题。这包括考虑卫星的故障管理、时延优化、能源管理等方面。动态规划、强化学习等方法可用于星座管理。</p>
+</li>
+<li><p><strong>通信资源分配算法：</strong> 用于在星座中合理分配通信资源，以满足用户需求。这可能涉及频谱分配、功率控制、多址协议等问题。优化算法如线性规划、整数规划等可用于通信资源的分配。</p>
+</li>
+<li><p><strong>星间链路优化算法：</strong> 用于优化星座中卫星之间的星间链路，包括链路的数据传输速率、时延、覆盖范围等方面。这可能涉及到动态规划、图论等算法。</p>
+</li>
+<li><p><strong>星座中的卫星运动算法：</strong> 这些算法用于模拟卫星的运动、轨道变化，以及考虑星座中卫星之间的相对运动。牛顿运动定律、开普勒定律等物理模型通常用于模拟卫星的轨道运动。</p>
+</li>
+</ol>
+<p>这些算法的选择取决于星座的具体目标和应用场景。星座设计和管理是一个复杂的问题，需要综合考虑多个因素，包括通信性能、资源利用效率、能源消耗等。</p>
+<h2 id="星座生成"><a href="#星座生成" class="headerlink" title="星座生成"></a>星座生成</h2><blockquote>
+<p>SGP4算法</p>
+</blockquote>
+<ol>
+<li><strong>生成星座参数设置：</strong> 创建 <code>GenerateSatelliteDto</code> 对象，设置生成星座的参数，包括轨道平面数量、单轨道卫星数量、相位因子、种子卫星ID以及星座ID。</li>
+<li><strong>生成星座数据：</strong> 调用 <code>generateSatellite</code> 方法，该方法根据输入的参数生成一组新的 TLE 数据列表，并将其保存到数据库中。在生成 TLE 数据时，通过对种子卫星的信息进行调整，生成具有新的轨道参数的卫星数据。</li>
+<li><strong>查看生成的卫星数据：</strong> 可以通过查询数据库，获取生成的卫星数据。这些数据包括卫星名称、NORAD ID、星座ID、发射时间、轨道参数、地面位置等信息。</li>
+<li><strong>计算卫星位置：</strong> 对于每个生成的卫星，使用SGP4模型计算卫星在特定时间的地球上的位置。这包括计算卫星的经度、纬度、高度等信息。</li>
+<li><strong>保存卫星数据：</strong> 将计算得到的卫星位置信息以及其他属性保存到数据库中，包括卫星的轨道位置、发射时间、覆盖角度等。</li>
+<li><strong>输出结果：</strong> 输出生成的卫星数据，可以按照需要格式化输出，例如卫星名称、NORAD ID、发射时间等信息。</li>
+</ol>
+<h1 id="N重覆盖"><a href="#N重覆盖" class="headerlink" title="N重覆盖"></a>N重覆盖</h1><h2 id="概念-6"><a href="#概念-6" class="headerlink" title="概念"></a>概念</h2><p>“N重覆盖”是一个通信系统中的概念，尤其是在通信卫星的设计和部署中经常涉及到。这个概念描述了通过多颗卫星提供覆盖以增强通信系统性能的能力。</p>
+<p>在通信系统中，覆盖是指系统提供服务的地理区域。N重覆盖则表示系统中有多个相互重叠的覆盖区域，其中 N 表示覆盖的数量。这种设计有助于提高覆盖的可靠性、稳定性和可用性。</p>
+<p>以下是关于N重覆盖的一些关键概念：</p>
+<ol>
+<li><strong>覆盖区域：</strong> 通信卫星旨在覆盖地球上的特定区域。一个卫星的覆盖区域取决于其轨道和信号传播特性。</li>
+<li><strong>N重覆盖：</strong> N重覆盖是指通过多个相互重叠的覆盖区域来提供服务。这可以通过部署多颗卫星，每颗卫星负责一个特定的覆盖区域，从而实现对整个地球的全球覆盖。</li>
+<li><strong>覆盖切换：</strong> 在N重覆盖系统中，覆盖切换是指在不同的覆盖区域之间切换服务。这种切换可以是自动的，也可以是由系统操作员手动触发的。</li>
+<li><strong>容错性：</strong> N重覆盖提供了一定的容错性。如果一颗卫星发生故障或失效，其他卫星仍然可以提供服务，从而增加了系统的可靠性。</li>
+<li><strong>覆盖重叠：</strong> N重覆盖的优势之一是覆盖区域的重叠。这种重叠可以确保在边缘区域和切换区域都能获得良好的通信性能。</li>
+<li><strong>系统设计：</strong> N重覆盖的系统设计需要考虑卫星的轨道、通信频段、天线指向和切换算法等因素，以确保整个系统能够高效、稳定地运行。</li>
+</ol>
+<p>N重覆盖是一种有效的方法，特别适用于需要全球覆盖并要求高可用性的通信系统，如卫星通信系统。</p>
+<h2 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h2><p>“N重覆盖”是一种卫星通信系统中的概念，其中多颗卫星提供重叠的覆盖区域，以增强通信系统的性能。在设计N重覆盖系统时，可能需要考虑以下一些算法和技术：</p>
+<ol>
+<li><strong>轨道配置算法：</strong> 这些算法用于确定每颗卫星的轨道参数，以确保它们在空间中均匀分布，覆盖区域之间有适当的重叠。这可以涉及到轨道高度、倾角、卫星数目等参数的优化。优化算法，如遗传算法、模拟退火算法等，可能用于找到最优的轨道配置。</li>
+<li><strong>覆盖区域划分算法：</strong> 一种有效的方法是使用地理信息系统（GIS）和空间分析技术，以确保每个卫星的覆盖区域具有适当的重叠，以实现平滑的切换。这可能涉及到对地球表面进行网格划分或使用多边形覆盖技术。</li>
+<li><strong>通信资源调度算法：</strong> 对于N重覆盖系统，通信资源的有效调度至关重要。这可能包括频谱分配、功率控制、多址协议等。通信资源分配的算法可能采用线性规划、整数规划等方法。</li>
+<li><strong>星间链路优化算法：</strong> 考虑到N个卫星之间的星间链路，需要一些算法来优化链路的性能，包括数据传输速率、时延、重叠区域的切换等。动态规划、图论等算法可以应用于这些问题。</li>
+<li><strong>容错性和动态重分配算法：</strong> 在N重覆盖系统中，考虑卫星的动态状态和可能的故障情况是重要的。算法可以用于动态地重分配通信资源和覆盖区域，以应对卫星的变化和故障。</li>
+</ol>
+<p>设计N重覆盖系统的算法需要综合考虑多个因素，包括覆盖区域的质量、通信效率、系统容错性等。具体的算法选择取决于具体的系统设计目标和应用场景。</p>
+<h2 id="N重覆盖算法"><a href="#N重覆盖算法" class="headerlink" title="N重覆盖算法"></a>N重覆盖算法</h2><ol>
+<li><strong>SGP4模型：</strong>用于卫星轨道的预测。在代码中，使用了SGP4模型（<code>SatelliteUtils.getSatPositionAtTime</code>）计算了低地球轨道（LEO）卫星在指定时间的位置信息。SGP4是一种通用的摄动模型，用于准确地预测卫星的轨道位置。</li>
+<li><strong>地面子点计算：</strong>利用SGP4计算得到的卫星位置，通过投影将其映射到地球表面上，得到地面子点的经纬度。这一步是通过<code>SatelliteUtils.calcSatSubPoint</code>方法实现的。</li>
+<li><strong>大地测量计算：</strong>使用<code>GeodeticCalculator</code>进行大地测量计算，计算卫星与地面站之间的方位角、俯仰角以及距离。这些参数对于了解卫星与地面站之间的空间关系至关重要。</li>
+<li><strong>覆盖范围生成：</strong>通过<code>SatelliteUtils.createCircle</code>方法生成卫星的覆盖范围，其中覆盖角度和卫星高度用于计算圆的半径。生成的覆盖范围通过多边形（<code>Polygon</code>）表示，可以用于后续的分析。</li>
+<li><strong>链路仿真计算：</strong>对于低、中轨卫星，进行了可视化分析和链路仿真计算。这包括计算方位角、俯仰角、距离等参数，以及在最小距离处进行链路仿真计算。这一过程有助于评估卫星与地面站之间的通信链路质量。</li>
+</ol>
+<p><strong>N重覆盖程序执行的主要步骤如下：</strong></p>
+<ol>
+<li><strong>初始化数据：</strong>获取计算请求的相关参数，包括项目ID、卫星数据、地面站数据、计算开始时间、计算结束时间等。</li>
+<li><strong>删除原数据：</strong>清除之前计算的原始数据，包括覆盖请求数据、覆盖仿真计算结果、低轨可视化分析、方位俯仰数据、链路计算数据等。</li>
+<li><strong>解析参数并保存请求数据：</strong>解析并保存地面站链路参数数据，包括地面站ID、起始时间、速率等，同时保存计算请求的相关信息。</li>
+<li><strong>进行N重覆盖仿真：</strong>根据给定的时间范围、时间间隔，对低、中轨卫星进行N重覆盖仿真。此过程涉及到卫星位置的预测（SGP4模型）、地面子点计算、覆盖范围生成等步骤。</li>
+<li><strong>可视化分析和链路计算：</strong>针对低、中轨卫星，计算每个地面站与卫星之间的方位角、俯仰角、距离等参数。在最小距离的地方进行链路仿真计算，以评估通信链路的质量。</li>
+<li><strong>统计数据：</strong>对低、中轨卫星的仿真计算结果进行统计，包括各地面站的覆盖次数、最小距离等信息。</li>
+<li><strong>进行高轨卫星链路计算：</strong>针对高轨卫星，进行链路综合计算，包括链路仿真、容量仿真等。</li>
+<li><strong>统计高轨卫星数据：</strong>对高轨卫星链路计算的结果进行统计，包括各地面站的链路参数、信噪比等信息。</li>
+<li><strong>计算完成：</strong>更新计算进度，标记N重覆盖仿真计算完成。程序执行完毕，提供相应的计算结果和统计信息。</li>
+</ol>
+<h1 id="星间链路"><a href="#星间链路" class="headerlink" title="星间链路"></a>星间链路</h1><h2 id="概念-7"><a href="#概念-7" class="headerlink" title="概念"></a>概念</h2><p>“星间链路”（Inter-Satellite Link，ISL）是卫星网络中的一个概念，指的是两颗或多颗卫星之间的通信链接。这些链接允许卫星直接相互通信，而无需通过地面站进行中继。星间链路在卫星通信网络中起着关键的作用，可以提高通信系统的效率、容错性和覆盖范围。</p>
+<p>以下是关于星间链路的一些关键概念：</p>
+<ol>
+<li><strong>直接卫星通信：</strong> 星间链路允许卫星之间直接通信，而无需通过地面站。这种直接通信可以降低时延，提高通信效率。</li>
+<li><strong>高效数据传输：</strong> 通过星间链路，卫星可以在它们之间快速、高效地传输数据。这对于大规模卫星网络、卫星互联网和卫星导航系统等应用至关重要。</li>
+<li><strong>星座协同工作：</strong> 星间链路允许卫星星座中的不同卫星之间协同工作。这对于提供全球范围的覆盖、灵活的通信和无缝切换等方面非常有用。</li>
+<li><strong>时延降低：</strong> 由于直接卫星通信，星间链路可以减少信号传播的时延，从而提高实时通信的性能。</li>
+<li><strong>容错性提高：</strong> 星间链路的使用可以提高卫星系统的容错性。如果一个卫星失效，其他卫星仍然可以通过星间链路保持通信，提高了整个系统的可用性。</li>
+<li><strong>轨道设计考虑：</strong> 星间链路的实现需要考虑卫星的轨道设计、通信频段、天线指向等因素。这有助于确保星间链路的稳定和可靠。</li>
+</ol>
+<p>星间链路对于构建大型、高性能的卫星网络，如卫星互联网和星座卫星导航系统，都是非常关键的。通过直接卫星通信，星间链路为卫星提供了更大的灵活性和独立性。</p>
+<h2 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h2><p>星间链路（Inter-Satellite Links，ISLs）是卫星星座中卫星之间直接通信的链接。为了实现高效、可靠的星间链路，涉及到一些算法和技术。以下是一些可能应用于星间链路的算法：</p>
+<ol>
+<li><strong>链路建立和维护算法：</strong> 星间链路需要能够在卫星之间建立并维护通信连接。算法需要考虑卫星位置、相对速度、信号传播时延等因素。建立和维护星间链路可能涉及到信号探测、跟踪和切换等。</li>
+<li><strong>星间链路路径规划算法：</strong> 在星座中，卫星之间可能有多个路径可以建立星间链路。路径规划算法可以优化星间链路的路径，以最小化时延、最大化数据传输速率或考虑其他性能指标。</li>
+<li><strong>星间链路资源分配算法：</strong> 资源分配算法用于分配星间链路的频谱、功率、数据传输速率等资源，以确保链路性能的最优化。这可能涉及到动态频谱分配、功率控制、拥塞管理等。</li>
+<li><strong>星间链路质量监测与改进算法：</strong> 由于卫星的运动、大气影响等因素，星间链路的质量可能会发生变化。算法可以用于监测链路质量，并采取适当的措施进行调整，以提高链路性能。</li>
+<li><strong>星间链路切换算法：</strong> 当卫星从一个星间链路中切换到另一个时，需要有效的切换算法。这可能涉及到与相邻卫星的协同工作，以确保平滑的切换过程。</li>
+<li><strong>星座中的链路层协议：</strong> 星座中的卫星通常需要运行链路层协议来管理星间链路。这可能包括数据帧的格式、流控制、差错检测和纠错等。</li>
+<li><strong>星座中的安全和认证算法：</strong> 由于星间链路传输的是敏感的通信数据，因此需要使用安全和认证算法来保护通信的隐私和完整性。这可能包括加密算法、数字签名等。</li>
+</ol>
+<p>这些算法涵盖了星间链路中的一些关键方面，以确保卫星之间的直接通信在各种条件下都能够高效、可靠地进行。不同的卫星任务和星座设计可能需要不同的算法和策略。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8D%AB%E6%98%9F%E6%A6%82%E5%BF%B5/" rel="tag"># 卫星概念</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/post/kafka.html" rel="prev" title="kafka">
+      <i class="fa fa-chevron-left"></i> kafka
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/post/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html" rel="next" title="设计模式">
+      设计模式 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A6%86%E7%9B%96%E6%9C%AF%E8%AF%AD"><span class="nav-number">1.</span> <span class="nav-text">覆盖术语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E8%A6%86%E7%9B%96"><span class="nav-number">1.1.</span> <span class="nav-text">简单覆盖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A6%86%E7%9B%96%E9%87%8D%E6%95%B0"><span class="nav-number">1.2.</span> <span class="nav-text">覆盖重数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A6%86%E7%9B%96%E6%97%B6%E9%97%B4"><span class="nav-number">1.3.</span> <span class="nav-text">覆盖时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%AE%BF%E6%97%B6%E9%97%B4"><span class="nav-number">1.4.</span> <span class="nav-text">重访时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E6%97%B6%E9%95%BF"><span class="nav-number">1.5.</span> <span class="nav-text">访问时长</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E6%AC%A1%E6%95%B0"><span class="nav-number">1.6.</span> <span class="nav-text">访问次数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E5%88%86%E9%9A%94%E6%97%B6%E9%95%BF"><span class="nav-number">1.7.</span> <span class="nav-text">访问分隔时长</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A6%86%E7%9B%96%E9%97%B4%E9%9A%99%E6%95%B0"><span class="nav-number">1.8.</span> <span class="nav-text">覆盖间隙数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A6%86%E7%9B%96%E9%97%B4%E9%9A%99%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87%E4%BB%A5%E4%B8%8B%E5%85%AC%E5%BC%8F%E6%9D%A5%E4%BC%B0%E7%AE%97%EF%BC%9A-Number-of-Gaps"><span class="nav-number">2.</span> <span class="nav-text">覆盖间隙数的计算可以通过以下公式来估算：$$Number\ of\ Gaps</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%B9%B3%E5%9D%87%E9%97%B4%E9%9A%94"><span class="nav-number">2.1.</span> <span class="nav-text">时间平均间隔</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%8D%E5%BA%94%E6%97%B6%E9%97%B4"><span class="nav-number">2.2.</span> <span class="nav-text">响应时间</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%A8%E9%81%93%E5%8F%82%E6%95%B0%E5%85%AD%E8%A6%81%E7%B4%A0"><span class="nav-number">3.</span> <span class="nav-text">轨道参数六要素</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%91%E5%9C%B0%E7%82%B9%E5%B9%85%E8%A7%92"><span class="nav-number">3.1.</span> <span class="nav-text">近地点幅角</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">3.1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97"><span class="nav-number">3.1.2.</span> <span class="nav-text">计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8A%E9%95%BF%E8%BD%B4"><span class="nav-number">3.2.</span> <span class="nav-text">半长轴</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">3.2.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97-1"><span class="nav-number">3.2.2.</span> <span class="nav-text">计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A6%BB%E5%BF%83%E7%8E%87%EF%BC%88%E5%81%8F%E5%BF%83%E7%8E%87%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">离心率（偏心率）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-1"><span class="nav-number">3.3.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97-2"><span class="nav-number">3.3.2.</span> <span class="nav-text">计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%A8%E9%81%93%E5%80%BE%E8%A7%92"><span class="nav-number">3.4.</span> <span class="nav-text">轨道倾角</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-2"><span class="nav-number">3.4.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97-3"><span class="nav-number">3.4.2.</span> <span class="nav-text">计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%87%E4%BA%A4%E7%82%B9%E7%BB%8F%E5%BA%A6"><span class="nav-number">3.5.</span> <span class="nav-text">升交点经度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-3"><span class="nav-number">3.5.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97-4"><span class="nav-number">3.5.2.</span> <span class="nav-text">计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%91%E5%9C%B0%E7%82%B9%E6%97%B6%E9%97%B4"><span class="nav-number">3.6.</span> <span class="nav-text">近地点时间</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-4"><span class="nav-number">3.6.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97-5"><span class="nav-number">3.6.2.</span> <span class="nav-text">计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TLE%E6%96%87%E4%BB%B6"><span class="nav-number">3.7.</span> <span class="nav-text">TLE文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%A0%B7%E4%BE%8B"><span class="nav-number">3.7.1.</span> <span class="nav-text">文件样例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TLE%E6%96%87%E4%BB%B6%E4%BB%8B%E7%BB%8D"><span class="nav-number">3.7.2.</span> <span class="nav-text">TLE文件介绍</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%A8%E8%BF%B9%E8%AE%A1%E7%AE%97"><span class="nav-number">4.</span> <span class="nav-text">轨迹计算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%A8%E9%81%93%E7%90%86%E8%AE%BA%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.1.</span> <span class="nav-text">轨道理论模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%A8%E9%81%93%E6%A8%A1%E5%9E%8B%E7%AE%97%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">轨道模型算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%98%9F%E5%BA%A7"><span class="nav-number">5.</span> <span class="nav-text">星座</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-5"><span class="nav-number">5.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-number">5.2.</span> <span class="nav-text">算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%9F%E5%BA%A7%E7%94%9F%E6%88%90"><span class="nav-number">5.3.</span> <span class="nav-text">星座生成</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#N%E9%87%8D%E8%A6%86%E7%9B%96"><span class="nav-number">6.</span> <span class="nav-text">N重覆盖</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-6"><span class="nav-number">6.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95-1"><span class="nav-number">6.2.</span> <span class="nav-text">算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#N%E9%87%8D%E8%A6%86%E7%9B%96%E7%AE%97%E6%B3%95"><span class="nav-number">6.3.</span> <span class="nav-text">N重覆盖算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%98%9F%E9%97%B4%E9%93%BE%E8%B7%AF"><span class="nav-number">7.</span> <span class="nav-text">星间链路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-7"><span class="nav-number">7.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95-2"><span class="nav-number">7.2.</span> <span class="nav-text">算法</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">potter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">potter</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
