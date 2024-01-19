@@ -1349,6 +1349,123 @@ X-Frame-Options: SAMEORIGIN<span aria-hidden="true" class="line-numbers-rows"><s
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Git.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Git.html" class="post-title-link" itemprop="url">git-简明指南</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li>创建新仓库</li>
+</ol>
+<blockquote>
+<p>创建文件夹，打开执行git init,创建新的git仓库</p>
+</blockquote>
+<ol start="2">
+<li>克隆仓库</li>
+</ol>
+<blockquote>
+<ol>
+<li>克隆本地仓库 git clone &#x2F;path&#x2F;repository</li>
+<li>克隆远程仓库 git clone username@host:&#x2F;path&#x2F;repository</li>
+</ol>
+</blockquote>
+<ol start="3">
+<li>工作流</li>
+</ol>
+<blockquote>
+<p>本地仓库由三棵树维护，第一个是工作目录，第二个是git add 以后进入暂存区域index,第三个是 git commit 以后进入head，但是还没到远端仓库</p>
+</blockquote>
+<ol start="4">
+<li>推送远程仓库</li>
+</ol>
+<blockquote>
+<p>git commit以后会进入本地仓库的head区域，执行git push origin master 会推送到远程仓库</p>
+<p>如果没有克隆仓库，但是你想连接远程的某个服务 git remote add origin <Server>,就可以推送上去了</Server></p>
+</blockquote>
+<ol start="5">
+<li>分支</li>
+</ol>
+<blockquote>
+<p>分支是用来绝缘开发的，当你创建完仓库后，master是默认分支，在其他分支上进行开发，完成后再合并到主分支</p>
+<p>创建一个分支： git checkout  -b feature_x</p>
+<p>切回主分支： git checkout master</p>
+<p>删除分支： git checkout -d feature_x</p>
+<p>将本地分支推送到远程仓库： git push origin <branch></branch></p>
+</blockquote>
+<ol start="6">
+<li>更新与合并</li>
+</ol>
+<blockquote>
+<p>将远程仓库更新到本地：git pull(git fetch 获取最新的版本到本地 + git merage 将最新的版本与本地的合并)</p>
+<p>如果本地和远程产生冲突，需要手动处理冲突的文件名，然后进行git add 冲突文件名</p>
+<p>查看分支的区别：git diff <source_branch> <target_branch></target_branch></source_branch></p>
+</blockquote>
+<ol start="7">
+<li>日志</li>
+</ol>
+<blockquote>
+<p>查看本地仓库的操作记录： git log</p>
+<p>查看具体某个人的操作记录： git log –author&#x3D;”xxxx”</p>
+</blockquote>
+<ol start="8">
+<li>替换本地改动</li>
+</ol>
+<blockquote>
+<p>替换本地改动： git checkout –<filename> 此命令会使head中最新的内容替换掉你的工作目录的文件（已经添加到暂存区的或新创建的文件都不会影响）</filename></p>
+<p>放弃本地改动与提交，可以从服务器上获取最新版，并将本地分支指向它，git fetch origin 获取远程最新的仓库，git reset –hard origin&#x2F;master</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/ClickHouse0904.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2679,123 +2796,6 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
 </li>
 </ol>
 <p>面直接讲metadata的表结构拷贝过去的方法，有一个致命的BUG。如果表是分布式表，直接将表结构拷贝，虽然clickHouse中表已经创建成功，但是在ZK上的表的唯一地址并不会自动创建。所以所有需要与ZK交互的表都变成： Read Only模式,不能插入数据</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Git.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Git.html" class="post-title-link" itemprop="url">git-简明指南</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ol>
-<li>创建新仓库</li>
-</ol>
-<blockquote>
-<p>创建文件夹，打开执行git init,创建新的git仓库</p>
-</blockquote>
-<ol start="2">
-<li>克隆仓库</li>
-</ol>
-<blockquote>
-<ol>
-<li>克隆本地仓库 git clone &#x2F;path&#x2F;repository</li>
-<li>克隆远程仓库 git clone username@host:&#x2F;path&#x2F;repository</li>
-</ol>
-</blockquote>
-<ol start="3">
-<li>工作流</li>
-</ol>
-<blockquote>
-<p>本地仓库由三棵树维护，第一个是工作目录，第二个是git add 以后进入暂存区域index,第三个是 git commit 以后进入head，但是还没到远端仓库</p>
-</blockquote>
-<ol start="4">
-<li>推送远程仓库</li>
-</ol>
-<blockquote>
-<p>git commit以后会进入本地仓库的head区域，执行git push origin master 会推送到远程仓库</p>
-<p>如果没有克隆仓库，但是你想连接远程的某个服务 git remote add origin <Server>,就可以推送上去了</Server></p>
-</blockquote>
-<ol start="5">
-<li>分支</li>
-</ol>
-<blockquote>
-<p>分支是用来绝缘开发的，当你创建完仓库后，master是默认分支，在其他分支上进行开发，完成后再合并到主分支</p>
-<p>创建一个分支： git checkout  -b feature_x</p>
-<p>切回主分支： git checkout master</p>
-<p>删除分支： git checkout -d feature_x</p>
-<p>将本地分支推送到远程仓库： git push origin <branch></branch></p>
-</blockquote>
-<ol start="6">
-<li>更新与合并</li>
-</ol>
-<blockquote>
-<p>将远程仓库更新到本地：git pull(git fetch 获取最新的版本到本地 + git merage 将最新的版本与本地的合并)</p>
-<p>如果本地和远程产生冲突，需要手动处理冲突的文件名，然后进行git add 冲突文件名</p>
-<p>查看分支的区别：git diff <source_branch> <target_branch></target_branch></source_branch></p>
-</blockquote>
-<ol start="7">
-<li>日志</li>
-</ol>
-<blockquote>
-<p>查看本地仓库的操作记录： git log</p>
-<p>查看具体某个人的操作记录： git log –author&#x3D;”xxxx”</p>
-</blockquote>
-<ol start="8">
-<li>替换本地改动</li>
-</ol>
-<blockquote>
-<p>替换本地改动： git checkout –<filename> 此命令会使head中最新的内容替换掉你的工作目录的文件（已经添加到暂存区的或新创建的文件都不会影响）</filename></p>
-<p>放弃本地改动与提交，可以从服务器上获取最新版，并将本地分支指向它，git fetch origin 获取远程最新的仓库，git reset –hard origin&#x2F;master</p>
-</blockquote>
 
       
     </div>
