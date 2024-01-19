@@ -352,7 +352,7 @@ dbMapping:
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-01-19 09:19:00" itemprop="dateModified" datetime="2024-01-19T09:19:00+08:00">2024-01-19</time>
+                <time title="修改时间：2024-01-19 09:38:58" itemprop="dateModified" datetime="2024-01-19T09:38:58+08:00">2024-01-19</time>
               </span>
 
           
@@ -448,6 +448,7 @@ dbMapping:
 </blockquote>
 <p>这个时间包括了用户请求的提交、系统对请求的处理和准备、卫星定位和调整轨道等步骤。较短的响应时间通常意味着卫星系统能够更及时地满足用户的需求，特别对于需要实时数据或通信的应用非常关键。</p>
 <p>响应时间的具体数值可能受到卫星系统设计、通信链路、轨道调整能力等多方面因素的影响。系统优化和性能改进往往需要综合考虑这些因素，以提高卫星系统的响应速度，满足用户的实时性需求。</p>
+<hr>
 <h2 id="轨道参数六要素"><a href="#轨道参数六要素" class="headerlink" title="轨道参数六要素"></a>轨道参数六要素</h2><blockquote>
 <p>卫星轨道就是卫星在太空中运行的轨迹。具体来说就是卫星在太空中围绕着它的“主体”运行的时候所形成的路径，一般都是椭圆形的。通常情况下，这个轨道相对于其“主体”是固定的。卫星轨道平面与地球赤道平面的夹角叫“轨道倾角”，它是确定卫星轨道空间位置的一个重要参数。轨道倾角小于90度为顺行轨道，轨道倾角大于90度为逆行轨道；轨道倾角为0度则为赤道轨道；轨道倾角等于90度，则轨道平面通过地球南北极，亦称“极轨道”。人造地球卫星绕地球运行，当它从地球南半球向北半球运行时，穿过地球赤道平面的那一点叫“升交点”。所谓升交点赤经，就是从春分点到地心的连线与从升交点到地心的连线的夹角。人造地球卫星在轨道上的每一个位置都会在地球表面上有一个投影，这叫“星下点”。所有星下点连成的曲线叫“星下点轨迹”。由于地球自转，星下点轨迹不只一条。相邻两条轨迹在同一纬度上的间隔正好等于地球在卫星轨道周期内转过的角度。根据星下点轨迹，可以预报卫星什么时候从什么地方上空经过。在航天指挥中心大厅的大型屏幕上，常可以看到上面显示的一条条星下点轨迹。相对于地球表面，星下点轨迹不断在平移。以下是人造地球卫星轨道的六要素</p>
 </blockquote>
@@ -552,28 +553,33 @@ $$
 <p>这两个时间参数对于卫星任务和轨道设计非常关键。通过调整卫星轨道的参数，可以实现对近地点和远地点的控制，从而影响卫星在轨道上的运动特性，比如覆盖范围、观测时间等。</p>
 <p>在卫星任务规划中，可以选择特定的近地点时间，以便卫星在轨道上的某个位置对地球进行观测。这样的调整可以使卫星在关注的区域上停留更长的时间，提高任务的效果。</p>
 <h4 id="计算-5"><a href="#计算-5" class="headerlink" title="计算"></a>计算</h4><p>近地点时间的计算涉及到轨道周期、轨道倾角以及轨道长半轴等轨道参数。下面是一个简化的计算公式，假设轨道是一个椭圆轨道：<br>$$<br>T_p&#x3D;T-\frac{Longitude of Ascending Node}{360}<br>\<br>其中：<br>T_p:近地点时间，<br>T:轨道周期，<br>Longitude of Ascending Node：升交点经度<br>$$</p>
-<h2 id="轨迹计算"><a href="#轨迹计算" class="headerlink" title="轨迹计算"></a>轨迹计算</h2><h4 id="轨道理论模型"><a href="#轨道理论模型" class="headerlink" title="轨道理论模型"></a>轨道理论模型</h4><h5 id="两体问题"><a href="#两体问题" class="headerlink" title="两体问题"></a>两体问题</h5><ol>
+<h2 id="轨迹计算"><a href="#轨迹计算" class="headerlink" title="轨迹计算"></a>轨迹计算</h2><h4 id="轨道理论模型"><a href="#轨道理论模型" class="headerlink" title="轨道理论模型"></a>轨道理论模型</h4><blockquote>
+<h5 id="两体问题模型"><a href="#两体问题模型" class="headerlink" title="两体问题模型"></a>两体问题模型</h5><ol>
 <li><strong>开普勒问题解法：</strong>开普勒定律和开普勒方程的解析解。</li>
 <li><strong>Cowell’s Method：</strong>Cowell引入的数值积分法，用于模拟天体的轨道演化。</li>
 <li><strong>Encke’s Method：</strong>Encke引入的数值积分法，用于计算彗星轨道。</li>
 <li><strong>Gauss’s Method：</strong>高斯引入的方法，通过三次观测来确定天体轨道。</li>
 </ol>
-<h5 id="多体问题"><a href="#多体问题" class="headerlink" title="多体问题"></a>多体问题</h5><ol>
-<li><p><strong>Simplified General Perturbations (SGP) 系列：</strong></p>
-<p>SGP：一种用于计算地球轨道上人造卫星位置的简化模型。</p>
-<p>SGP4：SGP的升级版本，更适用于近地轨道的卫星。</p>
-<p>SGP8：SGP4的改进版本，考虑更多的扰动因素。</p>
-</li>
+<h5 id="多体问题模型"><a href="#多体问题模型" class="headerlink" title="多体问题模型"></a>多体问题模型</h5><ol>
+<li><strong>Simplified General Perturbations (SGP) 系列：</strong></li>
+</ol>
+<p>  SGP：一种用于计算地球轨道上人造卫星位置的简化模型。</p>
+<p>  SGP4：SGP的升级版本，更适用于近地轨道的卫星。</p>
+<p>  SGP8：SGP4的改进版本，考虑更多的扰动因素。</p>
+<ol start="2">
 <li><p><strong>N-body Simulation：</strong>多体问题的数值积分模拟，通过数值方法模拟多个天体的相互引力作用。</p>
 </li>
 <li><p><strong>Lambert’s Problem Solving：</strong>Lambert问题的解法，用于找到连接两个点的轨道。</p>
 </li>
 <li><p><strong>扰动理论：</strong></p>
-<p>平均场理论：考虑周期性摄动，通过平均近似来简化计算。</p>
-<p>变分法：通过对轨道参数的微小变化进行分析。</p>
 </li>
 </ol>
-<h4 id="轨道模型算法"><a href="#轨道模型算法" class="headerlink" title="轨道模型算法"></a>轨道模型算法</h4><h5 id="SGP4"><a href="#SGP4" class="headerlink" title="SGP4"></a>SGP4</h5><p>SGP4（Simplified General Perturbations 4）是一种用于计算地球轨道上人造卫星位置的轨道理论模型。这个模型是为了预测卫星在地球轨道上的位置而设计的，主要用于卫星跟踪、导航和轨道计算等应用。以下是SGP4算法的一般步骤：</p>
+<p>  平均场理论：考虑周期性摄动，通过平均近似来简化计算。</p>
+<p>  变分法：通过对轨道参数的微小变化进行分析。</p>
+</blockquote>
+<h4 id="轨道模型算法"><a href="#轨道模型算法" class="headerlink" title="轨道模型算法"></a>轨道模型算法</h4><blockquote>
+<p>SGP4（Simplified General Perturbations 4）是一种用于计算地球轨道上人造卫星位置的轨道理论模型。这个模型是为了预测卫星在地球轨道上的位置而设计的，主要用于卫星跟踪、导航和轨道计算等应用。以下是SGP4算法的一般步骤：</p>
+</blockquote>
 <ol>
 <li><strong>读取TLE数据：</strong> 输入SGP4模型的主要数据是卫星的两行轨道元素（Two-Line Element, TLE），它们包含了卫星的轨道参数。</li>
 <li><strong>提取轨道元素：</strong> 从TLE数据中提取出轨道的相关元素，包括轨道倾角、卫星轨道周期、升交点赤经等。</li>
@@ -586,7 +592,10 @@ $$
 <li><strong>修正光行时：</strong> 由于信号传播的有限速度，需要考虑光行时修正，以获得观测者的视觉位置。</li>
 <li><strong>输出结果：</strong> 输出卫星的地心坐标，提供给用户进行进一步的处理或显示。</li>
 </ol>
-<h5 id="开普勒问题解法"><a href="#开普勒问题解法" class="headerlink" title="开普勒问题解法"></a>开普勒问题解法</h5><ol>
+<blockquote>
+<p>开普勒问题解法</p>
+</blockquote>
+<ol>
 <li><strong>输入参数：</strong> 提供质点的质量、初始位置和速度，以及引力常数 $$G$$。</li>
 <li><strong>初始化：</strong> 设置初始时间 $$t_0$$、初始位置 $$(x_0, y_0)$$ 和初始速度 $$ (v_{x0}, v_{y0})$$。</li>
 <li><strong>计算角动量：</strong> 计算角动量 $$h$$ 和开普勒常数 $$k$$。<br>$$ h &#x3D; \sqrt{v_{x0}^2 + v_{y0}^2} $$<br>$$ k &#x3D; G \cdot (m_1 + m_2) $$</li>
@@ -594,7 +603,10 @@ $$
 <li><strong>数值积分：</strong> 使用数值积分方法（例如Euler法、Runge-Kutta法等）来逐步计算角度 $$u$$ 随时间的演化。<br>$$ \frac{du}{dt} &#x3D; \frac{k}{h^2} - \frac{1}{r} $$<br>其中，$$r$$ 是质点到中心的距离，可以通过以下公式计算:<br>$$ r &#x3D; \sqrt{(x - x_0)^2 + (y - y_0)^2} $$</li>
 <li><strong>计算质点位置：</strong> 使用极坐标转换将 $$u$$ 转换为质点的位置 $$(x, y)$$。<br>$$ x &#x3D; r \cdot \cos(u) $$<br>$$ y &#x3D; r \cdot \sin(u) $$</li>
 </ol>
-<h5 id="数值积分法"><a href="#数值积分法" class="headerlink" title="数值积分法"></a>数值积分法</h5><ol>
+<blockquote>
+<p>数值积分法</p>
+</blockquote>
+<ol>
 <li><p><strong>输入参数：</strong> 初始位置 $$\vec{r}_0$$、初始速度 $$\vec{v}_0$$、质点质量 $$m$$、引力常数 $$G$$、积分时间步长 $$\Delta t$$ 和积分总时长 $$T$$。</p>
 </li>
 <li><p><strong>初始化：</strong> 设置初始时间 $$t &#x3D; 0$$，以及当前位置 $$\vec{r} &#x3D; \vec{r}_0$$ 和当前速度 $$\vec{v} &#x3D; \vec{v}_0$$。</p>
@@ -616,6 +628,7 @@ $$
 <li><p><strong>输出结果：</strong> 得到模拟的轨道位置和速度。</p>
 </li>
 </ol>
+<hr>
 <h2 id="星座"><a href="#星座" class="headerlink" title="星座"></a>星座</h2><h3 id="概念-4"><a href="#概念-4" class="headerlink" title="概念"></a>概念</h3><p>在卫星领域，星座（Satellite constellation）有时亦称卫星星系，通常指的是一组相互协同工作的卫星，共同组成一个网络以提供特定的服务或功能。这些卫星通常被设计成相互协同工作，以形成一个整体的卫星系统。星座的设计和运营需要综合考虑许多因素，以确保整个星座系统能够有效地提供所需的服务。</p>
 <p>以下是关于卫星星座的一些关键概念：</p>
 <ol>
@@ -656,6 +669,7 @@ $$
 <li><strong>保存卫星数据：</strong> 将计算得到的卫星位置信息以及其他属性保存到数据库中，包括卫星的轨道位置、发射时间、覆盖角度等。</li>
 <li><strong>输出结果：</strong> 输出生成的卫星数据，可以按照需要格式化输出，例如卫星名称、NORAD ID、发射时间等信息。</li>
 </ol>
+<hr>
 <h2 id="N重覆盖"><a href="#N重覆盖" class="headerlink" title="N重覆盖"></a>N重覆盖</h2><h3 id="概念-5"><a href="#概念-5" class="headerlink" title="概念"></a>概念</h3><p>“N重覆盖”是一个通信系统中的概念，尤其是在通信卫星的设计和部署中经常涉及到。这个概念描述了通过多颗卫星提供覆盖以增强通信系统性能的能力。</p>
 <p>在通信系统中，覆盖是指系统提供服务的地理区域。N重覆盖则表示系统中有多个相互重叠的覆盖区域，其中 N 表示覆盖的数量。这种设计有助于提高覆盖的可靠性、稳定性和可用性。</p>
 <p>以下是关于N重覆盖的一些关键概念：</p>
@@ -696,6 +710,7 @@ $$
 <li><strong>统计高轨卫星数据：</strong>对高轨卫星链路计算的结果进行统计，包括各地面站的链路参数、信噪比等信息。</li>
 <li><strong>计算完成：</strong>更新计算进度，标记N重覆盖仿真计算完成。程序执行完毕，提供相应的计算结果和统计信息。</li>
 </ol>
+<hr>
 <h2 id="星间链路"><a href="#星间链路" class="headerlink" title="星间链路"></a>星间链路</h2><h3 id="概念-6"><a href="#概念-6" class="headerlink" title="概念"></a>概念</h3><p>“星间链路”（Inter-Satellite Link，ISL）是卫星网络中的一个概念，指的是两颗或多颗卫星之间的通信链接。这些链接允许卫星直接相互通信，而无需通过地面站进行中继。星间链路在卫星通信网络中起着关键的作用，可以提高通信系统的效率、容错性和覆盖范围。</p>
 <p>以下是关于星间链路的一些关键概念：</p>
 <ol>
