@@ -165,7 +165,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Mysql.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/LeetCode%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -179,7 +179,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/Mysql.html" class="post-title-link" itemprop="url">数据库</a>
+            <a href="/post/LeetCode%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95.html" class="post-title-link" itemprop="url">Leetcode刷题记录</a>
         </h2>
 
         <div class="post-meta">
@@ -203,465 +203,67 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="什么是Schema设计"><a href="#什么是Schema设计" class="headerlink" title="什么是Schema设计"></a>什么是Schema设计</h2><blockquote>
-<p>Schema设计指的是对数据库表的设计</p>
+          <h2 id="LeetCode刷题记录"><a href="#LeetCode刷题记录" class="headerlink" title="LeetCode刷题记录"></a>LeetCode刷题记录</h2><h3 id="2208将数组和减半的最少操作次数"><a href="#2208将数组和减半的最少操作次数" class="headerlink" title="2208将数组和减半的最少操作次数"></a>2208将数组和减半的最少操作次数</h3><blockquote>
+<p>题目描述：</p>
+<p>给你一个正整数数组 <code>nums</code> 。每一次操作中，你可以从 <code>nums</code> 中选择 <strong>任意</strong> 一个数并将它减小到 <strong>恰好</strong> 一半。（注意，在后续操作中你可以对减半过的数继续执行操作）请你返回将 <code>nums</code> 数组和 <strong>至少</strong> 减少一半的 <strong>最少</strong> 操作数。</p>
 </blockquote>
-<h3 id="Schema设计目标"><a href="#Schema设计目标" class="headerlink" title="Schema设计目标"></a>Schema设计目标</h3><p><strong>可用的设计目标</strong></p>
 <blockquote>
-<p>对需求深刻理解，知道存储哪些数据能够保证业务流程顺利进行，并且使用合适的数据类型进行存储，保证所设计的数据库和数据表能够支撑当前的业务需求，且在技术实现上没有弊端，那它是可用的。</p>
-</blockquote>
-<p><strong>好用的设计目标</strong></p>
-<blockquote>
-<p>随业务规模变大，数据量规模也会有所上升，如何保持较高的性能，如将通用信息单独使用一张表存储，建立适当索引等。</p>
-</blockquote>
-<h3 id="Schema设计原则"><a href="#Schema设计原则" class="headerlink" title="Schema设计原则"></a>Schema设计原则</h3><blockquote>
-<ul>
-<li>数据库表名称，列名称，数据库名称都要用小写</li>
-<li>名称有意义，多个单词之间用下划线连接，名称不要过长</li>
-<li>够用且尽量小（数据库类型满足需求的前提下选择占用空间少的，减少用户存储空间和索引空间）</li>
-<li>不使用物理外键</li>
-<li>表一定要有主键</li>
-<li>保持一致编码字符集，如数据库、数据表、数据列字符集都应该是utf8或者utf8mb4</li>
-</ul>
-</blockquote>
-<h3 id="库设计规范"><a href="#库设计规范" class="headerlink" title="库设计规范"></a>库设计规范</h3><p><strong>创建数据库语句</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token keyword">database</span> <span class="token keyword">if</span> <span class="token operator">not</span> <span class="token keyword">exists</span> databases_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><strong>一个库应该存储多少张表</strong></p>
-<blockquote>
-<p>不要超过200个表，几十到100更适宜，表越多，需要维护的表结构越多，同时存储的数据量越大会给数据库造成很大压力，一旦出现损失，丢失的数据量也就越多。</p>
-</blockquote>
-<h3 id="表设计规范"><a href="#表设计规范" class="headerlink" title="表设计规范"></a>表设计规范</h3><p><strong>范式和反范式</strong></p>
-<blockquote>
-<p>范式化它的核心是数据只出现一次，不存在冗余数据，反范式破了这个规则，有冗余数据的存在</p>
-</blockquote>
-<p><strong>范式的优缺点</strong></p>
-<blockquote>
-<ul>
-<li>使用更少的存储空间</li>
-<li>由于没有冗余数据，增删改查速度快</li>
-<li>由于不存在冗余数据，稍微复杂的业务可能要做好几张表的关联</li>
-</ul>
-</blockquote>
-<p><strong>三大范式</strong></p>
-<blockquote>
-<p>1NF: 字段不可分，原子性，字段不可以再分，否则就不是关系型数据库</p>
-<p>2NF: 有主键，非主键字段依赖主键，唯一性，一个表说明一个事物</p>
-<p>3NF: 非主键字段之间不能依赖，每列都和主键有直接关系，但是不能传递依赖关系，各个非主键字段不能互相传递</p>
-</blockquote>
-<p><strong>宽表窄表</strong></p>
-<blockquote>
-<p>mysql对于每个表有4096列的限制，真正使用的限制取决于引擎，对于innodb来说，限制1017列</p>
-<p>宽表：超过40列的表，数据量比较大，占用存储空间多，降低排序分组的性能。</p>
-<p>窄表：少于40列的表，数据列比较分散，编写关联查询难度大。</p>
-</blockquote>
-<p><strong>索引合理使用</strong></p>
-<blockquote>
-<p>建立索引，能够加速表的数据查询，它也会占据一定的存储空间，缺点就是以空间换查询时间，与此同时插入，删除，更新的性能都会下降，要追求空间和时间的平衡，既不占用过多的存储空间，也保持较高的性能。</p>
-</blockquote>
-<h2 id="数据类型的说明"><a href="#数据类型的说明" class="headerlink" title="数据类型的说明"></a>数据类型的说明</h2><blockquote>
-<p>数据类型定义了数据库的列可以存储什么样类型的数据以及当前数据存储的基本规则，从mysql的角度出发，数据类型是为了方便对数据进行分类，使用统一的方式进行有效管理，更好的利用有限的空间。</p>
-</blockquote>
-<h3 id="数据类型分类"><a href="#数据类型分类" class="headerlink" title="数据类型分类"></a>数据类型分类</h3><blockquote>
-<p>mysql的数据类型通常分为四类</p>
+<p>技能掌握：</p>
 <ol>
-<li>字符串类型，如char、varchar、text，用于存储字符、字符串数据</li>
-<li>日期&#x2F;时间类型，如date、time、datetime、timestamp,用于存储时间或者日期，这种数据类型比较难选。</li>
-<li>数值类型，如tinyint、int 、bigint、float 、double、decimal,用于存储整数或者小数</li>
-<li>二进制类型，tityblob、blob、mediumblob、longblob，用于存储二进制数据</li>
+<li><h4 id="贪心算法基本思想"><a href="#贪心算法基本思想" class="headerlink" title="贪心算法基本思想"></a>贪心算法基本思想</h4></li>
+<li><h4 id="优先级队列使用"><a href="#优先级队列使用" class="headerlink" title="优先级队列使用"></a>优先级队列使用</h4></li>
+<li><h4 id="Lambda对数组排序"><a href="#Lambda对数组排序" class="headerlink" title="Lambda对数组排序"></a>Lambda对数组排序</h4></li>
 </ol>
 </blockquote>
-<h3 id="使用建议"><a href="#使用建议" class="headerlink" title="使用建议"></a>使用建议</h3><h4 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h4><blockquote>
-<p><strong>1.char数据类型</strong></p>
-<p>char数据类型用于存储固定长度的字符串，长度位于1-255之间，当存储字符串的长度未达到指定固定的长度，就会用空格填充造成空间浪费。</p>
-<p>char类型实际应用有手机号、身份证号。</p>
-<p><strong>2.varchar数据类型</strong></p>
-<p>varchar数据类型定义的是一个可变长度的字符串，长度位于0-65535，存储的字符串长度不能超过所指定的长度，且最大长度不能超过65535，对于长度不固定的用varchar数据类型比较合适。</p>
-<p>varchar类型的实际应用：姓名、邮箱等</p>
-<blockquote>
-<p><strong>char和varchar的区别：</strong></p>
-</blockquote>
-<blockquote>
-<p>（1）char指定了长度后，如果存储字符的长度不足，就会用空格补充，查询的时候再将空格去掉，所以char类型的存储的字符串不能有空格，varchar不受此限制。</p>
-</blockquote>
-<blockquote>
-<p>（2）由于char的长度固定，不论存入多少，都会占用固定长度的字节，但是varchar存入的字节数是存入字符数的+1（长度小于255）或者+2（长度大于255）</p>
-</blockquote>
-<blockquote>
-<p>（3）由于char的长度是固定的，不需要考虑边界问题，检索速度快于varchar</p>
-</blockquote>
-<p><strong>3.tinytext、text、mediumtext、longtext数据类型</strong></p>
-<p>mysql提供了四种文本数据类型，都属于可变长字符串，唯一不同的是存储空间不同</p>
-<p>tinytext 2^8-1</p>
-<p>text 2^16-1</p>
-<p>mediuntext 2^24-1</p>
-<p>longtext 2^32-1</p>
-<p>当存储的数据量过大时，就要考虑用文本了，当数据量超过500就应该使用文本，文本类型不能有默认值，且创建索引的时候要指定前多少个字符。</p>
-</blockquote>
-<h4 id="日期-x2F-时间类型"><a href="#日期-x2F-时间类型" class="headerlink" title="日期&#x2F;时间类型"></a>日期&#x2F;时间类型</h4><blockquote>
-<p><strong>1.date数据类型</strong></p>
-<blockquote>
-<p>date数据类型用于存储日期，存储范围为’1000-01-01’-‘9999-12-31’,只能用于存储年月日</p>
-</blockquote>
-<blockquote>
-<p>适合场景：出生日期</p>
-</blockquote>
-<p><strong>2.time数据类型</strong></p>
-<blockquote>
-<p>用于存储时间，不仅能够表示一天中的时间，也可以用于表示两个时间的间隔。存储范围是’-838:59:59’-‘838:59:59’,time还可以按照“D HH:MM:SS”格式存储，D的取值是0-34</p>
-</blockquote>
-<blockquote>
-<p>适合场景：具体时间</p>
-</blockquote>
-<p><strong>3.datetime数据类型</strong></p>
-<blockquote>
-<p>日期和时间的组合</p>
-</blockquote>
-<blockquote>
-<p>适合场景：数据插入时间和订单完成时间等等。</p>
-</blockquote>
-<p><strong>4.timestamp数据类型</strong></p>
-<blockquote>
-<p>用于存储日期和时间的数据，取值范围‘1970-01-01 00:00:01.000000’ UTC 到 ‘2038-01-19 03:14:07.999999’ UTC,它与datetime时间范围相比较少，和时区相关，当插入时间的时候，会先转换成本地时区，在存储，查询时间时，会先转换为本地时区在显示，不同时区看到的同一时间时不一样的</p>
-</blockquote>
-<p><strong>注意：</strong>datetime最佳选择，时间范围足够大，不管是只要时间还是日期在代码中处理即可，避免需求变更对数据库表进行改动。</p>
-</blockquote>
-<h4 id="数值类型"><a href="#数值类型" class="headerlink" title="数值类型"></a>数值类型</h4><p><strong>1.整数类型</strong></p>
+<ol>
+<li><h4 id="贪心算法的基本思想"><a href="#贪心算法的基本思想" class="headerlink" title="贪心算法的基本思想"></a>贪心算法的基本思想</h4><p>如果一个问题得不到最优解，把原问题拆解成小问题，计算每个小问题的最优解，把小问题的最优解叠起来就是整个问题的最优解。</p>
+</li>
+<li><h4 id="优先级队列使用-1"><a href="#优先级队列使用-1" class="headerlink" title="优先级队列使用"></a>优先级队列使用</h4><p>队列是按照先进先出的原则（FIFO）,优先级队列出队顺序由优先级决定。</p>
+<p>Java Queue的常用方法</p>
 <table>
 <thead>
 <tr>
-<th>数据类型</th>
-<th>占据空间</th>
-<th>范围（有符号）</th>
-<th>范围（无符号）</th>
+<th>方法</th>
 <th>描述</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>tinyint</td>
-<td>1字节</td>
-<td>-2^7 - 2^7 - 1</td>
-<td>0 - 127</td>
-<td>小整数值</td>
+<td>add</td>
+<td>添加元素，如果队列已满，抛出IIIegalSlabEepeplian</td>
 </tr>
 <tr>
-<td>smallint</td>
-<td>2字节</td>
-<td>-2^15 - 2^15 -1</td>
-<td>0 - 65535</td>
-<td>大整数值</td>
+<td>remove</td>
+<td>移除并返回队列的头部元素，如果队列为空，抛出NoSuchElementException</td>
 </tr>
 <tr>
-<td>mediumint</td>
-<td>3 字节</td>
-<td>-2^23 - 2^23 - 1</td>
-<td>0 - 16777215</td>
-<td>大整数值</td>
+<td>element</td>
+<td>返回队列头部元素，如果队列为空，抛出NoSuchElementException</td>
 </tr>
 <tr>
-<td>int</td>
-<td>4 字节</td>
-<td>-2^31 - 2^31 - 1</td>
-<td>0 - 4294967295</td>
-<td>大整数值</td>
+<td>offer</td>
+<td>添加元素，如果队列已满，返回false</td>
 </tr>
 <tr>
-<td>bigint</td>
-<td>8 个字节</td>
-<td>-2^63 - 2^63-1</td>
-<td>0 - 18446744073709551615</td>
-<td>极大整数值</td>
+<td>poll</td>
+<td>移除并返回队列的头部元素，如果队列为空,返回null</td>
+</tr>
+<tr>
+<td>peek</td>
+<td>返回队列头部元素，如果队列为空,返回null</td>
+</tr>
+<tr>
+<td>put</td>
+<td>添加元素，如果队列满，则阻塞</td>
+</tr>
+<tr>
+<td>take</td>
+<td>移除并返回头部元素</td>
 </tr>
 </tbody></table>
-<blockquote>
-<p>上述几种数据类型除了取值范围不同，其他的并没有本质的区别，在使用上选择足够大的空间就可以了，还有一个特性就是：显示宽度</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token operator">></span><span class="token identifier"><span class="token punctuation">`</span>a<span class="token punctuation">`</span></span> <span class="token keyword">bigint</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">COMMENT</span> <span class="token string">'a'</span><span class="token punctuation">,</span>
-<span class="token operator">></span><span class="token identifier"><span class="token punctuation">`</span>b<span class="token punctuation">`</span></span> <span class="token keyword">int</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">COMMENT</span> <span class="token string">'b'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li><h4 id="Lambda的使用"><a href="#Lambda的使用" class="headerlink" title="Lambda的使用"></a>Lambda的使用</h4></li>
+</ol>
 
-<p>20和11就是可选宽度，当b定义11时，如果存储宽度小于11会自动用空格补齐，定义宽度并不会影响字段的大小和存储值的范围</p>
-</blockquote>
-<p><strong>2.浮点类型</strong></p>
-<blockquote>
-<p>mysql支持两个浮点类型，float,double,float用于单精度浮点数，占用4个字节，double时双精度浮点数，占用8个字节，他们只能保存近似值，所以通常叫非标准类型，float相对于double来说，占用内存少，精度较低，取值范围较小。</p>
-<p>float(M,D),其中M是显示长度，D是定义的小数的位数，默认值是float(10,2),10是数字的总长包括小数位数，2是小数的位数，小数精度可以到24个精度。</p>
-<p>double(M,D)M和D的含义和float一样，默认值是double(16,4),它的小数精度可以到53位</p>
-</blockquote>
-<p>3.定点类型</p>
-<blockquote>
-<p>mysql中decimal被称为定点数据类型，由于它保存的是精确值，通常用于精度要求非常高的计算，也可以利用decimal保存比bigint更大的整数值。</p>
-<p>cpu不支持对decimal的数据类型进行计算，mysql自身实现了对decimal的高精度计算，底层实现方面，mysql将decimal的数据类型的数字使用二进制字符串进行存储，每4个字节存储9个数字。如果存储位数不够，则小数补0，但是，如果超出位数，就会报错。</p>
-<p>由于decimal需要比较大的空间和计算开销，他的计算效率没有float和double那么高，所以要求精确计算的场景下才会考虑使用decimal.</p>
-</blockquote>
-<h4 id="二进制类型"><a href="#二进制类型" class="headerlink" title="二进制类型"></a>二进制类型</h4><blockquote>
-<p>二进制类型理论上可以存储任何数据，如：文件、图片、其他多媒体数据，二进制数据类型相对于其他数据类型来</p>
-<p>说，使用频率较低，mysql一共提供了四种二进制数据类型，tityblob、blob、mediumblob、longblob他们的区别在于存储数据的范围不同</p>
-<ul>
-<li>tityblob 最大支持255字节</li>
-<li>blob 最大支持64kb</li>
-<li>mediumblob 最大支持 16MB</li>
-<li>longblob 最大支持4GB</li>
-</ul>
-<p>mysql提供并支持大文件存储，这样会降低数据库的性能，谨慎使用，能不用尽量不用</p>
-</blockquote>
-<h3 id="使用技巧"><a href="#使用技巧" class="headerlink" title="使用技巧"></a>使用技巧</h3><blockquote>
-<p><strong>1 使用not null 且带有comment</strong></p>
-<blockquote>
-<p>mysql的索引值为null时，会额外占用存储空间，另外进行比较和运算时，需要对null进行特殊处理，效率低</p>
-</blockquote>
-<blockquote>
-<p>comment就是列的注释，方便以后查阅</p>
-</blockquote>
-<p><strong>2 使用存储需要最小的数据类型</strong></p>
-<blockquote>
-<p>满足需求的前提下，选取最小的数据类型。</p>
-</blockquote>
-<blockquote>
-<p>可以选择tinyiny存储事件状态，可以使用smallint存储班级人数，并不需要都选择int进行存储。</p>
-</blockquote>
-<blockquote>
-<p>关于最小的数据类型的优势：</p>
-</blockquote>
-<blockquote>
-<ul>
-<li>越小的数据类型，占用磁盘、内存、cpu缓存都会更小、存取速度也会更快</li>
-<li>小的数据类型建立索引所需要的空间也相对的较少，这样一页中存储的索引节点数量也就越多，遍历的时候io就越少，索引的性能就越好。</li>
-</ul>
-</blockquote>
-<p><strong>3 选择简单的数据类型</strong></p>
-<p>能用int就不用varchar</p>
-<p><strong>4 存储订单金额小数直接用decimal</strong></p>
-<p><strong>5 尽量避免使用text和blob</strong></p>
-<blockquote>
-<p>mysql临时表并不支持text和blob这样的大数据类型，如果要查询这样的数据，则排序操作必须使用临时表，性能会下降很多。mysql对索引长度又限制，text类型只能用到前缀索引，并且由于存储的时指针，text列上不能有默认值。</p>
-</blockquote>
-</blockquote>
-<h2 id="Sql基础语法"><a href="#Sql基础语法" class="headerlink" title="Sql基础语法"></a>Sql基础语法</h2><h4 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h4><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">creat <span class="token keyword">database</span> databases_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h4 id="创建数据库表"><a href="#创建数据库表" class="headerlink" title="创建数据库表"></a>创建数据库表</h4><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token keyword">table</span> table_name <span class="token punctuation">(</span>
-cloumn_name1 data_type<span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">,</span>
-cloumn_name2 data_type<span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">,</span>
-cloumn_name3 data_type<span class="token punctuation">(</span>size<span class="token punctuation">)</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="sql约束"><a href="#sql约束" class="headerlink" title="sql约束"></a>sql约束</h4><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token keyword">table</span> table_name <span class="token punctuation">(</span>
-cloumn_name1 data_type<span class="token punctuation">(</span>size<span class="token punctuation">)</span> 约束<span class="token number">1</span><span class="token punctuation">,</span>
-cloumn_name2 data_type<span class="token punctuation">(</span>size<span class="token punctuation">)</span> 约束<span class="token number">2</span><span class="token punctuation">,</span>
-cloumn_name3 data_type<span class="token punctuation">(</span>size<span class="token punctuation">)</span> 约束<span class="token number">3</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h5 id="常见约束"><a href="#常见约束" class="headerlink" title="常见约束"></a>常见约束</h5><blockquote>
-<ul>
-<li>not null 不能存储空值</li>
-<li>unique 某列每行必须有唯一值</li>
-<li>pramary key 主键 not null和unique结合体</li>
-<li>foreign key  外键，可以从一个表的属性匹配到另一个表中</li>
-<li>check 保证某列的值符合指定条件</li>
-<li>default 设置默认值</li>
-</ul>
-</blockquote>
-<h6 id="Not-null-约束"><a href="#Not-null-约束" class="headerlink" title="Not null 约束"></a>Not null 约束</h6><blockquote>
-<p>约束强制列不包含null值。</p>
-</blockquote>
-<p><strong>语法使用</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token keyword">table</span> table_name<span class="token punctuation">(</span>
-id <span class="token keyword">int</span> <span class="token operator">not</span> <span class="token boolean">null</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>添加约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">Alter</span> <span class="token keyword">table</span> table_name <span class="token keyword">modify</span> id <span class="token keyword">int</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><strong>删除约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">Alter</span> <span class="token keyword">table</span> table_name <span class="token keyword">modify</span> id <span class="token keyword">int</span> <span class="token boolean">null</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h6 id="Unique约束"><a href="#Unique约束" class="headerlink" title="Unique约束"></a>Unique约束</h6><blockquote>
-<p>unique约束唯一标志数据库表中的每条记录。</p>
-<p>unique和primary key约束列或集合提供了唯一性的保证</p>
-<p>每个表可以有多个unique约束，但是primary key约束只有一个</p>
-</blockquote>
-<p><strong>创建约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token keyword">table</span> table_name<span class="token punctuation">(</span>
-id <span class="token keyword">int</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span>
-    <span class="token keyword">unique</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-<span class="token punctuation">)</span>
-
-<span class="token comment">//定义多个约束列</span>
-<span class="token keyword">create</span> <span class="token keyword">table</span> table_name<span class="token punctuation">(</span>
-id <span class="token keyword">int</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span>
-    name <span class="token keyword">varchar</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span>
-    <span class="token keyword">CONSTRAINT</span> uc_PersonID <span class="token keyword">unique</span> <span class="token punctuation">(</span>id<span class="token punctuation">,</span>name<span class="token punctuation">)</span>
-<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>添加约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">alter</span> <span class="token keyword">table</span> table_name <span class="token keyword">add</span> <span class="token keyword">unique</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-<span class="token comment">#定义多个约束列</span>
-<span class="token keyword">alter</span> <span class="token keyword">table</span> table_name <span class="token keyword">add</span>  <span class="token keyword">CONSTRAINT</span> uc_PersonID <span class="token keyword">unique</span><span class="token punctuation">(</span>id，name<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>删除约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">alter</span> <span class="token keyword">table</span> table_name  <span class="token keyword">drop</span> <span class="token keyword">index</span> uc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-
-
-<h6 id="Primary-key约束"><a href="#Primary-key约束" class="headerlink" title="Primary key约束"></a>Primary key约束</h6><blockquote>
-<p>primary key约束唯一标志数据库中的每条记录</p>
-<p>主键唯一，且不为空</p>
-<p>每个表都应该有一个主键，并且只有一个主键</p>
-</blockquote>
-<p><strong>创建约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token keyword">table</span> table_name <span class="token punctuation">(</span>
-id <span class="token keyword">int</span> <span class="token operator">not</span> <span class="token boolean">null</span> <span class="token punctuation">,</span>
-<span class="token keyword">primary</span> <span class="token keyword">key</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-<span class="token punctuation">)</span>
-
-<span class="token comment">#定义多列为主键</span>
-<span class="token keyword">create</span> <span class="token keyword">table</span> table_name <span class="token punctuation">(</span>
-id <span class="token keyword">int</span> <span class="token operator">not</span> <span class="token boolean">null</span> <span class="token punctuation">,</span>
-    name <span class="token keyword">varchar</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span>
- <span class="token keyword">constraint</span> uc <span class="token keyword">primary</span> <span class="token keyword">key</span> <span class="token punctuation">(</span>id<span class="token punctuation">,</span>name<span class="token punctuation">)</span>
-<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>添加约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">alter</span> <span class="token keyword">table</span> table_name <span class="token keyword">add</span> <span class="token keyword">primary</span> <span class="token keyword">key</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-<span class="token comment">//添加多列为主键</span>
-<span class="token keyword">alter</span> <span class="token keyword">table</span> table_name <span class="token keyword">add</span> <span class="token keyword">constraint</span> uc <span class="token keyword">primary</span> <span class="token keyword">key</span> <span class="token punctuation">(</span>id<span class="token punctuation">,</span>name<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>删除约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">alter</span> <span class="token keyword">table</span> table_name <span class="token keyword">drop</span> <span class="token keyword">primary</span> <span class="token keyword">key</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h6 id="Foreign-key约束"><a href="#Foreign-key约束" class="headerlink" title="Foreign key约束"></a>Foreign key约束</h6><blockquote>
-<p>一个表中的foregin key指向另一个表中unquie key唯一约束键</p>
-<p>防止非法数据插入外键列</p>
-</blockquote>
-<p><strong>创建约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token keyword">table</span> table_name <span class="token punctuation">(</span>
-    id <span class="token keyword">int</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span>
-    o_id <span class="token keyword">int</span> noy <span class="token boolean">null</span><span class="token punctuation">,</span>
-    <span class="token keyword">primary</span> <span class="token keyword">key</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">,</span>
-    <span class="token keyword">foreign</span> <span class="token keyword">key</span> <span class="token punctuation">(</span>o_id<span class="token punctuation">)</span> <span class="token keyword">references</span> other_table_name<span class="token punctuation">(</span>other_id<span class="token punctuation">)</span>
-	<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>添加约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">alter</span> <span class="token keyword">table</span> table_name <span class="token keyword">add</span> <span class="token keyword">foreign</span> <span class="token keyword">key</span> <span class="token punctuation">(</span>o_id<span class="token punctuation">)</span> <span class="token keyword">references</span>  other_table_name<span class="token punctuation">(</span>other_id<span class="token punctuation">)</span>
-<span class="token comment">#定义多个列</span>
-<span class="token keyword">alter</span> <span class="token keyword">table</span> table_name <span class="token keyword">add</span> <span class="token keyword">constraint</span> fk <span class="token keyword">foreign</span> <span class="token keyword">key</span> <span class="token punctuation">(</span>o_id<span class="token punctuation">)</span> <span class="token keyword">references</span> other_table_name<span class="token punctuation">(</span>other_id<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>删除约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">alter</span> <span class="token keyword">table</span> table_name <span class="token keyword">drop</span> <span class="token keyword">foreign</span> <span class="token keyword">key</span> fk<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h6 id="check约束"><a href="#check约束" class="headerlink" title="check约束"></a>check约束</h6><blockquote>
-<p>check用于限制列中值的范围</p>
-<p>对于单列进行check约束，那么该列只允许特定的值。</p>
-<p>如果对一个表进行check约束，此约束会基于行中其他列的值在特定的列中的值进行限制。</p>
-</blockquote>
-<p><strong>创建约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token keyword">table</span> table_name<span class="token punctuation">(</span>
-id <span class="token keyword">int</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span>
-<span class="token keyword">check</span> <span class="token punctuation">(</span>id<span class="token operator">></span><span class="token number">0</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span>
-<span class="token comment">//定义多个列的约束</span>
-<span class="token keyword">create</span> <span class="token keyword">table</span> table_name<span class="token punctuation">(</span>
-id <span class="token keyword">int</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">;</span>
-city <span class="token keyword">varchar</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span>
-<span class="token keyword">check</span> <span class="token punctuation">(</span>id<span class="token operator">></span><span class="token number">0</span> <span class="token operator">and</span> city<span class="token operator">=</span><span class="token string">'beijing'</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>添加约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">alter</span> <span class="token keyword">table</span> table_name <span class="token keyword">add</span> <span class="token keyword">check</span> <span class="token punctuation">(</span>id<span class="token operator">></span><span class="token number">0</span><span class="token punctuation">)</span>
-<span class="token comment">#定义多列约束</span>
-<span class="token keyword">alter</span> <span class="token keyword">table</span> table_name <span class="token keyword">add</span> <span class="token keyword">constraint</span> check_name <span class="token keyword">check</span> <span class="token punctuation">(</span>id<span class="token operator">></span><span class="token number">0</span> <span class="token operator">and</span> city<span class="token operator">=</span><span class="token string">'beijing'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>删除约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">alter</span> <span class="token keyword">table</span> table_name <span class="token keyword">drop</span> <span class="token keyword">check</span> check_name<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h6 id="Default约束"><a href="#Default约束" class="headerlink" title="Default约束"></a>Default约束</h6><blockquote>
-<p>default约束用于向列中插入默认值</p>
-</blockquote>
-<p><strong>创建约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token keyword">table</span> table_name<span class="token punctuation">(</span>
-id <span class="token keyword">int</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span>
-city <span class="token keyword">varchar</span> <span class="token operator">not</span> <span class="token boolean">null</span> <span class="token keyword">default</span> <span class="token string">'beijing'</span>
-<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>添加约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">alter</span> <span class="token keyword">table</span> table_name <span class="token keyword">add</span> city <span class="token keyword">set</span> <span class="token keyword">default</span> <span class="token string">'beijing'</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><strong>删除约束</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">alter</span> <span class="token keyword">table</span> table_name 
-<span class="token keyword">alter</span> city <span class="token keyword">drop</span> <span class="token keyword">default</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h3 id="Sql函数"><a href="#Sql函数" class="headerlink" title="Sql函数"></a>Sql函数</h3><table>
-<thead>
-<tr>
-<th>名称</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>AVG()</td>
-<td>返回平均值</td>
-</tr>
-<tr>
-<td>COUNT()</td>
-<td>返回行数</td>
-</tr>
-<tr>
-<td>MAX()</td>
-<td>返回指定列的最大值</td>
-</tr>
-<tr>
-<td>MIN()</td>
-<td>返回指定列的最小值</td>
-</tr>
-<tr>
-<td>SUM()</td>
-<td>返回数值列的总数</td>
-</tr>
-<tr>
-<td>UCASE()</td>
-<td>字段的值转换为大写</td>
-</tr>
-<tr>
-<td>LCASE()</td>
-<td>字段的值转换为小写</td>
-</tr>
-<tr>
-<td>SUBSTR()</td>
-<td>字符串截取</td>
-</tr>
-<tr>
-<td>LENGTH()</td>
-<td>返回字符串长度</td>
-</tr>
-<tr>
-<td>ROUND()</td>
-<td>把数值字段舍入为指定的小数位数</td>
-</tr>
-<tr>
-<td>NOW()</td>
-<td>返回当前系统的日期和时间</td>
-</tr>
-<tr>
-<td>DATE_FORMAT()</td>
-<td>格式化为 YYYY-MM-DD 的日期</td>
-</tr>
-<tr>
-<td>TRIM()</td>
-<td>删除字符串左右两侧的空格</td>
-</tr>
-<tr>
-<td>REVERSE()</td>
-<td>字符串 反转</td>
-</tr>
-<tr>
-<td>CONCAT()</td>
-<td>字符串拼接</td>
-</tr>
-<tr>
-<td>REPLACE()</td>
-<td>字符串替换</td>
-</tr>
-</tbody></table>
-<h3 id="Sql进阶语法"><a href="#Sql进阶语法" class="headerlink" title="Sql进阶语法"></a>Sql进阶语法</h3><h3 id="Sql高级语法"><a href="#Sql高级语法" class="headerlink" title="Sql高级语法"></a>Sql高级语法</h3>
       
     </div>
 
@@ -925,6 +527,103 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html" class="post-title-link" itemprop="url">Java内存模型</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="一、基础概念"><a href="#一、基础概念" class="headerlink" title="一、基础概念"></a>一、基础概念</h2><ol>
+<li><p>处理器的内存模型</p>
+<p>CPU的发展在摩尔定律的指导下以18个月的速度翻一倍的速度在发展，内存和硬盘的发展远远落后于CPU，为了解决这个问题CPU厂商设计的了高速缓存解决I&#x2F;O速度和CPU运行速度不匹配问题。</p>
+</li>
+<li><p>高速缓存</p>
+</li>
+</ol>
+<p>​    高速缓存位于CPU和内存之间，当程序进行运算的时候，会将数据从内存中复制一份到高速缓存中，当cpu运算的时候直接从高速缓存里面拿数据，运算完后将数据向高速缓存写入，再将高速缓存刷新到内存中。</p>
+<ol start="3">
+<li><p>缓存的一致性协议</p>
+<p>缓存一致性问题：多核CPU中，每个CPU拥有属于自己的高速缓存，但是内存只有一块，无法保证多个CPU处理相关数据后，更新回主内存的数据以谁为准呢？</p>
+<p>解决方案：</p>
+</li>
+</ol>
+<p>​	1）通过在总线上加锁</p>
+<p>​	CPU和内存的通信是通过总线进行的，在总线上加锁，阻塞其他CPU对内存的访问，保证缓存不一致问题，但是阻塞其他CPU访问内存，导致效率低下。</p>
+<p>​	2）通过缓存一致性协议</p>
+<p>​	MESI协议保证内存中的共享变量的副本是一致的，当cpu写入数据的时候，发现操作变量为共享变量（在其他cpu中也存在该共享变量），会发送信号，通知其他的cpu将这个变量设置为无效状态，当其他cpu读取这个数据时候，发现这个变量是无效的，他会从内存中重新读取。</p>
+<ol start="4">
+<li>CPU乱序执行优化</li>
+</ol>
+<p>​	为了让处理器内部的运算单元能够被充分利用，处理器会对输入的代码进行乱序执行（out-of-order execution）优化处理器会在计算之后，将乱序执行的结构重组，保证结果和顺序执行是一致的，但是不保证程序中各个语句执行顺序和输入顺序一致。（JAVA虚拟机的即时编译器也有类似的指令重排序优化）</p>
+<ol start="5">
+<li><p>处理器内存模型的几种类型</p>
+<p>顺序一致性内存模型：</p>
+<ul>
+<li>一个线程中的所有操作必须按照程序的顺序执行</li>
+<li>所有线程都只能看到一个单一的操作执行顺序，在顺序执行的一致性内存模型，每个操作都必须原子执行且立即对所有线程可见。</li>
+</ul>
+</li>
+</ol>
+<h2 id="二、JAVA内存模型"><a href="#二、JAVA内存模型" class="headerlink" title="二、JAVA内存模型"></a>二、JAVA内存模型</h2><p>​	不同架构的物理机器可以拥有不一样的内存模型，java的宗旨是一次编译，到处运行，为了实现该目标，java虚拟机规范定义了java内存模型（JAVA Memory Model,JMM）</p>
+<ol>
+<li>主内存</li>
+</ol>
+<p>​	java的内存模型规定了所有变量（实例字段、静态字段、构成数组对象的元素）都存储在主内存中。</p>
+<ol start="2">
+<li>工作内存</li>
+</ol>
+<p>​	每条线程还有自己的工作内存（类比高速缓存区）工作内存中保存了被该线程使用的变量的主内存副本拷贝，线程对变量的所有操作都是在工作内存中完成的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/GithubAction.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1039,163 +738,6 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
 <pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html" class="post-title-link" itemprop="url">Java内存模型</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="一、基础概念"><a href="#一、基础概念" class="headerlink" title="一、基础概念"></a>一、基础概念</h2><ol>
-<li><p>处理器的内存模型</p>
-<p>CPU的发展在摩尔定律的指导下以18个月的速度翻一倍的速度在发展，内存和硬盘的发展远远落后于CPU，为了解决这个问题CPU厂商设计的了高速缓存解决I&#x2F;O速度和CPU运行速度不匹配问题。</p>
-</li>
-<li><p>高速缓存</p>
-</li>
-</ol>
-<p>​    高速缓存位于CPU和内存之间，当程序进行运算的时候，会将数据从内存中复制一份到高速缓存中，当cpu运算的时候直接从高速缓存里面拿数据，运算完后将数据向高速缓存写入，再将高速缓存刷新到内存中。</p>
-<ol start="3">
-<li><p>缓存的一致性协议</p>
-<p>缓存一致性问题：多核CPU中，每个CPU拥有属于自己的高速缓存，但是内存只有一块，无法保证多个CPU处理相关数据后，更新回主内存的数据以谁为准呢？</p>
-<p>解决方案：</p>
-</li>
-</ol>
-<p>​	1）通过在总线上加锁</p>
-<p>​	CPU和内存的通信是通过总线进行的，在总线上加锁，阻塞其他CPU对内存的访问，保证缓存不一致问题，但是阻塞其他CPU访问内存，导致效率低下。</p>
-<p>​	2）通过缓存一致性协议</p>
-<p>​	MESI协议保证内存中的共享变量的副本是一致的，当cpu写入数据的时候，发现操作变量为共享变量（在其他cpu中也存在该共享变量），会发送信号，通知其他的cpu将这个变量设置为无效状态，当其他cpu读取这个数据时候，发现这个变量是无效的，他会从内存中重新读取。</p>
-<ol start="4">
-<li>CPU乱序执行优化</li>
-</ol>
-<p>​	为了让处理器内部的运算单元能够被充分利用，处理器会对输入的代码进行乱序执行（out-of-order execution）优化处理器会在计算之后，将乱序执行的结构重组，保证结果和顺序执行是一致的，但是不保证程序中各个语句执行顺序和输入顺序一致。（JAVA虚拟机的即时编译器也有类似的指令重排序优化）</p>
-<ol start="5">
-<li><p>处理器内存模型的几种类型</p>
-<p>顺序一致性内存模型：</p>
-<ul>
-<li>一个线程中的所有操作必须按照程序的顺序执行</li>
-<li>所有线程都只能看到一个单一的操作执行顺序，在顺序执行的一致性内存模型，每个操作都必须原子执行且立即对所有线程可见。</li>
-</ul>
-</li>
-</ol>
-<h2 id="二、JAVA内存模型"><a href="#二、JAVA内存模型" class="headerlink" title="二、JAVA内存模型"></a>二、JAVA内存模型</h2><p>​	不同架构的物理机器可以拥有不一样的内存模型，java的宗旨是一次编译，到处运行，为了实现该目标，java虚拟机规范定义了java内存模型（JAVA Memory Model,JMM）</p>
-<ol>
-<li>主内存</li>
-</ol>
-<p>​	java的内存模型规定了所有变量（实例字段、静态字段、构成数组对象的元素）都存储在主内存中。</p>
-<ol start="2">
-<li>工作内存</li>
-</ol>
-<p>​	每条线程还有自己的工作内存（类比高速缓存区）工作内存中保存了被该线程使用的变量的主内存副本拷贝，线程对变量的所有操作都是在工作内存中完成的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Flowable.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Flowable.html" class="post-title-link" itemprop="url">工作流</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-01-17 10:45:31 / 修改时间：10:55:57" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="1-开始"><a href="#1-开始" class="headerlink" title="1. 开始"></a>1. 开始</h2><h3 id="1-1-Flowable是什么？"><a href="#1-1-Flowable是什么？" class="headerlink" title="1.1 Flowable是什么？"></a>1.1 Flowable是什么？</h3><p>Flowable是一个使用Java编写的轻量级业务流程引擎。Flowable流程引擎可用于部署BPMN 2.0流程定义（用于定义流程的行业XML标准）， 创建这些流程定义的流程实例，进行查询，访问运行中或历史的流程实例与相关数据等。</p>
-<h3 id="1-2-Flowable与Activiti"><a href="#1-2-Flowable与Activiti" class="headerlink" title="1.2 Flowable与Activiti"></a>1.2 Flowable与Activiti</h3><p>flowable项目源自于activiti，通过两个框架的发展史即知。在2016.7~2017.5期间activiti团队内部已经产生了重大的分歧，于是原班核心人员（activiti5以及6比较核心的leader）Tijs Rademakers和Joram Barrez等便去开发flowable框架了，原来的activiti6以及activiti5代码则留给 Salaboy团队进行开发和维护。flowable是基于activiti-6.0.0.Beta4分支开发的。目前Flowable已经修复了activiti6很多的bug，可以实现零成本从activiti迁移到flowable。</p>
-<h3 id="1-3-构建命令行程序"><a href="#1-3-构建命令行程序" class="headerlink" title="1.3 构建命令行程序"></a>1.3 构建命令行程序</h3>
       
     </div>
 
@@ -1448,6 +990,66 @@ X-Frame-Options: SAMEORIGIN<span aria-hidden="true" class="line-numbers-rows"><s
 <p>放弃本地改动与提交，可以从服务器上获取最新版，并将本地分支指向它，git fetch origin 获取远程最新的仓库，git reset –hard origin&#x2F;master</p>
 </blockquote>
 
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Flowable.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Flowable.html" class="post-title-link" itemprop="url">工作流</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-17 10:45:31 / 修改时间：10:55:57" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-开始"><a href="#1-开始" class="headerlink" title="1. 开始"></a>1. 开始</h2><h3 id="1-1-Flowable是什么？"><a href="#1-1-Flowable是什么？" class="headerlink" title="1.1 Flowable是什么？"></a>1.1 Flowable是什么？</h3><p>Flowable是一个使用Java编写的轻量级业务流程引擎。Flowable流程引擎可用于部署BPMN 2.0流程定义（用于定义流程的行业XML标准）， 创建这些流程定义的流程实例，进行查询，访问运行中或历史的流程实例与相关数据等。</p>
+<h3 id="1-2-Flowable与Activiti"><a href="#1-2-Flowable与Activiti" class="headerlink" title="1.2 Flowable与Activiti"></a>1.2 Flowable与Activiti</h3><p>flowable项目源自于activiti，通过两个框架的发展史即知。在2016.7~2017.5期间activiti团队内部已经产生了重大的分歧，于是原班核心人员（activiti5以及6比较核心的leader）Tijs Rademakers和Joram Barrez等便去开发flowable框架了，原来的activiti6以及activiti5代码则留给 Salaboy团队进行开发和维护。flowable是基于activiti-6.0.0.Beta4分支开发的。目前Flowable已经修复了activiti6很多的bug，可以实现零成本从activiti迁移到flowable。</p>
+<h3 id="1-3-构建命令行程序"><a href="#1-3-构建命令行程序" class="headerlink" title="1.3 构建命令行程序"></a>1.3 构建命令行程序</h3>
       
     </div>
 
@@ -2815,7 +2417,7 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Apach%20Flink.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Canal.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -2829,7 +2431,7 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/Apach%20Flink.html" class="post-title-link" itemprop="url">Flink</a>
+            <a href="/post/Canal.html" class="post-title-link" itemprop="url">Canal</a>
         </h2>
 
         <div class="post-meta">
@@ -2840,7 +2442,7 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-01-17 10:45:31 / 修改时间：10:54:54" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+              <time title="创建时间：2024-01-17 10:45:31 / 修改时间：10:55:11" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
             </span>
 
           
@@ -2854,9 +2456,104 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Apach-Flink"><a href="#Apach-Flink" class="headerlink" title="Apach Flink"></a>Apach Flink</h1><blockquote>
-<p>Apache Flink是一个用于分布式流和批处理数据处理的开源平台。Flink的核心是流数据流引擎，为数据流上的分布式计算提供数据分发，通信和容错。Flink在流引擎之上构建批处理，覆盖本机迭代支持，托管内存和程序优化</p>
+          <h4 id="一、数据库复制和同步的基本概念"><a href="#一、数据库复制和同步的基本概念" class="headerlink" title="一、数据库复制和同步的基本概念"></a>一、数据库复制和同步的基本概念</h4><blockquote>
+<p>作用：实现了数据在多个数据库实例之间的保持一致和同步。应用程序能够获得高可用性、灾备性和读取负载均衡等好处。</p>
 </blockquote>
+<ol>
+<li>主从复制（Master-Slave Replication）：主从复制是最常见的数据库复制方法之一。在主从复制中，有一个主数据库（Master）和一个或多个从数据库（Slaves）。主数据库是数据的源头，它负责接收来自应用程序的写操作，并将这些写操作记录为称为日志（Log）的格式。从数据库则通过读取这些日志，将主数据库的写操作进行重演，以保持数据的一致性。</li>
+<li>数据一致性（Data Consistency）：数据一致性是指主数据库和从数据库之间的数据保持一致。当在主数据库上进行写操作时，主数据库会将这些操作的日志记录下来，并将其发送给从数据库。从数据库会按照相同的顺序重现这些操作，确保数据的一致性。一致性的实现可以通过各种机制，例如基于事务日志（Transaction Log）或二进制日志（Binary Log）。</li>
+<li>数据传输（Data Transfer）：数据传输是指将主数据库的数据从一个位置传输到另一个位置。在数据库复制和同步过程中，数据传输通常通过网络进行。主数据库将写操作记录为日志，并通过网络传输给从数据库，从数据库接收日志并执行相应的操作。</li>
+<li>增量复制（Incremental Replication）：增量复制是一种常见的复制方式，其中只有发生了更改的部分数据会被复制和同步。这种方式可以减少网络传输的数据量，并提高复制效率。增量复制通常使用日志来跟踪数据的更改，只传输和应用这些更改。</li>
+<li>数据延迟（Data Latency）：在数据库复制和同步中，主数据库和从数据库之间可能存在一定的延迟。这是因为数据在传输和应用过程中需要一定的时间。数据延迟可能会导致从数据库上的数据不是实时的，在某些情况下可能会有一定的时间窗口内的数据不一致。</li>
+</ol>
+<h4 id="二、canal作用及原理"><a href="#二、canal作用及原理" class="headerlink" title="二、canal作用及原理"></a>二、canal作用及原理</h4><p><img src="https://camo.githubusercontent.com/63881e271f889d4a424c55cea2f9c2065f63494fecac58432eac415f6e47e959/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139313130343130313733353934372e706e67"></p>
+<p>canal作用：根据Mysql数据库增量日志进行解析，提供增量数据的订阅和消费。</p>
+<p>canal原理：canal模拟Mysql slave交互协议，伪装成slave发送dump报文，主数据库master收到dump请求后，推送binary log给canal。</p>
+<h4 id="三、数据库准备"><a href="#三、数据库准备" class="headerlink" title="三、数据库准备"></a>三、数据库准备</h4><p>1.开启binlog,&#x2F;etc&#x2F;my.cnf 中配置如下</p>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">mysqld</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">server-id</span><span class="token punctuation">=</span><span class="token value attr-value">1</span>
+<span class="token key attr-name">log_bin</span><span class="token punctuation">=</span><span class="token value attr-value">mysql-bin</span>
+<span class="token key attr-name">binlog-format</span><span class="token punctuation">=</span><span class="token value attr-value">row</span>
+<span class="token key attr-name">bind-address</span><span class="token punctuation">=</span><span class="token value attr-value">0.0.0.0</span>
+<span class="token key attr-name">port</span><span class="token punctuation">=</span><span class="token value attr-value">3306</span>
+<span class="token key attr-name">basedir</span><span class="token punctuation">=</span><span class="token value attr-value">/usr/local/mysql</span>
+<span class="token key attr-name">datadir</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql</span>
+<span class="token key attr-name">socket</span><span class="token punctuation">=</span><span class="token value attr-value">/tmp/mysql.sock</span>
+<span class="token key attr-name">log-error</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql/mysql.err</span>
+<span class="token key attr-name">pid-file</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql/mysql.pid</span>
+<span class="token comment">#character config</span>
+<span class="token key attr-name">character_set_server</span><span class="token punctuation">=</span><span class="token value attr-value">utf8mb4</span>
+<span class="token key attr-name">symbolic-links</span><span class="token punctuation">=</span><span class="token value attr-value">0</span>
+<span class="token key attr-name">explicit_defaults_for_timestamp</span><span class="token punctuation">=</span><span class="token value attr-value">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>2.授权 canal 链接 MySQL 账号具有作为 MySQL slave 的权限, 如果已有账户可直接 grant</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">USER</span> canal IDENTIFIED <span class="token keyword">BY</span> <span class="token string">'canal'</span><span class="token punctuation">;</span>  
+<span class="token keyword">GRANT</span> <span class="token keyword">SELECT</span><span class="token punctuation">,</span> <span class="token keyword">REPLICATION</span> SLAVE<span class="token punctuation">,</span> <span class="token keyword">REPLICATION</span> CLIENT <span class="token keyword">ON</span> <span class="token operator">*</span><span class="token punctuation">.</span><span class="token operator">*</span> <span class="token keyword">TO</span> <span class="token string">'canal'</span><span class="token variable">@'%'</span><span class="token punctuation">;</span>
+FLUSH <span class="token keyword">PRIVILEGES</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h4 id="四、安装Server"><a href="#四、安装Server" class="headerlink" title="四、安装Server"></a>四、安装Server</h4><blockquote>
+<p>下载：canal.deployer-1.1.6.tar.gz</p>
+</blockquote>
+<p>1.conf&#x2F;example&#x2F;instance.properties配置修改</p>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment">#position info，需要改成自己的数据库信息</span>
+<span class="token key attr-name">canal.instance.master.address</span> <span class="token punctuation">=</span> <span class="token value attr-value">127.0.0.1:3306 </span>
+<span class="token key attr-name">canal.instance.master.journal.name</span> <span class="token value attr-value">= </span>
+<span class="token key attr-name">canal.instance.master.position</span> <span class="token value attr-value">= </span>
+<span class="token key attr-name">canal.instance.master.timestamp</span> <span class="token value attr-value">= </span>
+<span class="token comment">#canal.instance.standby.address = </span>
+<span class="token comment">#canal.instance.standby.journal.name =</span>
+<span class="token comment">#canal.instance.standby.position = </span>
+<span class="token comment">#canal.instance.standby.timestamp = </span>
+<span class="token comment">#username/password，需要改成自己的数据库信息</span>
+<span class="token key attr-name">canal.instance.dbUsername</span> <span class="token punctuation">=</span> <span class="token value attr-value">canal  </span>
+<span class="token key attr-name">canal.instance.dbPassword</span> <span class="token punctuation">=</span> <span class="token value attr-value">canal</span>
+<span class="token key attr-name">canal.instance.defaultDatabaseName</span> <span class="token value attr-value">=</span>
+<span class="token key attr-name">canal.instance.connectionCharset</span> <span class="token punctuation">=</span> <span class="token value attr-value">UTF-8</span>
+<span class="token comment">#table regex</span>
+<span class="token key attr-name">canal.instance.filter.regex</span> <span class="token punctuation">=</span> <span class="token value attr-value">.\*\\\\..\*</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>2.启动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> bin/startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="五、安装RDB适配器"><a href="#五、安装RDB适配器" class="headerlink" title="五、安装RDB适配器"></a>五、安装RDB适配器</h4><blockquote>
+<p>下载：canal.adapter-1.1.7-SNAPSHOT.tar.gz</p>
+</blockquote>
+<h5 id="1-修改启动器配置-application-yml-这里以mysql目标库为例-将bootstrap-yml注释掉"><a href="#1-修改启动器配置-application-yml-这里以mysql目标库为例-将bootstrap-yml注释掉" class="headerlink" title="1.修改启动器配置: application.yml, 这里以mysql目标库为例,将bootstrap.yml注释掉"></a>1.修改启动器配置: application.yml, 这里以mysql目标库为例,将bootstrap.yml注释掉</h5><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">srcDataSources:
+    defaultDS:
+      url: jdbc:mysql://192.168.67.24:3306/mytest?useUnicode=true
+      username: root
+      password: *******
+  canalAdapters:
+  - instance: example # canal instance Name or mq topic name
+    groups:
+    - groupId: g1
+      outerAdapters:
+      - name: rdb                                               # 指定为rdb类型同步
+        key: mysql1                                            # 指定adapter的唯一key, 与表映射配置中outerAdapterKey对应
+        properties:
+          jdbc.driverClassName: com.mysql.jdbc.Driver        # jdbc驱动名, 部分jdbc的jar包需要自行放致lib目录下
+          jdbc.url: jdbc:mysql://192.168.67.16:31185/mytest?useUnicode=true        # jdbc url
+          jdbc.username: dongzhimen                                 # jdbc username
+          jdbc.password: **********                                # jdbc password
+          druid.stat.enable: false                                           
+		  druid.stat.slowSqlMillis: 1000	<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h5 id="2-修改conf-x2F-rdb-x2F-mytest-user-yml文件"><a href="#2-修改conf-x2F-rdb-x2F-mytest-user-yml文件" class="headerlink" title="2.修改conf&#x2F;rdb&#x2F;mytest_user.yml文件"></a>2.修改conf&#x2F;rdb&#x2F;mytest_user.yml文件</h5><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">dataSourceKey: defaultDS
+destination: example
+outerAdapterKey: mysql1
+concurrent: true
+dbMapping:
+  mirrorDb: true
+  database: mytest<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>其中dbMapping.database的值代表源库和目标库的schema名称，即两库的schema要一模一样</p>
+</blockquote>
+<p>3.启动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 
       
     </div>
