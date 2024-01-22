@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Apogee_%28PSF%29_mul.svg/640px-Apogee_%28PSF%29_mul.svg.png">
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/2/27/GPS24goldenSML.gif">
 <meta property="article:published_time" content="2024-01-17T02:08:17.374Z">
-<meta property="article:modified_time" content="2024-01-19T07:15:42.568Z">
+<meta property="article:modified_time" content="2024-01-19T08:29:20.121Z">
 <meta property="article:author" content="potter">
 <meta property="article:tag" content="卫星概念">
 <meta name="twitter:card" content="summary">
@@ -207,7 +207,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-01-19 15:15:42" itemprop="dateModified" datetime="2024-01-19T15:15:42+08:00">2024-01-19</time>
+                <time title="修改时间：2024-01-19 16:29:20" itemprop="dateModified" datetime="2024-01-19T16:29:20+08:00">2024-01-19</time>
               </span>
 
           
@@ -686,7 +686,53 @@ $$
 </ol>
 <p>这些算法的选择取决于星座的具体目标和应用场景。星座设计和管理是一个复杂的问题，需要综合考虑多个因素，包括通信性能、资源利用效率、能源消耗等。</p>
 <h2 id="星座生成"><a href="#星座生成" class="headerlink" title="星座生成"></a>星座生成</h2><blockquote>
-<p>SGP4算法</p>
+<p>Walker算法</p>
+</blockquote>
+<ul>
+<li><strong>介绍</strong>: Walker算法是一种用于设计卫星轨道的算法。它采用离散的轨道分布来实现一组卫星的均匀覆盖。</li>
+<li><strong>原理</strong>: 通过在经度、纬度和轨道倾角的参数空间中选择合适的值，Walker算法能够确保卫星在不同时间和位置提供均匀的覆盖。</li>
+<li><strong>优势</strong>: 提供对地球表面的全球性覆盖，适用于通信和遥感等应用。</li>
+</ul>
+<ul>
+<li><p><strong>输入</strong>：</p>
+</li>
+<li><p>1.轨道卫星数目（N）：要设计的卫星数量。</p>
+</li>
+<li><p>2.分配的轨道槽位数（m）：用于均匀分布卫星的轨道槽位数量。</p>
+</li>
+<li><p><strong>算法步骤</strong>：</p>
+</li>
+<li><p>1.计算步长（Step）：计算步长，即将轨道槽位平均分配给每颗卫星的数量，公式为：<code>Step = ceil(N / m)</code>。</p>
+</li>
+<li><p>2.初始化轨道槽位列表：生成一个轨道槽位列表，包含<code>m</code>个元素，每个元素的值为该轨道槽位上的卫星数量。</p>
+</li>
+<li><p>3.分配轨道槽位：按照步长逐一分配轨道槽位给每颗卫星，直到所有卫星都被分配完毕。</p>
+</li>
+<li><p>4.计算轨道参数：使用分配得到的轨道槽位信息，计算每颗卫星的轨道参数，包括经度、纬度、倾角等。</p>
+</li>
+<li><p><strong>输出</strong>：输出是每颗卫星的轨道参数，确保它们在轨道上均匀分布，提供全球性覆盖。</p>
+</li>
+</ul>
+<blockquote>
+<p>Ballard算法</p>
+</blockquote>
+<ul>
+<li><strong>介绍</strong>: Ballard算法是另一种用于卫星轨道设计的方法，它主要用于规划地球同步轨道。</li>
+<li><strong>原理</strong>: Ballard算法通过对卫星的周期、半长轴、倾角等参数进行计算，使卫星的轨道周期与地球自转周期同步，从而实现卫星始终在相同的地理位置上空对地面进行观测。</li>
+<li><strong>优势</strong>: 特别适用于需要连续监测同一地区的应用，如气象卫星。</li>
+<li><strong>输入</strong>：</li>
+<li>1.所需轨道的地球自转周期：通常是一天，即86400秒。</li>
+<li>2.卫星的平均运动（Mean Motion）：与轨道周期相关的卫星运动速度。</li>
+<li><strong>算法步骤</strong>：</li>
+<li>1.计算轨道倾角：根据所需轨道的地球自转周期和卫星的平均运动，使用公式计算轨道倾角。</li>
+<li>2.计算轨道高度：根据轨道倾角，计算使得轨道卫星保持同步的轨道高度。</li>
+<li>3.计算半长轴：利用轨道高度，计算半长轴。</li>
+<li>4.计算周期：根据轨道高度和地球引力常数，计算卫星的轨道周期。</li>
+<li>5.计算初始相位：计算使卫星始终在相同的地理位置上的初始相位。</li>
+<li><strong>输出</strong>：输出是卫星的轨道参数，确保卫星与地球同步，提供连续监测同一地区的能力。</li>
+</ul>
+<blockquote>
+<p>算法整理 data&#x2F;satellite&#x2F;constellation&#x2F;generateSatellite</p>
 </blockquote>
 <ol>
 <li><strong>生成星座参数设置：</strong> 创建 <code>GenerateSatelliteDto</code> 对象，设置生成星座的参数，包括轨道平面数量、单轨道卫星数量、相位因子、种子卫星ID以及星座ID。</li>
@@ -718,13 +764,16 @@ $$
 </ol>
 <p>设计N重覆盖系统的算法需要综合考虑多个因素，包括覆盖区域的质量、通信效率、系统容错性等。具体的算法选择取决于具体的系统设计目标和应用场景。</p>
 <h2 id="N重覆盖算法"><a href="#N重覆盖算法" class="headerlink" title="N重覆盖算法"></a>N重覆盖算法</h2><ol>
-<li><strong>SGP4模型：</strong>用于卫星轨道的预测。在代码中，使用了SGP4模型（<code>SatelliteUtils.getSatPositionAtTime</code>）计算了低地球轨道（LEO）卫星在指定时间的位置信息。SGP4是一种通用的摄动模型，用于准确地预测卫星的轨道位置。</li>
-<li><strong>地面子点计算：</strong>利用SGP4计算得到的卫星位置，通过投影将其映射到地球表面上，得到地面子点的经纬度。这一步是通过<code>SatelliteUtils.calcSatSubPoint</code>方法实现的。</li>
-<li><strong>大地测量计算：</strong>使用<code>GeodeticCalculator</code>进行大地测量计算，计算卫星与地面站之间的方位角、俯仰角以及距离。这些参数对于了解卫星与地面站之间的空间关系至关重要。</li>
+<li><strong>SGP4模型：</strong>用于卫星轨道的预测。使用了SGP4模型（<code>SatelliteUtils.getSatPositionAtTime</code>）计算了低地球轨道（LEO）卫星在指定时间的位置信息</li>
+<li><strong>地面子点计算：</strong>利用SGP4计算得到的卫星位置，通过投影将其映射到地球表面上，得到地面子点的经纬度。通过<code>SatelliteUtils.calcSatSubPoint</code>方法实现的。</li>
+<li><strong>大地测量计算：</strong>使用<code>GeodeticCalculator</code>进行大地测量计算，计算卫星与地面站之间的方位角、俯仰角以及距离。</li>
 <li><strong>覆盖范围生成：</strong>通过<code>SatelliteUtils.createCircle</code>方法生成卫星的覆盖范围，其中覆盖角度和卫星高度用于计算圆的半径。生成的覆盖范围通过多边形（<code>Polygon</code>）表示，可以用于后续的分析。</li>
-<li><strong>链路仿真计算：</strong>对于低、中轨卫星，进行了可视化分析和链路仿真计算。这包括计算方位角、俯仰角、距离等参数，以及在最小距离处进行链路仿真计算。这一过程有助于评估卫星与地面站之间的通信链路质量。</li>
+<li><strong>链路仿真计算：</strong>对于低、中轨卫星，进行了可视化分析和链路仿真计算。这包括计算方位角、俯仰角、距离等参数，以及在最小距离处进行链路仿真计算。</li>
 </ol>
 <p><strong>N重覆盖程序执行的主要步骤如下：</strong></p>
+<blockquote>
+<p>算法整理&#x2F;comprehensive&#x2F;coverage&#x2F;request&#x2F;calculate</p>
+</blockquote>
 <ol>
 <li><strong>初始化数据：</strong>获取计算请求的相关参数，包括项目ID、卫星数据、地面站数据、计算开始时间、计算结束时间等。</li>
 <li><strong>删除原数据：</strong>清除之前计算的原始数据，包括覆盖请求数据、覆盖仿真计算结果、低轨可视化分析、方位俯仰数据、链路计算数据等。</li>
@@ -855,7 +904,7 @@ $$
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
