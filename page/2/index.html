@@ -1622,7 +1622,7 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/GithubAction.html" class="post-title-link" itemprop="url">Github Action</a>
+            <a href="/post/GithubAction.html" class="post-title-link" itemprop="url">Github Learn</a>
         </h2>
 
         <div class="post-meta">
@@ -1634,6 +1634,13 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
 
               <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-01-24 17:50:45" itemprop="dateModified" datetime="2024-01-24T17:50:45+08:00">2024-01-24</time>
+              </span>
 
           
 
@@ -1646,24 +1653,70 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h1><h2 id="什么是Actions"><a href="#什么是Actions" class="headerlink" title="什么是Actions"></a>什么是Actions</h2><blockquote>
+          <h1 id="git的通信协议"><a href="#git的通信协议" class="headerlink" title="git的通信协议"></a>git的通信协议</h1><h2 id="ssh协议"><a href="#ssh协议" class="headerlink" title="ssh协议"></a>ssh协议</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone git@github.com:BJPotter/BJPotter.github.io.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="https协议"><a href="#https协议" class="headerlink" title="https协议"></a>https协议</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/BJPotter/BJPotter.github.io.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+<h2 id="gitHub-Cli协议"><a href="#gitHub-Cli协议" class="headerlink" title="gitHub Cli协议"></a>gitHub Cli协议</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gh repo clone BJPotter/BJPotter.github.io<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+<h1 id="gitHub配置SSH-Key"><a href="#gitHub配置SSH-Key" class="headerlink" title="gitHub配置SSH Key"></a>gitHub配置SSH Key</h1><h2 id="设置git的用户名和邮箱"><a href="#设置git的用户名和邮箱" class="headerlink" title="设置git的用户名和邮箱"></a>设置git的用户名和邮箱</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在Git客户端执行</span>
+<span class="token function">git</span> config --global user.name <span class="token string">"这里输入你在GitHub的账户名"</span>
+<span class="token function">git</span> config --global user.email <span class="token string">"这里输入你在GitHub的注册邮箱名"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="生成SSH-Key"><a href="#生成SSH-Key" class="headerlink" title="生成SSH Key"></a>生成<strong>SSH Key</strong></h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> ~/.ssh
+ssh-keygen -t rsa -C <span class="token string">"这里输入你在 GitHub 的注册邮箱"</span>
+<span class="token function">cat</span> id_rsa.pub<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="gitHub配置公钥"><a href="#gitHub配置公钥" class="headerlink" title="gitHub配置公钥"></a>gitHub配置公钥</h2><blockquote>
+<p>在github中点击头像，依次点击Settings &gt; SSH and GPG Keys &gt; New SSH Key</p>
+<p>把客户端的公钥复制到里面，并给title起一个名字保存即可</p>
+</blockquote>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ssh</span> -T git@github.com
+<span class="token comment"># 返回 You've successfully authenticated则成功 </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h1 id="https免密配置"><a href="#https免密配置" class="headerlink" title="https免密配置"></a>https免密配置</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 输入一次账号密码后第二次就会记住账号密码。</span>
+<span class="token function">git</span> config --global credential.helper store<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+
+<h1 id="Actions"><a href="#Actions" class="headerlink" title="Actions"></a>Actions</h1><h2 id="什么是Actions"><a href="#什么是Actions" class="headerlink" title="什么是Actions"></a>什么是Actions</h2><blockquote>
 <p>在github创建的仓库中，Actions是可以自定义的一些列的操作，如：提交代码后触发自动化编译打包和部署到远程服务器上，官方所说的定义是：在仓库中自动化、自定义操作执行软件开发工作流程，目前有很多现成的Actions可以直接拿来使用，也可以进行自定义创建到自己工作流程中。</p>
 </blockquote>
-<h2 id="Actions的使用"><a href="#Actions的使用" class="headerlink" title="Actions的使用"></a>Actions的使用</h2><blockquote>
+<h2 id="Actions可以做什么"><a href="#Actions可以做什么" class="headerlink" title="Actions可以做什么"></a>Actions可以做什么</h2><blockquote>
 <p>Actions通常用来两个方面</p>
 <ol>
 <li>自动化ci&#x2F;cd,触发事件后自动化编译打包部署。</li>
 <li>自动添加标签，当有人提issues的时候可以自动化的添加标签</li>
 </ol>
 </blockquote>
-<h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><blockquote>
+<h2 id="Actions组件"><a href="#Actions组件" class="headerlink" title="Actions组件"></a>Actions组件</h2><blockquote>
 <p>可以把Github Actions 工作流程配置为在存储库发生事件触发。</p>
 <p>example: 拉取请求或者推送请求的时候触发工作流程[工作流程理解为jobs]</p>
 <p>一个工作流程包含一个作业或者多个作业，这些作业可以按照顺序执行，也可以并发执行，每个作业都会在自己虚拟机中进行，或者在容器中进行，这个运行的进程可以理解为运行了一个runner,每个作业可能会有多个步骤，这个步骤运行自定义的脚本或者运行操作。</p>
 </blockquote>
-<p><img src="/GitHubActions.assets/overview-actions-simple.png" alt="工作流程概述"></p>
-<h3 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h3><p>工作流程是一个可配置的自动化过程，它将运行一个或多个作业。 工作流程由签入到存储库的 YAML 文件定义，并在存储库中的事件触发时运行，也可以手动触发，或按定义的时间表触发。文件位于仓库的根目录下的<code>.github/workflows</code></p>
-<h6 id="触发工作流程"><a href="#触发工作流程" class="headerlink" title="触发工作流程"></a>触发工作流程</h6><ol>
+<img src="/post/overview-actions-simple.png" alt="工作流程概述" style="zoom:50%;">
+
+<h3 id="Workflows（工作流）"><a href="#Workflows（工作流）" class="headerlink" title="Workflows（工作流）"></a><strong>Workflows（工作流）</strong></h3><blockquote>
+<p>工作流是一个可配置的自动化的程序。创建一个工作流，你需要定义一个 YAML 文件，当你的仓库触发某个事件的时候，工作流就会运行，当然也可以手动触发，或者定义一个时间表。</p>
+</blockquote>
+<h3 id="事件（Events）"><a href="#事件（Events）" class="headerlink" title="事件（Events）"></a><strong>事件（Events）</strong></h3><blockquote>
+<p>事件是指仓库触发运行工作流的具体的行为，比如创建一个 pull request，新建一个 issue、或者推送一个 commit。你也可以使用时间表触发一个工作流，或者通过请求一个 REST API，再或者手动触发。</p>
+</blockquote>
+<h3 id="任务（Jobs）"><a href="#任务（Jobs）" class="headerlink" title="任务（Jobs）"></a><strong>任务（Jobs）</strong></h3><blockquote>
+<p>任务是在同一个运行器上执行的一组步骤（steps）。一个步骤（steps）要么是一个shell 脚本（script）要么是一个动作（action）。步骤会顺序执行，并彼此独立。因为每一个步骤都在同一个运行器上被执行，所以你可以从一个步骤（step）传递数据到另一个步骤（step）。</p>
+</blockquote>
+<h3 id="动作（Actions）"><a href="#动作（Actions）" class="headerlink" title="动作（Actions）"></a><strong>动作（Actions）</strong></h3><blockquote>
+<p>动作是 GitHub Actions 平台的一个自定义的应用，它会执行一个复杂但是需要频繁重复的作业。使用动作可以减少重复代码。比如一个 action 可以实现从 GitHub 拉取你的 git 仓库，为你的构建环境创建合适的工具链等。</p>
+</blockquote>
+<h3 id="运行器（Runners）"><a href="#运行器（Runners）" class="headerlink" title="运行器（Runners）"></a><strong>运行器（Runners）</strong></h3><blockquote>
+<p>一个运行器是一个可以运行工作流的服务。每一个运行器一次只运行一个单独的任务。GitHub 提供 Ubuntu Linux，Microsoft Windows 和 macOS 运行器，每一个工作流都运行在一个独立新建的虚拟机中。</p>
+</blockquote>
+<h2 id="创建一个工作流"><a href="#创建一个工作流" class="headerlink" title="创建一个工作流"></a><strong>创建一个工作流</strong></h2><p>工作流程是一个可配置的自动化过程，它将运行一个或多个作业。 工作流程由签入到存储库的 YAML 文件定义，并在存储库中的事件触发时运行，也可以手动触发，或按定义的时间表触发。文件位于仓库的根目录下的<code>.github/workflows</code></p>
+<h3 id="触发工作流程"><a href="#触发工作流程" class="headerlink" title="触发工作流程"></a>触发工作流程</h3><ol>
 <li><p>工作流程存储库发生事件</p>
 <pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># 单个事件触发</span>
 <span class="token key atrule">on</span><span class="token punctuation">:</span> push
@@ -1676,7 +1729,7 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
   <span class="token key atrule">schedule</span><span class="token punctuation">:</span>
     <span class="token punctuation">-</span> <span class="token key atrule">cron</span><span class="token punctuation">:</span>  <span class="token string">'30 5,17 * * *'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ol>
-<h6 id="使用作业"><a href="#使用作业" class="headerlink" title="使用作业"></a>使用作业</h6><ol>
+<h3 id="使用作业"><a href="#使用作业" class="headerlink" title="使用作业"></a>使用作业</h3><ol>
 <li>创建jobs</li>
 </ol>
 <pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">jobs</span><span class="token punctuation">:</span>
@@ -1692,7 +1745,8 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
 </ol>
 <pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">runs-on</span><span class="token punctuation">:</span> ubuntu<span class="token punctuation">-</span>latest<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p><img src="/GitHubActions.assets/image-20220511144812151.png" alt="image-20220511144812151"></p>
+<img src="/post/image-20220511144812151.png" alt="image-20220511144812151" style="zoom: 67%;">
+
 <blockquote>
 <p>以上是常见的运行器，就是用哪个虚拟机</p>
 </blockquote>
@@ -1713,13 +1767,6 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
       <span class="token punctuation">-</span> <span class="token key atrule">run</span><span class="token punctuation">:</span> npm install <span class="token punctuation">-</span>g bats<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
-
-
-
-
-
-<p>Springboot打包</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
       
@@ -1837,7 +1884,7 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Flowable.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Geoserver.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1851,7 +1898,7 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/Flowable.html" class="post-title-link" itemprop="url">工作流</a>
+            <a href="/post/Geoserver.html" class="post-title-link" itemprop="url">离线安装GeoServer</a>
         </h2>
 
         <div class="post-meta">
@@ -1860,9 +1907,8 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-01-17 10:45:31 / 修改时间：10:55:57" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+              <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
             </span>
 
           
@@ -1876,9 +1922,85 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="1-开始"><a href="#1-开始" class="headerlink" title="1. 开始"></a>1. 开始</h2><h3 id="1-1-Flowable是什么？"><a href="#1-1-Flowable是什么？" class="headerlink" title="1.1 Flowable是什么？"></a>1.1 Flowable是什么？</h3><p>Flowable是一个使用Java编写的轻量级业务流程引擎。Flowable流程引擎可用于部署BPMN 2.0流程定义（用于定义流程的行业XML标准）， 创建这些流程定义的流程实例，进行查询，访问运行中或历史的流程实例与相关数据等。</p>
-<h3 id="1-2-Flowable与Activiti"><a href="#1-2-Flowable与Activiti" class="headerlink" title="1.2 Flowable与Activiti"></a>1.2 Flowable与Activiti</h3><p>flowable项目源自于activiti，通过两个框架的发展史即知。在2016.7~2017.5期间activiti团队内部已经产生了重大的分歧，于是原班核心人员（activiti5以及6比较核心的leader）Tijs Rademakers和Joram Barrez等便去开发flowable框架了，原来的activiti6以及activiti5代码则留给 Salaboy团队进行开发和维护。flowable是基于activiti-6.0.0.Beta4分支开发的。目前Flowable已经修复了activiti6很多的bug，可以实现零成本从activiti迁移到flowable。</p>
-<h3 id="1-3-构建命令行程序"><a href="#1-3-构建命令行程序" class="headerlink" title="1.3 构建命令行程序"></a>1.3 构建命令行程序</h3>
+          <h2 id="离线安装GeoServer"><a href="#离线安装GeoServer" class="headerlink" title="离线安装GeoServer"></a>离线安装GeoServer</h2><blockquote>
+<p>前提：安装好java,配置好JAVA_HOME</p>
+</blockquote>
+<p>1.准备源码包</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">https://jaist.dl.sourceforge.net/project/geoserver/GeoServer/2.15.1/geoserver-2.15.1-bin.zip<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>2.解压</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">unzip</span> geoserver-2.15.1-bin.zip <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>3.修改端口</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> geoserver-2.15.1
+<span class="token function">vi</span> start.ini 
+jetty.port<span class="token operator">=</span><span class="token number">8181</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>4.启动程序</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> bin
+./startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>5.后台启动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">nohup</span> /root/geoserver-2.15.1/bin/startup.sh <span class="token operator">&amp;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="geoserver跨域配置"><a href="#geoserver跨域配置" class="headerlink" title="geoserver跨域配置"></a>geoserver跨域配置</h2><p>1.查看对应的版本</p>
+<blockquote>
+<p>启动程序后，默认用户名&#x2F;密码登陆进去，F12抓取一下Response Header,Server里面有版本号</p>
+</blockquote>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">Cache-Control: no-cache, no-store
+Content-Length: 0
+Date: Mon, 23 May 2022 07:56:02 GMT
+Expires: Thu, 01 Jan 1970 00:00:00 GMT
+Location: http://180.76.187.95:8181/geoserver/web/?0
+Pragma: no-cache
+Server: Jetty(9.4.12.v20180830)
+Set-Cookie: JSESSIONID=node012k3zcl8cf6121wuziii0dzvt75.node0;Path=/geoserver
+X-Frame-Options: SAMEORIGIN<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>2.下载jar包</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token comment">&lt;!-- https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-server --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.eclipse.jetty<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>jetty-server<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>9.4.12.v20180830<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>3.上传jar包</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">上传路径 /root/geoserver-2.15.1/webapps/geoserver/WEB-INF/lib<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>4.修改配置</p>
+<pre class="line-numbers language-web.xml" data-language="web.xml"><code class="language-web.xml">vim &#x2F;root&#x2F;geoserver-2.15.1&#x2F;webapps&#x2F;geoserver&#x2F;WEB-INF&#x2F;web.xml<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-name</span><span class="token punctuation">></span></span>CORS<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-name</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-class</span><span class="token punctuation">></span></span>com.thetransactioncompany.cors.CORSFilter<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-class</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.allowOrigin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>*<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.supportedMethods<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>GET,POST,HEAD,PUT,DELETE<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.supportedHeaders<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>Accept,Origin,X-Requested-With,Content-Type,Last-Modified<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.exposedHeaders<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>Set-Cookie<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.supportsCredentials<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-mapping</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-name</span><span class="token punctuation">></span></span>CORS<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-name</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url-pattern</span><span class="token punctuation">></span></span>/*<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>url-pattern</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-mapping</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
       
     </div>
 
