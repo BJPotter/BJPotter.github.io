@@ -165,6 +165,358 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Geoserver.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Geoserver.html" class="post-title-link" itemprop="url">离线安装GeoServer</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="离线安装GeoServer"><a href="#离线安装GeoServer" class="headerlink" title="离线安装GeoServer"></a>离线安装GeoServer</h2><blockquote>
+<p>前提：安装好java,配置好JAVA_HOME</p>
+</blockquote>
+<p>1.准备源码包</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">https://jaist.dl.sourceforge.net/project/geoserver/GeoServer/2.15.1/geoserver-2.15.1-bin.zip<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>2.解压</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">unzip</span> geoserver-2.15.1-bin.zip <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>3.修改端口</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> geoserver-2.15.1
+<span class="token function">vi</span> start.ini 
+jetty.port<span class="token operator">=</span><span class="token number">8181</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>4.启动程序</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> bin
+./startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>5.后台启动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">nohup</span> /root/geoserver-2.15.1/bin/startup.sh <span class="token operator">&amp;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="geoserver跨域配置"><a href="#geoserver跨域配置" class="headerlink" title="geoserver跨域配置"></a>geoserver跨域配置</h2><p>1.查看对应的版本</p>
+<blockquote>
+<p>启动程序后，默认用户名&#x2F;密码登陆进去，F12抓取一下Response Header,Server里面有版本号</p>
+</blockquote>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">Cache-Control: no-cache, no-store
+Content-Length: 0
+Date: Mon, 23 May 2022 07:56:02 GMT
+Expires: Thu, 01 Jan 1970 00:00:00 GMT
+Location: http://180.76.187.95:8181/geoserver/web/?0
+Pragma: no-cache
+Server: Jetty(9.4.12.v20180830)
+Set-Cookie: JSESSIONID=node012k3zcl8cf6121wuziii0dzvt75.node0;Path=/geoserver
+X-Frame-Options: SAMEORIGIN<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>2.下载jar包</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token comment">&lt;!-- https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-server --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.eclipse.jetty<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>jetty-server<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>9.4.12.v20180830<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>3.上传jar包</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">上传路径 /root/geoserver-2.15.1/webapps/geoserver/WEB-INF/lib<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>4.修改配置</p>
+<pre class="line-numbers language-web.xml" data-language="web.xml"><code class="language-web.xml">vim &#x2F;root&#x2F;geoserver-2.15.1&#x2F;webapps&#x2F;geoserver&#x2F;WEB-INF&#x2F;web.xml<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-name</span><span class="token punctuation">></span></span>CORS<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-name</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-class</span><span class="token punctuation">></span></span>com.thetransactioncompany.cors.CORSFilter<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-class</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.allowOrigin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>*<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.supportedMethods<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>GET,POST,HEAD,PUT,DELETE<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.supportedHeaders<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>Accept,Origin,X-Requested-With,Content-Type,Last-Modified<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.exposedHeaders<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>Set-Cookie<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.supportsCredentials<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-mapping</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-name</span><span class="token punctuation">></span></span>CORS<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-name</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url-pattern</span><span class="token punctuation">></span></span>/*<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>url-pattern</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-mapping</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Apach%20Flink.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Apach%20Flink.html" class="post-title-link" itemprop="url">Flink</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-17 10:45:31 / 修改时间：10:54:54" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Apach-Flink"><a href="#Apach-Flink" class="headerlink" title="Apach Flink"></a>Apach Flink</h1><blockquote>
+<p>Apache Flink是一个用于分布式流和批处理数据处理的开源平台。Flink的核心是流数据流引擎，为数据流上的分布式计算提供数据分发，通信和容错。Flink在流引擎之上构建批处理，覆盖本机迭代支持，托管内存和程序优化</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Canal.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Canal.html" class="post-title-link" itemprop="url">Canal</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-17 10:45:31 / 修改时间：10:55:11" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="一、数据库复制和同步的基本概念"><a href="#一、数据库复制和同步的基本概念" class="headerlink" title="一、数据库复制和同步的基本概念"></a>一、数据库复制和同步的基本概念</h4><blockquote>
+<p>作用：实现了数据在多个数据库实例之间的保持一致和同步。应用程序能够获得高可用性、灾备性和读取负载均衡等好处。</p>
+</blockquote>
+<ol>
+<li>主从复制（Master-Slave Replication）：主从复制是最常见的数据库复制方法之一。在主从复制中，有一个主数据库（Master）和一个或多个从数据库（Slaves）。主数据库是数据的源头，它负责接收来自应用程序的写操作，并将这些写操作记录为称为日志（Log）的格式。从数据库则通过读取这些日志，将主数据库的写操作进行重演，以保持数据的一致性。</li>
+<li>数据一致性（Data Consistency）：数据一致性是指主数据库和从数据库之间的数据保持一致。当在主数据库上进行写操作时，主数据库会将这些操作的日志记录下来，并将其发送给从数据库。从数据库会按照相同的顺序重现这些操作，确保数据的一致性。一致性的实现可以通过各种机制，例如基于事务日志（Transaction Log）或二进制日志（Binary Log）。</li>
+<li>数据传输（Data Transfer）：数据传输是指将主数据库的数据从一个位置传输到另一个位置。在数据库复制和同步过程中，数据传输通常通过网络进行。主数据库将写操作记录为日志，并通过网络传输给从数据库，从数据库接收日志并执行相应的操作。</li>
+<li>增量复制（Incremental Replication）：增量复制是一种常见的复制方式，其中只有发生了更改的部分数据会被复制和同步。这种方式可以减少网络传输的数据量，并提高复制效率。增量复制通常使用日志来跟踪数据的更改，只传输和应用这些更改。</li>
+<li>数据延迟（Data Latency）：在数据库复制和同步中，主数据库和从数据库之间可能存在一定的延迟。这是因为数据在传输和应用过程中需要一定的时间。数据延迟可能会导致从数据库上的数据不是实时的，在某些情况下可能会有一定的时间窗口内的数据不一致。</li>
+</ol>
+<h4 id="二、canal作用及原理"><a href="#二、canal作用及原理" class="headerlink" title="二、canal作用及原理"></a>二、canal作用及原理</h4><p><img src="https://camo.githubusercontent.com/63881e271f889d4a424c55cea2f9c2065f63494fecac58432eac415f6e47e959/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139313130343130313733353934372e706e67"></p>
+<p>canal作用：根据Mysql数据库增量日志进行解析，提供增量数据的订阅和消费。</p>
+<p>canal原理：canal模拟Mysql slave交互协议，伪装成slave发送dump报文，主数据库master收到dump请求后，推送binary log给canal。</p>
+<h4 id="三、数据库准备"><a href="#三、数据库准备" class="headerlink" title="三、数据库准备"></a>三、数据库准备</h4><p>1.开启binlog,&#x2F;etc&#x2F;my.cnf 中配置如下</p>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">mysqld</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">server-id</span><span class="token punctuation">=</span><span class="token value attr-value">1</span>
+<span class="token key attr-name">log_bin</span><span class="token punctuation">=</span><span class="token value attr-value">mysql-bin</span>
+<span class="token key attr-name">binlog-format</span><span class="token punctuation">=</span><span class="token value attr-value">row</span>
+<span class="token key attr-name">bind-address</span><span class="token punctuation">=</span><span class="token value attr-value">0.0.0.0</span>
+<span class="token key attr-name">port</span><span class="token punctuation">=</span><span class="token value attr-value">3306</span>
+<span class="token key attr-name">basedir</span><span class="token punctuation">=</span><span class="token value attr-value">/usr/local/mysql</span>
+<span class="token key attr-name">datadir</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql</span>
+<span class="token key attr-name">socket</span><span class="token punctuation">=</span><span class="token value attr-value">/tmp/mysql.sock</span>
+<span class="token key attr-name">log-error</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql/mysql.err</span>
+<span class="token key attr-name">pid-file</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql/mysql.pid</span>
+<span class="token comment">#character config</span>
+<span class="token key attr-name">character_set_server</span><span class="token punctuation">=</span><span class="token value attr-value">utf8mb4</span>
+<span class="token key attr-name">symbolic-links</span><span class="token punctuation">=</span><span class="token value attr-value">0</span>
+<span class="token key attr-name">explicit_defaults_for_timestamp</span><span class="token punctuation">=</span><span class="token value attr-value">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>2.授权 canal 链接 MySQL 账号具有作为 MySQL slave 的权限, 如果已有账户可直接 grant</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">USER</span> canal IDENTIFIED <span class="token keyword">BY</span> <span class="token string">'canal'</span><span class="token punctuation">;</span>  
+<span class="token keyword">GRANT</span> <span class="token keyword">SELECT</span><span class="token punctuation">,</span> <span class="token keyword">REPLICATION</span> SLAVE<span class="token punctuation">,</span> <span class="token keyword">REPLICATION</span> CLIENT <span class="token keyword">ON</span> <span class="token operator">*</span><span class="token punctuation">.</span><span class="token operator">*</span> <span class="token keyword">TO</span> <span class="token string">'canal'</span><span class="token variable">@'%'</span><span class="token punctuation">;</span>
+FLUSH <span class="token keyword">PRIVILEGES</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h4 id="四、安装Server"><a href="#四、安装Server" class="headerlink" title="四、安装Server"></a>四、安装Server</h4><blockquote>
+<p>下载：canal.deployer-1.1.6.tar.gz</p>
+</blockquote>
+<p>1.conf&#x2F;example&#x2F;instance.properties配置修改</p>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment">#position info，需要改成自己的数据库信息</span>
+<span class="token key attr-name">canal.instance.master.address</span> <span class="token punctuation">=</span> <span class="token value attr-value">127.0.0.1:3306 </span>
+<span class="token key attr-name">canal.instance.master.journal.name</span> <span class="token value attr-value">= </span>
+<span class="token key attr-name">canal.instance.master.position</span> <span class="token value attr-value">= </span>
+<span class="token key attr-name">canal.instance.master.timestamp</span> <span class="token value attr-value">= </span>
+<span class="token comment">#canal.instance.standby.address = </span>
+<span class="token comment">#canal.instance.standby.journal.name =</span>
+<span class="token comment">#canal.instance.standby.position = </span>
+<span class="token comment">#canal.instance.standby.timestamp = </span>
+<span class="token comment">#username/password，需要改成自己的数据库信息</span>
+<span class="token key attr-name">canal.instance.dbUsername</span> <span class="token punctuation">=</span> <span class="token value attr-value">canal  </span>
+<span class="token key attr-name">canal.instance.dbPassword</span> <span class="token punctuation">=</span> <span class="token value attr-value">canal</span>
+<span class="token key attr-name">canal.instance.defaultDatabaseName</span> <span class="token value attr-value">=</span>
+<span class="token key attr-name">canal.instance.connectionCharset</span> <span class="token punctuation">=</span> <span class="token value attr-value">UTF-8</span>
+<span class="token comment">#table regex</span>
+<span class="token key attr-name">canal.instance.filter.regex</span> <span class="token punctuation">=</span> <span class="token value attr-value">.\*\\\\..\*</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>2.启动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> bin/startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="五、安装RDB适配器"><a href="#五、安装RDB适配器" class="headerlink" title="五、安装RDB适配器"></a>五、安装RDB适配器</h4><blockquote>
+<p>下载：canal.adapter-1.1.7-SNAPSHOT.tar.gz</p>
+</blockquote>
+<h5 id="1-修改启动器配置-application-yml-这里以mysql目标库为例-将bootstrap-yml注释掉"><a href="#1-修改启动器配置-application-yml-这里以mysql目标库为例-将bootstrap-yml注释掉" class="headerlink" title="1.修改启动器配置: application.yml, 这里以mysql目标库为例,将bootstrap.yml注释掉"></a>1.修改启动器配置: application.yml, 这里以mysql目标库为例,将bootstrap.yml注释掉</h5><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">srcDataSources:
+    defaultDS:
+      url: jdbc:mysql://192.168.67.24:3306/mytest?useUnicode=true
+      username: root
+      password: *******
+  canalAdapters:
+  - instance: example # canal instance Name or mq topic name
+    groups:
+    - groupId: g1
+      outerAdapters:
+      - name: rdb                                               # 指定为rdb类型同步
+        key: mysql1                                            # 指定adapter的唯一key, 与表映射配置中outerAdapterKey对应
+        properties:
+          jdbc.driverClassName: com.mysql.jdbc.Driver        # jdbc驱动名, 部分jdbc的jar包需要自行放致lib目录下
+          jdbc.url: jdbc:mysql://192.168.67.16:31185/mytest?useUnicode=true        # jdbc url
+          jdbc.username: dongzhimen                                 # jdbc username
+          jdbc.password: **********                                # jdbc password
+          druid.stat.enable: false                                           
+		  druid.stat.slowSqlMillis: 1000	<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h5 id="2-修改conf-x2F-rdb-x2F-mytest-user-yml文件"><a href="#2-修改conf-x2F-rdb-x2F-mytest-user-yml文件" class="headerlink" title="2.修改conf&#x2F;rdb&#x2F;mytest_user.yml文件"></a>2.修改conf&#x2F;rdb&#x2F;mytest_user.yml文件</h5><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">dataSourceKey: defaultDS
+destination: example
+outerAdapterKey: mysql1
+concurrent: true
+dbMapping:
+  mirrorDb: true
+  database: mytest<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>其中dbMapping.database的值代表源库和目标库的schema名称，即两库的schema要一模一样</p>
+</blockquote>
+<p>3.启动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E5%8D%AB%E6%98%9F%E6%A6%82%E5%BF%B5.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -880,14 +1232,14 @@ $$
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-count">34</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
