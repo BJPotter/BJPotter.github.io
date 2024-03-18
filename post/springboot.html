@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 6.2.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -380,10 +380,10 @@
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h4 id="7-运行你的应用"><a href="#7-运行你的应用" class="headerlink" title="7.运行你的应用"></a>7.运行你的应用</h4><p>如果你使用Spring Boot的Maven或Gradle插件来创建可执行jar，你可以使用 <code>java -jar</code> 来运行你的打包后应用程序，如下例所示。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">java</span> <span class="token parameter variable">-jar</span> target/myapplication-0.0.1-SNAPSHOT.jar
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ java -jar target/myapplication-0.0.1-SNAPSHOT.jar
 //打包后的jar程序，也支持通过命令行参数开启远程调试服务，如下。
-$ <span class="token function">java</span> <span class="token parameter variable">-Xdebug</span> <span class="token parameter variable">-Xrunjdwp:server</span><span class="token operator">=</span>y,transport<span class="token operator">=</span>dt_socket,address<span class="token operator">=</span><span class="token number">8000</span>,suspend<span class="token operator">=</span>n <span class="token punctuation">\</span>
-       <span class="token parameter variable">-jar</span> target/myapplication-0.0.1-SNAPSHOT.jar
+$ java -Xdebug -Xrunjdwp:server<span class="token operator">=</span>y,transport<span class="token operator">=</span>dt_socket,address<span class="token operator">=</span><span class="token number">8000</span>,suspend<span class="token operator">=</span>n <span class="token punctuation">\</span>
+       -jar target/myapplication-0.0.1-SNAPSHOT.jar
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h4 id="8-开发者工具（Developer-Tools）"><a href="#8-开发者工具（Developer-Tools）" class="headerlink" title="8.开发者工具（Developer Tools）"></a>8.开发者工具（Developer Tools）</h4><p>Spring Boot 提供了一套额外的工具，可以让你更加愉快的开发应用。 <code>spring-boot-devtools</code> 模块可以包含在任何项目中，以在开发期间提供一些有用的特性。 要使用devtools，请添加以下依赖到项目中。</p>
@@ -423,7 +423,7 @@ Action:
 Identify and stop the process that is listening on port 8080 or configure this application to listen on another port.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>如果 failure analyzer 不能够处理异常，你仍然可以显示完整的条件报告以更好地了解出错的原因。例如，如果你通过使用 <code>java -jar</code> 来运行你的应用程序，你可以按以下方式启用 <code>debug</code> 属性。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">java</span> <span class="token parameter variable">-jar</span> myproject-0.0.1-SNAPSHOT.jar <span class="token parameter variable">--debug</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ java -jar myproject-0.0.1-SNAPSHOT.jar --debug<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h5 id="1-2-懒初始化（Lazy-Initialization）"><a href="#1-2-懒初始化（Lazy-Initialization）" class="headerlink" title="1.2. 懒初始化（Lazy Initialization）"></a>1.2. 懒初始化（Lazy Initialization）</h5><p><code>SpringApplication</code> 允许应用程序被懒初始化。 当启用懒初始化时，Bean在需要时被创建，而不是在应用程序启动时。 因此，懒初始化可以减少应用程序的启动时间。 在一个Web应用程序中，启用懒初始化后将导致许多与Web相关的Bean在收到HTTP请求之后才会进行初始化。</p>
 <p>懒初始化的一个缺点是它会延迟发现应用程序的问题。 如果一个配置错误的Bean被懒初始化了，那么在启动过程中就不会再出现故障，问题只有在Bean被初始化时才会显现出来。 还必须注意确保JVM有足够的内存来容纳应用程序的所有Bean，而不仅仅是那些在启动期间被初始化的Bean。 由于这些原因，默认情况下不启用懒初始化，建议在启用懒初始化之前，对JVM的堆大小进行微调。</p>
@@ -441,7 +441,7 @@ Identify and stop the process that is listening on port 8080 or configure this a
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
         <span class="token class-name">SpringApplication</span> application <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SpringApplication</span><span class="token punctuation">(</span><span class="token class-name">MyApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        application<span class="token punctuation">.</span><span class="token function">setBannerMode</span><span class="token punctuation">(</span><span class="token class-name">Banner<span class="token punctuation">.</span>Mode</span><span class="token punctuation">.</span><span class="token constant">OFF</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        application<span class="token punctuation">.</span><span class="token function">setBannerMode</span><span class="token punctuation">(</span><span class="token class-name">Banner<span class="token punctuation">.</span>Mode</span><span class="token punctuation">.</span>OFF<span class="token punctuation">)</span><span class="token punctuation">;</span>
         application<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
@@ -450,7 +450,7 @@ Identify and stop the process that is listening on port 8080 or configure this a
 <h5 id="1-5-Builder-API"><a href="#1-5-Builder-API" class="headerlink" title="1.5. Builder API"></a>1.5. Builder API</h5><p><code>SpringApplicationBuilder</code> 允许你链式调用多个方法，包括调用 <code>parent</code> 和 <code>child</code> 方法，创建一个层次结构，如下例所示。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">new</span> <span class="token class-name">SpringApplicationBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">sources</span><span class="token punctuation">(</span><span class="token class-name">Parent</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
     <span class="token punctuation">.</span><span class="token function">child</span><span class="token punctuation">(</span><span class="token class-name">Application</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token function">bannerMode</span><span class="token punctuation">(</span><span class="token class-name">Banner<span class="token punctuation">.</span>Mode</span><span class="token punctuation">.</span><span class="token constant">OFF</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">bannerMode</span><span class="token punctuation">(</span><span class="token class-name">Banner<span class="token punctuation">.</span>Mode</span><span class="token punctuation">.</span>OFF<span class="token punctuation">)</span>
     <span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h5 id="1-6-Application-可用性"><a href="#1-6-Application-可用性" class="headerlink" title="1.6. Application 可用性"></a>1.6. Application 可用性</h5><p>在平台上部署时，应用程序可以使用 Kubernetes Probes等基础设施向平台提供有关其可用性的信息。Spring Boot对常用的 “liveness” 和 “readiness” 可用性状态提供了开箱即用的支持。如果你使用Spring Boot的 “actuator” ，那么这些状态将作为健康端点组（health endpoint groups）暴露出来。</p>
@@ -605,14 +605,14 @@ Identify and stop the process that is listening on port 8080 or configure this a
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">37</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
