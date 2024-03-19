@@ -165,6 +165,531 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html" class="post-title-link" itemprop="url">设计模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="基于jdbc的策略模式"><a href="#基于jdbc的策略模式" class="headerlink" title="基于jdbc的策略模式"></a>基于jdbc的策略模式</h2><blockquote>
+<p>当进行数据库连接的时候，可能是mysql，可能是oracle,可能是pg,涉及到数据库的切换。为此采用策略模式进行多数据库切换，只需要选择不同数据库的对应的客户端就行</p>
+<p>策略模式原理：</p>
+<p>策略模式属于对象的行为模式。其用意是针对一组算法，将每一个算法封装到具有共同接口的独立的类中，从而使得它们可以相互替换。策略模式使得算法可以在不影响到客户端的情况下发生变化。</p>
+<p>缺点：把每个具体的策略实现都单独封装成为类，如果备选的策略很多的话，那么对象的数目就会很可观。</p>
+</blockquote>
+<h3 id="创建策略接口"><a href="#创建策略接口" class="headerlink" title="创建策略接口"></a>创建策略接口</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * 数据库连接策略接口
+ * &lt;/p>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">StatgeDb</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token class-name">Connection</span> <span class="token function">getConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Mysql策略实现类"><a href="#Mysql策略实现类" class="headerlink" title="Mysql策略实现类"></a>Mysql策略实现类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * Mysql策略实现类
+ * &lt;/p>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MysqlStatge</span> <span class="token keyword">implements</span> <span class="token class-name">StatgeDb</span><span class="token punctuation">&#123;</span>
+    <span class="token comment">/**
+     * 具体实现
+     * @return
+     */</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">Connection</span> <span class="token function">getConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//1.加载驱动</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"com.mysql.cj.jdbc.Driver"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">ClassNotFoundException</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token comment">//2.获取连接</span>
+        <span class="token class-name">Connection</span> con <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            con <span class="token operator">=</span> <span class="token class-name">DriverManager</span><span class="token punctuation">.</span><span class="token function">getConnection</span><span class="token punctuation">(</span><span class="token string">"jdbc:mysql://localhost:3306/switchgame(lf526)?characterEncoding=utf8&amp;serverTimezone=UTC&amp;useSSL=false"</span><span class="token punctuation">,</span> <span class="token string">"root"</span><span class="token punctuation">,</span> <span class="token string">"123456"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">SQLException</span> throwables<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"获取连接失败"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            throwables<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"获取连接成功"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> con<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Orcale策略实现类"><a href="#Orcale策略实现类" class="headerlink" title="Orcale策略实现类"></a>Orcale策略实现类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * Orcale策略实现类
+ * &lt;/p>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">OrcaleStatge</span> <span class="token keyword">implements</span> <span class="token class-name">StatgeDb</span><span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">Connection</span> <span class="token function">getConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"OrcaleStatge连接成功，只做演示，不具体实现"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Pg策略实现类"><a href="#Pg策略实现类" class="headerlink" title="Pg策略实现类"></a>Pg策略实现类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * Pg策略实现类
+ * &lt;/p>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PgStatge</span> <span class="token keyword">implements</span> <span class="token class-name">StatgeDb</span><span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">Connection</span> <span class="token function">getConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"PgStatge连接成功，只做演示，不具体实现"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="策略模式实现类"><a href="#策略模式实现类" class="headerlink" title="策略模式实现类"></a>策略模式实现类</h3><blockquote>
+<p>策略模式客户端，只需要创建客户端的时候，传入不同的策略对象，即可调用不同的数据库</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * 策略模式实现类
+ * &lt;/p>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">StatgeDbClient</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">StatgeDb</span> statgeDb<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token class-name">StatgeDbClient</span><span class="token punctuation">(</span><span class="token class-name">StatgeDb</span> statgeDb<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>statgeDb <span class="token operator">=</span> statgeDb<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token class-name">Connection</span> <span class="token function">getConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> statgeDb<span class="token punctuation">.</span><span class="token function">getConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="策略模式实现测试类"><a href="#策略模式实现测试类" class="headerlink" title="策略模式实现测试类"></a>策略模式实现测试类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * 策略模式实现测试类
+ * &lt;/p>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">StatgeDbTest</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//对mysql进行连接</span>
+        <span class="token class-name">StatgeDbClient</span> statgeDbClient <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StatgeDbClient</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">MysqlStatge</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Connection</span> connection <span class="token operator">=</span> statgeDbClient<span class="token punctuation">.</span><span class="token function">getConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//对mysql进行连接</span>
+        <span class="token class-name">StatgeDbClient</span> orcaleStatge <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StatgeDbClient</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">OrcaleStatge</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Connection</span> connection_orcale <span class="token operator">=</span> orcaleStatge<span class="token punctuation">.</span><span class="token function">getConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//对mysql进行连接</span>
+        <span class="token class-name">StatgeDbClient</span> pgStatge <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StatgeDbClient</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">PgStatge</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Connection</span> connection_pgStatge <span class="token operator">=</span> pgStatge<span class="token punctuation">.</span><span class="token function">getConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><blockquote>
+<p>执行sql的时候想看下执行的sql语句，此时可以使用代理模式，把需要打印的sql，调用一下打印方法就可以了</p>
+<p>代理模式: 为一个对象提供一个替身，以控制对这个对象的访问。即通过代理对象访问目标对象.这样做的好处是:可以在目标对象实现的基础上,增强额外的功能操作,即扩展目标对象的功能。</p>
+</blockquote>
+<h3 id="创建代理模式接口"><a href="#创建代理模式接口" class="headerlink" title="创建代理模式接口"></a>创建代理模式接口</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * 代理模式接口
+ * &lt;/p>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">ProxySql</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="创建真实实现类"><a href="#创建真实实现类" class="headerlink" title="创建真实实现类"></a>创建真实实现类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * 代理真实类
+ * &lt;/p>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RealProxySqlImpl</span> <span class="token keyword">implements</span> <span class="token class-name">ProxySql</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> sql<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token class-name">RealProxySqlImpl</span><span class="token punctuation">(</span><span class="token class-name">String</span> sql<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>sql <span class="token operator">=</span> sql<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"execute sql "</span><span class="token operator">+</span><span class="token keyword">this</span><span class="token punctuation">.</span>sql<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="创建代理实现类"><a href="#创建代理实现类" class="headerlink" title="创建代理实现类"></a>创建代理实现类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * 代理实现类
+ * &lt;/p>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ProxySqlImpl</span> <span class="token keyword">implements</span> <span class="token class-name">ProxySql</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token class-name">RealProxySqlImpl</span> realProxySql<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> sql<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token class-name">ProxySqlImpl</span><span class="token punctuation">(</span><span class="token class-name">String</span> sql<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>sql <span class="token operator">=</span> sql<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>realProxySql <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            realProxySql <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RealProxySqlImpl</span><span class="token punctuation">(</span>sql<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        realProxySql<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><blockquote>
+<p>只需要需要打印sql的地方进行调用代理类，本方法打印sql实现比较简单，代理模式可以进行进行事务管理，sql注入的检测等其他高级功能</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//读取用户信息</span>
+<span class="token keyword">public</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Map</span><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span><span class="token class-name">String</span><span class="token punctuation">></span><span class="token punctuation">></span></span><span class="token function">getUsers</span><span class="token punctuation">(</span><span class="token class-name">String</span> username<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+ <span class="token class-name">String</span> sql <span class="token operator">=</span> <span class="token string">"select * from user"</span><span class="token punctuation">;</span>
+ <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> params <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+ <span class="token keyword">if</span><span class="token punctuation">(</span>username <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  sql <span class="token operator">=</span> sql <span class="token operator">+</span> <span class="token string">"where username like ?"</span><span class="token punctuation">;</span>
+  <span class="token comment">//添加代理类</span>
+  <span class="token class-name">ProxySql</span> proxySql <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProxySqlImpl</span><span class="token punctuation">(</span>sql<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  proxySql<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  params <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">&#123;</span><span class="token string">"%"</span><span class="token operator">+</span> username <span class="token operator">+</span> <span class="token string">"%"</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+ <span class="token keyword">return</span> db<span class="token punctuation">.</span><span class="token function">getList</span><span class="token punctuation">(</span>sql<span class="token punctuation">,</span>params<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h2><blockquote>
+<p>它提供了一种创建对象的最佳方式。</p>
+<p>这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。</p>
+</blockquote>
+<blockquote>
+<p>懒汉式和饿汉式区别:</p>
+<p>实例化方面:懒汉式默认不会实例化，外部什么时候调用什么时候new。饿汉式在类加载的时候就实例化，并目创建单例对象。<br>线程安全方面:</p>
+<p>1.饿汉式线程安全:在线程还没出现之前就已经实例化了，因此饿汉式线程一定是安全的。<br>2.懒汉式线程不安全:因为懒汉式加载是在使用时才会去new实例的，那么你去new的时候是一个动态的过程，是放到方法中实现的。</p>
+</blockquote>
+<h4 id="懒汉式实现方式"><a href="#懒汉式实现方式" class="headerlink" title="懒汉式实现方式"></a>懒汉式实现方式</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * 单例模式类
+ * &lt;/p>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Singleton</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">/**
+     * 懒汉式
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token class-name">DBUtil</span> instance<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Singleton</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">synchronized</span> <span class="token class-name">DBUtil</span> <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>instance <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            instance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DBUtil</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">return</span> instance<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="饿汉式实现方式"><a href="#饿汉式实现方式" class="headerlink" title="饿汉式实现方式"></a>饿汉式实现方式</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * 单例模式类
+ * &lt;/p>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Singleton</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">/**
+     * 饿汉式
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token class-name">DBUtil</span> instance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DBUtil</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Singleton</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">DBUtil</span> <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> instance<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><blockquote>
+<p>每次使用的时候不用每次new创建一个对象，直接去单例里面拿对象</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SoftTypeService</span> <span class="token punctuation">&#123;</span>
+	<span class="token comment">//private DBUtil db = new DBUtil();</span>
+	<span class="token keyword">private</span> <span class="token class-name">DBUtil</span> db <span class="token operator">=</span> <span class="token class-name">Singleton</span><span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="模板方法"><a href="#模板方法" class="headerlink" title="模板方法"></a>模板方法</h2><blockquote>
+<p>在模板模式（Template Pattern）中，一个抽象类公开定义了执行它的方法的方式&#x2F;模板。它的子类可以按需要重写方法实现，但调用将以抽象类中定义的方式进行。这种类型的设计模式属于行为型模式</p>
+<p>Servlet就是一个很好的模板模式的类，只需要继承并且重写他的get、post方法就可以，因为它已经写好了这种模板</p>
+</blockquote>
+<h4 id="自定义一个servlet"><a href="#自定义一个servlet" class="headerlink" title="自定义一个servlet"></a>自定义一个servlet</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * 自定义模板类
+ * &lt;/p>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ServletHttp</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">long</span> serialVersionUID <span class="token operator">=</span> <span class="token number">1L</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">ServletHttp</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// TODO Auto-generated constructor stub</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span><span class="token class-name">HttpServletRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> response<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ServletException</span><span class="token punctuation">,</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//执行具体的业务逻辑</span>
+    <span class="token punctuation">&#125;</span>
+
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doPost</span><span class="token punctuation">(</span><span class="token class-name">HttpServletRequest</span> req<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> resp<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ServletException</span><span class="token punctuation">,</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">doGet</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> resp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="未自定义前我们的使用方式"><a href="#未自定义前我们的使用方式" class="headerlink" title="未自定义前我们的使用方式"></a>未自定义前我们的使用方式</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/logout"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Logout</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">long</span> serialVersionUID <span class="token operator">=</span> <span class="token number">1L</span><span class="token punctuation">;</span>
+       
+    <span class="token comment">/**
+     * @see HttpServlet#HttpServlet()
+     */</span>
+    <span class="token keyword">public</span> <span class="token class-name">Logout</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// TODO Auto-generated constructor stub</span>
+    <span class="token punctuation">&#125;</span>
+
+	<span class="token comment">/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */</span>
+	<span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span><span class="token class-name">HttpServletRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> response<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ServletException</span><span class="token punctuation">,</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
+
+		request<span class="token punctuation">.</span><span class="token function">getSession</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">invalidate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		response<span class="token punctuation">.</span><span class="token function">sendRedirect</span><span class="token punctuation">(</span><span class="token string">"index.html"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		
+	<span class="token punctuation">&#125;</span>
+
+	<span class="token comment">/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */</span>
+	<span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doPost</span><span class="token punctuation">(</span><span class="token class-name">HttpServletRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> response<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ServletException</span><span class="token punctuation">,</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
+		<span class="token comment">// TODO Auto-generated method stub</span>
+		<span class="token function">doGet</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> response<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+
+<span class="token punctuation">&#125;</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="使用我们自定义的servlet模板"><a href="#使用我们自定义的servlet模板" class="headerlink" title="使用我们自定义的servlet模板"></a>使用我们自定义的servlet模板</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * 模板模式类
+ * &lt;/p>
+ *
+ */</span>
+<span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/logout2"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ModelLogout</span> <span class="token keyword">extends</span> <span class="token class-name">ServletHttp</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span><span class="token class-name">HttpServletRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> response<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ServletException</span><span class="token punctuation">,</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//执行具体的业务逻辑</span>
+        request<span class="token punctuation">.</span><span class="token function">getSession</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">invalidate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        response<span class="token punctuation">.</span><span class="token function">sendRedirect</span><span class="token punctuation">(</span><span class="token string">"index.html"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="测试方式"><a href="#测试方式" class="headerlink" title="测试方式"></a>测试方式</h3><pre class="line-numbers language-jsp" data-language="jsp"><code class="language-jsp">&lt;%@ page pageEncoding&#x3D;&quot;utf-8&quot;%&gt;
+&lt;h1 style&#x3D;&quot;color: red; text-align: center;&quot;&gt;&lt;&#x2F;h1&gt;
+&lt;body style&#x3D;&quot;background:url(images&#x2F;b3.jpg);background-size:cover;text-align: center;&quot;&gt;
+&lt;div align&#x3D;&quot;right&quot;&gt;
+	&lt;a href&#x3D;&quot;list_user&quot;&gt;用户管理&lt;&#x2F;a&gt;&amp;nbsp;&amp;nbsp; 
+	&lt;a href&#x3D;&quot;&quot;&gt;游戏软件管理&lt;&#x2F;a&gt;&amp;nbsp;&amp;nbsp; 
+	&lt;a href&#x3D;&quot;type_list&quot;&gt;游戏分类管理&lt;&#x2F;a&gt;&amp;nbsp;&amp;nbsp; 
+	&lt;a href&#x3D;&quot;logout&quot;&gt;退出系统&lt;&#x2F;a&gt;&amp;nbsp;&amp;nbsp; 换成&lt;a href&#x3D;&quot;logout2&quot;&gt;退出系统&lt;&#x2F;a&gt;&amp;nbsp;&amp;nbsp;
+&lt;&#x2F;div&gt;
+&lt;&#x2F;body&gt;
+&lt;hr&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h2><blockquote>
+<p>用一个已经创建的实例作为原型，通过复制该原型对象来创建一个和原型相同或相似的新对象。在这里，原型实例指定了要创建的对象的种类。</p>
+</blockquote>
+<h4 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h4><blockquote>
+<ul>
+<li>Java自带的原型模式基于内存二进制流的复制，在性能上比直接 new 一个对象更加优良。</li>
+<li>可以使用深克隆方式保存对象的状态，使用原型模式将对象复制一份，并将其状态保存起来，简化了创建对象的过程，以便在需要的时候使用（例如恢复到历史某一状态），可辅助实现撤销操作。</li>
+</ul>
+</blockquote>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点:"></a>缺点:</h4><blockquote>
+<ul>
+<li>需要为每一个类都配置一个 clone 方法</li>
+<li>clone 方法位于类的内部，当对已有类进行改造的时候，需要修改代码，违背了开闭原则。</li>
+<li>当实现深克隆时，需要编写较为复杂的代码，而且当对象之间存在多重嵌套引用时，为了实现深克隆，每一层对象对应的类都必须支持深克隆，实现起来会比较麻烦。因此，深克隆、浅克隆需要运用得当。</li>
+</ul>
+</blockquote>
+<h4 id="抽象原型类"><a href="#抽象原型类" class="headerlink" title="抽象原型类"></a>抽象原型类</h4><blockquote>
+<p>Cloneable 接口</p>
+</blockquote>
+<h4 id="具体原型类"><a href="#具体原型类" class="headerlink" title="具体原型类"></a>具体原型类</h4><blockquote>
+<p>实现抽象原型类的 clone() 方法，它是可被复制的对象。</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * user类
+ * &lt;/p>
+ *
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span>  <span class="token keyword">implements</span> <span class="token class-name">Cloneable</span><span class="token punctuation">&#123;</span>
+    <span class="token class-name">Integer</span> id<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> username<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> password<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> salt<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> ident<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> telephone<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> address<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> id<span class="token punctuation">,</span> <span class="token class-name">String</span> username<span class="token punctuation">,</span> <span class="token class-name">String</span> password<span class="token punctuation">,</span> <span class="token class-name">String</span> salt<span class="token punctuation">,</span> <span class="token class-name">String</span> ident<span class="token punctuation">,</span> <span class="token class-name">String</span> telephone<span class="token punctuation">,</span> <span class="token class-name">String</span> address<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>username <span class="token operator">=</span> username<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>password <span class="token operator">=</span> password<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>salt <span class="token operator">=</span> salt<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>ident <span class="token operator">=</span> ident<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>telephone <span class="token operator">=</span> telephone<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>address <span class="token operator">=</span> address<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token class-name">String</span> username<span class="token punctuation">,</span> <span class="token class-name">String</span> password<span class="token punctuation">,</span> <span class="token class-name">String</span> salt<span class="token punctuation">,</span> <span class="token class-name">String</span> ident<span class="token punctuation">,</span> <span class="token class-name">String</span> telephone<span class="token punctuation">,</span> <span class="token class-name">String</span> address<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>username <span class="token operator">=</span> username<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>password <span class="token operator">=</span> password<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>salt <span class="token operator">=</span> salt<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>ident <span class="token operator">=</span> ident<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>telephone <span class="token operator">=</span> telephone<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>address <span class="token operator">=</span> address<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">Integer</span> <span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> id<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setId</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> id<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getUsername</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> username<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setUsername</span><span class="token punctuation">(</span><span class="token class-name">String</span> username<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>username <span class="token operator">=</span> username<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getPassword</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> password<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setPassword</span><span class="token punctuation">(</span><span class="token class-name">String</span> password<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>password <span class="token operator">=</span> password<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getSalt</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> salt<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setSalt</span><span class="token punctuation">(</span><span class="token class-name">String</span> salt<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>salt <span class="token operator">=</span> salt<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getIdent</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> ident<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setIdent</span><span class="token punctuation">(</span><span class="token class-name">String</span> ident<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>ident <span class="token operator">=</span> ident<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getTelephone</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> telephone<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setTelephone</span><span class="token punctuation">(</span><span class="token class-name">String</span> telephone<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>telephone <span class="token operator">=</span> telephone<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getAddress</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> address<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setAddress</span><span class="token punctuation">(</span><span class="token class-name">String</span> address<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>address <span class="token operator">=</span> address<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"User&#123;"</span> <span class="token operator">+</span>
+                <span class="token string">"id="</span> <span class="token operator">+</span> id <span class="token operator">+</span>
+                <span class="token string">", username='"</span> <span class="token operator">+</span> username <span class="token operator">+</span> <span class="token char">'\''</span> <span class="token operator">+</span>
+                <span class="token string">", password='"</span> <span class="token operator">+</span> password <span class="token operator">+</span> <span class="token char">'\''</span> <span class="token operator">+</span>
+                <span class="token string">", salt='"</span> <span class="token operator">+</span> salt <span class="token operator">+</span> <span class="token char">'\''</span> <span class="token operator">+</span>
+                <span class="token string">", ident='"</span> <span class="token operator">+</span> ident <span class="token operator">+</span> <span class="token char">'\''</span> <span class="token operator">+</span>
+                <span class="token string">", telephone='"</span> <span class="token operator">+</span> telephone <span class="token operator">+</span> <span class="token char">'\''</span> <span class="token operator">+</span>
+                <span class="token string">", address='"</span> <span class="token operator">+</span> address <span class="token operator">+</span> <span class="token char">'\''</span> <span class="token operator">+</span>
+                <span class="token char">'&#125;'</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">CloneNotSupportedException</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"具体原型复制成功！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token class-name">User</span><span class="token punctuation">)</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>测试方法</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * &lt;p>
+ * 原型测试类
+ * &lt;/p>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PrototypeTest</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">CloneNotSupportedException</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">User</span> user <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">User</span> user1 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">User</span><span class="token punctuation">)</span> user<span class="token punctuation">.</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"obj1==obj2?"</span> <span class="token operator">+</span> <span class="token punctuation">(</span>user <span class="token operator">==</span> user1<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E4%B8%AA%E4%BA%BA%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF%E5%9B%BE.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -880,7 +1405,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/flume.html" class="post-title-link" itemprop="url">flume</a>
+            <a href="/post/flume.html" class="post-title-link" itemprop="url">Flume</a>
         </h2>
 
         <div class="post-meta">
@@ -889,10 +1414,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-01-17 10:45:31 / 修改时间：10:56:14" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
+              <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-03-19 16:02:58" itemprop="dateModified" datetime="2024-03-19T16:02:58+08:00">2024-03-19</time>
+              </span>
 
           
 
@@ -905,17 +1436,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <blockquote>
+          <h1 id="系统要求"><a href="#系统要求" class="headerlink" title="系统要求"></a>系统要求</h1><blockquote>
 <p>Apache Flume 是一个分布式、高可靠、高可用的用来收集、聚合、转移不同来源的大量日志数据到中央数据仓库的工具</p>
 </blockquote>
-<h2 id="一、系统要求"><a href="#一、系统要求" class="headerlink" title="一、系统要求"></a>一、系统要求</h2><ol>
+<ol>
 <li>Jre - Java 1.8或更高版本</li>
 <li>内存 - 足够的内存 用来配置Sources、Channels和Sinks</li>
 <li>硬盘空间 - 足够的硬盘用来配置Channels 和 Sinks</li>
 <li>目录权限 - Agent用来读写目录的权限</li>
 </ol>
-<h2 id="二、数据流模型"><a href="#二、数据流模型" class="headerlink" title="二、数据流模型"></a>二、数据流模型</h2><p><strong>Event是Flume定义的一个数据流传输的最小单元</strong>。Agent就是一个Flume的实例，本质是一个JVM进程，该JVM进程控制Event数据流从外部日志生产者那里传输到目的地（或者是下一个Agent）。</p>
-<h2 id="三、基础概念"><a href="#三、基础概念" class="headerlink" title="三、基础概念"></a>三、基础概念</h2><p><img src="https://flume.liyifeng.org/_images/UserGuide_image00.png"></p>
+<h1 id="数据流模型"><a href="#数据流模型" class="headerlink" title="数据流模型"></a>数据流模型</h1><p><strong>Event是Flume定义的一个数据流传输的最小单元</strong>。Agent就是一个Flume的实例，本质是一个JVM进程，该JVM进程控制Event数据流从外部日志生产者那里传输到目的地（或者是下一个Agent）。</p>
+<h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><p><img src="https://flume.liyifeng.org/_images/UserGuide_image00.png"></p>
 <p>Agent就是Flume的一个部署实例，一个完整的Agent中包含了必须的三个组件Source、Channel和Sink。</p>
 <ul>
 <li><p>Source 数据的来源和方式</p>
@@ -931,15 +1462,17 @@
 <p>当Source接收Event（Web Server）时，它将其存储到一个或多个channel。该channel是一个被动存储器（或者说叫存储池），可以存储Event直到它被Sink消耗。</p>
 <p>Agent中的source和sink与channel存取Event是异步的。</p>
 </blockquote>
-<h4 id="可靠性"><a href="#可靠性" class="headerlink" title="可靠性"></a>可靠性</h4><blockquote>
+<p>可靠性</p>
+<blockquote>
 <p>Event会在每个Agent的Channel上进行缓存，随后Event将会传递到流中的下一个Agent或目的地（比如HDFS）。只有成功地发送到下一个Agent或目的地后Event才会从Channel中删除。这一步保证了Event数据流在Flume Agent中传输时端到端的可靠性。</p>
 <p>channel作用：1.保证数据的可靠传输的 2.数据流入和流出的异步执行</p>
 <p>Flume使用事务来保证Event的 <strong>可靠传输</strong>。Source和Sink对Channel提供的每个Event数据分别封装一个事务用于存储和恢复，这样就保证了数据流的集合在点对点之间的可靠传输。在多层架构的情况下，来自前一层的sink和来自下一层的Source 都会有事务在运行以确保数据安全地传输到下一层的Channel中。</p>
 </blockquote>
-<h4 id="可恢复性"><a href="#可恢复性" class="headerlink" title="可恢复性"></a>可恢复性</h4><blockquote>
+<p>可恢复性</p>
+<blockquote>
 <p>Event数据会缓存在Channel中用来在失败的时候恢复出来。Flume支持保存在本地文件系统中的『文件channel』，也支持保存在内存中的『内存Channel』，『内存Channel』显然速度会更快，缺点是万一Agent挂掉『内存Channel』中缓存的数据也就丢失了。</p>
 </blockquote>
-<h2 id="四、安装"><a href="#四、安装" class="headerlink" title="四、安装"></a>四、安装</h2><blockquote>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><blockquote>
 <p>下载地址：<a target="_blank" rel="noopener" href="https://www.apache.org/dyn/closer.lua/flume/1.11.0/apache-flume-1.11.0-bin.tar.gz">https://www.apache.org/dyn/closer.lua/flume/1.11.0/apache-flume-1.11.0-bin.tar.gz</a></p>
 </blockquote>
 <pre class="line-numbers language-config" data-language="config"><code class="language-config"># example.conf: 一个单节点的 Flume 实例配置
@@ -966,14 +1499,14 @@ a1.channels.c1.transactionCapacity &#x3D; 100    #source和sink从内存channel�
 a1.sources.r1.channels &#x3D; c1       #与source r1绑定的channel有一个，叫做c1
 a1.sinks.k1.channel &#x3D; c1          #与sink k1绑定的channel有一个，叫做c1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="五、数据获取方式"><a href="#五、数据获取方式" class="headerlink" title="五、数据获取方式"></a>五、数据获取方式</h2><blockquote>
+<h1 id="数据获取方式"><a href="#数据获取方式" class="headerlink" title="数据获取方式"></a>数据获取方式</h1><blockquote>
 <p>Flume支持多种从外部获取数据的方式。</p>
 </blockquote>
 <p>1.RPC</p>
 <p>2.执行命令</p>
 <p>3.网络流(Avro、Thrift、Syslog、Netcat）</p>
 <p>4.Spooling Directory Source（将监视这个目录中产生的新文件，并在新文件出现时从新文件中解析数据出来）</p>
-<h4 id="Spooling-Directory-Source"><a href="#Spooling-Directory-Source" class="headerlink" title="Spooling Directory Source"></a>Spooling Directory Source</h4><p>这个Source允许你把要收集的文件放入磁盘上的某个指定目录。它会将监视这个目录中产生的新文件，并在新文件出现时从新文件中解析数据出来。数据解析逻辑是可配置的。 在新文件被完全读入Channel之后默认会重命名该文件以示完成（也可以配置成读完后立即删除、也可以配置trackerDir来跟踪已经收集过的文件）。</p>
+<h2 id="Spooling-Directory-Source"><a href="#Spooling-Directory-Source" class="headerlink" title="Spooling Directory Source"></a>Spooling Directory Source</h2><p>这个Source允许你把要收集的文件放入磁盘上的某个指定目录。它会将监视这个目录中产生的新文件，并在新文件出现时从新文件中解析数据出来。数据解析逻辑是可配置的。 在新文件被完全读入Channel之后默认会重命名该文件以示完成（也可以配置成读完后立即删除、也可以配置trackerDir来跟踪已经收集过的文件）。</p>
 <p>Spooling Directory Source是可靠的，即使Flume重新启动或被kill，也不会丢失数据。同时作为这种可靠性的代价，指定目录中的被收集的文件必须是不可变的、唯一命名的。Flume会自动检测避免这种情况发生，如果发现问题，则会抛出异常：</p>
 <ol>
 <li>如果文件在写入完成后又被再次写入新内容，Flume将向其日志文件（这是指Flume自己logs目录下的日志文件）打印错误并停止处理。</li>
@@ -1139,7 +1672,7 @@ a1.sources.src-1.channels &#x3D; ch-1
 a1.sources.src-1.spoolDir &#x3D; &#x2F;var&#x2F;log&#x2F;apache&#x2F;flumeSpool
 a1.sources.src-1.fileHeader &#x3D; true<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="Kafka-Sink"><a href="#Kafka-Sink" class="headerlink" title="Kafka Sink"></a>Kafka Sink</h4><p>这个 Sink 可以把数据发送到 <a target="_blank" rel="noopener" href="http://kafka.apache.org/">Kafka</a> topic上。目的就是将 Flume 与 Kafka 集成，以便基于拉的处理系统可以处理来自各种 Flume Source 的数据。</p>
+<h2 id="Kafka-Sink"><a href="#Kafka-Sink" class="headerlink" title="Kafka Sink"></a>Kafka Sink</h2><p>这个 Sink 可以把数据发送到 <a target="_blank" rel="noopener" href="http://kafka.apache.org/">Kafka</a> topic上。目的就是将 Flume 与 Kafka 集成，以便基于拉的处理系统可以处理来自各种 Flume Source 的数据。</p>
 <p>目前支持Kafka 0.10.1.0以上版本，最高已经在Kafka 2.0.1版本上完成了测试，这已经是Flume 1.9发行时候的最高的Kafka版本了。</p>
 <table>
 <thead>
@@ -1257,8 +1790,8 @@ a1.sinks.k1.kafka.producer.acks &#x3D; 1
 a1.sinks.k1.kafka.producer.linger.ms &#x3D; 1
 a1.sinks.k1.kafka.producer.compression.type &#x3D; snappy<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="Flume-Channels"><a href="#Flume-Channels" class="headerlink" title="Flume Channels"></a>Flume Channels</h3><p>channel 是在 Agent 上暂存 Event 的缓冲池。 Event由source添加，由sink消费后删除。</p>
-<h4 id="Memory-Channel"><a href="#Memory-Channel" class="headerlink" title="Memory Channel"></a>Memory Channel</h4><p>内存 channel 是把 Event 队列存储到内存上，队列的最大数量就是 <em>capacity</em> 的设定值。它非常适合对吞吐量有较高要求的场景，但也是有代价的，当发生故障的时候会丢失当时内存中的所有 Event。 必需的参数已用 <strong>粗体</strong> 标明。</p>
+<h2 id="Flume-Channels"><a href="#Flume-Channels" class="headerlink" title="Flume Channels"></a>Flume Channels</h2><p>channel 是在 Agent 上暂存 Event 的缓冲池。 Event由source添加，由sink消费后删除。</p>
+<h2 id="Memory-Channel"><a href="#Memory-Channel" class="headerlink" title="Memory Channel"></a>Memory Channel</h2><p>内存 channel 是把 Event 队列存储到内存上，队列的最大数量就是 <em>capacity</em> 的设定值。它非常适合对吞吐量有较高要求的场景，但也是有代价的，当发生故障的时候会丢失当时内存中的所有 Event。 必需的参数已用 <strong>粗体</strong> 标明。</p>
 <table>
 <thead>
 <tr>
@@ -2331,123 +2864,6 @@ Identify and stop the process that is listening on port 8080 or configure this a
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/LeetCode%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/LeetCode%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95.html" class="post-title-link" itemprop="url">Leetcode刷题记录</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="LeetCode刷题记录"><a href="#LeetCode刷题记录" class="headerlink" title="LeetCode刷题记录"></a>LeetCode刷题记录</h2><h3 id="2208将数组和减半的最少操作次数"><a href="#2208将数组和减半的最少操作次数" class="headerlink" title="2208将数组和减半的最少操作次数"></a>2208将数组和减半的最少操作次数</h3><blockquote>
-<p>题目描述：</p>
-<p>给你一个正整数数组 <code>nums</code> 。每一次操作中，你可以从 <code>nums</code> 中选择 <strong>任意</strong> 一个数并将它减小到 <strong>恰好</strong> 一半。（注意，在后续操作中你可以对减半过的数继续执行操作）请你返回将 <code>nums</code> 数组和 <strong>至少</strong> 减少一半的 <strong>最少</strong> 操作数。</p>
-</blockquote>
-<blockquote>
-<p>技能掌握：</p>
-<ol>
-<li><h4 id="贪心算法基本思想"><a href="#贪心算法基本思想" class="headerlink" title="贪心算法基本思想"></a>贪心算法基本思想</h4></li>
-<li><h4 id="优先级队列使用"><a href="#优先级队列使用" class="headerlink" title="优先级队列使用"></a>优先级队列使用</h4></li>
-<li><h4 id="Lambda对数组排序"><a href="#Lambda对数组排序" class="headerlink" title="Lambda对数组排序"></a>Lambda对数组排序</h4></li>
-</ol>
-</blockquote>
-<ol>
-<li><h4 id="贪心算法的基本思想"><a href="#贪心算法的基本思想" class="headerlink" title="贪心算法的基本思想"></a>贪心算法的基本思想</h4><p>如果一个问题得不到最优解，把原问题拆解成小问题，计算每个小问题的最优解，把小问题的最优解叠起来就是整个问题的最优解。</p>
-</li>
-<li><h4 id="优先级队列使用-1"><a href="#优先级队列使用-1" class="headerlink" title="优先级队列使用"></a>优先级队列使用</h4><p>队列是按照先进先出的原则（FIFO）,优先级队列出队顺序由优先级决定。</p>
-<p>Java Queue的常用方法</p>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>add</td>
-<td>添加元素，如果队列已满，抛出IIIegalSlabEepeplian</td>
-</tr>
-<tr>
-<td>remove</td>
-<td>移除并返回队列的头部元素，如果队列为空，抛出NoSuchElementException</td>
-</tr>
-<tr>
-<td>element</td>
-<td>返回队列头部元素，如果队列为空，抛出NoSuchElementException</td>
-</tr>
-<tr>
-<td>offer</td>
-<td>添加元素，如果队列已满，返回false</td>
-</tr>
-<tr>
-<td>poll</td>
-<td>移除并返回队列的头部元素，如果队列为空,返回null</td>
-</tr>
-<tr>
-<td>peek</td>
-<td>返回队列头部元素，如果队列为空,返回null</td>
-</tr>
-<tr>
-<td>put</td>
-<td>添加元素，如果队列满，则阻塞</td>
-</tr>
-<tr>
-<td>take</td>
-<td>移除并返回头部元素</td>
-</tr>
-</tbody></table>
-</li>
-<li><h4 id="Lambda的使用"><a href="#Lambda的使用" class="headerlink" title="Lambda的使用"></a>Lambda的使用</h4></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Mysql.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2963,7 +3379,7 @@ city <span class="token keyword">varchar</span> <span class="token operator">not
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/PostgreSQL.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/LeetCode%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -2977,7 +3393,7 @@ city <span class="token keyword">varchar</span> <span class="token operator">not
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/PostgreSQL.html" class="post-title-link" itemprop="url">PostgreSQL 学习</a>
+            <a href="/post/LeetCode%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95.html" class="post-title-link" itemprop="url">Leetcode刷题记录</a>
         </h2>
 
         <div class="post-meta">
@@ -2989,13 +3405,6 @@ city <span class="token keyword">varchar</span> <span class="token operator">not
 
               <time title="创建时间：2024-01-17 10:45:31" itemprop="dateCreated datePublished" datetime="2024-01-17T10:45:31+08:00">2024-01-17</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-01-26 14:44:22" itemprop="dateModified" datetime="2024-01-26T14:44:22+08:00">2024-01-26</time>
-              </span>
 
           
 
@@ -3008,57 +3417,67 @@ city <span class="token keyword">varchar</span> <span class="token operator">not
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="安装PostgreSQL"><a href="#安装PostgreSQL" class="headerlink" title="安装PostgreSQL"></a>安装PostgreSQL</h1><h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><ul>
-<li>make &gt;&#x3D; 3.8.0</li>
-<li>推荐gcc最新版</li>
-<li>bzip、bzip2、tar、readline、readline-devel、zlib-devel</li>
-<li>Perl</li>
-</ul>
-<h2 id="下载源代码"><a href="#下载源代码" class="headerlink" title="下载源代码"></a>下载源代码</h2><pre class="line-numbers language-uri" data-language="uri"><code class="language-uri"><span class="token path">https</span> ://www.postgresql.org/download/
-<span class="token fragment"><span class="token fragment-delimiter">#</span></span> 下载名为postgresql-10.21.tar.gz  解压
-<span class="token path">gunzip</span> postgresql-10.21.tar.gz
-<span class="token path">tar</span> xf postgresql-10.21.tar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+          <h2 id="LeetCode刷题记录"><a href="#LeetCode刷题记录" class="headerlink" title="LeetCode刷题记录"></a>LeetCode刷题记录</h2><h3 id="2208将数组和减半的最少操作次数"><a href="#2208将数组和减半的最少操作次数" class="headerlink" title="2208将数组和减半的最少操作次数"></a>2208将数组和减半的最少操作次数</h3><blockquote>
+<p>题目描述：</p>
+<p>给你一个正整数数组 <code>nums</code> 。每一次操作中，你可以从 <code>nums</code> 中选择 <strong>任意</strong> 一个数并将它减小到 <strong>恰好</strong> 一半。（注意，在后续操作中你可以对减半过的数继续执行操作）请你返回将 <code>nums</code> 数组和 <strong>至少</strong> 减少一半的 <strong>最少</strong> 操作数。</p>
+</blockquote>
+<blockquote>
+<p>技能掌握：</p>
+<ol>
+<li><h4 id="贪心算法基本思想"><a href="#贪心算法基本思想" class="headerlink" title="贪心算法基本思想"></a>贪心算法基本思想</h4></li>
+<li><h4 id="优先级队列使用"><a href="#优先级队列使用" class="headerlink" title="优先级队列使用"></a>优先级队列使用</h4></li>
+<li><h4 id="Lambda对数组排序"><a href="#Lambda对数组排序" class="headerlink" title="Lambda对数组排序"></a>Lambda对数组排序</h4></li>
+</ol>
+</blockquote>
+<ol>
+<li><h4 id="贪心算法的基本思想"><a href="#贪心算法的基本思想" class="headerlink" title="贪心算法的基本思想"></a>贪心算法的基本思想</h4><p>如果一个问题得不到最优解，把原问题拆解成小问题，计算每个小问题的最优解，把小问题的最优解叠起来就是整个问题的最优解。</p>
+</li>
+<li><h4 id="优先级队列使用-1"><a href="#优先级队列使用-1" class="headerlink" title="优先级队列使用"></a>优先级队列使用</h4><p>队列是按照先进先出的原则（FIFO）,优先级队列出队顺序由优先级决定。</p>
+<p>Java Queue的常用方法</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>add</td>
+<td>添加元素，如果队列已满，抛出IIIegalSlabEepeplian</td>
+</tr>
+<tr>
+<td>remove</td>
+<td>移除并返回队列的头部元素，如果队列为空，抛出NoSuchElementException</td>
+</tr>
+<tr>
+<td>element</td>
+<td>返回队列头部元素，如果队列为空，抛出NoSuchElementException</td>
+</tr>
+<tr>
+<td>offer</td>
+<td>添加元素，如果队列已满，返回false</td>
+</tr>
+<tr>
+<td>poll</td>
+<td>移除并返回队列的头部元素，如果队列为空,返回null</td>
+</tr>
+<tr>
+<td>peek</td>
+<td>返回队列头部元素，如果队列为空,返回null</td>
+</tr>
+<tr>
+<td>put</td>
+<td>添加元素，如果队列满，则阻塞</td>
+</tr>
+<tr>
+<td>take</td>
+<td>移除并返回头部元素</td>
+</tr>
+</tbody></table>
+</li>
+<li><h4 id="Lambda的使用"><a href="#Lambda的使用" class="headerlink" title="Lambda的使用"></a>Lambda的使用</h4></li>
+</ol>
 
-<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./configure --prefix<span class="token operator">=</span>/usr/local/postgresql<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">make</span> <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="创建data、log目录"><a href="#创建data、log目录" class="headerlink" title="创建data、log目录"></a>创建data、log目录</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /usr/local/postgresql
-<span class="token function">mkdir</span> /usr/local/postgresql/data
-<span class="token function">mkdir</span> /usr/local/postgresql/log<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a>设置环境变量</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/profile
-<span class="token comment"># 添加</span>
-<span class="token builtin class-name">export</span> <span class="token assign-left variable">PGHOME</span><span class="token operator">=</span>/usr/local/postgresql
-<span class="token builtin class-name">export</span> <span class="token assign-left variable">PGDATA</span><span class="token operator">=</span>/usr/local/postgresql/data
-<span class="token comment"># 保存后生效</span>
-<span class="token builtin class-name">source</span> /etc/profile<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="增加用户-postgres-并赋权"><a href="#增加用户-postgres-并赋权" class="headerlink" title="增加用户 postgres 并赋权"></a>增加用户 postgres 并赋权</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">useradd</span> postgres
-<span class="token function">chown</span> -R postgres:root /usr/local/postgresql<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h2 id="初始化数据库"><a href="#初始化数据库" class="headerlink" title="初始化数据库"></a>初始化数据库</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">su</span> postgres
-/usr/local/postgresql/bin/initdb -D /usr/local/postgresql/data/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h2 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /usr/local/postgresql/data/postgresql.conf
-<span class="token comment"># 修改</span>
-listen_addresses <span class="token operator">=</span> <span class="token string">'*'</span>
-port <span class="token operator">=</span> <span class="token number">5432</span>
-
-<span class="token function">vim</span> /usr/local/postgresql/data/pg_hba.conf
-<span class="token comment"># 添加一行</span>
-<span class="token function">host</span>    all             all             <span class="token number">0.0</span>.0.0/0               trust<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pg_ctl start -l /usr/local/postgresql/log/pg_server.log<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="登录默认数据库"><a href="#登录默认数据库" class="headerlink" title="登录默认数据库"></a>登录默认数据库</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">/usr/local/postgresql/bin/psql postgres<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="为默认用户设置密码"><a href="#为默认用户设置密码" class="headerlink" title="为默认用户设置密码"></a>为默认用户设置密码</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">postgres</span><span class="token operator">=</span><span class="token comment"># sudo -u postgres psql postgres</span>
-postgres-<span class="token comment">#  \password postgres</span>
-Enter new password: 
-Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="基础教程"><a href="#基础教程" class="headerlink" title="基础教程"></a>基础教程</h1><h2 id="Querying-Data"><a href="#Querying-Data" class="headerlink" title="Querying Data"></a>Querying Data</h2><h2 id="Filtering-Data"><a href="#Filtering-Data" class="headerlink" title="Filtering Data"></a>Filtering Data</h2><h2 id="Joining-Multiple-Tables"><a href="#Joining-Multiple-Tables" class="headerlink" title="Joining Multiple Tables"></a>Joining Multiple Tables</h2><h2 id="Grouping-Data"><a href="#Grouping-Data" class="headerlink" title="Grouping Data"></a>Grouping Data</h2><h2 id="Set-Operations"><a href="#Set-Operations" class="headerlink" title="Set Operations"></a>Set Operations</h2><h2 id="Grouping-sets-Cube-and-Rollup"><a href="#Grouping-sets-Cube-and-Rollup" class="headerlink" title="Grouping sets, Cube, and Rollup"></a>Grouping sets, Cube, and Rollup</h2><h2 id="Subquery"><a href="#Subquery" class="headerlink" title="Subquery"></a>Subquery</h2><h2 id="Common-Table-Expressions"><a href="#Common-Table-Expressions" class="headerlink" title="Common Table Expressions"></a>Common Table Expressions</h2><h2 id="Modifying-Data"><a href="#Modifying-Data" class="headerlink" title="Modifying Data"></a>Modifying Data</h2><h2 id="Transactions"><a href="#Transactions" class="headerlink" title="Transactions"></a>Transactions</h2><h2 id="Import-amp-Export-Data"><a href="#Import-amp-Export-Data" class="headerlink" title="Import &amp; Export Data"></a>Import &amp; Export Data</h2><h2 id="Managing-Tables"><a href="#Managing-Tables" class="headerlink" title="Managing Tables"></a>Managing Tables</h2><h2 id="Understanding-PostgreSQL-Constraints"><a href="#Understanding-PostgreSQL-Constraints" class="headerlink" title="Understanding PostgreSQL Constraints"></a>Understanding PostgreSQL Constraints</h2><h2 id="PostgreSQL-Data-Types-in-Depth"><a href="#PostgreSQL-Data-Types-in-Depth" class="headerlink" title="PostgreSQL Data Types in Depth"></a>PostgreSQL Data Types in Depth</h2><h2 id="Conditional-Expressions-amp-Operators"><a href="#Conditional-Expressions-amp-Operators" class="headerlink" title="Conditional Expressions &amp; Operators"></a>Conditional Expressions &amp; Operators</h2><h2 id="PostgreSQL-Utilities"><a href="#PostgreSQL-Utilities" class="headerlink" title="PostgreSQL Utilities"></a>PostgreSQL Utilities</h2><h2 id="PostgreSQL-Recipes"><a href="#PostgreSQL-Recipes" class="headerlink" title="PostgreSQL Recipes"></a>PostgreSQL Recipes</h2><h1 id="高级教程"><a href="#高级教程" class="headerlink" title="高级教程"></a>高级教程</h1><h2 id="PL-x2F-pgSQL"><a href="#PL-x2F-pgSQL" class="headerlink" title="PL&#x2F;pgSQL"></a>PL&#x2F;pgSQL</h2><h2 id="Triggers"><a href="#Triggers" class="headerlink" title="Triggers"></a>Triggers</h2><h2 id="Views"><a href="#Views" class="headerlink" title="Views"></a>Views</h2><h2 id="Indexes"><a href="#Indexes" class="headerlink" title="Indexes"></a>Indexes</h2><h2 id="Administration"><a href="#Administration" class="headerlink" title="Administration"></a>Administration</h2>
       
     </div>
 
@@ -3142,7 +3561,7 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-count">39</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
