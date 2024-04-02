@@ -28,7 +28,7 @@
 <meta property="og:description" content="Sql介绍关系型数据库是什么 关系型数据库是以结构化的方式组织和存储数据的数据库   表（Table）：数据存储的地方，可以想象为一个网格，由行和列组成。每个表代表数据库中的一个实体或概念。   行（Row）：表中的一行代表了一个记录（Record），即一组相关的数据项。每行都是一个数据实体的实例。 列（Column）：表中的一列存放的是同一种数据，例如名字或者价格等。列有一个定义好的数据类型，如">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-03-25T03:31:16.645Z">
-<meta property="article:modified_time" content="2024-04-01T10:06:15.496Z">
+<meta property="article:modified_time" content="2024-04-02T01:36:49.102Z">
 <meta property="article:author" content="potter">
 <meta name="twitter:card" content="summary">
 
@@ -200,7 +200,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-01 18:06:15" itemprop="dateModified" datetime="2024-04-01T18:06:15+08:00">2024-04-01</time>
+                <time title="修改时间：2024-04-02 09:36:49" itemprop="dateModified" datetime="2024-04-02T09:36:49+08:00">2024-04-02</time>
               </span>
 
           
@@ -775,11 +775,443 @@
     <span class="token operator">AND</span> price <span class="token operator">&lt;</span> <span class="token number">20</span>
 <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h1 id="高级-SQL-函数"><a href="#高级-SQL-函数" class="headerlink" title="高级 SQL 函数"></a>高级 SQL 函数</h1><h2 id="数学函数"><a href="#数学函数" class="headerlink" title="数学函数"></a>数学函数</h2><p><strong>ABS() 函数：</strong>该函数返回数字的绝对（正）值。</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> ABS<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">243</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">-- output: 243</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
+<p><strong>Avg() 函数：</strong>该函数返回列的平均值。</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token function">AVG</span><span class="token punctuation">(</span>price<span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
+<p><strong>COUNT() 函数：</strong>该函数返回符合指定条件的行数。</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token function">COUNT</span><span class="token punctuation">(</span>productID<span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
+<p><strong>SUM() 函数：</strong>该函数返回数字列的总和。</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token function">SUM</span><span class="token punctuation">(</span>price<span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
+<p><strong>MIN() &amp; MAX() 函数：</strong> MIN() 函数返回所选列的最小值，MAX() 函数返回所选列的最大值。</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token function">MIN</span><span class="token punctuation">(</span>price<span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span>
+<span class="token keyword">SELECT</span> <span class="token function">MAX</span><span class="token punctuation">(</span>price<span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
+<p><strong>ROUND() 函数：</strong>此函数用于将数字字段舍入为最接近的整数，但是您可以指定要返回的小数位数。</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token function">ROUND</span><span class="token punctuation">(</span>price<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><strong>CEILING() 功能：</strong>该函数返回大于或等于指定数值表达式的最小整数。</p>
+<pre class="line-numbers language-none"><code class="language-none">SELECT CEILING(price) FROM products;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><strong>FLOOR() 函数：</strong>该函数返回小于或等于指定数值表达式的最大整数。</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> FLOOR<span class="token punctuation">(</span>price<span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><strong>SQRT() 函数：</strong>该函数返回数字的平方根。</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> SQRT<span class="token punctuation">(</span>price<span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><strong>PI() 函数：</strong>该函数返回常量Pi。</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> PI<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h2><p><code>CONCAT</code> 函数将两个或多个字符串组合成一个字符串。</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">CONCAT<span class="token punctuation">(</span>string1<span class="token punctuation">,</span> string2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> string_n<span class="token punctuation">)</span> 例如：
+<span class="token keyword">SELECT</span> CONCAT<span class="token punctuation">(</span><span class="token string">'Hello '</span><span class="token punctuation">,</span> <span class="token string">'World'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//上述 SQL 语句的输出将是“Hello World”。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p><code>SUBSTRING</code> 函数从给定字符串中提取字符串。</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">SUBSTRING<span class="token punctuation">(</span>string<span class="token punctuation">,</span> <span class="token keyword">start</span><span class="token punctuation">,</span> length<span class="token punctuation">)</span> 例如：
+<span class="token keyword">SELECT</span> SUBSTRING<span class="token punctuation">(</span><span class="token string">'SQL Tutorial'</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//上述查询的输出将是“SQL”</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p><code>LENGTH</code> 函数返回字符串的长度。</p>
+<pre class="line-numbers language-none"><code class="language-none">LENGTH(string) 例如：
+SELECT LENGTH(&#39;Hello World&#39;);
+&#x2F;&#x2F;上述 SQL 语句的输出将为 11。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p><code>UPPER</code> 函数将字符串中的所有字母转换为大写，而 <code>LOWER</code> 函数则将字符串中的所有字母转换为小写。</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">UPPER<span class="token punctuation">(</span>string<span class="token punctuation">)</span>
+LOWER<span class="token punctuation">(</span>string<span class="token punctuation">)</span> 例如：
+<span class="token keyword">SELECT</span> UPPER<span class="token punctuation">(</span><span class="token string">'Hello World'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">SELECT</span> LOWER<span class="token punctuation">(</span><span class="token string">'Hello World'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//上述 SQL 语句的输出将分别是“HELLO WORLD”和“hello world”。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>TRIM</code> 函数删除字符串的前导和尾随空格,还可以删除其他指定的字符</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">TRIM<span class="token punctuation">(</span><span class="token punctuation">[</span>LEADING<span class="token operator">|</span>TRAILING<span class="token operator">|</span>BOTH<span class="token punctuation">]</span> <span class="token punctuation">[</span>removal_string<span class="token punctuation">]</span> <span class="token keyword">FROM</span> original_string<span class="token punctuation">)</span> 例如：
+<span class="token keyword">SELECT</span> TRIM<span class="token punctuation">(</span><span class="token string">'   Hello World   '</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">SELECT</span> TRIM<span class="token punctuation">(</span><span class="token string">'h'</span> <span class="token keyword">FROM</span> <span class="token string">'hello'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">-- output: 第一个查询的输出将是“Hello World”，第二个查询的输出将是“ello”。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>replace</code>函数替换指定的字符</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">REPLACE</span><span class="token punctuation">(</span>input_string<span class="token punctuation">,</span> string_to_replace<span class="token punctuation">,</span> replacement_string<span class="token punctuation">)</span> 例如：
+<span class="token keyword">SELECT</span> <span class="token keyword">REPLACE</span><span class="token punctuation">(</span><span class="token string">'Potter'</span><span class="token punctuation">,</span><span class="token string">'o'</span><span class="token punctuation">,</span><span class="token string">'e'</span><span class="token punctuation">)</span>
+<span class="token comment">-- output: petter</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="条件函数"><a href="#条件函数" class="headerlink" title="条件函数"></a>条件函数</h2><p><strong>CASE表达式</strong></p>
+<blockquote>
+<p>相当于其他编程语言的IF-THEN-ELSE 逻辑</p>
+</blockquote>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 语法：</span>
+<span class="token keyword">SELECT</span> column1<span class="token punctuation">,</span> column2<span class="token punctuation">,</span> 
+<span class="token punctuation">(</span><span class="token keyword">CASE</span> 
+    <span class="token keyword">WHEN</span> condition1 <span class="token keyword">THEN</span> result1
+    <span class="token keyword">WHEN</span> condition2 <span class="token keyword">THEN</span> result2
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">ELSE</span> result 
+<span class="token keyword">END</span><span class="token punctuation">)</span> 
+<span class="token keyword">FROM</span> table_name<span class="token punctuation">;</span>
+<span class="token comment">-- 例子：</span>
+<span class="token keyword">SELECT</span> OrderID<span class="token punctuation">,</span> Quantity<span class="token punctuation">,</span>
+ <span class="token punctuation">(</span><span class="token keyword">CASE</span>
+     <span class="token keyword">WHEN</span> Quantity <span class="token operator">></span> <span class="token number">30</span> <span class="token keyword">THEN</span> <span class="token string">'Over 30'</span>
+     <span class="token keyword">WHEN</span> Quantity <span class="token operator">=</span> <span class="token number">30</span> <span class="token keyword">THEN</span> <span class="token string">'Equals 30'</span>
+     <span class="token keyword">ELSE</span> <span class="token string">'Under 30'</span>
+ <span class="token keyword">END</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> QuantityText
+<span class="token keyword">FROM</span> OrderDetails<span class="token punctuation">;</span>
+<span class="token comment">-- output: 查询逻辑为：查询OrderID、Quantity、QuantityText三个字段，其中QuantityText字段的值根据Quantity值判断，如果大于30则为Over 30，等于30则为Equals 30，否则为Under 30</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>COALESCE表达式</strong></p>
+<blockquote>
+<p>SQL中的函数<code>COALESCE</code>用于管理数据中的NULL值。它从左到右扫描参数并返回第一个不是 的参数<code>NULL</code>。</p>
+</blockquote>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">COALESCE</span><span class="token punctuation">(</span>value1<span class="token punctuation">,</span>value2<span class="token punctuation">,</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> valueN<span class="token punctuation">)</span>
+<span class="token comment">-- 示例1：</span>
+<span class="token keyword">SELECT</span> product_name<span class="token punctuation">,</span> <span class="token keyword">COALESCE</span><span class="token punctuation">(</span>price<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> Price  <span class="token keyword">FROM</span> products<span class="token punctuation">;</span>
+<span class="token comment">-- output: 如果产品条目的“价格”列为NULL，则它将返回“0”</span>
+<span class="token comment">-- 示例2	：</span>
+<span class="token keyword">SELECT</span> <span class="token keyword">COALESCE</span><span class="token punctuation">(</span><span class="token boolean">NULL</span><span class="token punctuation">,</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span> <span class="token string">'third value'</span><span class="token punctuation">,</span> <span class="token string">'fourth value'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">-- output: 它将返回“第三个值”，因为这是列表中的第一个非 NULL 值。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>NULLIF表达式</strong></p>
+<blockquote>
+<p><code>NULLIF</code>相比<code>expression1</code>于<code>expression2</code>.如果<code>expression1</code>和<code>expression2</code>相等，则函数返回 NULL。否则，它返回<code>expression1</code>。两个表达式必须具有相同的数据类型。</p>
+</blockquote>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">NULLIF</span><span class="token punctuation">(</span>expression1<span class="token punctuation">,</span> expression2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+示例<span class="token number">1</span>：
+<span class="token keyword">SELECT</span> 
+    first_name<span class="token punctuation">,</span> 
+    last_name<span class="token punctuation">,</span>
+    <span class="token keyword">NULLIF</span><span class="token punctuation">(</span>email<span class="token punctuation">,</span> <span class="token string">'NA'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> email
+<span class="token keyword">FROM</span> 
+    users<span class="token punctuation">;</span>
+<span class="token comment">-- output:  如果字段 email 为“NA”，则将返回 NULL。否则email返回实际的字段值。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>IF表达式</strong></p>
+<blockquote>
+<p><code>IF</code>如果条件为 TRUE，则函数返回 value_true；如果条件为 FALSE，则返回 value_false。</p>
+</blockquote>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">IF</span><span class="token punctuation">(</span>condition<span class="token punctuation">,</span>value_true<span class="token punctuation">,</span>value_false<span class="token punctuation">)</span>
+<span class="token keyword">SELECT</span> <span class="token keyword">IF</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">></span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">'One is greater than zero'</span><span class="token punctuation">,</span> <span class="token string">'One is not greater than zero'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="时间函数"><a href="#时间函数" class="headerlink" title="时间函数"></a>时间函数</h2><h3 id="DATE"><a href="#DATE" class="headerlink" title="DATE"></a>DATE</h3><p>创建Date类型的表</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Orders <span class="token punctuation">(</span>
+    OrderId <span class="token keyword">int</span><span class="token punctuation">,</span>
+    ProductName <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    OrderDate <span class="token keyword">date</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>插入日期数据</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> Orders <span class="token punctuation">(</span>OrderId<span class="token punctuation">,</span> ProductName<span class="token punctuation">,</span> OrderDate<span class="token punctuation">)</span> <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">'Product 1'</span><span class="token punctuation">,</span> <span class="token string">'2022-01-01'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>查询指定日期</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> Orders  <span class="token keyword">WHERE</span> OrderDate <span class="token operator">=</span> <span class="token string">'2022-01-01'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>更新日期</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">UPDATE</span> Orders  <span class="token keyword">SET</span> OrderDate <span class="token operator">=</span> <span class="token string">'2022-01-02'</span>  <span class="token keyword">WHERE</span> OrderId <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>返回当前日期</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token keyword">CURRENT_DATE</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>日期差异</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> DATEDIFF<span class="token punctuation">(</span><span class="token keyword">day</span><span class="token punctuation">,</span> <span class="token string">'2022-01-01'</span><span class="token punctuation">,</span> <span class="token string">'2022-01-15'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> DiffInDays<span class="token punctuation">;</span>
+<span class="token comment">-- output: 14</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>日期添加</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> DATEADD<span class="token punctuation">(</span><span class="token keyword">year</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">'2022-01-01'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> NewDate<span class="token punctuation">;</span>
+<span class="token comment">-- output:  Sun Jan 01 2023 08:00:00 GMT+0800 (台北标准时间)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="TIME"><a href="#TIME" class="headerlink" title="TIME"></a>TIME</h3><blockquote>
+<p>在 SQL 中，TIME 数据类型用于在数据库中存储时间值。它允许您存储小时、分钟和秒。 TIME 的格式为“HH:MI:SS”。</p>
+</blockquote>
+<p>创建Time字段语法</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> table_name <span class="token punctuation">(</span>
+    column_name <span class="token keyword">TIME</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>插入时间字段</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> table_name <span class="token punctuation">(</span>column_name<span class="token punctuation">)</span> <span class="token keyword">values</span> <span class="token punctuation">(</span><span class="token string">'17:34:20'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>范围</p>
+<blockquote>
+<p>SQL 中的时间范围是’00:00:00’到’23:59:59’。</p>
+</blockquote>
+<p>获取当前时间</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> CURTIME<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>添加时间</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> ADDTIME<span class="token punctuation">(</span><span class="token string">'2007-12-31 23:59:59'</span><span class="token punctuation">,</span><span class="token string">'1 1:1:1'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>时间差</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 减去时间差</span>
+<span class="token keyword">SELECT</span> TIMEDIFF<span class="token punctuation">(</span><span class="token string">'2000:01:01 00:00:00'</span><span class="token punctuation">,</span> <span class="token string">'2000:01:01 00:01:01'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>转换</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 函数在MySQL中用于将时间值转换为秒</span>
+<span class="token keyword">SELECT</span> TIME_TO_SEC<span class="token punctuation">(</span><span class="token string">'22:23:00'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">-- output: 80580</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="DATEPART"><a href="#DATEPART" class="headerlink" title="DATEPART"></a>DATEPART</h3><blockquote>
+<p><code>DATEPART</code>是 SQL 中的一个有用函数，可以使用它从任何日期或时间表达式获取年、季度、月、年中的某一天、日、周、工作日、小时、分钟、秒或毫秒。</p>
+</blockquote>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 在日期中提取年、月、日</span>
+<span class="token keyword">SELECT</span> DATEPART<span class="token punctuation">(</span><span class="token keyword">year</span><span class="token punctuation">,</span> <span class="token string">'2021-07-14'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token string">'Year'</span><span class="token punctuation">;</span>
+<span class="token keyword">SELECT</span> DATEPART<span class="token punctuation">(</span><span class="token keyword">month</span><span class="token punctuation">,</span> <span class="token string">'2021-07-14'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token string">'Month'</span><span class="token punctuation">;</span>
+<span class="token keyword">SELECT</span> DATEPART<span class="token punctuation">(</span><span class="token keyword">day</span><span class="token punctuation">,</span> <span class="token string">'2021-07-14'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token string">'Day'</span><span class="token punctuation">;</span>
+<span class="token comment">-- 日期时间中提取小时、分钟或秒</span>
+<span class="token keyword">SELECT</span> DATEPART<span class="token punctuation">(</span><span class="token keyword">hour</span><span class="token punctuation">,</span> <span class="token string">'2021-07-14T13:30:15'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token string">'Hour'</span><span class="token punctuation">,</span>
+<span class="token keyword">SELECT</span> DATEPART<span class="token punctuation">(</span><span class="token keyword">minute</span><span class="token punctuation">,</span> <span class="token string">'2021-07-14T13:30:15'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token string">'Minute'</span><span class="token punctuation">,</span>
+<span class="token keyword">SELECT</span> DATEPART<span class="token punctuation">(</span><span class="token keyword">second</span><span class="token punctuation">,</span> <span class="token string">'2021-07-14T13:30:15'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token string">'Second'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="DATEADD"><a href="#DATEADD" class="headerlink" title="DATEADD"></a>DATEADD</h3><blockquote>
+<p>语法：<br><code>DATEADD(interval, number, date)</code></p>
+<ul>
+<li>间隔类型（例如日、月、年、小时、分钟、秒）</li>
+<li>一个数字（对于未来日期可以是正数，对于过去日期可以是负数）</li>
+<li>计算所依据的日期。</li>
+</ul>
+</blockquote>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> DATEADD<span class="token punctuation">(</span><span class="token keyword">day</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token string">'2022-01-01'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> NewDate
+<span class="token comment">-- output: 2022-01-04</span>
+<span class="token comment">-- 查找未来7天的数据</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> Orders <span class="token keyword">WHERE</span> OrderDate <span class="token operator">&lt;=</span> DATEADD<span class="token punctuation">(</span><span class="token keyword">day</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> GETDATE<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="TIMESTAMP"><a href="#TIMESTAMP" class="headerlink" title="TIMESTAMP"></a>TIMESTAMP</h3><blockquote>
+<p>SQL<code>TIMESTAMP</code>是一种允许您存储日期和时间的数据类型。它通常用于跟踪对记录所做的更新和更改，提供发生的时间顺序。</p>
+<p>根据 SQL 平台的不同，格式和存储大小可能略有不同。例如，<code>MySQL</code> 使用<code>YYYY-MM-DD HH:MI:SS</code>格式，而在 <code>PostgreSQL</code> 中，它存储为<code>YYYY-MM-DD HH:MI:SS</code>格式，但它还可以存储微秒</p>
+</blockquote>
+<p><code>TIMESTAMP</code>以下是如何在 SQL 表中定义具有类型的列：</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> table_name <span class="token punctuation">(</span>
+   column1 <span class="token keyword">TIMESTAMP</span><span class="token punctuation">,</span>
+   column2 <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+   <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>一个常见的用例<code>TIMESTAMP</code>是每次更新行时自动更新时间戳。这可以通过将<code>DEFAULT</code>约束设置为来实现<code>CURRENT_TIMESTAMP</code>：</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> table_name <span class="token punctuation">(</span>
+   column1 <span class="token keyword">TIMESTAMP</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CURRENT_TIMESTAMP</span><span class="token punctuation">,</span>
+   column2 <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+   <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在 MySQL 中，每当行的其他字段发生任何更改时，<code>ON UPDATE CURRENT_TIMESTAMP</code>可用于自动将字段更新为当前日期和时间。<code>TIMESTAMP</code></p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> table_name <span class="token punctuation">(</span>
+   column1 <span class="token keyword">TIMESTAMP</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CURRENT_TIMESTAMP</span> <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CURRENT_TIMESTAMP</span><span class="token punctuation">,</span>
+   column2 <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+   <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>您还可以插入或更新具有特定时间戳的记录：</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> table_name <span class="token punctuation">(</span>column1<span class="token punctuation">,</span> column2<span class="token punctuation">)</span> <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token string">'2019-06-10 10:20:30'</span><span class="token punctuation">,</span> <span class="token string">'example data'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">UPDATE</span> table_name <span class="token keyword">SET</span> column1 <span class="token operator">=</span> <span class="token string">'2020-07-20 15:30:45'</span> <span class="token keyword">WHERE</span> column2 <span class="token operator">=</span> <span class="token string">'example data'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h1><blockquote>
+<p>视图是一个虚拟的表，不直接存储数据，存的是SQL的查询，因此视图根据原表的数据变化而变化</p>
+</blockquote>
+<p>创建视图</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">VIEW</span> CustomerView <span class="token keyword">AS</span> <span class="token keyword">SELECT</span> CustomerID<span class="token punctuation">,</span> Name<span class="token punctuation">,</span> Address <span class="token keyword">FROM</span> Customers<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>查询视图</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> CustomerView<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>更新视图</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token operator">OR</span> <span class="token keyword">REPLACE</span> <span class="token keyword">VIEW</span> CustomerView <span class="token keyword">AS</span> <span class="token keyword">SELECT</span> CustomerID<span class="token punctuation">,</span> Name<span class="token punctuation">,</span> Address<span class="token punctuation">,</span> Phone <span class="token keyword">FROM</span> Customers<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>删除视图</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">DROP</span> <span class="token keyword">VIEW</span> <span class="token keyword">IF</span> <span class="token keyword">EXISTS</span> CustomerView<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><blockquote>
+<p>SQL中的索引是一个数据库对象，用于提高数据库表上数据检索操作的速度。与书中的索引如何帮助您快速查找信息而无需阅读整本书类似，数据库中的索引可以帮助数据库软件快速查找数据而无需扫描整个表。</p>
+</blockquote>
+<h2 id="索引的分类"><a href="#索引的分类" class="headerlink" title="索引的分类"></a>索引的分类</h2><ol>
+<li><p>根据存储结构分类:</p>
+<ul>
+<li>B-Tree索引：这是最常见的索引类型，支持随机访问、顺序访问、范围访问和部分键匹配查询。</li>
+<li>Hash索引：基于哈希表实现，适合等值查询，但不支持范围查询。</li>
+<li>R-Tree索引：适用于空间数据，如地图坐标。</li>
+<li>Bitmap索引：适用于有限离散取值的列，如性别、国家等。</li>
+</ul>
+</li>
+<li><p>根据物理实现分类:</p>
+<ul>
+<li>聚簇索引（Clustered Index）：数据行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能有一个聚簇索引。</li>
+<li>非聚簇索引（Non-Clustered Index）：索引顺序与数据行的物理存储顺序不同。</li>
+</ul>
+</li>
+<li><p>按照列的数目分类:</p>
+<ul>
+<li>单列索引：索引只包含一个列。</li>
+<li>复合索引&#x2F;组合索引：也称多列索引，索引包含两个以上的列。</li>
+</ul>
+</li>
+<li><p>按照唯一性分类:</p>
+<ul>
+<li>唯一索引（Unique Index）：确保索引键列的每行数据都是唯一的。</li>
+<li>非唯一索引：允许索引键列中有重复的值。</li>
+</ul>
+</li>
+<li><p>根据是否为表的一部分分类:</p>
+<ul>
+<li>主键索引：通常是表的主键的唯一索引。</li>
+<li>辅助索引&#x2F;二级索引：表中除了主键索引之外的索引。</li>
+</ul>
+</li>
+<li><p>功能性分类:</p>
+<ul>
+<li>全文索引（Full-text Indexes）：为了在文本数据列中支持复杂的查询，如匹配某些搜索词或短语等。</li>
+<li>部分索引（Partial Indexes）：也称为过滤索引，只为表中符合特定条件的部分数据建立索引。</li>
+</ul>
+</li>
+<li><p>其他特殊类型的索引:</p>
+<ul>
+<li>空间索引（Spatial Index）：用于地理空间数据的查询。</li>
+<li>XML索引：用于XML数据类型的字段，加快XML数据的查询效率。</li>
+</ul>
+</li>
+</ol>
+<p>索引的选择和使用应该基于数据的使用模式、查询类型、数据分布和数据库管理系统的特性。合适的索引能够大幅提高查询性能，但是也会消耗额外的存储空间，且在数据变更时需要维护，可能影响写入性能。因此，设计索引时需要权衡查询优化与资源消耗。</p>
+<h2 id="管理索引"><a href="#管理索引" class="headerlink" title="管理索引"></a>管理索引</h2><p>创建索引</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> index_name <span class="token keyword">ON</span> table_name<span class="token punctuation">(</span>column_name<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>删除索引</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">DROP</span> <span class="token keyword">INDEX</span> index_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>修改索引</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">REINDEX <span class="token keyword">INDEX</span> index_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>查询索引</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SHOW</span> INDEXES <span class="token operator">IN</span> table_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="查询优化"><a href="#查询优化" class="headerlink" title="查询优化"></a>查询优化</h2><ol>
+<li><p>使用索引：</p>
+<ul>
+<li>为经常作为查询条件的列添加索引。</li>
+<li>使用复合索引针对包含多个条件的查询进行优化。</li>
+<li>确保索引字段的选择性好，以允许数据库快速缩小搜索结果范围。</li>
+</ul>
+</li>
+<li><p>优化查询语句：</p>
+<ul>
+<li>避免使用SELECT *，只选择所需的列。</li>
+<li>尽量使用表的别名和前缀，尤其是在连接多个表的查询中。</li>
+<li>确保WHERE子句中的条件尽可能使查询能利用索引。</li>
+</ul>
+</li>
+<li><p>调整数据模型：</p>
+<ul>
+<li>正规化数据结构以避免冗余，并减少数据的管理工作。</li>
+<li>在需要频繁读取的场景下考虑反正规化，以减少JOIN操作的需要。</li>
+</ul>
+</li>
+<li><p>使用查询缓存：</p>
+<ul>
+<li>利用数据库提供的查询缓存，对于那些不经常改变的数据，利用缓存可以大大加快查询速度。</li>
+</ul>
+</li>
+<li><p>查询计划分析：</p>
+<ul>
+<li>使用EXPLAIN或其他分析工具查看查询的执行计划。</li>
+<li>根据执行计划调整查询方式，比如改变JOIN的类型或顺序。</li>
+</ul>
+</li>
+<li><p>使用批处理：</p>
+<ul>
+<li>对于数据插入和更新操作，使用批处理可以减少I&#x2F;O次数，提高性能。</li>
+</ul>
+</li>
+<li><p>避免复杂的子查询：</p>
+<ul>
+<li>能用JOIN解决的问题就不要用子查询。</li>
+<li>尝试把复杂的子查询改写为临时表。</li>
+</ul>
+</li>
+<li><p>减少事务大小：</p>
+<ul>
+<li>长事务会锁定资源较长时间，减小事务的处理数据量可以提高并发性能。</li>
+</ul>
+</li>
+<li><p>硬件和系统优化：</p>
+<ul>
+<li>确保有足够的内存和高效的CPU。</li>
+<li>磁盘I&#x2F;O性能常常是瓶颈，选择适合的存储解决方案。</li>
+<li>良好的网络基础设施，尤其是在分布式数据库环境中。</li>
+</ul>
+</li>
+<li><p>监控和分析：</p>
+<ul>
+<li>监控数据库的性能，分析瓶颈点。</li>
+<li>定期进行数据库维护，比如索引重建和统计信息的更新。</li>
+</ul>
+</li>
+</ol>
+<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><blockquote>
+<p>SQL中事务是针对数据库执行的工作单元，事务是以逻辑顺序完成的工作单元或序列，无论是由用户手动方式还是由某种数据库程序自动完成。</p>
+</blockquote>
+<h3 id="事务使用"><a href="#事务使用" class="headerlink" title="事务使用"></a>事务使用</h3><p>开启事务</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span> <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>提交事务</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">COMMIT</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>回滚</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">ROLLBACK</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>保存点</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SAVEPOINT</span> savepoint_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>示例：</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span>
+
+<span class="token keyword">UPDATE</span> Accounts <span class="token keyword">SET</span> Balance <span class="token operator">=</span> Balance <span class="token operator">-</span> <span class="token number">100</span> <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token keyword">UPDATE</span> Accounts <span class="token keyword">SET</span> Balance <span class="token operator">=</span> Balance <span class="token operator">+</span> <span class="token number">100</span> <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+
+<span class="token keyword">IF</span> @<span class="token variable">@ERROR</span> <span class="token operator">=</span> <span class="token number">0</span>
+   <span class="token keyword">COMMIT</span><span class="token punctuation">;</span>
+<span class="token keyword">ELSE</span>
+   <span class="token keyword">ROLLBACK</span><span class="token punctuation">;</span>
+<span class="token comment">-- 事务要么成功，要么失败</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="ACID原则"><a href="#ACID原则" class="headerlink" title="ACID原则"></a>ACID原则</h3><p>原子性（Atomicity）：<br>   原子性是指事务中的操作要么全部完成，要么全部不完成。事务中的所有操作就像一个原子单元一样，组合在一起作为一个不可分割的整体。若事务在执行过程中发生错误或其他问题，所有已经执行的操作都会被回滚，数据库状态回到事务开始之前的状态。</p>
+<ol start="2">
+<li><p>一致性（Consistency）：<br>一致性确保事务从一个一致的状态转换到另一个一致的状态。一致性意味着数据库在事务开始前和结束后，都必须处于一致性状态，满足所有预定的规则和约束，包括数据的完整性约束、级联关系、数据范围等。</p>
+</li>
+<li><p>隔离性（Isolation）：<br>隔离性是指当多个事务同时对数据库进行操作时，一个事务的操作不能被其他事务看到，直到该事务完成。隔离性可以防止事务之间互相干扰，特别是防止“脏读”（读到其他未提交事务的数据）、“不可重复读”、“幻读”等问题。在SQL标准中，隔离性有几个级别，包括读未提交、读提交、重复读和串行化。</p>
+</li>
+<li><p>持久性（Durability）：<br>持久性指一个事务一旦被提交，它对数据库的修改应该是永久性的。即使发生系统崩溃或其他故障，事务的结果也不应丢失。这通常是通过将事务日志持久化到非易失的存储介质来实现的。</p>
+</li>
+</ol>
+<p>这些原则为数据库事务提供了一个可靠的工作基础，确保了数据的准确性和完整性，并允许多个用户和应用程序能并发地安全地操作数据库。虽然ACID对于关系型数据库系统至关重要，但在分布式系统和NoSQL数据库领域，有时会为了获得更好的性能和可伸缩性，而放宽对这些严格原则的需求。</p>
+<h3 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h3><ol>
+<li><p><strong>READ UNCOMMITTED</strong> 这是最低级别的隔离。一个事务可能会读取其他事务所做的尚未提交的更改，也称为“脏读”。以下是如何设置此级别的示例：</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SET</span> <span class="token keyword">TRANSACTION</span> <span class="token keyword">ISOLATION</span> <span class="token keyword">LEVEL</span> <span class="token keyword">READ</span> <span class="token keyword">UNCOMMITTED</span><span class="token punctuation">;</span>
+<span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span>
+<span class="token comment">-- Execute your SQL commands here</span>
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p><strong>READ COMMITTED</strong> 事务只能看到在其开始之前提交的数据更改，从而避免“脏读”。然而，它可能会遇到“不可重复读取”，即如果一个事务多次读取同一行，则每次可能会得到不同的结果。设置此级别的方法如下：</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SET</span> <span class="token keyword">TRANSACTION</span> <span class="token keyword">ISOLATION</span> <span class="token keyword">LEVEL</span> <span class="token keyword">READ</span> <span class="token keyword">COMMITTED</span><span class="token punctuation">;</span>
+<span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span>
+<span class="token comment">-- Execute your SQL commands here</span>
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p><strong>可重复读</strong> 这里，一旦一个事务读取一行，任何其他事务对这些行的写入（更改）都会被阻止，直到第一个事务完成，从而防止“不可重复读取”。然而，“幻读”仍然可能发生。设置此级别的方法如下：</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SET</span> <span class="token keyword">TRANSACTION</span> <span class="token keyword">ISOLATION</span> <span class="token keyword">LEVEL</span> <span class="token keyword">REPEATABLE</span> <span class="token keyword">READ</span><span class="token punctuation">;</span>
+<span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span>
+<span class="token comment">-- Execute your SQL commands here</span>
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p><strong>SERIALIZABLE</strong> 这是最高级别的隔离。它避免了“脏读”、“不可重复读”和“幻读”。这是通过将一个事务与其他事务完全隔离来完成的：对查询中使用的数据获取读锁和写锁，以防止其他事务访问相应的数据。设置此级别的方法如下：</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SET</span> <span class="token keyword">TRANSACTION</span> <span class="token keyword">ISOLATION</span> <span class="token keyword">LEVEL</span> <span class="token keyword">SERIALIZABLE</span><span class="token punctuation">;</span>
+<span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span>
+<span class="token comment">-- Execute your SQL commands here</span>
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+<blockquote>
+<p>更高级别的隔离通常会提供更高的一致性，但可能会由于锁等待时间的增加而降低性能。</p>
+</blockquote>
 
     </div>
 
@@ -860,7 +1292,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Sql%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">Sql介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">关系型数据库是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDBMS%E7%9A%84%E4%BC%98%E7%82%B9%E5%92%8C%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">RDBMS的优点和缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">1.2.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E5%92%8CNoSql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.3.</span> <span class="nav-text">SQL和NoSql数据库的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Sql%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.3.1.</span> <span class="nav-text">Sql数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NoSQL-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.3.2.</span> <span class="nav-text">NoSQL 数据库</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">SQL基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">2.1.</span> <span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">2.3.</span> <span class="nav-text">操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.1.</span> <span class="nav-text">算术运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.2.</span> <span class="nav-text">比较运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.3.</span> <span class="nav-text">逻辑运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.4.</span> <span class="nav-text">位运算符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E5%8F%A5"><span class="nav-number">2.4.</span> <span class="nav-text">语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT"><span class="nav-number">2.4.1.</span> <span class="nav-text">SELECT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#INSERT"><span class="nav-number">2.4.2.</span> <span class="nav-text">INSERT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UPDATE"><span class="nav-number">2.4.3.</span> <span class="nav-text">UPDATE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DELETE"><span class="nav-number">2.4.4.</span> <span class="nav-text">DELETE</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80"><span class="nav-number">3.</span> <span class="nav-text">数据定义语言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C%E8%AF%AD%E8%A8%80"><span class="nav-number">4.</span> <span class="nav-text">数据操作语言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="nav-number">5.</span> <span class="nav-text">聚合查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0"><span class="nav-number">5.1.</span> <span class="nav-text">聚合函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GROUP-BY%E5%92%8CHAVING%E5%AD%90%E5%8F%A5"><span class="nav-number">5.2.</span> <span class="nav-text">GROUP BY和HAVING子句</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.</span> <span class="nav-text">数据约束</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NOT-NULL-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.1.</span> <span class="nav-text">NOT NULL 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UNIQUE-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.2.</span> <span class="nav-text">UNIQUE 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PRIMARY-KEY-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.3.</span> <span class="nav-text">PRIMARY KEY 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%96%E9%94%AE%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.4.</span> <span class="nav-text">外键约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CHECK-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.5.</span> <span class="nav-text">CHECK 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DEFAULT-Constraint"><span class="nav-number">6.6.</span> <span class="nav-text">DEFAULT Constraint</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#INDEX-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.7.</span> <span class="nav-text">INDEX 约束</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E6%9F%A5%E8%AF%A2"><span class="nav-number">7.</span> <span class="nav-text">连接查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.1.</span> <span class="nav-text">内连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A6%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.2.</span> <span class="nav-text">左连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%B3%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.3.</span> <span class="nav-text">右连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E5%A4%96%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.4.</span> <span class="nav-text">全外连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.5.</span> <span class="nav-text">自连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.6.</span> <span class="nav-text">交叉连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="nav-number">8.</span> <span class="nav-text">子查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E9%87%8F%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E5%8D%95%E8%A1%8C%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.1.</span> <span class="nav-text">标量子查询（单行子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%97%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E5%A4%9A%E8%A1%8C%E5%8D%95%E5%88%97%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.2.</span> <span class="nav-text">列子查询（多行单列子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E5%A4%9A%E8%A1%8C%E5%A4%9A%E5%88%97%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.3.</span> <span class="nav-text">行子查询（多行多列子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E7%9B%B8%E5%85%B3%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.4.</span> <span class="nav-text">相关子查询（相关子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E6%B4%BE%E7%94%9F%E8%A1%A8%E6%88%96%E5%86%85%E8%81%94%E8%A7%86%E5%9B%BE%EF%BC%89"><span class="nav-number">8.5.</span> <span class="nav-text">表子查询（派生表或内联视图）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXISTS%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="nav-number">8.6.</span> <span class="nav-text">EXISTS子查询</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Sql%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">Sql介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">关系型数据库是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDBMS%E7%9A%84%E4%BC%98%E7%82%B9%E5%92%8C%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">RDBMS的优点和缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">1.2.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E5%92%8CNoSql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.3.</span> <span class="nav-text">SQL和NoSql数据库的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Sql%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.3.1.</span> <span class="nav-text">Sql数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NoSQL-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.3.2.</span> <span class="nav-text">NoSQL 数据库</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">SQL基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">2.1.</span> <span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">2.3.</span> <span class="nav-text">操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.1.</span> <span class="nav-text">算术运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.2.</span> <span class="nav-text">比较运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.3.</span> <span class="nav-text">逻辑运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.4.</span> <span class="nav-text">位运算符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E5%8F%A5"><span class="nav-number">2.4.</span> <span class="nav-text">语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT"><span class="nav-number">2.4.1.</span> <span class="nav-text">SELECT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#INSERT"><span class="nav-number">2.4.2.</span> <span class="nav-text">INSERT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UPDATE"><span class="nav-number">2.4.3.</span> <span class="nav-text">UPDATE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DELETE"><span class="nav-number">2.4.4.</span> <span class="nav-text">DELETE</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80"><span class="nav-number">3.</span> <span class="nav-text">数据定义语言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C%E8%AF%AD%E8%A8%80"><span class="nav-number">4.</span> <span class="nav-text">数据操作语言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="nav-number">5.</span> <span class="nav-text">聚合查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0"><span class="nav-number">5.1.</span> <span class="nav-text">聚合函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GROUP-BY%E5%92%8CHAVING%E5%AD%90%E5%8F%A5"><span class="nav-number">5.2.</span> <span class="nav-text">GROUP BY和HAVING子句</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.</span> <span class="nav-text">数据约束</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NOT-NULL-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.1.</span> <span class="nav-text">NOT NULL 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UNIQUE-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.2.</span> <span class="nav-text">UNIQUE 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PRIMARY-KEY-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.3.</span> <span class="nav-text">PRIMARY KEY 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%96%E9%94%AE%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.4.</span> <span class="nav-text">外键约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CHECK-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.5.</span> <span class="nav-text">CHECK 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DEFAULT-Constraint"><span class="nav-number">6.6.</span> <span class="nav-text">DEFAULT Constraint</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#INDEX-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.7.</span> <span class="nav-text">INDEX 约束</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E6%9F%A5%E8%AF%A2"><span class="nav-number">7.</span> <span class="nav-text">连接查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.1.</span> <span class="nav-text">内连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A6%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.2.</span> <span class="nav-text">左连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%B3%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.3.</span> <span class="nav-text">右连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E5%A4%96%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.4.</span> <span class="nav-text">全外连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.5.</span> <span class="nav-text">自连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.6.</span> <span class="nav-text">交叉连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="nav-number">8.</span> <span class="nav-text">子查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E9%87%8F%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E5%8D%95%E8%A1%8C%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.1.</span> <span class="nav-text">标量子查询（单行子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%97%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E5%A4%9A%E8%A1%8C%E5%8D%95%E5%88%97%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.2.</span> <span class="nav-text">列子查询（多行单列子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E5%A4%9A%E8%A1%8C%E5%A4%9A%E5%88%97%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.3.</span> <span class="nav-text">行子查询（多行多列子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E7%9B%B8%E5%85%B3%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.4.</span> <span class="nav-text">相关子查询（相关子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E6%B4%BE%E7%94%9F%E8%A1%A8%E6%88%96%E5%86%85%E8%81%94%E8%A7%86%E5%9B%BE%EF%BC%89"><span class="nav-number">8.5.</span> <span class="nav-text">表子查询（派生表或内联视图）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXISTS%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="nav-number">8.6.</span> <span class="nav-text">EXISTS子查询</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7-SQL-%E5%87%BD%E6%95%B0"><span class="nav-number">9.</span> <span class="nav-text">高级 SQL 函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%87%BD%E6%95%B0"><span class="nav-number">9.1.</span> <span class="nav-text">数学函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0"><span class="nav-number">9.2.</span> <span class="nav-text">字符串函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0"><span class="nav-number">9.3.</span> <span class="nav-text">条件函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%87%BD%E6%95%B0"><span class="nav-number">9.4.</span> <span class="nav-text">时间函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DATE"><span class="nav-number">9.4.1.</span> <span class="nav-text">DATE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TIME"><span class="nav-number">9.4.2.</span> <span class="nav-text">TIME</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DATEPART"><span class="nav-number">9.4.3.</span> <span class="nav-text">DATEPART</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DATEADD"><span class="nav-number">9.4.4.</span> <span class="nav-text">DATEADD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TIMESTAMP"><span class="nav-number">9.4.5.</span> <span class="nav-text">TIMESTAMP</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%86%E5%9B%BE"><span class="nav-number">10.</span> <span class="nav-text">视图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">11.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">11.1.</span> <span class="nav-text">索引的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E7%B4%A2%E5%BC%95"><span class="nav-number">11.2.</span> <span class="nav-text">管理索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-number">11.3.</span> <span class="nav-text">查询优化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1"><span class="nav-number">12.</span> <span class="nav-text">事务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E4%BD%BF%E7%94%A8"><span class="nav-number">12.0.1.</span> <span class="nav-text">事务使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ACID%E5%8E%9F%E5%88%99"><span class="nav-number">12.0.2.</span> <span class="nav-text">ACID原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-number">12.0.3.</span> <span class="nav-text">事务隔离级别</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
