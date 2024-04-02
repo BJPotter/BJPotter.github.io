@@ -165,7 +165,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E9%AB%98%E7%BA%A7.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -179,7 +179,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/Java%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B.html" class="post-title-link" itemprop="url">java异步编程</a>
+            <a href="/post/Java%E9%AB%98%E7%BA%A7.html" class="post-title-link" itemprop="url">java 高级</a>
         </h2>
 
         <div class="post-meta">
@@ -203,324 +203,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="第一章-认识异步编程"><a href="#第一章-认识异步编程" class="headerlink" title="第一章 认识异步编程"></a>第一章 认识异步编程</h2><h4 id="1-1-异步编程概念与作用"><a href="#1-1-异步编程概念与作用" class="headerlink" title="1.1 异步编程概念与作用"></a>1.1 异步编程概念与作用</h4><p>同步编程：每个线程同时只能发送一个请求，并同步等待返还，为提高性能，引入多个线程来实现并行处理。</p>
-<p>异步编程：是一种程序并行运行的手段，可以让程序中的一个工作单元与主程序线程分开独立运行，并在工作单元结束后，通知主程序线程它的运行结果或失败原因。</p>
-<p>作用：</p>
-<ol>
-<li>提高程序的性能和响应能力。</li>
-<li>提高线程的利用率。</li>
-</ol>
-<h4 id="1-2-异步编程场景"><a href="#1-2-异步编程场景" class="headerlink" title="1.2 异步编程场景"></a>1.2 异步编程场景</h4><ol>
-<li>日志的异步打印</li>
-<li>Spring框架中@Async注解</li>
-<li>异步RPC调用（Netty、Dubbo）</li>
-<li>Servlet、Webflux</li>
-</ol>
-<h2 id="第二章-显式使用线程和线程池实现异步编程"><a href="#第二章-显式使用线程和线程池实现异步编程" class="headerlink" title="第二章 显式使用线程和线程池实现异步编程"></a>第二章 显式使用线程和线程池实现异步编程</h2><h4 id="2-1-显式使用线程实现异步编程"><a href="#2-1-显式使用线程实现异步编程" class="headerlink" title="2.1 显式使用线程实现异步编程"></a>2.1 显式使用线程实现异步编程</h4><blockquote>
-<p>实现异步编程方式：</p>
-<ol>
-<li>实现Runnable接口的run方法，传递Runnable接口的实现类作为创建Thread的参数，启动线程</li>
-<li>实现Thread类，重新run方法</li>
-</ol>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//实现1</span>
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
-            <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span class="token string">"threadA"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        thread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        thread<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"执行时间为："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token comment">//实现2</span>
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token string">"ThreadA"</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-            <span class="token annotation punctuation">@Override</span>
-            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-        thread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        thread<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"执行时间："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<blockquote>
-<p><strong>注意：</strong></p>
-<ol>
-<li><p><code>thread.join()</code>方法会阻塞其他线程</p>
-</li>
-<li><p>java中线程有Deamon和非Deamon之分，默认我们创建的都是非Deamon线程，如果要创建Deamon要进行SetDeamon(true),当jvm中不存在非Deamon线程则会推出虚拟机。</p>
-</li>
-<li><p>守护线程不一定完成执行取决于用户线程，设置守护线程要在start前设置，java普通运行的是两个线程，一个是主线程，一个是GC线程，GC线程是守护线程。</p>
-</li>
-</ol>
-</blockquote>
-<p>缺点：</p>
-<ol>
-<li>线程的创建与销毁时有开销的–》线程池</li>
-<li>没有限制线程的个数，使用不当会导致系统进程用尽–》线程池</li>
-<li>异步任务执行完后没有返回值–》Future</li>
-</ol>
-<h4 id="2-2-显式使用线程池实现异步编程"><a href="#2-2-显式使用线程池实现异步编程" class="headerlink" title="2.2 显式使用线程池实现异步编程"></a>2.2 显式使用线程池实现异步编程</h4><h4 id="2-2-1-如何显式使用线程池实现异步编程"><a href="#2-2-1-如何显式使用线程池实现异步编程" class="headerlink" title="2.2.1 如何显式使用线程池实现异步编程"></a>2.2.1 如何显式使用线程池实现异步编程</h4><blockquote>
-<p>使用线程池实现线程复用，当需要执行异步任务的时候，直接把任务投递到线程池进行异步进行</p>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">   <span class="token comment">/**
-    * 创建线程池
-    * @return
-    */</span>
-   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token class-name">ExecutorService</span> <span class="token function">threadPoolExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-       <span class="token keyword">int</span> availableProcessors <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">availableProcessors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token keyword">return</span>  <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span>availableProcessors<span class="token punctuation">,</span>
-               availableProcessors<span class="token operator">*</span><span class="token number">2</span><span class="token punctuation">,</span>
-               <span class="token number">1</span><span class="token punctuation">,</span>
-               <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MINUTES<span class="token punctuation">,</span>
-               <span class="token keyword">new</span> <span class="token class-name">LinkedBlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-               <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor<span class="token punctuation">.</span>CallerRunsPolicy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-   <span class="token punctuation">&#125;</span>
-
-   <span class="token comment">/**
-    * 提交异步任务到线程池执行
-    * @param args
-    * @throws InterruptedException
-    */</span>
-   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
-       <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">ThreadPoolExample</span><span class="token punctuation">.</span><span class="token function">threadPoolExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
-           <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"耗时："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-   <span class="token punctuation">&#125;</span>
-<span class="token comment">/**
-* 有返回值的异步执行，但是get方法会阻塞其他线程
-*/</span>
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
-       <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> submit <span class="token operator">=</span> <span class="token class-name">ThreadPoolExample</span><span class="token punctuation">.</span><span class="token function">threadPoolExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">submit</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>submit<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"耗时："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-   <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="2-2-2-线程池ThreadpoolExecutor原理剖析"><a href="#2-2-2-线程池ThreadpoolExecutor原理剖析" class="headerlink" title="2.2.2 线程池ThreadpoolExecutor原理剖析"></a>2.2.2 线程池ThreadpoolExecutor原理剖析</h4><ol>
-<li>概述</li>
-</ol>
-<blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token operator">></span><span class="token comment">// 高三位标记线程池的状态，低29位表示线程的个数</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">AtomicInteger</span> ctl <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AtomicInteger</span><span class="token punctuation">(</span><span class="token function">ctlOf</span><span class="token punctuation">(</span>RUNNING<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 线程个数的掩码数</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> COUNT_BITS <span class="token operator">=</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span>SIZE <span class="token operator">-</span> <span class="token number">3</span><span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 线程的最大个数</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> CAPACITY   <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
-
-<span class="token operator">></span><span class="token comment">// runState is stored in the high-order bits</span>
-<span class="token operator">></span><span class="token comment">// 接受新任务并处理阻塞队列里面的任务</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> RUNNING    <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 拒绝新任务但是处理阻塞队列里的任务</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> SHUTDOWN   <span class="token operator">=</span>  <span class="token number">0</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 拒绝新任务，抛弃阻塞队列里的任务，同时中断正在处理的任务</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> STOP       <span class="token operator">=</span>  <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 所有任务都执行完了，包括阻塞队列里面的任务，当前线程池活动线程数为0，将调用terminated方法</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> TIDYING    <span class="token operator">=</span>  <span class="token number">2</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 终止状态</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> TERMINATED <span class="token operator">=</span>  <span class="token number">3</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 返回运行状态</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">runStateOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> c<span class="token punctuation">)</span>     <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> c <span class="token operator">&amp;</span> <span class="token operator">~</span>CAPACITY<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
-<span class="token operator">></span><span class="token comment">// 返回线程个数</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">workerCountOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> c<span class="token punctuation">)</span>  <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> c <span class="token operator">&amp;</span> CAPACITY<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
-<span class="token operator">></span><span class="token comment">// 计算ctl新值</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">ctlOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> rs<span class="token punctuation">,</span> <span class="token keyword">int</span> wc<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> rs <span class="token operator">|</span> wc<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</blockquote>
-<p>线程池的参数配置</p>
-<p>corePoolSize: 线程池核心线程个数</p>
-<p>workQueue: 用于保存等待执行的任务阻塞队列（有界队列、无界队列、同步队列、优先级队列）</p>
-<p>maximunPoolSize: 线程池的最大线程数量</p>
-<p>threadFactory: 创建线程的工厂类</p>
-<p>defaultHandler: 饱和策略（当队列达到maximunPoolSize后采取的策略）</p>
-<p>keepAliveTime: 存活时间，当前线程数量&gt;核心线程数量，且处于空闲状态，闲置连接能存活的最大时间</p>
-<ol start="2">
-<li>提交任务到线程池原理解析</li>
-</ol>
-<blockquote>
-<p>ThreadPoolExecutor提交任务到线程池中的方法</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>任务类型</th>
-<th>返回值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>void execute(Runnable command)</td>
-<td>Runnable类型的任务</td>
-<td>void</td>
-</tr>
-<tr>
-<td><T> Future<T> submit(Callable<T> task);</T></T></T></td>
-<td>Runnable类型的任务</td>
-<td>执行结果</td>
-</tr>
-<tr>
-<td><T> Future<T> submit(Runnable task, T result);</T></T></td>
-<td>Runnable类型的任务以及result内容</td>
-<td>result</td>
-</tr>
-</tbody></table>
-<ol start="3">
-<li>线程池中任务执行原理</li>
-</ol>
-<blockquote>
-<p>当用户提交任务到线程池后，在线程池没有执行拒绝策略的情况下，用户线程会马上返回，而提交的任务要么切换到worker线程执行，要么放入阻塞队列里面由worker线程来执行。</p>
-</blockquote>
-<ol start="4">
-<li>线程池的关闭</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>作用</th>
-<th>返回值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>shutdown()</td>
-<td>设置为shutdown状态，线程池不会接收新的任务，但是队列里面的任务还是要执行的</td>
-<td>void</td>
-</tr>
-<tr>
-<td>shutdownNow()</td>
-<td>设置为stop状态，线程池不会接收新的任务，并且会丢弃工作队列里面的任务</td>
-<td>被丢弃的任务列表</td>
-</tr>
-</tbody></table>
-<ol start="5">
-<li>线程池的拒绝策略</li>
-</ol>
-<blockquote>
-<p>拒绝策略执行的触发条件：线程池中线程的个数达到maxpoolsize,对于新投递的任务进行拒绝策略的执行。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>拒绝策略</th>
-<th>策略内容</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>CallerRunsPolicy()</td>
-<td>使用调用线程执行新提交的任务</td>
-</tr>
-<tr>
-<td>AbortPolicy()</td>
-<td>抛弃新增任务，抛出RejectedExecutionException</td>
-</tr>
-<tr>
-<td>DiscardOldestPolicy（）</td>
-<td>抛弃队列里面最老的任务，并把新任务添加到队列里面</td>
-</tr>
-<tr>
-<td>DiscardPolicy()</td>
-<td>抛弃新增任务</td>
-</tr>
-</tbody></table>
-<h2 id="第三章-基于JDK中的Future实现异步编程"><a href="#第三章-基于JDK中的Future实现异步编程" class="headerlink" title="第三章 基于JDK中的Future实现异步编程"></a>第三章 基于JDK中的Future实现异步编程</h2><p>3.1 jdk中的future</p>
-<blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token operator">></span><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">V</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
-<span class="token comment">//取消任务，如果任务正在执行，mayInterruptIfRunning设置为true打断，否则不中断</span>
-   <span class="token keyword">boolean</span> <span class="token function">cancel</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> mayInterruptIfRunning<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-   <span class="token comment">//如何任务在执行前被取消返回true,否则返回false</span>
-   <span class="token keyword">boolean</span> <span class="token function">isCancelled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-   <span class="token comment">//判断任务是否已经完成</span>
-   <span class="token keyword">boolean</span> <span class="token function">isDone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-   <span class="token comment">// 等待异步任务执行完，返回结果</span>
-   
-   <span class="token class-name">V</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">,</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">;</span>
-
-   <span class="token comment">//到达超时时间后，返回，不会一直阻塞调用线程</span>
-   
-   <span class="token class-name">V</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span> unit<span class="token punctuation">)</span>
-       <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">,</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">,</span> <span class="token class-name">TimeoutException</span><span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</blockquote>
-<p>3.2.1 FutureTask概述</p>
-<blockquote>
-<p>1.FutureTask只有当任务结束才能获取返回值。</p>
-<p>2.返回值只能通过get方法获取，调用get会阻塞</p>
-<p>3.任务一旦运行完成不能被重启，除非运行过程中使用了runAndReset方法</p>
-</blockquote>
-<p>3.2.2 FutureTask类图结构</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%9F%BA%E7%A1%80.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Java%E5%9F%BA%E7%A1%80.html" class="post-title-link" itemprop="url">java 基础</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-03-20 09:03:13" itemprop="dateCreated datePublished" datetime="2024-03-20T09:03:13+08:00">2024-03-20</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="install"><a href="#install" class="headerlink" title="install"></a>install</h1><h1 id="basic"><a href="#basic" class="headerlink" title="basic"></a>basic</h1><h2 id="Syntax"><a href="#Syntax" class="headerlink" title="Syntax"></a>Syntax</h2><h2 id="Output"><a href="#Output" class="headerlink" title="Output"></a>Output</h2><h2 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h2><h2 id="Variables"><a href="#Variables" class="headerlink" title="Variables"></a>Variables</h2><h2 id="Data-Types"><a href="#Data-Types" class="headerlink" title="Data Types"></a>Data Types</h2><h2 id="Type-Casting"><a href="#Type-Casting" class="headerlink" title="Type Casting"></a>Type Casting</h2><h2 id="Operators"><a href="#Operators" class="headerlink" title="Operators"></a>Operators</h2><h2 id="Strings"><a href="#Strings" class="headerlink" title="Strings"></a>Strings</h2><h2 id="Math"><a href="#Math" class="headerlink" title="Math"></a>Math</h2><h2 id="Booleans"><a href="#Booleans" class="headerlink" title="Booleans"></a>Booleans</h2><h2 id="If-x2F-Else"><a href="#If-x2F-Else" class="headerlink" title="If&#x2F;Else"></a>If&#x2F;Else</h2><h2 id="Switch"><a href="#Switch" class="headerlink" title="Switch"></a>Switch</h2><h2 id="While-Loop"><a href="#While-Loop" class="headerlink" title="While Loop"></a>While Loop</h2><h2 id="For-Loop"><a href="#For-Loop" class="headerlink" title="For Loop"></a>For Loop</h2><h2 id="Break-x2F-Continue"><a href="#Break-x2F-Continue" class="headerlink" title="Break&#x2F;Continue"></a>Break&#x2F;Continue</h2><h2 id="Arrays"><a href="#Arrays" class="headerlink" title="Arrays"></a>Arrays</h2><h1 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h1><h2 id="Methods-1"><a href="#Methods-1" class="headerlink" title="Methods"></a>Methods</h2><h2 id="Method-Parameters"><a href="#Method-Parameters" class="headerlink" title="Method Parameters"></a>Method Parameters</h2><h2 id="Method-Overloading"><a href="#Method-Overloading" class="headerlink" title="Method Overloading"></a>Method Overloading</h2><h2 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h2><h2 id="Recursion"><a href="#Recursion" class="headerlink" title="Recursion"></a>Recursion</h2><h1 id="Classes"><a href="#Classes" class="headerlink" title="Classes"></a>Classes</h1><h2 id="OOP"><a href="#OOP" class="headerlink" title="OOP"></a>OOP</h2><h2 id="Classes-and-Objects"><a href="#Classes-and-Objects" class="headerlink" title="Classes and Objects"></a>Classes and Objects</h2><h2 id="Class-Attributes"><a href="#Class-Attributes" class="headerlink" title="Class Attributes"></a>Class Attributes</h2><h2 id="Class-Methods"><a href="#Class-Methods" class="headerlink" title="Class Methods"></a>Class Methods</h2><h2 id="Constructors"><a href="#Constructors" class="headerlink" title="Constructors"></a>Constructors</h2><h2 id="Modifiers"><a href="#Modifiers" class="headerlink" title="Modifiers"></a>Modifiers</h2><h2 id="Encapsulation"><a href="#Encapsulation" class="headerlink" title="Encapsulation"></a>Encapsulation</h2><h2 id="Packages"><a href="#Packages" class="headerlink" title="Packages"></a>Packages</h2><h2 id="Inheritance"><a href="#Inheritance" class="headerlink" title="Inheritance"></a>Inheritance</h2><h2 id="Polymorphism"><a href="#Polymorphism" class="headerlink" title="Polymorphism"></a>Polymorphism</h2><h2 id="Inner-Classes"><a href="#Inner-Classes" class="headerlink" title="Inner Classes"></a>Inner Classes</h2><h2 id="Abstraction"><a href="#Abstraction" class="headerlink" title="Abstraction"></a>Abstraction</h2><h2 id="Interface"><a href="#Interface" class="headerlink" title="Interface"></a>Interface</h2><h2 id="Enums"><a href="#Enums" class="headerlink" title="Enums"></a>Enums</h2><h2 id="User-Input"><a href="#User-Input" class="headerlink" title="User Input"></a>User Input</h2><h2 id="Date"><a href="#Date" class="headerlink" title="Date"></a>Date</h2><h2 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h2><h2 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h2><h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><h2 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h2><h2 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h2><h2 id="Wrapper-Classes"><a href="#Wrapper-Classes" class="headerlink" title="Wrapper Classes"></a>Wrapper Classes</h2><h2 id="Exceptions"><a href="#Exceptions" class="headerlink" title="Exceptions"></a>Exceptions</h2><h2 id="Regular-Expressions"><a href="#Regular-Expressions" class="headerlink" title="Regular Expressions"></a>Regular Expressions</h2><h2 id="Threads"><a href="#Threads" class="headerlink" title="Threads"></a>Threads</h2><h2 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h2><h1 id="File-Handing"><a href="#File-Handing" class="headerlink" title="File Handing"></a>File Handing</h1><h2 id="Files"><a href="#Files" class="headerlink" title="Files"></a>Files</h2><h2 id="Create-x2F-Write-Files"><a href="#Create-x2F-Write-Files" class="headerlink" title="Create&#x2F;Write Files"></a>Create&#x2F;Write Files</h2><h2 id="Read-Files"><a href="#Read-Files" class="headerlink" title="Read Files"></a>Read Files</h2><h2 id="Delete-Files"><a href="#Delete-Files" class="headerlink" title="Delete Files"></a>Delete Files</h2>
+          <h1 id="Generics"><a href="#Generics" class="headerlink" title="Generics"></a>Generics</h1><h1 id="Streams"><a href="#Streams" class="headerlink" title="Streams"></a>Streams</h1><h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><h1 id="Garbage-Collection"><a href="#Garbage-Collection" class="headerlink" title="Garbage Collection"></a>Garbage Collection</h1><h1 id="Threads"><a href="#Threads" class="headerlink" title="Threads"></a>Threads</h1><h1 id="Memory-Management"><a href="#Memory-Management" class="headerlink" title="Memory Management"></a>Memory Management</h1><h1 id="Collection-Framework"><a href="#Collection-Framework" class="headerlink" title="Collection Framework"></a>Collection Framework</h1><h1 id="Serialization"><a href="#Serialization" class="headerlink" title="Serialization"></a>Serialization</h1><h1 id="Networking-sockets"><a href="#Networking-sockets" class="headerlink" title="Networking sockets"></a>Networking sockets</h1>
       
     </div>
 
@@ -618,6 +301,63 @@
 </ol>
 <p>​	每条线程还有自己的工作内存（类比高速缓存区）工作内存中保存了被该线程使用的变量的主内存副本拷贝，线程对变量的所有操作都是在工作内存中完成的。</p>
 
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%9F%BA%E7%A1%80.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Java%E5%9F%BA%E7%A1%80.html" class="post-title-link" itemprop="url">java 基础</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-03-20 09:03:13" itemprop="dateCreated datePublished" datetime="2024-03-20T09:03:13+08:00">2024-03-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="install"><a href="#install" class="headerlink" title="install"></a>install</h1><h1 id="basic"><a href="#basic" class="headerlink" title="basic"></a>basic</h1><h2 id="Syntax"><a href="#Syntax" class="headerlink" title="Syntax"></a>Syntax</h2><h2 id="Output"><a href="#Output" class="headerlink" title="Output"></a>Output</h2><h2 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h2><h2 id="Variables"><a href="#Variables" class="headerlink" title="Variables"></a>Variables</h2><h2 id="Data-Types"><a href="#Data-Types" class="headerlink" title="Data Types"></a>Data Types</h2><h2 id="Type-Casting"><a href="#Type-Casting" class="headerlink" title="Type Casting"></a>Type Casting</h2><h2 id="Operators"><a href="#Operators" class="headerlink" title="Operators"></a>Operators</h2><h2 id="Strings"><a href="#Strings" class="headerlink" title="Strings"></a>Strings</h2><h2 id="Math"><a href="#Math" class="headerlink" title="Math"></a>Math</h2><h2 id="Booleans"><a href="#Booleans" class="headerlink" title="Booleans"></a>Booleans</h2><h2 id="If-x2F-Else"><a href="#If-x2F-Else" class="headerlink" title="If&#x2F;Else"></a>If&#x2F;Else</h2><h2 id="Switch"><a href="#Switch" class="headerlink" title="Switch"></a>Switch</h2><h2 id="While-Loop"><a href="#While-Loop" class="headerlink" title="While Loop"></a>While Loop</h2><h2 id="For-Loop"><a href="#For-Loop" class="headerlink" title="For Loop"></a>For Loop</h2><h2 id="Break-x2F-Continue"><a href="#Break-x2F-Continue" class="headerlink" title="Break&#x2F;Continue"></a>Break&#x2F;Continue</h2><h2 id="Arrays"><a href="#Arrays" class="headerlink" title="Arrays"></a>Arrays</h2><h1 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h1><h2 id="Methods-1"><a href="#Methods-1" class="headerlink" title="Methods"></a>Methods</h2><h2 id="Method-Parameters"><a href="#Method-Parameters" class="headerlink" title="Method Parameters"></a>Method Parameters</h2><h2 id="Method-Overloading"><a href="#Method-Overloading" class="headerlink" title="Method Overloading"></a>Method Overloading</h2><h2 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h2><h2 id="Recursion"><a href="#Recursion" class="headerlink" title="Recursion"></a>Recursion</h2><h1 id="Classes"><a href="#Classes" class="headerlink" title="Classes"></a>Classes</h1><h2 id="OOP"><a href="#OOP" class="headerlink" title="OOP"></a>OOP</h2><h2 id="Classes-and-Objects"><a href="#Classes-and-Objects" class="headerlink" title="Classes and Objects"></a>Classes and Objects</h2><h2 id="Class-Attributes"><a href="#Class-Attributes" class="headerlink" title="Class Attributes"></a>Class Attributes</h2><h2 id="Class-Methods"><a href="#Class-Methods" class="headerlink" title="Class Methods"></a>Class Methods</h2><h2 id="Constructors"><a href="#Constructors" class="headerlink" title="Constructors"></a>Constructors</h2><h2 id="Modifiers"><a href="#Modifiers" class="headerlink" title="Modifiers"></a>Modifiers</h2><h2 id="Encapsulation"><a href="#Encapsulation" class="headerlink" title="Encapsulation"></a>Encapsulation</h2><h2 id="Packages"><a href="#Packages" class="headerlink" title="Packages"></a>Packages</h2><h2 id="Inheritance"><a href="#Inheritance" class="headerlink" title="Inheritance"></a>Inheritance</h2><h2 id="Polymorphism"><a href="#Polymorphism" class="headerlink" title="Polymorphism"></a>Polymorphism</h2><h2 id="Inner-Classes"><a href="#Inner-Classes" class="headerlink" title="Inner Classes"></a>Inner Classes</h2><h2 id="Abstraction"><a href="#Abstraction" class="headerlink" title="Abstraction"></a>Abstraction</h2><h2 id="Interface"><a href="#Interface" class="headerlink" title="Interface"></a>Interface</h2><h2 id="Enums"><a href="#Enums" class="headerlink" title="Enums"></a>Enums</h2><h2 id="User-Input"><a href="#User-Input" class="headerlink" title="User Input"></a>User Input</h2><h2 id="Date"><a href="#Date" class="headerlink" title="Date"></a>Date</h2><h2 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h2><h2 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h2><h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><h2 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h2><h2 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h2><h2 id="Wrapper-Classes"><a href="#Wrapper-Classes" class="headerlink" title="Wrapper Classes"></a>Wrapper Classes</h2><h2 id="Exceptions"><a href="#Exceptions" class="headerlink" title="Exceptions"></a>Exceptions</h2><h2 id="Regular-Expressions"><a href="#Regular-Expressions" class="headerlink" title="Regular Expressions"></a>Regular Expressions</h2><h2 id="Threads"><a href="#Threads" class="headerlink" title="Threads"></a>Threads</h2><h2 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h2><h1 id="File-Handing"><a href="#File-Handing" class="headerlink" title="File Handing"></a>File Handing</h1><h2 id="Files"><a href="#Files" class="headerlink" title="Files"></a>Files</h2><h2 id="Create-x2F-Write-Files"><a href="#Create-x2F-Write-Files" class="headerlink" title="Create&#x2F;Write Files"></a>Create&#x2F;Write Files</h2><h2 id="Read-Files"><a href="#Read-Files" class="headerlink" title="Read Files"></a>Read Files</h2><h2 id="Delete-Files"><a href="#Delete-Files" class="headerlink" title="Delete Files"></a>Delete Files</h2>
       
     </div>
 
