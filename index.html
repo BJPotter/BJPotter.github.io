@@ -465,7 +465,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-02 09:36:49" itemprop="dateModified" datetime="2024-04-02T09:36:49+08:00">2024-04-02</time>
+                <time title="修改时间：2024-04-03 09:16:51" itemprop="dateModified" datetime="2024-04-03T09:16:51+08:00">2024-04-03</time>
               </span>
 
           
@@ -1413,43 +1413,55 @@ LOWER<span class="token punctuation">(</span>string<span class="token punctuatio
 </li>
 </ol>
 <h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><blockquote>
-<p>SQL中事务是针对数据库执行的工作单元，事务是以逻辑顺序完成的工作单元或序列，无论是由用户手动方式还是由某种数据库程序自动完成。</p>
+<p>SQL中的事务是由一组有逻辑的数据库操作组成的工作单元，一个事务内的所有操作要么全部成功，要么全部失败，通过事务保证数据库数据的一致性。</p>
 </blockquote>
-<h3 id="事务使用"><a href="#事务使用" class="headerlink" title="事务使用"></a>事务使用</h3><p>开启事务</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span> <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="如何使用事务"><a href="#如何使用事务" class="headerlink" title="如何使用事务"></a>如何使用事务</h3><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 开启事务</span>
+<span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span> 
+<span class="token comment">-- 提交事务</span>
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span>
+<span class="token comment">-- 回滚</span>
+<span class="token keyword">ROLLBACK</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>提交事务</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">COMMIT</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>回滚</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">ROLLBACK</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>保存点</p>
+<p><strong>保存点（<code>Savepoint</code>）</strong></p>
+<blockquote>
+<p>保存点就是快照，事务可以回滚到指定的快照节点，使用 <code>SAVEPOINT</code> 命令来设置保存点，使用 <code>ROLLBACK TO</code> 命令回滚到特定的保存点。</p>
+<p>如果一个长事务在执行过程中只有某一小部分操作失败，那么在失败之前设置一个保存点，等失败后只需回滚这一部分操作，而不用回滚整个事务，提高效率。</p>
+</blockquote>
 <pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SAVEPOINT</span> savepoint_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>示例：</p>
+<p><strong>事务示例：</strong></p>
 <pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span>
 
 <span class="token keyword">UPDATE</span> Accounts <span class="token keyword">SET</span> Balance <span class="token operator">=</span> Balance <span class="token operator">-</span> <span class="token number">100</span> <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
 <span class="token keyword">UPDATE</span> Accounts <span class="token keyword">SET</span> Balance <span class="token operator">=</span> Balance <span class="token operator">+</span> <span class="token number">100</span> <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
 
-<span class="token keyword">IF</span> @<span class="token variable">@ERROR</span> <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token comment">-- 检查最后一个操作是否成功。如果上一个T-SQL操作没有产生错误，`@@ERROR`的值将为0。</span>
+<span class="token keyword">IF</span> @<span class="token variable">@ERROR</span> <span class="token operator">=</span> <span class="token number">0</span> 
    <span class="token keyword">COMMIT</span><span class="token punctuation">;</span>
 <span class="token keyword">ELSE</span>
    <span class="token keyword">ROLLBACK</span><span class="token punctuation">;</span>
-<span class="token comment">-- 事务要么成功，要么失败</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment">-- 事务要么成功，要么失败</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="ACID原则"><a href="#ACID原则" class="headerlink" title="ACID原则"></a>ACID原则</h3><p>原子性（Atomicity）：<br>   原子性是指事务中的操作要么全部完成，要么全部不完成。事务中的所有操作就像一个原子单元一样，组合在一起作为一个不可分割的整体。若事务在执行过程中发生错误或其他问题，所有已经执行的操作都会被回滚，数据库状态回到事务开始之前的状态。</p>
-<ol start="2">
-<li><p>一致性（Consistency）：<br>一致性确保事务从一个一致的状态转换到另一个一致的状态。一致性意味着数据库在事务开始前和结束后，都必须处于一致性状态，满足所有预定的规则和约束，包括数据的完整性约束、级联关系、数据范围等。</p>
-</li>
-<li><p>隔离性（Isolation）：<br>隔离性是指当多个事务同时对数据库进行操作时，一个事务的操作不能被其他事务看到，直到该事务完成。隔离性可以防止事务之间互相干扰，特别是防止“脏读”（读到其他未提交事务的数据）、“不可重复读”、“幻读”等问题。在SQL标准中，隔离性有几个级别，包括读未提交、读提交、重复读和串行化。</p>
-</li>
-<li><p>持久性（Durability）：<br>持久性指一个事务一旦被提交，它对数据库的修改应该是永久性的。即使发生系统崩溃或其他故障，事务的结果也不应丢失。这通常是通过将事务日志持久化到非易失的存储介质来实现的。</p>
-</li>
-</ol>
-<p>这些原则为数据库事务提供了一个可靠的工作基础，确保了数据的准确性和完整性，并允许多个用户和应用程序能并发地安全地操作数据库。虽然ACID对于关系型数据库系统至关重要，但在分布式系统和NoSQL数据库领域，有时会为了获得更好的性能和可伸缩性，而放宽对这些严格原则的需求。</p>
-<h3 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h3><ol>
+<h3 id="如何保证数据的完整性和可靠性"><a href="#如何保证数据的完整性和可靠性" class="headerlink" title="如何保证数据的完整性和可靠性"></a>如何保证数据的完整性和可靠性</h3><p><strong>1. 原子性（Atomicity）</strong></p>
+<blockquote>
+<p>一个事务（transaction）是一个原子单元，要么全部成功，要么全部不执行。</p>
+</blockquote>
+<p><strong>2. 一致性（Consistency）</strong></p>
+<blockquote>
+<p>事务操作前后，数据必须满足预定义的规则和约束，如数据类型、长度、范围等业务规则。如：一个银行应用其中一个规则是每个客户的账户余额必须大于或等于0。这是数据库的一个一致性状态。</p>
+</blockquote>
+<p><strong>3. 隔离性（Isolation）</strong></p>
+<blockquote>
+<p>一个事务执行后，它影响的数据对其他正在执行的事务是不可见的。</p>
+</blockquote>
+<p><strong>4. 持久性（Durability）</strong></p>
+<blockquote>
+<p>一个事务成功执行后，数据库中数据的更改会永久保存在数据库中。</p>
+</blockquote>
+<h3 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h3><blockquote>
+<p>事务的隔离级别在事务并发执行时，来管理事务之间的交互，以防范可能引发的数据不一致问题。</p>
+</blockquote>
+<ol>
 <li><p><strong>READ UNCOMMITTED</strong> 这是最低级别的隔离。一个事务可能会读取其他事务所做的尚未提交的更改，也称为“脏读”。以下是如何设置此级别的示例：</p>
 <pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SET</span> <span class="token keyword">TRANSACTION</span> <span class="token keyword">ISOLATION</span> <span class="token keyword">LEVEL</span> <span class="token keyword">READ</span> <span class="token keyword">UNCOMMITTED</span><span class="token punctuation">;</span>
 <span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span>
