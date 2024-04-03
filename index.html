@@ -465,7 +465,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-03 11:37:20" itemprop="dateModified" datetime="2024-04-03T11:37:20+08:00">2024-04-03</time>
+                <time title="修改时间：2024-04-03 18:02:04" itemprop="dateModified" datetime="2024-04-03T18:02:04+08:00">2024-04-03</time>
               </span>
 
           
@@ -1505,6 +1505,123 @@ LOWER<span class="token punctuation">(</span>string<span class="token punctuatio
 <blockquote>
 <p><strong>更高级别的隔离通常会提供更高的一致性，但可能会由于锁等待时间的增加而降低性能。</strong></p>
 </blockquote>
+<h1 id="存储过程和函数"><a href="#存储过程和函数" class="headerlink" title="存储过程和函数"></a>存储过程和函数</h1><h2 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h2><blockquote>
+<p>SQL存储过程是保存了一组经过预编译的可重用的SQL代码</p>
+</blockquote>
+<h3 id="存储过程的优点"><a href="#存储过程的优点" class="headerlink" title="存储过程的优点"></a>存储过程的优点</h3><ol>
+<li><p>预编译：存储过程在创建时会被编译并存储在数据库中。之后的调用不需要重新编译，只是执行已编译的代码，这可以提高执行效率。</p>
+</li>
+<li><p>减少网络流量：可以将多个SQL语句封装在一个存储过程中，用户只需一次调用，而非将多个语句分别从客户端发送到服务器，这样可以减少网络通信量。</p>
+</li>
+<li><p>重用和封装：存储过程可以被多个程序或应用重用。同时也可以将复杂的业务逻辑封装在存储过程内部，简化应用开发。</p>
+</li>
+<li><p>安全性：可以通过数据库的权限机制对存储过程进行权限控制，只允许特定用户执行特定的存储过程，从而增强了数据库操作的安全性。</p>
+</li>
+<li><p>事务管理：存储过程可以使用事务来确保数据的一致性。在存储过程中可以根据需要开始事务、提交事务或者在遇到错误时回滚事务。</p>
+</li>
+</ol>
+<h3 id="存储过程如何使用"><a href="#存储过程如何使用" class="headerlink" title="存储过程如何使用"></a>存储过程如何使用</h3><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 创建一个存储过程</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">PROCEDURE</span> getEmployeesBySalary
+  <span class="token variable">@minSalary</span> <span class="token keyword">int</span>
+<span class="token keyword">AS</span>
+<span class="token keyword">BEGIN</span>
+  <span class="token keyword">SELECT</span> firstName<span class="token punctuation">,</span> lastName
+  <span class="token keyword">FROM</span> Employees
+  <span class="token keyword">WHERE</span> salary <span class="token operator">></span> <span class="token variable">@minSalary</span>
+<span class="token keyword">END</span>
+GO
+<span class="token comment">-- 执行存储过程</span>
+<span class="token keyword">EXEC</span> getEmployeesBySalary <span class="token number">50000</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><blockquote>
+<p>SQL 函数是执行特定任务的一组 SQL 语句,函数必须返回一个值或结果。</p>
+</blockquote>
+<p><strong>1. 标量函数（Scalar functions）</strong>返回单个值，可以在使用单个表达式的地方使用。例如：</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">FUNCTION</span> addNumbers<span class="token punctuation">(</span><span class="token variable">@a</span> <span class="token keyword">int</span><span class="token punctuation">,</span> <span class="token variable">@b</span> <span class="token keyword">int</span><span class="token punctuation">)</span>
+<span class="token keyword">RETURNS</span> <span class="token keyword">int</span> 
+<span class="token keyword">AS</span> 
+<span class="token keyword">BEGIN</span>
+   <span class="token keyword">RETURN</span> <span class="token variable">@a</span> <span class="token operator">+</span> <span class="token variable">@b</span>
+<span class="token keyword">END</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>2. 表值函数（Table-valued functions）</strong>返回一个表。它们可以像普通表一样在 JOIN 子句中使用</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">FUNCTION</span> getBooks <span class="token punctuation">(</span><span class="token variable">@authorID</span> <span class="token keyword">INT</span><span class="token punctuation">)</span>
+<span class="token keyword">RETURNS</span> <span class="token keyword">TABLE</span>
+<span class="token keyword">AS</span> 
+<span class="token keyword">RETURN</span> <span class="token punctuation">(</span>
+   <span class="token keyword">SELECT</span> books<span class="token punctuation">.</span>title<span class="token punctuation">,</span> books<span class="token punctuation">.</span>publicationYear 
+   <span class="token keyword">FROM</span> books 
+   <span class="token keyword">WHERE</span> books<span class="token punctuation">.</span>authorID <span class="token operator">=</span> <span class="token variable">@authorID</span>
+<span class="token punctuation">)</span>
+<span class="token comment">-- 调用getBooks函数</span>
+<span class="token keyword">SELECT</span> title<span class="token punctuation">,</span> publicationYear <span class="token keyword">FROM</span> getBooks<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="存储过程和表值函数的区别"><a href="#存储过程和表值函数的区别" class="headerlink" title="存储过程和表值函数的区别"></a>存储过程和表值函数的区别</h2><ol>
+<li><p>返回类型：</p>
+<ul>
+<li>存储过程可以返回零个、一个或多个结果集，也可以返回输出参数，或者根本不返回任何东西。</li>
+<li>表值函数返回一个表对象，可以像使用普通表一样查询这个对象。</li>
+</ul>
+</li>
+<li><p>使用上下文：</p>
+<ul>
+<li>存储过程不能在 SQL 语句（如 SELECT、UPDATE、INSERT、DELETE）中直接调用，通常需要使用特定的调用语句（如 CALL 或 EXECUTE）。</li>
+<li>表值函数可以直接在 SQL 查询中作为数据源使用，就像一个表一样。</li>
+</ul>
+</li>
+<li><p>副作用：</p>
+<ul>
+<li>存储过程可以包含产生副作用的 SQL 语句，如插入、更新、删除记录等。</li>
+<li>表值函数通常不允许包括有副作用的操作，它们设计来用作只读操作，并且期望是确定性的。</li>
+</ul>
+</li>
+<li><p>执行方式：</p>
+<ul>
+<li>存储过程需要显式执行，并且可以接受输入和输出参数。</li>
+<li>表值函数可以像其他任何列或表一样参与查询，并且通常只接受输入参数。</li>
+</ul>
+</li>
+<li><p>事务管理：</p>
+<ul>
+<li>存储过程中可以包含事务逻辑（如开始事务、提交事务、回滚事务）。</li>
+<li>表值函数不能使用事务逻辑。</li>
+</ul>
+</li>
+<li><p>调用方式：</p>
+<ul>
+<li>存储过程可以独立调用。</li>
+<li>表值函数需要在 SELECT 语句中被调用，可以像表一样被 JOIN。</li>
+</ul>
+</li>
+</ol>
+<h1 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h1><blockquote>
+<p>SQL性能优化对于加速SQL查询和提高数据库整体性能至关重要。最重要的是，它可以确保 SQL 语句的顺利高效执行，从而带来更好的应用程序性能和用户体验。</p>
+</blockquote>
+<h2 id="索引-1"><a href="#索引-1" class="headerlink" title="索引"></a>索引</h2><p>创建索引是优化 SQL 性能的重要方法之一。它们加速从数据库中查找和检索数据。</p>
+<pre class="line-numbers language-none"><code class="language-none">CREATE INDEX index_name
+ON table_name (column1, column2, ...);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>请记住，虽然索引可以加快数据检索速度，但它们可能会减慢数据修改速度，例如<code>INSERT</code>、<code>UPDATE</code>、 和<code>DELETE</code>。</p>
+<h2 id="避免选择"><a href="#避免选择" class="headerlink" title="避免选择*"></a>避免选择*</h2><p>仅获取所需的列，而不是使用 获取所有列<code>SELECT *</code>。它减少了需要从磁盘读取的数据量。</p>
+<pre class="line-numbers language-none"><code class="language-none">SELECT required_column FROM table_name;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="使用Join代替多个查询"><a href="#使用Join代替多个查询" class="headerlink" title="使用Join代替多个查询"></a>使用Join代替多个查询</h2><p>使用联接子句可以根据两个或多个表之间的相关列将两个或多个表中的行组合到单个查询中。这减少了访问数据库的查询数量，从而提高了性能。</p>
+<pre class="line-numbers language-none"><code class="language-none">SELECT Orders.OrderID, Customers.CustomerName
+FROM Orders
+INNER JOIN Customers
+ON Orders.CustomerID&#x3D;Customers.CustomerID;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="使用限制"><a href="#使用限制" class="headerlink" title="使用限制"></a>使用限制</h2><p>如果只需要一定数量的行，请使用 LIMIT 关键字来限制查询返回的行数。</p>
+<pre class="line-numbers language-none"><code class="language-none">SELECT column FROM table LIMIT 10;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="避免在开头使用带通配符的-LIKE-运算符"><a href="#避免在开头使用带通配符的-LIKE-运算符" class="headerlink" title="避免在开头使用带通配符的 LIKE 运算符"></a>避免在开头使用带通配符的 LIKE 运算符</h2><p>在查询开头使用通配符 ( <code>LIKE &#39;%search_term&#39;</code>) 可能会导致全表扫描。</p>
+<pre class="line-numbers language-none"><code class="language-none">SELECT column FROM table WHERE column LIKE &#39;search_term%&#39;;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="优化数据库架构"><a href="#优化数据库架构" class="headerlink" title="优化数据库架构"></a>优化数据库架构</h2><p>数据库模式涉及数据的组织方式以及如何优化以获得更好的性能。</p>
+<h2 id="使用解释"><a href="#使用解释" class="headerlink" title="使用解释"></a>使用解释</h2><p>许多数据库具有“解释计划”功能，可以显示数据库引擎执行查询的计划。</p>
+<pre class="line-numbers language-none"><code class="language-none">EXPLAIN SELECT * FROM table_name WHERE column &#x3D; &#39;value&#39;;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>这可以深入了解性能瓶颈，例如全表扫描、缺失索引等。</p>
 
       
     </div>
