@@ -755,235 +755,6 @@ Identify and stop the process that is listening on port 8080 or configure this a
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%B8%89.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%B8%89.html" class="post-title-link" itemprop="url">Java基础常用类</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h1><blockquote>
-<p>异常是在程序执行过程中遇到的一种意外情况或错误，它会干扰正常的程序执行流程。</p>
-</blockquote>
-<h2 id="异常的类型"><a href="#异常的类型" class="headerlink" title="异常的类型"></a>异常的类型</h2><blockquote>
-<p>异常的父类是Throwable有两个⼦类Exception和Error。</p>
-<p>Error是程序⽆法处理的错误，⼀旦出现这个错误，虚拟机将被迫停⽌运⾏。</p>
-<p>Exception不会导致程序停⽌，⼜分为两个部分RunTimeException运⾏时异常和CheckedException检查异常</p>
-<p>RunTimeException常常发⽣在程序运⾏过程中，会导致程序当前线程执⾏失败。CheckedException常常发⽣在程序编译过程中，会导致程序编译不通过。</p>
-</blockquote>
-<img src="https://telegraph-image-2ni.pages.dev/file/f5fc08365d6eedc7d186d.png" alt="img" style="zoom:50%;">
-
-<h2 id="Throwable类的常用方法"><a href="#Throwable类的常用方法" class="headerlink" title="Throwable类的常用方法"></a>Throwable类的常用方法</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//返回异常发生时的简要描述</span>
-<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> detailMessage<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token comment">//返回异常发生时的详细信息</span>
-<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">String</span> s <span class="token operator">=</span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">String</span> message <span class="token operator">=</span> <span class="token function">getLocalizedMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token punctuation">(</span>message <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token punctuation">(</span>s <span class="token operator">+</span> <span class="token string">": "</span> <span class="token operator">+</span> message<span class="token punctuation">)</span> <span class="token operator">:</span> s<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token comment">//在控制台上打印 Throwable 对象封装的异常信息</span>
-<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><blockquote>
-<p>当出现异常我们要捕获并处理异常，或者抛出异常两种方式</p>
-</blockquote>
-<p><strong>1.抛出异常</strong></p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span>
-<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span> <span class="token keyword">throw</span>  <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"异常了"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p><strong>2.捕获并处理</strong></p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//使用try-catch代码块捕获并处理异常</span>
-<span class="token keyword">public</span>  <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-       <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-           <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">0</span><span class="token punctuation">;</span>
-       <span class="token punctuation">&#125;</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-           <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"0不能做除数"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-           e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token comment">//也可以使用try-catch-finally finally代码块中一般出现异常也会执行，常用来进行资源的关闭</span>
-<span class="token comment">//使用try-with-source替代try-catch-finally代码更简短，更清晰，会自动进行资源的关闭</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><blockquote>
-<p>泛型（Generics）是Java中一种参数化类型的概念，它允许在定义类、接口和方法时使用类型参数。通过泛型，可以使类、接口和方法在定义时不指定具体的数据类型，而是在实例化或调用时再指定具体的类型。</p>
-<p>使用泛型的主要目的是提高代码的灵活性、可重用性和安全性，同时减少重复代码的编写。泛型可以在编译时进行类型检查，避免在运行时出现类型转换错误，提高了代码的安全性。</p>
-</blockquote>
-<h2 id="泛型的使用方式"><a href="#泛型的使用方式" class="headerlink" title="泛型的使用方式"></a>泛型的使用方式</h2><p><strong>泛型类</strong>：使用泛型参数化的类，可以在定义时指定类型参数。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">MyClass</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// 泛型类中的方法或成员变量可以使用泛型类型参数T</span>
-    <span class="token keyword">private</span> <span class="token class-name">T</span> value<span class="token punctuation">;</span>
-
-    <span class="token keyword">public</span> <span class="token class-name">T</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> value<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token class-name">T</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> value<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>泛型接口</strong>：使用泛型参数化的接口，可以在实现时指定类型参数。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">interface</span> <span class="token class-name">MyInterface</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
-    <span class="token class-name">T</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token class-name">T</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>泛型方法</strong>：在方法定义中使用泛型参数，可以在调用时指定具体的类型参数。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Utils</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token class-name">T</span> <span class="token function">getLastElement</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> list<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token keyword">return</span> list<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="项目中哪些使用泛型"><a href="#项目中哪些使用泛型" class="headerlink" title="项目中哪些使用泛型"></a>项目中哪些使用泛型</h2><p>1.前后端返回的统一接口CommonResult</p>
-<p>2.自定义的excel处理类ExcelUtil动态的指定的类型导出数据</p>
-<p>3.集合类，例如，<code>ArrayList&lt;String&gt;</code>表示一个只能存储字符串类型的ArrayList。</p>
-<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><h2 id="什么是反射（Reflection）"><a href="#什么是反射（Reflection）" class="headerlink" title="什么是反射（Reflection）"></a>什么是反射（Reflection）</h2><blockquote>
-<p>允许在运行时动态地检查类、获取类的信息（如字段、方法、构造函数等），以及调用类的方法、访问或修改类的属性等。</p>
-</blockquote>
-<h2 id="反射可以做什么"><a href="#反射可以做什么" class="headerlink" title="反射可以做什么"></a>反射可以做什么</h2><ol>
-<li><strong>获取类的信息</strong>：可以获取类的名称、包名、父类、实现的接口等信息。</li>
-<li><strong>获取类的字段（Field）信息</strong>：可以获取类中定义的字段的名称、类型、修饰符等信息。</li>
-<li><strong>获取类的方法（Method）信息</strong>：可以获取类中定义的方法的名称、参数类型、返回类型、修饰符等信息。</li>
-<li><strong>获取类的构造函数信息</strong>：可以获取类中定义的构造函数的参数类型、修饰符等信息。</li>
-<li><strong>动态调用方法</strong>：可以在运行时动态地调用类的方法，传递参数并获取返回值。</li>
-<li><strong>动态创建对象</strong>：可以在运行时动态地创建类的对象，并对对象进行操作。</li>
-</ol>
-<h2 id="反射的使用场景"><a href="#反射的使用场景" class="headerlink" title="反射的使用场景"></a>反射的使用场景</h2><ol>
-<li><strong>框架和库</strong>：许多Java框架和库，如Spring框架、Hibernate ORM框架等，都广泛使用了反射。框架需要在运行时动态地加载和操作类，以实现诸如依赖注入、AOP（面向切面编程）、ORM（对象关系映射）等功能。</li>
-<li><strong>动态代理</strong>：反射可以用来创建动态代理对象，实现动态地在运行时生成代理类并拦截方法调用，用于实现诸如远程调用、事务管理等功能。</li>
-<li><strong>序列化和反序列化</strong>：Java中的序列化和反序列化机制通常使用了反射来动态地读取和写入对象的字段信息，以实现对象的序列化和反序列化。</li>
-<li><strong>单元测试</strong>：在单元测试中，反射可以用来访问私有方法、私有字段等，以便进行单元测试。</li>
-<li><strong>注解处理器</strong>：反射可以用来解析和处理注解，例如编写自定义的注解处理器，根据注解来生成代码或进行其他操作。</li>
-<li><strong>工具类</strong>：一些工具类或开发工具（如IDE）可能会使用反射来获取和操作类的信息，以实现一些功能，例如自动生成代码、代码检查、代码重构等。</li>
-<li><strong>动态加载类</strong>：反射可以用来动态加载类和资源文件，例如通过ClassLoader动态加载类、读取配置文件等。</li>
-</ol>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//下面为jdk动态代理，通过反射实现的</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DebugInvocationHandler</span> <span class="token keyword">implements</span> <span class="token class-name">InvocationHandler</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">/**
-     * 代理类中的真实对象
-     */</span>
-    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Object</span> target<span class="token punctuation">;</span>
-
-    <span class="token keyword">public</span> <span class="token class-name">DebugInvocationHandler</span><span class="token punctuation">(</span><span class="token class-name">Object</span> target<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>target <span class="token operator">=</span> target<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">invoke</span><span class="token punctuation">(</span><span class="token class-name">Object</span> proxy<span class="token punctuation">,</span> <span class="token class-name">Method</span> method<span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InvocationTargetException</span><span class="token punctuation">,</span> <span class="token class-name">IllegalAccessException</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"before method "</span> <span class="token operator">+</span> method<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">Object</span> result <span class="token operator">=</span> method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>target<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"after method "</span> <span class="token operator">+</span> method<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h1><h2 id="什么是注解"><a href="#什么是注解" class="headerlink" title="什么是注解"></a>什么是注解</h2><blockquote>
-<p><code>Annotation</code> （注解） 是 Java5 开始引入的新特性，可以看作是一种特殊的注释，主要用于修饰类、方法或者变量，提供某些信息供程序在编译或者运行时使用。</p>
-<p>注解本质是一个继承了<code>Annotation</code> 的特殊接口：</p>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Target</span><span class="token punctuation">(</span><span class="token class-name">ElementType</span><span class="token punctuation">.</span>METHOD<span class="token punctuation">)</span>
-<span class="token annotation punctuation">@Retention</span><span class="token punctuation">(</span><span class="token class-name">RetentionPolicy</span><span class="token punctuation">.</span>SOURCE<span class="token punctuation">)</span>
-<span class="token keyword">public</span> <span class="token annotation punctuation">@interface</span> <span class="token class-name">Override</span> <span class="token punctuation">&#123;</span>
-<span class="token punctuation">&#125;</span>
-相当于
-<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Override</span> <span class="token keyword">extends</span> <span class="token class-name">Annotation</span><span class="token punctuation">&#123;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<blockquote>
-<p>JDK 提供了很多内置的注解（比如 <code>@Override</code>、<code>@Deprecated</code>），同时，我们还可以自定义注解。</p>
-</blockquote>
-<h2 id="注解解析的方式"><a href="#注解解析的方式" class="headerlink" title="注解解析的方式"></a>注解解析的方式</h2><blockquote>
-<p>注解只有被解析之后才会生效，常见的解析方法有两种：</p>
-</blockquote>
-<ul>
-<li><strong>编译期直接扫描</strong>：编译器在编译 Java 代码的时候扫描对应的注解并处理，比如某个方法使用<code>@Override</code> 注解，编译器在编译的时候就会检测当前的方法是否重写了父类对应的方法。</li>
-<li><strong>运行期通过反射处理</strong>：像框架中自带的注解(比如 Spring 框架的 <code>@Value</code>、<code>@Component</code>)都是通过反射来进行处理的。</li>
-</ul>
-<h2 id="注解的使用场景"><a href="#注解的使用场景" class="headerlink" title="注解的使用场景"></a>注解的使用场景</h2><ol>
-<li><strong>代码说明和文档生成</strong>：可以使用注解来添加说明、作者、版本等信息，帮助理解和使用代码，也可以通过注解生成文档。</li>
-<li><strong>编译时检查</strong>：可以使用注解进行编译时的静态检查，例如 <code>@Override</code> 注解用于检查是否正确覆盖了父类的方法。</li>
-<li><strong>运行时处理</strong>：可以使用注解在运行时进行处理，例如依赖注入、AOP（面向切面编程）、配置解析等。</li>
-<li><strong>代码生成</strong>：可以使用注解来生成代码或配置文件，例如使用注解来配置ORM框架。</li>
-<li><strong>元数据处理</strong>：可以使用注解获取和处理类、方法、字段等的元数据信息，例如自定义注解处理器。</li>
-</ol>
-<h1 id="SPI"><a href="#SPI" class="headerlink" title="SPI"></a>SPI</h1><blockquote>
-<p>SPI 即 Service Provider Interface ，字面意思就是：“服务提供者的接口”，我的理解是：专门提供给服务提供者或者扩展框架功能的开发者去使用的一个接口。</p>
-<p>SPI 将服务接口和具体的服务实现分离开来，将服务调用方和服务实现者解耦，能够提升程序的扩展性、可维护性。修改或者替换服务实现并不需要修改调用方。</p>
-<p>很多框架都使用了 Java 的 SPI 机制，比如：Spring 框架、数据库加载驱动、日志接口、以及 Dubbo 的扩展实现等等。</p>
-</blockquote>
-<h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><blockquote>
-<p>序列化是指将对象转换为字节流的过程，以便将其存储到文件中、通过网络传输或在内存中进行传递。序列化的主要目的是将对象的状态保存下来，以便在需要时可以重新创建对象或者传输对象数据。</p>
-<p>在Java中，序列化是通过实现Serializable接口来实现的。Serializable接口是一个标记接口，没有任何方法，它只是用于指示Java虚拟机这个类可以被序列化。当一个类实现了Serializable接口后，它的对象就可以被序列化成字节流，从而可以进行持久化存储或网络传输。</p>
-</blockquote>
-<p>简单来说：</p>
-<ul>
-<li><strong>序列化</strong>：将数据结构或对象转换成二进制字节流的过程</li>
-<li><strong>反序列化</strong>：将在序列化过程中所生成的二进制字节流转换成数据结构或者对象的过程</li>
-</ul>
-<p>下面是序列化和反序列化常见应用场景：</p>
-<ul>
-<li>对象在进行网络传输（比如远程方法调用 RPC 的时候）之前需要先被序列化，接收到序列化的对象之后需要再进行反序列化；</li>
-<li>将对象存储到文件之前需要进行序列化，将对象从文件中读取出来需要进行反序列化；</li>
-<li>将对象存储到数据库（如 Redis）之前需要用到序列化，将对象从缓存数据库中读取出来需要反序列化；</li>
-<li>将对象存储到内存之前需要进行序列化，从内存中读取出来之后需要进行反序列化。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%B8%80.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1295,6 +1066,235 @@ Identify and stop the process that is listening on port 8080 or configure this a
 <li>如果参数是引用类型，传递的就是实参所引用的对象在堆中地址值的拷贝，同样也会创建副本</li>
 </ul>
 </blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%B8%89.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%B8%89.html" class="post-title-link" itemprop="url">Java基础常用类</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h1><blockquote>
+<p>异常是在程序执行过程中遇到的一种意外情况或错误，它会干扰正常的程序执行流程。</p>
+</blockquote>
+<h2 id="异常的类型"><a href="#异常的类型" class="headerlink" title="异常的类型"></a>异常的类型</h2><blockquote>
+<p>异常的父类是Throwable有两个⼦类Exception和Error。</p>
+<p>Error是程序⽆法处理的错误，⼀旦出现这个错误，虚拟机将被迫停⽌运⾏。</p>
+<p>Exception不会导致程序停⽌，⼜分为两个部分RunTimeException运⾏时异常和CheckedException检查异常</p>
+<p>RunTimeException常常发⽣在程序运⾏过程中，会导致程序当前线程执⾏失败。CheckedException常常发⽣在程序编译过程中，会导致程序编译不通过。</p>
+</blockquote>
+<img src="https://telegraph-image-2ni.pages.dev/file/f5fc08365d6eedc7d186d.png" alt="img" style="zoom:50%;">
+
+<h2 id="Throwable类的常用方法"><a href="#Throwable类的常用方法" class="headerlink" title="Throwable类的常用方法"></a>Throwable类的常用方法</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//返回异常发生时的简要描述</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> detailMessage<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token comment">//返回异常发生时的详细信息</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> s <span class="token operator">=</span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> message <span class="token operator">=</span> <span class="token function">getLocalizedMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span>message <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token punctuation">(</span>s <span class="token operator">+</span> <span class="token string">": "</span> <span class="token operator">+</span> message<span class="token punctuation">)</span> <span class="token operator">:</span> s<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token comment">//在控制台上打印 Throwable 对象封装的异常信息</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><blockquote>
+<p>当出现异常我们要捕获并处理异常，或者抛出异常两种方式</p>
+</blockquote>
+<p><strong>1.抛出异常</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span> <span class="token keyword">throw</span>  <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"异常了"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>2.捕获并处理</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//使用try-catch代码块捕获并处理异常</span>
+<span class="token keyword">public</span>  <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+       <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+           <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">0</span><span class="token punctuation">;</span>
+       <span class="token punctuation">&#125;</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+           <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"0不能做除数"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">//也可以使用try-catch-finally finally代码块中一般出现异常也会执行，常用来进行资源的关闭</span>
+<span class="token comment">//使用try-with-source替代try-catch-finally代码更简短，更清晰，会自动进行资源的关闭</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><blockquote>
+<p>泛型（Generics）是Java中一种参数化类型的概念，它允许在定义类、接口和方法时使用类型参数。通过泛型，可以使类、接口和方法在定义时不指定具体的数据类型，而是在实例化或调用时再指定具体的类型。</p>
+<p>使用泛型的主要目的是提高代码的灵活性、可重用性和安全性，同时减少重复代码的编写。泛型可以在编译时进行类型检查，避免在运行时出现类型转换错误，提高了代码的安全性。</p>
+</blockquote>
+<h2 id="泛型的使用方式"><a href="#泛型的使用方式" class="headerlink" title="泛型的使用方式"></a>泛型的使用方式</h2><p><strong>泛型类</strong>：使用泛型参数化的类，可以在定义时指定类型参数。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">MyClass</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 泛型类中的方法或成员变量可以使用泛型类型参数T</span>
+    <span class="token keyword">private</span> <span class="token class-name">T</span> value<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">T</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> value<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token class-name">T</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> value<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>泛型接口</strong>：使用泛型参数化的接口，可以在实现时指定类型参数。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">interface</span> <span class="token class-name">MyInterface</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">T</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token class-name">T</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>泛型方法</strong>：在方法定义中使用泛型参数，可以在调用时指定具体的类型参数。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Utils</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token class-name">T</span> <span class="token function">getLastElement</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> list<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">return</span> list<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="项目中哪些使用泛型"><a href="#项目中哪些使用泛型" class="headerlink" title="项目中哪些使用泛型"></a>项目中哪些使用泛型</h2><p>1.前后端返回的统一接口CommonResult</p>
+<p>2.自定义的excel处理类ExcelUtil动态的指定的类型导出数据</p>
+<p>3.集合类，例如，<code>ArrayList&lt;String&gt;</code>表示一个只能存储字符串类型的ArrayList。</p>
+<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><h2 id="什么是反射（Reflection）"><a href="#什么是反射（Reflection）" class="headerlink" title="什么是反射（Reflection）"></a>什么是反射（Reflection）</h2><blockquote>
+<p>允许在运行时动态地检查类、获取类的信息（如字段、方法、构造函数等），以及调用类的方法、访问或修改类的属性等。</p>
+</blockquote>
+<h2 id="反射可以做什么"><a href="#反射可以做什么" class="headerlink" title="反射可以做什么"></a>反射可以做什么</h2><ol>
+<li><strong>获取类的信息</strong>：可以获取类的名称、包名、父类、实现的接口等信息。</li>
+<li><strong>获取类的字段（Field）信息</strong>：可以获取类中定义的字段的名称、类型、修饰符等信息。</li>
+<li><strong>获取类的方法（Method）信息</strong>：可以获取类中定义的方法的名称、参数类型、返回类型、修饰符等信息。</li>
+<li><strong>获取类的构造函数信息</strong>：可以获取类中定义的构造函数的参数类型、修饰符等信息。</li>
+<li><strong>动态调用方法</strong>：可以在运行时动态地调用类的方法，传递参数并获取返回值。</li>
+<li><strong>动态创建对象</strong>：可以在运行时动态地创建类的对象，并对对象进行操作。</li>
+</ol>
+<h2 id="反射的使用场景"><a href="#反射的使用场景" class="headerlink" title="反射的使用场景"></a>反射的使用场景</h2><ol>
+<li><strong>框架和库</strong>：许多Java框架和库，如Spring框架、Hibernate ORM框架等，都广泛使用了反射。框架需要在运行时动态地加载和操作类，以实现诸如依赖注入、AOP（面向切面编程）、ORM（对象关系映射）等功能。</li>
+<li><strong>动态代理</strong>：反射可以用来创建动态代理对象，实现动态地在运行时生成代理类并拦截方法调用，用于实现诸如远程调用、事务管理等功能。</li>
+<li><strong>序列化和反序列化</strong>：Java中的序列化和反序列化机制通常使用了反射来动态地读取和写入对象的字段信息，以实现对象的序列化和反序列化。</li>
+<li><strong>单元测试</strong>：在单元测试中，反射可以用来访问私有方法、私有字段等，以便进行单元测试。</li>
+<li><strong>注解处理器</strong>：反射可以用来解析和处理注解，例如编写自定义的注解处理器，根据注解来生成代码或进行其他操作。</li>
+<li><strong>工具类</strong>：一些工具类或开发工具（如IDE）可能会使用反射来获取和操作类的信息，以实现一些功能，例如自动生成代码、代码检查、代码重构等。</li>
+<li><strong>动态加载类</strong>：反射可以用来动态加载类和资源文件，例如通过ClassLoader动态加载类、读取配置文件等。</li>
+</ol>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//下面为jdk动态代理，通过反射实现的</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DebugInvocationHandler</span> <span class="token keyword">implements</span> <span class="token class-name">InvocationHandler</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">/**
+     * 代理类中的真实对象
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Object</span> target<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">DebugInvocationHandler</span><span class="token punctuation">(</span><span class="token class-name">Object</span> target<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>target <span class="token operator">=</span> target<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">invoke</span><span class="token punctuation">(</span><span class="token class-name">Object</span> proxy<span class="token punctuation">,</span> <span class="token class-name">Method</span> method<span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InvocationTargetException</span><span class="token punctuation">,</span> <span class="token class-name">IllegalAccessException</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"before method "</span> <span class="token operator">+</span> method<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Object</span> result <span class="token operator">=</span> method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>target<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"after method "</span> <span class="token operator">+</span> method<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h1><h2 id="什么是注解"><a href="#什么是注解" class="headerlink" title="什么是注解"></a>什么是注解</h2><blockquote>
+<p><code>Annotation</code> （注解） 是 Java5 开始引入的新特性，可以看作是一种特殊的注释，主要用于修饰类、方法或者变量，提供某些信息供程序在编译或者运行时使用。</p>
+<p>注解本质是一个继承了<code>Annotation</code> 的特殊接口：</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Target</span><span class="token punctuation">(</span><span class="token class-name">ElementType</span><span class="token punctuation">.</span>METHOD<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Retention</span><span class="token punctuation">(</span><span class="token class-name">RetentionPolicy</span><span class="token punctuation">.</span>SOURCE<span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token annotation punctuation">@interface</span> <span class="token class-name">Override</span> <span class="token punctuation">&#123;</span>
+<span class="token punctuation">&#125;</span>
+相当于
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Override</span> <span class="token keyword">extends</span> <span class="token class-name">Annotation</span><span class="token punctuation">&#123;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>JDK 提供了很多内置的注解（比如 <code>@Override</code>、<code>@Deprecated</code>），同时，我们还可以自定义注解。</p>
+</blockquote>
+<h2 id="注解解析的方式"><a href="#注解解析的方式" class="headerlink" title="注解解析的方式"></a>注解解析的方式</h2><blockquote>
+<p>注解只有被解析之后才会生效，常见的解析方法有两种：</p>
+</blockquote>
+<ul>
+<li><strong>编译期直接扫描</strong>：编译器在编译 Java 代码的时候扫描对应的注解并处理，比如某个方法使用<code>@Override</code> 注解，编译器在编译的时候就会检测当前的方法是否重写了父类对应的方法。</li>
+<li><strong>运行期通过反射处理</strong>：像框架中自带的注解(比如 Spring 框架的 <code>@Value</code>、<code>@Component</code>)都是通过反射来进行处理的。</li>
+</ul>
+<h2 id="注解的使用场景"><a href="#注解的使用场景" class="headerlink" title="注解的使用场景"></a>注解的使用场景</h2><ol>
+<li><strong>代码说明和文档生成</strong>：可以使用注解来添加说明、作者、版本等信息，帮助理解和使用代码，也可以通过注解生成文档。</li>
+<li><strong>编译时检查</strong>：可以使用注解进行编译时的静态检查，例如 <code>@Override</code> 注解用于检查是否正确覆盖了父类的方法。</li>
+<li><strong>运行时处理</strong>：可以使用注解在运行时进行处理，例如依赖注入、AOP（面向切面编程）、配置解析等。</li>
+<li><strong>代码生成</strong>：可以使用注解来生成代码或配置文件，例如使用注解来配置ORM框架。</li>
+<li><strong>元数据处理</strong>：可以使用注解获取和处理类、方法、字段等的元数据信息，例如自定义注解处理器。</li>
+</ol>
+<h1 id="SPI"><a href="#SPI" class="headerlink" title="SPI"></a>SPI</h1><blockquote>
+<p>SPI 即 Service Provider Interface ，字面意思就是：“服务提供者的接口”，我的理解是：专门提供给服务提供者或者扩展框架功能的开发者去使用的一个接口。</p>
+<p>SPI 将服务接口和具体的服务实现分离开来，将服务调用方和服务实现者解耦，能够提升程序的扩展性、可维护性。修改或者替换服务实现并不需要修改调用方。</p>
+<p>很多框架都使用了 Java 的 SPI 机制，比如：Spring 框架、数据库加载驱动、日志接口、以及 Dubbo 的扩展实现等等。</p>
+</blockquote>
+<h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><blockquote>
+<p>序列化是指将对象转换为字节流的过程，以便将其存储到文件中、通过网络传输或在内存中进行传递。序列化的主要目的是将对象的状态保存下来，以便在需要时可以重新创建对象或者传输对象数据。</p>
+<p>在Java中，序列化是通过实现Serializable接口来实现的。Serializable接口是一个标记接口，没有任何方法，它只是用于指示Java虚拟机这个类可以被序列化。当一个类实现了Serializable接口后，它的对象就可以被序列化成字节流，从而可以进行持久化存储或网络传输。</p>
+</blockquote>
+<p>简单来说：</p>
+<ul>
+<li><strong>序列化</strong>：将数据结构或对象转换成二进制字节流的过程</li>
+<li><strong>反序列化</strong>：将在序列化过程中所生成的二进制字节流转换成数据结构或者对象的过程</li>
+</ul>
+<p>下面是序列化和反序列化常见应用场景：</p>
+<ul>
+<li>对象在进行网络传输（比如远程方法调用 RPC 的时候）之前需要先被序列化，接收到序列化的对象之后需要再进行反序列化；</li>
+<li>将对象存储到文件之前需要进行序列化，将对象从文件中读取出来需要进行反序列化；</li>
+<li>将对象存储到数据库（如 Redis）之前需要用到序列化，将对象从缓存数据库中读取出来需要反序列化；</li>
+<li>将对象存储到内存之前需要进行序列化，从内存中读取出来之后需要进行反序列化。</li>
+</ul>
 
       
     </div>
@@ -1996,102 +1996,6 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/docker.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/docker.html" class="post-title-link" itemprop="url">docker安装</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h2><blockquote>
-<ol>
-<li>系统版本：</li>
-</ol>
-<p>  要安装 Docker Engine，您需要 CentOS 7、CentOS 8（流）或 CentOS 9（流）的维护版本。</p>
-<ol start="2">
-<li>卸载旧版本：</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> yum remove <span class="token function">docker</span> <span class="token punctuation">\</span>
-                 docker-client <span class="token punctuation">\</span>
-                 docker-client-latest <span class="token punctuation">\</span>
-                 docker-common <span class="token punctuation">\</span>
-                 docker-latest <span class="token punctuation">\</span>
-                 docker-latest-logrotate <span class="token punctuation">\</span>
-                 docker-logrotate <span class="token punctuation">\</span>
-                 docker-engine<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="3">
-<li>设置存储库</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>yum <span class="token function">install</span> -y yum-utils
-<span class="token operator">></span>yum-config-manager <span class="token punctuation">\</span>
-   --add-repo <span class="token punctuation">\</span>
-   https://download.docker.com/linux/centos/docker-ce.repo<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="4">
-<li>安装最新版doker</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>yum <span class="token function">install</span> docker-ce docker-ce-cli containerd.io docker-compose-plugin -y<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ol start="5">
-<li>启动docker</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>systemctl start <span class="token function">docker</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ol start="6">
-<li>设置开机自启</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>systemctl <span class="token builtin class-name">enable</span> <span class="token function">docker</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/cs.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2244,7 +2148,7 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/SQL%20Tutorial.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/docker.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -2258,7 +2162,7 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/SQL%20Tutorial.html" class="post-title-link" itemprop="url">Sql Tutourial</a>
+            <a href="/post/docker.html" class="post-title-link" itemprop="url">docker安装</a>
         </h2>
 
         <div class="post-meta">
@@ -2270,13 +2174,6 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
 
               <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-04 08:08:28" itemprop="dateModified" datetime="2024-04-04T08:08:28+08:00">2024-04-04</time>
-              </span>
 
           
 
@@ -2289,1149 +2186,118 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Sql介绍"><a href="#Sql介绍" class="headerlink" title="Sql介绍"></a>Sql介绍</h1><h2 id="关系型数据库是什么"><a href="#关系型数据库是什么" class="headerlink" title="关系型数据库是什么"></a>关系型数据库是什么</h2><blockquote>
-<p>关系型数据库是以结构化的方式组织和存储数据的数据库</p>
-</blockquote>
-<ul>
-<li>表（Table）：数据存储的地方，可以想象为一个网格，由行和列组成。每个表代表数据库中的一个实体或概念。</li>
-</ul>
-<ul>
-<li>行（Row）：表中的一行代表了一个记录（Record），即一组相关的数据项。每行都是一个数据实体的实例。</li>
-<li>列（Column）：表中的一列存放的是同一种数据，例如名字或者价格等。列有一个定义好的数据类型，如整数、字符串、日期等。</li>
-<li>主键（Primary Key）：表中的一个列或列的组合，它唯一标识表中的每一行。无两行可具有相同的主键值。</li>
-<li>外键（Foreign Key）：一个表中的字段，它是另一个表的主键，用于创建表与表之间的关联。</li>
-<li>关系（Relationship）：表间的连结，通过外键实现，可以是一对一、一对多或多对多。</li>
-<li>约束（Constraints）：用于确保数据库中数据的准确性和可靠性的规则。如主键约束、外键约束、唯一性约束等。</li>
-<li>SQL（Structured Query Language）：用于执行各种操作的标准语言，如数据查询、更新记录、管理和定义数据结构等。</li>
-</ul>
-<blockquote>
-<p>常见的关系型数据库管理系统（RDBMS）包括：Oracle、Microsoft SQL Server、MySQL、PostgreSQL和SQLite。</p>
-</blockquote>
-<h2 id="RDBMS的优点和缺点"><a href="#RDBMS的优点和缺点" class="headerlink" title="RDBMS的优点和缺点"></a>RDBMS的优点和缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
-<li><strong>结构化数据</strong>：RDBMS 允许使用表中的行和列以结构化方式存储数据。这使得使用 SQL（结构化查询语言）轻松操作数据，确保高效灵活的使用。</li>
-<li><strong>ACID 属性</strong>：ACID 代表原子性、一致性、隔离性和持久性。这些属性确保了 RDBMS 中可靠且安全的数据操作，使其适合任务关键型应用程序。</li>
-<li><strong>规范化</strong>：RDBMS 支持数据规范化，这是一种以减少数据冗余并提高数据完整性的方式组织数据的过程。</li>
-<li><strong>可扩展性</strong>：RDBMS 通常提供良好的可扩展性选项，允许随着数据和工作负载的增长添加更多存储或计算资源。</li>
-<li><strong>数据完整性</strong>：RDBMS提供约束、主键、外键等机制来保证数据的完整性和一致性，确保数据准确可靠。</li>
-<li><strong>安全性</strong>：RDBMS 提供各种安全功能，例如用户身份验证、访问控制和数据加密，以保护敏感数据。</li>
-</ul>
-<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li><strong>复杂性</strong>：设置和管理 RDBMS 可能很复杂，尤其是对于大型应用程序。它需要技术知识和技能来管理、调整和优化数据库。</li>
-<li><strong>成本</strong>：RDBMS 可能很昂贵，无论是在许可费用还是其所需的计算和存储资源方面。</li>
-<li><strong>固定模式</strong>：RDBMS 遵循严格的数据组织模式，这意味着对模式的任何更改都可能非常耗时且复杂。</li>
-<li><strong>非结构化数据的处理</strong>：RDBMS 不适合处理多媒体文件、社交媒体帖子和传感器数据等非结构化数据，因为它们的关系结构针对结构化数据进行了优化。</li>
-<li><strong>水平可扩展性</strong>：RDBMS 不像 NoSQL 数据库那样容易水平扩展。水平扩展需要向系统添加更多机器，这在成本和复杂性方面可能具有挑战性。</li>
-</ul>
-<h2 id="SQL和NoSql数据库的区别"><a href="#SQL和NoSql数据库的区别" class="headerlink" title="SQL和NoSql数据库的区别"></a>SQL和NoSql数据库的区别</h2><h3 id="Sql数据库"><a href="#Sql数据库" class="headerlink" title="Sql数据库"></a>Sql数据库</h3><blockquote>
-<p>SQL（结构化查询语言）数据库也称为关系数据库。它们具有预定义的架构，数据存储在由行和列组成的表中。 SQL数据库遵循ACID（原子性、一致性、隔离性、持久性）属性来确保事务的可靠。一些流行的 SQL 数据库包括 MySQL、PostgreSQL 和 Microsoft SQL Server。</p>
-</blockquote>
-<p><strong>SQL数据库的优点</strong></p>
-<ul>
-<li><strong>预定义模式</strong>：非常适合具有固定结构的应用程序。</li>
-<li><strong>ACID事务</strong>：保证数据的一致性和可靠性。</li>
-<li><strong>支持复杂查询</strong>：丰富的SQL查询可以处理复杂的数据关系和聚合操作。</li>
-<li><strong>可扩展性</strong>：通过向服务器添加更多资源（例如 RAM、CPU）进行垂直扩展。</li>
-</ul>
-<p><strong>SQL数据库的局限性：</strong></p>
-<ul>
-<li><strong>刚性模式</strong>：数据结构更新非常耗时，并且可能导致停机。</li>
-<li><strong>扩展</strong>：跨多个服务器水平扩展和分片数据的困难。</li>
-<li><strong>不太适合分层数据</strong>：需要多个表和 JOIN 来建模树状结构。</li>
-</ul>
-<h3 id="NoSQL-数据库"><a href="#NoSQL-数据库" class="headerlink" title="NoSQL 数据库"></a>NoSQL 数据库</h3><blockquote>
-<p>NoSQL（不仅是 SQL）数据库是指非关系数据库，它不遵循固定的数据存储模式。相反，它们使用灵活的半结构化格式，例如 JSON 文档、键值对或图表。 MongoDB、Cassandra、Redis 和 Couchbase 是一些流行的 NoSQL 数据库。</p>
-</blockquote>
-<p><strong>NoSQL 数据库的优点：</strong></p>
-<ul>
-<li><strong>灵活的架构</strong>：轻松适应变化而不中断应用程序。</li>
-<li><strong>可扩展性</strong>：通过跨多个服务器对数据进行分区（分片）进行水平扩展。</li>
-<li><strong>快速</strong>：专为更快的读取和写入而设计，通常使用更简单的查询语言。</li>
-<li><strong>处理大量数据</strong>：更适合管理大数据和实时应用程序。</li>
-<li><strong>支持各种数据结构</strong>：不同的 NoSQL 数据库可以满足不同的需求，例如文档、图形或键值存储。</li>
-</ul>
-<p><strong>NoSQL 数据库的局限性：</strong></p>
-<ul>
-<li><strong>有限的查询能力</strong>：一些NoSQL数据库缺乏复杂的查询和聚合支持或使用特定的查询语言。</li>
-<li><strong>较弱的一致性</strong>：许多 NoSQL 数据库遵循 BASE（基本可用、软状态、最终一致性）属性，这些属性提供的一致性保证比符合 ACID 的数据库更弱。</li>
-</ul>
-<h1 id="SQL基础语法"><a href="#SQL基础语法" class="headerlink" title="SQL基础语法"></a>SQL基础语法</h1><h2 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h2><blockquote>
-<p>SQL不区分大小写，关键字可以小写，为了方便阅读，约定他们都大写</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>关键字</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>SELECT</strong></td>
-<td>从数据库中检索数据</td>
-</tr>
-<tr>
-<td><strong>FROM</strong></td>
-<td>与select结合使用，指定哪个表</td>
-</tr>
-<tr>
-<td><strong>WHERE</strong></td>
-<td>用于过滤记录</td>
-</tr>
-<tr>
-<td><strong>INSERT INTO</strong></td>
-<td>往数据库中插入数据</td>
-</tr>
-<tr>
-<td><strong>UPDATE</strong></td>
-<td>更新数据库中的数据</td>
-</tr>
-<tr>
-<td><strong>DELETE</strong></td>
-<td>删除数据库中的数据</td>
-</tr>
-<tr>
-<td><strong>CREATE DATABASE</strong></td>
-<td>创建数据库</td>
-</tr>
-<tr>
-<td><strong>ALTER DATABASE</strong></td>
-<td>用于在已有的库的全局特性的修改</td>
-</tr>
-<tr>
-<td><strong>DROP DATABASE</strong></td>
-<td>删除数据库</td>
-</tr>
-<tr>
-<td><strong>CREATE TABLE</strong></td>
-<td>创建数据表</td>
-</tr>
-<tr>
-<td><strong>ALTER TABLE</strong></td>
-<td>用于在已有的表中添加、删除或修改列</td>
-</tr>
-<tr>
-<td><strong>DROP TABLE</strong></td>
-<td>删除数据表</td>
-</tr>
-</tbody></table>
-<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><blockquote>
-<p>SQL 数据类型定义可以存储在数据库表列中的数据类型。根据 DBMS 的不同，数据类型的名称可能略有不同。</p>
-</blockquote>
-<p>INT用于整数。例如：</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Employees <span class="token punctuation">(</span>
-    ID <span class="token keyword">INT</span><span class="token punctuation">,</span>
-    Name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>DECIMAL用于小数和小数。例如：</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Items <span class="token punctuation">(</span>
-    ID <span class="token keyword">INT</span><span class="token punctuation">,</span>
-    Price <span class="token keyword">DECIMAL</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>CHAR用于固定长度的字符串。例如：</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Employees <span class="token punctuation">(</span>
-    ID <span class="token keyword">INT</span><span class="token punctuation">,</span>
-    Initial <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>VARCHAR用于可变长度字符串。例如：</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Employees <span class="token punctuation">(</span>
-    ID <span class="token keyword">INT</span><span class="token punctuation">,</span>
-    Name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>DATE用于格式为 ( <code>YYYY-MM-DD</code>) 的日期。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Employees <span class="token punctuation">(</span>
-    ID <span class="token keyword">INT</span><span class="token punctuation">,</span>
-    BirthDate <span class="token keyword">DATE</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>DATETIME用于格式为 ( <code>YYYY-MM-DD HH:MI:SS</code>) 的日期和时间值。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Orders <span class="token punctuation">(</span>
-    ID <span class="token keyword">INT</span><span class="token punctuation">,</span>
-    OrderDate <span class="token keyword">DATETIME</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><code>BINARY</code>用于二进制字符串</p>
-<p><code>BOOLEAN</code>用于布尔值（<code>TRUE</code>或<code>FALSE</code>）</p>
-<h2 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h2><blockquote>
-<p>运算符主要分为几类：算术运算符、比较运算符、逻辑运算符、位运算符</p>
-</blockquote>
-<h3 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h3><ul>
-<li>Addition</li>
-<li>Subtraction</li>
-<li>Multiplication</li>
-<li>Division</li>
-<li>Modulus</li>
-</ul>
-<h3 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h3><ul>
-<li>Equal</li>
-<li>Not equal</li>
-<li>Greater than</li>
-<li>Less than</li>
-<li>Greater than or equal</li>
-<li>Less than or equal</li>
-</ul>
-<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><ul>
-<li>AND</li>
-<li>OR</li>
-<li>NOT</li>
-</ul>
-<h3 id="位运算符"><a href="#位运算符" class="headerlink" title="位运算符"></a>位运算符</h3><ul>
-<li>&amp;</li>
-<li>|</li>
-<li>^</li>
-</ul>
-<h2 id="语句"><a href="#语句" class="headerlink" title="语句"></a>语句</h2><h3 id="SELECT"><a href="#SELECT" class="headerlink" title="SELECT"></a>SELECT</h3><blockquote>
-<p><code>SELECT</code>语句在 SQL 中用于从数据库中选取特定数据。换句话说，它用于从数据库中选择您想要显示的内容。该语句的语法<code>SELECT</code>相当简单：</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token keyword">column</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token keyword">FROM</span> <span class="token keyword">table</span> <span class="token keyword">WHERE</span> condition<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ul>
-<li><code>column(s)</code>：输入要显示的列的名称。</li>
-<li><code>table</code>：要从中检索数据的表的名称。</li>
-<li><code>WHERE</code>： 选修的。这是一个过滤器，仅显示满足此条件的行。</li>
-</ul>
-<h3 id="INSERT"><a href="#INSERT" class="headerlink" title="INSERT"></a>INSERT</h3><blockquote>
-<p>SQL 中的语句<code>INSERT</code>用于向数据库的表中添加新的数据行。该语句有三种形式<code>INSERT INTO</code>values、<code>INSERT INTO</code>set 和<code>INSERT INTO</code>select</p>
-</blockquote>
-<p>INSERT INTO VALUES</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> table_name <span class="token punctuation">(</span>column1<span class="token punctuation">,</span> column2<span class="token punctuation">,</span> column3<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span>
-<span class="token keyword">VALUES</span> <span class="token punctuation">(</span>value1<span class="token punctuation">,</span> value2<span class="token punctuation">,</span> value3<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>INSERT INTO SET</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> table_name 
-<span class="token keyword">SET</span> column1 <span class="token operator">=</span> value1<span class="token punctuation">,</span> column2 <span class="token operator">=</span> value2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>INSERT INTO SELECT</p>
-<blockquote>
-<p>该<code>INSERT INTO SELECT</code>语句用于从一个表复制数据并将其插入到另一表中。或者，将数据插入另一个表中的特定列。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> table_name1 <span class="token punctuation">(</span>column1<span class="token punctuation">,</span> column2<span class="token punctuation">,</span> column3<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span>
-<span class="token keyword">SELECT</span> column1<span class="token punctuation">,</span> column2<span class="token punctuation">,</span> column3<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-<span class="token keyword">FROM</span> table_name2
-<span class="token keyword">WHERE</span> condition<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="UPDATE"><a href="#UPDATE" class="headerlink" title="UPDATE"></a>UPDATE</h3><blockquote>
-<p>SQL<code>UPDATE</code>语句用于修改数据库中的现有数据</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">UPDATE</span> table_name
-<span class="token keyword">SET</span> column1 <span class="token operator">=</span> value1<span class="token punctuation">,</span> column2 <span class="token operator">=</span> value2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-<span class="token keyword">WHERE</span> condition<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<ul>
-<li><code>table_name</code>：将执行更新的表的名称。</li>
-<li><code>SET</code>：此子句指定列名和应更新为的新值。</li>
-<li><code>column1, column2, ...</code>：表中的列名称。</li>
-<li><code>value1, value2, ...</code>：要记录到数据库中的新值。</li>
-<li><code>WHERE</code>：此子句指定标识要更新的行的条件。</li>
-</ul>
-<h3 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h3><blockquote>
-<p>SQL 中的语句<code>DELETE</code>可帮助您从数据库中删除现有记录</p>
-</blockquote>
+          <h2 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h2><blockquote>
 <ol>
-<li><p><strong>删除所有行：</strong></p>
-<p><code>DELETE</code>不带子句的语句将<code>WHERE</code>删除表中的所有行。此操作是不可逆的。例子：</p>
-<pre class="line-numbers language-none"><code class="language-none">DELETE FROM table_name;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>此 SQL 语句删除 中的所有记录<code>table_name</code>。</p>
-</li>
-<li><p><strong>删除特定行：</strong></p>
-<p>当与<code>WHERE</code>子句结合使用时，<code>DELETE</code>SQL 语句将删除满足条件的特定行。例子：</p>
-<pre class="line-numbers language-none"><code class="language-none">DELETE FROM table_name WHERE condition;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>该语句的此实例从给定匹配的位置<code>DELETE</code>删除记录。<code>table_name``condition</code></p>
-</li>
+<li>系统版本：</li>
 </ol>
-<p><em>注意：“DELETE”语句所做的删除是永久性的，无法撤消。始终确保在运行 DELETE 查询之前有备份，尤其是在生产数据库上时。</em></p>
-<h1 id="数据定义语言"><a href="#数据定义语言" class="headerlink" title="数据定义语言"></a>数据定义语言</h1><blockquote>
-<p>Data Definition Language(DDL)，数据定义语言 (DDL) 主要功能是创建、修改和删除数据库表结构</p>
-</blockquote>
-<ol>
-<li><p><code>CREATE</code>：该命令用于创建数据库或其对象（如表、索引、函数、视图、存储过程和触发器）。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">//1.创建数据库</span>
-<span class="token keyword">CREATE</span> <span class="token keyword">DATABASE</span> myDatabase<span class="token punctuation">;</span>
-<span class="token comment">//2.创建表</span>
-<span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Students <span class="token punctuation">(</span>
-    ID <span class="token keyword">INT</span><span class="token punctuation">,</span>
-    Name <span class="token keyword">varchar</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//3.创建索引</span>
-<span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> idx_Students_Name <span class="token keyword">ON</span> Students<span class="token punctuation">(</span>Name<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//4.创建视图</span>
-<span class="token keyword">CREATE</span> <span class="token keyword">VIEW</span> HighGradeStudents <span class="token keyword">AS</span>
-<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> Students
-<span class="token keyword">WHERE</span> Grade <span class="token operator">></span> <span class="token number">90</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><code>DROP</code>：该命令用于删除现有的数据库或表。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">//1.删除数据库</span>
-<span class="token keyword">DROP</span> <span class="token keyword">DATABASE</span> myDatabase<span class="token punctuation">;</span>
-<span class="token comment">//2.删除数据库表</span>
-<span class="token keyword">DROP</span> <span class="token keyword">TABLE</span> Students<span class="token punctuation">;</span>
-<span class="token comment">//3.删除所用</span>
-<span class="token keyword">DROP</span> <span class="token keyword">INDEX</span> idx_Students_Name <span class="token keyword">ON</span> Students<span class="token punctuation">;</span>
-<span class="token comment">//4.删除视图</span>
-<span class="token keyword">DROP</span> <span class="token keyword">VIEW</span> HighGradeStudents<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><code>ALTER</code>：这用于更改数据库的结构。它用于添加、删除&#x2F;删除或修改现有表中的列。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">//1.添加列</span>
-<span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> tableName <span class="token keyword">ADD</span> columnName datatype<span class="token punctuation">;</span>
-<span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> tableName <span class="token keyword">ADD</span> <span class="token punctuation">(</span>columnName1 datatype<span class="token punctuation">,</span>columnName2 datatype<span class="token punctuation">,</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//2.删除列</span>
-<span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> tableName <span class="token keyword">DROP</span> <span class="token keyword">COLUMN</span> columnName<span class="token punctuation">;</span>
-<span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> tableName <span class="token keyword">DROP</span> <span class="token punctuation">(</span>columnName1<span class="token punctuation">,</span>columnName2<span class="token punctuation">,</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//3.修改列</span>
-<span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> tableName <span class="token keyword">ALTER</span> <span class="token keyword">COLUMN</span> columnName <span class="token keyword">TYPE</span> newDataType<span class="token punctuation">;</span>
-<span class="token comment">//4.添加约束</span>
-<span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> tableName <span class="token keyword">ADD</span> <span class="token keyword">CONSTRAINT</span> constraintName <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>column1<span class="token punctuation">,</span> column2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> column_n<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//5.删除约束</span>
-<span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> tableName <span class="token keyword">DROP</span> <span class="token keyword">CONSTRAINT</span> constraintName<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><code>TRUNCATE</code>：这用于从表中删除所有记录，包括为删除的记录分配的所有空间。</p>
-<blockquote>
-<p>TRUNCATE是SQL中的一个关键词，用于删除表中的所有记录，但不删除表本身。这意味着表的结构、属性、索引等将保持不变，只是表中的数据被清空。</p>
-<p>相较于DELETE操作，TRUNCATE通常会更快，尤其是在大型表中，这是因为它在删除数据时不会记录个别行的删除操作。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">TRUNCATE</span> <span class="token keyword">TABLE</span> table_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
-<li><p><code>RENAME</code>：这用于重命名数据库中的对象。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">RENAME</span> <span class="token keyword">TABLE</span> old_table_name <span class="token keyword">TO</span> new_table_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<p>  要安装 Docker Engine，您需要 CentOS 7、CentOS 8（流）或 CentOS 9（流）的维护版本。</p>
+<ol start="2">
+<li>卸载旧版本：</li>
 </ol>
-<blockquote>
-<p>在DDL操作中，不能执行<code>COMMIT</code>and<code>ROLLBACK</code>语句，因为MySQL引擎会自动提交更改。</p>
-</blockquote>
-<h1 id="数据操作语言"><a href="#数据操作语言" class="headerlink" title="数据操作语言"></a>数据操作语言</h1><blockquote>
-<p>Data Manipulation Language (DML),数据操作语言 (DML)主要从数据库中插入、检索、更新和删除数据。包含了四个命令insert into、select、update、delete from</p>
-</blockquote>
-<ol>
-<li><p><strong>INSERT INTO</strong> - 此命令用于将新行（记录）插入表中。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">//1. 插入完整的列级</span>
-<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> table_name  <span class="token keyword">VALUES</span> <span class="token punctuation">(</span>value1<span class="token punctuation">,</span> value2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> valueN<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//2. 选择性插入</span>
-<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> table_name <span class="token punctuation">(</span> column1<span class="token punctuation">,</span> column2<span class="token punctuation">,</span> column3<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">)</span>  <span class="token keyword">VALUES</span> <span class="token punctuation">(</span> value1<span class="token punctuation">,</span> value2<span class="token punctuation">,</span> value3<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">)</span>  
-<span class="token comment">//3. 从另一个表插入</span>
-<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> table1 <span class="token punctuation">(</span>column1<span class="token punctuation">,</span> column2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">,</span> columnN<span class="token punctuation">)</span> <span class="token keyword">SELECT</span> column1<span class="token punctuation">,</span> column2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">,</span> columnN  <span class="token keyword">FROM</span> table2 <span class="token keyword">WHERE</span> condition<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><strong>SELECT</strong> - 该命令用于从数据库中选择数据。返回的数据存储在结果表中，称为结果集。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> column1<span class="token punctuation">,</span> column2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> 
-<span class="token keyword">FROM</span> table_name<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-</li>
-<li><p><strong>UPDATE</strong> - 此命令用于修改表中的现有行。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">UPDATE</span> table_name <span class="token keyword">SET</span> column1 <span class="token operator">=</span> value1<span class="token punctuation">,</span> column2 <span class="token operator">=</span> value2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token keyword">WHERE</span> condition<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
-<li><p><strong>DELETE FROM</strong> - 此命令用于从表中删除现有行（记录）。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">//1. 删除表中所有行</span>
-<span class="token keyword">DELETE</span> <span class="token keyword">FROM</span> students<span class="token punctuation">;</span>
-<span class="token comment">//2. 删除指定行</span>
-<span class="token keyword">DELETE</span> <span class="token keyword">FROM</span> table_name <span class="token keyword">WHERE</span> condition<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> yum remove <span class="token function">docker</span> <span class="token punctuation">\</span>
+                 docker-client <span class="token punctuation">\</span>
+                 docker-client-latest <span class="token punctuation">\</span>
+                 docker-common <span class="token punctuation">\</span>
+                 docker-latest <span class="token punctuation">\</span>
+                 docker-latest-logrotate <span class="token punctuation">\</span>
+                 docker-logrotate <span class="token punctuation">\</span>
+                 docker-engine<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="3">
+<li>设置存储库</li>
 </ol>
-<h1 id="聚合查询"><a href="#聚合查询" class="headerlink" title="聚合查询"></a>聚合查询</h1><h2 id="聚合函数"><a href="#聚合函数" class="headerlink" title="聚合函数"></a>聚合函数</h2><blockquote>
-<p>SQL 聚合函数是内置函数，用于对数据执行某些计算并返回单个值。</p>
-</blockquote>
-<ul>
-<li><p>COUNT()</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token function">COUNT</span><span class="token punctuation">(</span>column_name<span class="token punctuation">)</span> 
-<span class="token keyword">FROM</span> table_name 
-<span class="token keyword">WHERE</span> condition<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>SUM()</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">  <span class="token keyword">SELECT</span> <span class="token function">SUM</span><span class="token punctuation">(</span>column_name<span class="token punctuation">)</span> 
-  <span class="token keyword">FROM</span> table_name 
-  <span class="token keyword">WHERE</span> condition<span class="token punctuation">;</span>
-
-<span class="token operator">+</span> <span class="token function">AVG</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-
-  <span class="token identifier"><span class="token punctuation">`</span><span class="token punctuation">`</span></span><span class="token punctuation">`</span><span class="token keyword">sql</span>
-  <span class="token keyword">SELECT</span> <span class="token function">AVG</span><span class="token punctuation">(</span>column_name<span class="token punctuation">)</span> 
-  <span class="token keyword">FROM</span> table_name 
-  <span class="token keyword">WHERE</span> condition<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>MAX()</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">  <span class="token keyword">SELECT</span> <span class="token function">MIN</span><span class="token punctuation">(</span>column_name<span class="token punctuation">)</span> 
-  <span class="token keyword">FROM</span> table_name 
-  <span class="token keyword">WHERE</span> condition<span class="token punctuation">;</span>
-
-<span class="token operator">+</span> <span class="token function">MIN</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-
-  <span class="token identifier"><span class="token punctuation">`</span><span class="token punctuation">`</span></span><span class="token punctuation">`</span><span class="token keyword">sql</span>
-  <span class="token keyword">SELECT</span> <span class="token function">MAX</span><span class="token punctuation">(</span>column_name<span class="token punctuation">)</span> 
-  <span class="token keyword">FROM</span> table_name 
-  <span class="token keyword">WHERE</span> condition<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-</ul>
-<blockquote>
-<p>聚合函数忽略NULL值，使用 COUNT(*) 时，会计算包括 NULL 在内的行的总数；但如果你指定某列如 COUNT(column_name)，则只会计算非 NULL 值的数量。</p>
-</blockquote>
-<h2 id="GROUP-BY和HAVING子句"><a href="#GROUP-BY和HAVING子句" class="headerlink" title="GROUP BY和HAVING子句"></a>GROUP BY和HAVING子句</h2><blockquote>
-<p>在SQL中，<code>GROUP BY</code> 和 <code>HAVING</code> 子句通常与聚合函数一起使用，它们用于对数据分组，并对这些分组进行过滤。</p>
-<p>GROUP BY 子句用于将结果集中的记录分组，每个分组包含有相同值的列。之后你可以使用聚合函数（如 COUNT, SUM, AVG, MAX, MIN），对每个分组进行聚合计算。通过 GROUP BY 子句，可以执行多样化的数据汇总分析</p>
-<p>HAVING 子句类似于 WHERE 子句，不过 HAVING 主要用于过滤分组后的结果。WHERE 子句在数据分组之前进行过滤，而 HAVING 子句在数据分组之后对聚合后的结果进行过滤。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> CustomerID<span class="token punctuation">,</span> <span class="token function">COUNT</span><span class="token punctuation">(</span>OrderID<span class="token punctuation">)</span> <span class="token keyword">AS</span> NumberOfOrders<span class="token punctuation">,</span> <span class="token function">SUM</span><span class="token punctuation">(</span>Amount<span class="token punctuation">)</span> <span class="token keyword">AS</span> TotalAmount
-<span class="token keyword">FROM</span> Orders
-<span class="token keyword">WHERE</span> OrderDate <span class="token operator">BETWEEN</span> <span class="token string">'2018-01-01'</span> <span class="token operator">AND</span> <span class="token string">'2018-12-31'</span>
-<span class="token operator">AND</span> <span class="token keyword">Status</span> <span class="token operator">=</span> <span class="token string">'Completed'</span>
-<span class="token keyword">GROUP</span> <span class="token keyword">BY</span> CustomerID
-<span class="token keyword">HAVING</span> <span class="token function">SUM</span><span class="token punctuation">(</span>Amount<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">1000</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="数据约束"><a href="#数据约束" class="headerlink" title="数据约束"></a>数据约束</h1><h2 id="NOT-NULL-约束"><a href="#NOT-NULL-约束" class="headerlink" title="NOT NULL 约束"></a>NOT NULL 约束</h2><blockquote>
-<p>确保列不能有 NULL 值。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Students <span class="token punctuation">(</span>
-    ID <span class="token keyword">int</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-    Name <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-    Age <span class="token keyword">int</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="UNIQUE-约束"><a href="#UNIQUE-约束" class="headerlink" title="UNIQUE 约束"></a>UNIQUE 约束</h2><blockquote>
-<p>确保列中的所有值都不同。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Students <span class="token punctuation">(</span>
-    ID <span class="token keyword">int</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">UNIQUE</span><span class="token punctuation">,</span>
-    Name <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-    Age <span class="token keyword">int</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="PRIMARY-KEY-约束"><a href="#PRIMARY-KEY-约束" class="headerlink" title="PRIMARY KEY 约束"></a>PRIMARY KEY 约束</h2><blockquote>
-<p>唯一标识数据库表中的每条记录。主键必须包含唯一值。与 UNIQUE 约束完全相同，但一张表中可以有多个唯一约束，但每个表只能有一个 PRIMARY KEY 约束。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Students <span class="token punctuation">(</span>
-    ID <span class="token keyword">int</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-    Name <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-    Age <span class="token keyword">int</span><span class="token punctuation">,</span>
-    <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>ID<span class="token punctuation">)</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="外键约束"><a href="#外键约束" class="headerlink" title="外键约束"></a>外键约束</h2><blockquote>
-<p>防止破坏表之间链接的操作。外键是一个表中的字段（或字段集合），它引用另一表中的主键。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Orders <span class="token punctuation">(</span>
-    OrderID <span class="token keyword">int</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-    OrderNumber <span class="token keyword">int</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-    ID <span class="token keyword">int</span><span class="token punctuation">,</span>
-    <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>OrderID<span class="token punctuation">)</span><span class="token punctuation">,</span>
-    <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>ID<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> Students<span class="token punctuation">(</span>ID<span class="token punctuation">)</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="CHECK-约束"><a href="#CHECK-约束" class="headerlink" title="CHECK 约束"></a>CHECK 约束</h2><blockquote>
-<p>CHECK 约束确保列中的所有值都满足特定条件。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Students <span class="token punctuation">(</span>
-    ID <span class="token keyword">int</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-    Name <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-    Age <span class="token keyword">int</span><span class="token punctuation">,</span>
-    <span class="token keyword">CHECK</span> <span class="token punctuation">(</span>Age<span class="token operator">>=</span><span class="token number">18</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="DEFAULT-Constraint"><a href="#DEFAULT-Constraint" class="headerlink" title="DEFAULT Constraint"></a>DEFAULT Constraint</h2><blockquote>
-<p>在未指定任何列时为列提供默认值。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Students <span class="token punctuation">(</span>
-    ID <span class="token keyword">int</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-    Name <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-    Age <span class="token keyword">int</span><span class="token punctuation">,</span>
-    City <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span> <span class="token keyword">DEFAULT</span> <span class="token string">'Unknown'</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="INDEX-约束"><a href="#INDEX-约束" class="headerlink" title="INDEX 约束"></a>INDEX 约束</h2><blockquote>
-<p>用于快速创建数据库并从数据库检索数据。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> idx_name 
-<span class="token keyword">ON</span> Students <span class="token punctuation">(</span>Name<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h1 id="连接查询"><a href="#连接查询" class="headerlink" title="连接查询"></a>连接查询</h1><h2 id="内连接"><a href="#内连接" class="headerlink" title="内连接"></a>内连接</h2><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> column_name<span class="token punctuation">(</span>s<span class="token punctuation">)</span>
-<span class="token keyword">FROM</span> table1
-<span class="token keyword">INNER</span> <span class="token keyword">JOIN</span> table2
-<span class="token keyword">ON</span> table1<span class="token punctuation">.</span>column_name <span class="token operator">=</span> table2<span class="token punctuation">.</span>column_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="左连接"><a href="#左连接" class="headerlink" title="左连接"></a>左连接</h2><blockquote>
-<p>该<code>LEFT JOIN</code>关键字返回左表（table1）中的所有记录以及右表（table2）中的匹配记录。如果没有匹配，结果<code>NULL</code>从右侧开始。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> column_name<span class="token punctuation">(</span>s<span class="token punctuation">)</span>
-<span class="token keyword">FROM</span> table1
-<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> table2
-<span class="token keyword">ON</span> table1<span class="token punctuation">.</span>column_name <span class="token operator">=</span> table2<span class="token punctuation">.</span>column_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h2 id="右连接"><a href="#右连接" class="headerlink" title="右连接"></a>右连接</h2><blockquote>
-<p>该<code>RIGHT JOIN</code>关键字返回右表 (table2) 中的所有记录以及左表 (table1) 中的匹配记录。如果没有匹配，则结果<code>NULL</code>在左侧。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> column_name<span class="token punctuation">(</span>s<span class="token punctuation">)</span>
-<span class="token keyword">FROM</span> table1
-<span class="token keyword">RIGHT</span> <span class="token keyword">JOIN</span> table2
-<span class="token keyword">ON</span> table1<span class="token punctuation">.</span>column_name <span class="token operator">=</span> table2<span class="token punctuation">.</span>column_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="全外连接"><a href="#全外连接" class="headerlink" title="全外连接"></a>全外连接</h2><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SQL</span> 中的<span class="token keyword">FULL</span> <span class="token keyword">OUTER</span> <span class="token keyword">JOIN</span>是一种根据两个或多个表之间的相关列组合来自两个或多个表的行的方法。它返回左表 <span class="token punctuation">(</span> table1<span class="token punctuation">)</span> 和右表 <span class="token punctuation">(</span> table2<span class="token punctuation">)</span> 中的所有行。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-
-
-<h2 id="自连接"><a href="#自连接" class="headerlink" title="自连接"></a>自连接</h2><blockquote>
-<p><code>SELF JOIN</code>是一个标准 SQL 操作，其中表与其自身连接。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> a<span class="token punctuation">.</span>column_name<span class="token punctuation">,</span> b<span class="token punctuation">.</span>column_name
-<span class="token keyword">FROM</span> table_name <span class="token keyword">AS</span> a<span class="token punctuation">,</span> table_name <span class="token keyword">AS</span> b
-<span class="token keyword">WHERE</span> a<span class="token punctuation">.</span>common_field <span class="token operator">=</span> b<span class="token punctuation">.</span>common_field<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h2 id="交叉连接"><a href="#交叉连接" class="headerlink" title="交叉连接"></a>交叉连接</h2><blockquote>
-<p>SQL 中的交叉连接用于将第一个表的每一行与第二个表的每一行组合起来。它也称为两个表的笛卡尔积。执行交叉连接最重要的一点是它不需要任何连接条件。</p>
-<p>交叉联接的问题是它返回两个表的笛卡尔积，这可能会导致大量行和大量资源使用。因此，明智地使用它们并且仅在必要时使用它们至关重要。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> column_name<span class="token punctuation">(</span>s<span class="token punctuation">)</span>
-<span class="token keyword">FROM</span> table1
-<span class="token keyword">CROSS</span> <span class="token keyword">JOIN</span> table2<span class="token punctuation">;</span>
-等价于
-<span class="token keyword">SELECT</span> column_name<span class="token punctuation">(</span>s<span class="token punctuation">)</span>
-<span class="token keyword">FROM</span> table1<span class="token punctuation">,</span> table2<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h1><blockquote>
-<p>在 SQL 中，子查询是嵌入另一个 SQL 查询中的查询。您也可以将其称为嵌套查询或内部查询。包含查询通常称为外部查询。子查询用于检索将在主查询中使用的数据，作为进一步限制要检索的数据的条件。</p>
-<p>子查询可用于查询的各个部分，包括：</p>
-<ul>
-<li><strong>选择</strong>语句</li>
-<li><strong>FROM</strong>子句</li>
-<li><strong>WHERE</strong>子句</li>
-<li><strong>GROUP BY</strong>子句</li>
-<li><strong>HAVING</strong>子句</li>
-</ul>
-</blockquote>
-<h2 id="标量子查询（单行子查询）"><a href="#标量子查询（单行子查询）" class="headerlink" title="标量子查询（单行子查询）"></a>标量子查询（单行子查询）</h2><p>标量子查询返回单个值的子查询，即返回结果是单行单列的。它通常用在比较操作符的右侧，例如 &#x3D;, &lt;, &gt;, &lt;&#x3D;, &gt;&#x3D;, &lt;&gt;。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span>
-<span class="token keyword">FROM</span> employees
-<span class="token keyword">WHERE</span> salary <span class="token operator">=</span> <span class="token punctuation">(</span>
-    <span class="token keyword">SELECT</span> <span class="token function">MAX</span><span class="token punctuation">(</span>salary<span class="token punctuation">)</span>
-    <span class="token keyword">FROM</span> employees
-    <span class="token keyword">WHERE</span> department <span class="token operator">=</span> <span class="token string">'Sales'</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="列子查询（多行单列子查询）"><a href="#列子查询（多行单列子查询）" class="headerlink" title="列子查询（多行单列子查询）"></a>列子查询（多行单列子查询）</h2><p>列子查询返回单列的多个值，且适用于 IN, NOT IN, ANY, ALL, EXISTS 等操作符。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span>
-<span class="token keyword">FROM</span> products
-<span class="token keyword">WHERE</span> product_id <span class="token operator">IN</span> <span class="token punctuation">(</span>
-    <span class="token keyword">SELECT</span> product_id
-    <span class="token keyword">FROM</span> order_details
-    <span class="token keyword">WHERE</span> quantity <span class="token operator">></span> <span class="token number">10</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="行子查询（多行多列子查询）"><a href="#行子查询（多行多列子查询）" class="headerlink" title="行子查询（多行多列子查询）"></a>行子查询（多行多列子查询）</h2><p>行子查询返回一行或多行，并涉及多列数据，在与外部查询进行比较时使用。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span>
-<span class="token keyword">FROM</span> orders
-<span class="token keyword">WHERE</span> <span class="token punctuation">(</span>customer_id<span class="token punctuation">,</span> order_date<span class="token punctuation">)</span> <span class="token operator">IN</span> <span class="token punctuation">(</span>
-    <span class="token keyword">SELECT</span> customer_id<span class="token punctuation">,</span> <span class="token function">MAX</span><span class="token punctuation">(</span>order_date<span class="token punctuation">)</span>
-    <span class="token keyword">FROM</span> orders
-    <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> customer_id
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="相关子查询（相关子查询）"><a href="#相关子查询（相关子查询）" class="headerlink" title="相关子查询（相关子查询）"></a>相关子查询（相关子查询）</h2><p>相关子查询是指子查询引用了外部查询中的一个或多个列。子查询对于每一行或几行外部查询的结果，都需要重新运行一次。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> e1<span class="token punctuation">.</span>employee_name
-<span class="token keyword">FROM</span> employees e1
-<span class="token keyword">WHERE</span> e1<span class="token punctuation">.</span>salary <span class="token operator">></span> <span class="token punctuation">(</span>
-    <span class="token keyword">SELECT</span> <span class="token function">AVG</span><span class="token punctuation">(</span>e2<span class="token punctuation">.</span>salary<span class="token punctuation">)</span>
-    <span class="token keyword">FROM</span> employees e2
-    <span class="token keyword">WHERE</span> e2<span class="token punctuation">.</span>department <span class="token operator">=</span> e1<span class="token punctuation">.</span>department
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="表子查询（派生表或内联视图）"><a href="#表子查询（派生表或内联视图）" class="headerlink" title="表子查询（派生表或内联视图）"></a>表子查询（派生表或内联视图）</h2><p>当子查询返回一个完整的表时，它可以作为一个派生表或内联视图使用在 FROM 子句中。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token function">AVG</span><span class="token punctuation">(</span>salary<span class="token punctuation">)</span>
-<span class="token keyword">FROM</span> <span class="token punctuation">(</span>
-    <span class="token keyword">SELECT</span> department<span class="token punctuation">,</span> <span class="token function">SUM</span><span class="token punctuation">(</span>salary<span class="token punctuation">)</span> <span class="token keyword">as</span> salary
-    <span class="token keyword">FROM</span> employees
-    <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> department
-<span class="token punctuation">)</span> <span class="token keyword">AS</span> department_total_salaries<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="EXISTS子查询"><a href="#EXISTS子查询" class="headerlink" title="EXISTS子查询"></a>EXISTS子查询</h2><p>EXISTS 子查询用于检查是否存在由子查询返回的行。EXISTS 子查询总是返回TRUE或FALSE。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span>
-<span class="token keyword">FROM</span> suppliers
-<span class="token keyword">WHERE</span> <span class="token keyword">EXISTS</span> <span class="token punctuation">(</span>
-    <span class="token keyword">SELECT</span> <span class="token operator">*</span>
-    <span class="token keyword">FROM</span> products
-    <span class="token keyword">WHERE</span> products<span class="token punctuation">.</span>supplier_id <span class="token operator">=</span> suppliers<span class="token punctuation">.</span>supplier_id
-    <span class="token operator">AND</span> price <span class="token operator">&lt;</span> <span class="token number">20</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="高级-SQL-函数"><a href="#高级-SQL-函数" class="headerlink" title="高级 SQL 函数"></a>高级 SQL 函数</h1><h2 id="数学函数"><a href="#数学函数" class="headerlink" title="数学函数"></a>数学函数</h2><p><strong>ABS() 函数：</strong>该函数返回数字的绝对（正）值。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> ABS<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">243</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">-- output: 243</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p><strong>Avg() 函数：</strong>该函数返回列的平均值。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token function">AVG</span><span class="token punctuation">(</span>price<span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><strong>COUNT() 函数：</strong>该函数返回符合指定条件的行数。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token function">COUNT</span><span class="token punctuation">(</span>productID<span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><strong>SUM() 函数：</strong>该函数返回数字列的总和。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token function">SUM</span><span class="token punctuation">(</span>price<span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><strong>MIN() &amp; MAX() 函数：</strong> MIN() 函数返回所选列的最小值，MAX() 函数返回所选列的最大值。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token function">MIN</span><span class="token punctuation">(</span>price<span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span>
-<span class="token keyword">SELECT</span> <span class="token function">MAX</span><span class="token punctuation">(</span>price<span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p><strong>ROUND() 函数：</strong>此函数用于将数字字段舍入为最接近的整数，但是您可以指定要返回的小数位数。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token function">ROUND</span><span class="token punctuation">(</span>price<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><strong>CEILING() 功能：</strong>该函数返回大于或等于指定数值表达式的最小整数。</p>
-<pre class="line-numbers language-none"><code class="language-none">SELECT CEILING(price) FROM products;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><strong>FLOOR() 函数：</strong>该函数返回小于或等于指定数值表达式的最大整数。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> FLOOR<span class="token punctuation">(</span>price<span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><strong>SQRT() 函数：</strong>该函数返回数字的平方根。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> SQRT<span class="token punctuation">(</span>price<span class="token punctuation">)</span> <span class="token keyword">FROM</span> products<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><strong>PI() 函数：</strong>该函数返回常量Pi。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> PI<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h2><p><code>CONCAT</code> 函数将两个或多个字符串组合成一个字符串。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">CONCAT<span class="token punctuation">(</span>string1<span class="token punctuation">,</span> string2<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> string_n<span class="token punctuation">)</span> 例如：
-<span class="token keyword">SELECT</span> CONCAT<span class="token punctuation">(</span><span class="token string">'Hello '</span><span class="token punctuation">,</span> <span class="token string">'World'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//上述 SQL 语句的输出将是“Hello World”。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p><code>SUBSTRING</code> 函数从给定字符串中提取字符串。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">SUBSTRING<span class="token punctuation">(</span>string<span class="token punctuation">,</span> <span class="token keyword">start</span><span class="token punctuation">,</span> length<span class="token punctuation">)</span> 例如：
-<span class="token keyword">SELECT</span> SUBSTRING<span class="token punctuation">(</span><span class="token string">'SQL Tutorial'</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//上述查询的输出将是“SQL”</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p><code>LENGTH</code> 函数返回字符串的长度。</p>
-<pre class="line-numbers language-none"><code class="language-none">LENGTH(string) 例如：
-SELECT LENGTH(&#39;Hello World&#39;);
-&#x2F;&#x2F;上述 SQL 语句的输出将为 11。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p><code>UPPER</code> 函数将字符串中的所有字母转换为大写，而 <code>LOWER</code> 函数则将字符串中的所有字母转换为小写。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">UPPER<span class="token punctuation">(</span>string<span class="token punctuation">)</span>
-LOWER<span class="token punctuation">(</span>string<span class="token punctuation">)</span> 例如：
-<span class="token keyword">SELECT</span> UPPER<span class="token punctuation">(</span><span class="token string">'Hello World'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">SELECT</span> LOWER<span class="token punctuation">(</span><span class="token string">'Hello World'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//上述 SQL 语句的输出将分别是“HELLO WORLD”和“hello world”。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><code>TRIM</code> 函数删除字符串的前导和尾随空格,还可以删除其他指定的字符</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">TRIM<span class="token punctuation">(</span><span class="token punctuation">[</span>LEADING<span class="token operator">|</span>TRAILING<span class="token operator">|</span>BOTH<span class="token punctuation">]</span> <span class="token punctuation">[</span>removal_string<span class="token punctuation">]</span> <span class="token keyword">FROM</span> original_string<span class="token punctuation">)</span> 例如：
-<span class="token keyword">SELECT</span> TRIM<span class="token punctuation">(</span><span class="token string">'   Hello World   '</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">SELECT</span> TRIM<span class="token punctuation">(</span><span class="token string">'h'</span> <span class="token keyword">FROM</span> <span class="token string">'hello'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">-- output: 第一个查询的输出将是“Hello World”，第二个查询的输出将是“ello”。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><code>replace</code>函数替换指定的字符</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">REPLACE</span><span class="token punctuation">(</span>input_string<span class="token punctuation">,</span> string_to_replace<span class="token punctuation">,</span> replacement_string<span class="token punctuation">)</span> 例如：
-<span class="token keyword">SELECT</span> <span class="token keyword">REPLACE</span><span class="token punctuation">(</span><span class="token string">'Potter'</span><span class="token punctuation">,</span><span class="token string">'o'</span><span class="token punctuation">,</span><span class="token string">'e'</span><span class="token punctuation">)</span>
-<span class="token comment">-- output: petter</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="条件函数"><a href="#条件函数" class="headerlink" title="条件函数"></a>条件函数</h2><p><strong>CASE表达式</strong></p>
-<blockquote>
-<p>相当于其他编程语言的IF-THEN-ELSE 逻辑</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 语法：</span>
-<span class="token keyword">SELECT</span> column1<span class="token punctuation">,</span> column2<span class="token punctuation">,</span> 
-<span class="token punctuation">(</span><span class="token keyword">CASE</span> 
-    <span class="token keyword">WHEN</span> condition1 <span class="token keyword">THEN</span> result1
-    <span class="token keyword">WHEN</span> condition2 <span class="token keyword">THEN</span> result2
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-    <span class="token keyword">ELSE</span> result 
-<span class="token keyword">END</span><span class="token punctuation">)</span> 
-<span class="token keyword">FROM</span> table_name<span class="token punctuation">;</span>
-<span class="token comment">-- 例子：</span>
-<span class="token keyword">SELECT</span> OrderID<span class="token punctuation">,</span> Quantity<span class="token punctuation">,</span>
- <span class="token punctuation">(</span><span class="token keyword">CASE</span>
-     <span class="token keyword">WHEN</span> Quantity <span class="token operator">></span> <span class="token number">30</span> <span class="token keyword">THEN</span> <span class="token string">'Over 30'</span>
-     <span class="token keyword">WHEN</span> Quantity <span class="token operator">=</span> <span class="token number">30</span> <span class="token keyword">THEN</span> <span class="token string">'Equals 30'</span>
-     <span class="token keyword">ELSE</span> <span class="token string">'Under 30'</span>
- <span class="token keyword">END</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> QuantityText
-<span class="token keyword">FROM</span> OrderDetails<span class="token punctuation">;</span>
-<span class="token comment">-- output: 查询逻辑为：查询OrderID、Quantity、QuantityText三个字段，其中QuantityText字段的值根据Quantity值判断，如果大于30则为Over 30，等于30则为Equals 30，否则为Under 30</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>COALESCE表达式</strong></p>
-<blockquote>
-<p>SQL中的函数<code>COALESCE</code>用于管理数据中的NULL值。它从左到右扫描参数并返回第一个不是 的参数<code>NULL</code>。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">COALESCE</span><span class="token punctuation">(</span>value1<span class="token punctuation">,</span>value2<span class="token punctuation">,</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> valueN<span class="token punctuation">)</span>
-<span class="token comment">-- 示例1：</span>
-<span class="token keyword">SELECT</span> product_name<span class="token punctuation">,</span> <span class="token keyword">COALESCE</span><span class="token punctuation">(</span>price<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> Price  <span class="token keyword">FROM</span> products<span class="token punctuation">;</span>
-<span class="token comment">-- output: 如果产品条目的“价格”列为NULL，则它将返回“0”</span>
-<span class="token comment">-- 示例2	：</span>
-<span class="token keyword">SELECT</span> <span class="token keyword">COALESCE</span><span class="token punctuation">(</span><span class="token boolean">NULL</span><span class="token punctuation">,</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span> <span class="token string">'third value'</span><span class="token punctuation">,</span> <span class="token string">'fourth value'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">-- output: 它将返回“第三个值”，因为这是列表中的第一个非 NULL 值。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>NULLIF表达式</strong></p>
-<blockquote>
-<p><code>NULLIF</code>相比<code>expression1</code>于<code>expression2</code>.如果<code>expression1</code>和<code>expression2</code>相等，则函数返回 NULL。否则，它返回<code>expression1</code>。两个表达式必须具有相同的数据类型。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">NULLIF</span><span class="token punctuation">(</span>expression1<span class="token punctuation">,</span> expression2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-示例<span class="token number">1</span>：
-<span class="token keyword">SELECT</span> 
-    first_name<span class="token punctuation">,</span> 
-    last_name<span class="token punctuation">,</span>
-    <span class="token keyword">NULLIF</span><span class="token punctuation">(</span>email<span class="token punctuation">,</span> <span class="token string">'NA'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> email
-<span class="token keyword">FROM</span> 
-    users<span class="token punctuation">;</span>
-<span class="token comment">-- output:  如果字段 email 为“NA”，则将返回 NULL。否则email返回实际的字段值。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>IF表达式</strong></p>
-<blockquote>
-<p><code>IF</code>如果条件为 TRUE，则函数返回 value_true；如果条件为 FALSE，则返回 value_false。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">IF</span><span class="token punctuation">(</span>condition<span class="token punctuation">,</span>value_true<span class="token punctuation">,</span>value_false<span class="token punctuation">)</span>
-<span class="token keyword">SELECT</span> <span class="token keyword">IF</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">></span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">'One is greater than zero'</span><span class="token punctuation">,</span> <span class="token string">'One is not greater than zero'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h2 id="时间函数"><a href="#时间函数" class="headerlink" title="时间函数"></a>时间函数</h2><h3 id="DATE"><a href="#DATE" class="headerlink" title="DATE"></a>DATE</h3><p>创建Date类型的表</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Orders <span class="token punctuation">(</span>
-    OrderId <span class="token keyword">int</span><span class="token punctuation">,</span>
-    ProductName <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    OrderDate <span class="token keyword">date</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>插入日期数据</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> Orders <span class="token punctuation">(</span>OrderId<span class="token punctuation">,</span> ProductName<span class="token punctuation">,</span> OrderDate<span class="token punctuation">)</span> <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">'Product 1'</span><span class="token punctuation">,</span> <span class="token string">'2022-01-01'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>查询指定日期</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> Orders  <span class="token keyword">WHERE</span> OrderDate <span class="token operator">=</span> <span class="token string">'2022-01-01'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>更新日期</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">UPDATE</span> Orders  <span class="token keyword">SET</span> OrderDate <span class="token operator">=</span> <span class="token string">'2022-01-02'</span>  <span class="token keyword">WHERE</span> OrderId <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>返回当前日期</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token keyword">CURRENT_DATE</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>日期差异</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> DATEDIFF<span class="token punctuation">(</span><span class="token keyword">day</span><span class="token punctuation">,</span> <span class="token string">'2022-01-01'</span><span class="token punctuation">,</span> <span class="token string">'2022-01-15'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> DiffInDays<span class="token punctuation">;</span>
-<span class="token comment">-- output: 14</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>日期添加</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> DATEADD<span class="token punctuation">(</span><span class="token keyword">year</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">'2022-01-01'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> NewDate<span class="token punctuation">;</span>
-<span class="token comment">-- output:  Sun Jan 01 2023 08:00:00 GMT+0800 (台北标准时间)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h3 id="TIME"><a href="#TIME" class="headerlink" title="TIME"></a>TIME</h3><blockquote>
-<p>在 SQL 中，TIME 数据类型用于在数据库中存储时间值。它允许您存储小时、分钟和秒。 TIME 的格式为“HH:MI:SS”。</p>
-</blockquote>
-<p>创建Time字段语法</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> table_name <span class="token punctuation">(</span>
-    column_name <span class="token keyword">TIME</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>插入时间字段</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> table_name <span class="token punctuation">(</span>column_name<span class="token punctuation">)</span> <span class="token keyword">values</span> <span class="token punctuation">(</span><span class="token string">'17:34:20'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>范围</p>
-<blockquote>
-<p>SQL 中的时间范围是’00:00:00’到’23:59:59’。</p>
-</blockquote>
-<p>获取当前时间</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> CURTIME<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>添加时间</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> ADDTIME<span class="token punctuation">(</span><span class="token string">'2007-12-31 23:59:59'</span><span class="token punctuation">,</span><span class="token string">'1 1:1:1'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>时间差</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 减去时间差</span>
-<span class="token keyword">SELECT</span> TIMEDIFF<span class="token punctuation">(</span><span class="token string">'2000:01:01 00:00:00'</span><span class="token punctuation">,</span> <span class="token string">'2000:01:01 00:01:01'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>转换</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 函数在MySQL中用于将时间值转换为秒</span>
-<span class="token keyword">SELECT</span> TIME_TO_SEC<span class="token punctuation">(</span><span class="token string">'22:23:00'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">-- output: 80580</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="DATEPART"><a href="#DATEPART" class="headerlink" title="DATEPART"></a>DATEPART</h3><blockquote>
-<p><code>DATEPART</code>是 SQL 中的一个有用函数，可以使用它从任何日期或时间表达式获取年、季度、月、年中的某一天、日、周、工作日、小时、分钟、秒或毫秒。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 在日期中提取年、月、日</span>
-<span class="token keyword">SELECT</span> DATEPART<span class="token punctuation">(</span><span class="token keyword">year</span><span class="token punctuation">,</span> <span class="token string">'2021-07-14'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token string">'Year'</span><span class="token punctuation">;</span>
-<span class="token keyword">SELECT</span> DATEPART<span class="token punctuation">(</span><span class="token keyword">month</span><span class="token punctuation">,</span> <span class="token string">'2021-07-14'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token string">'Month'</span><span class="token punctuation">;</span>
-<span class="token keyword">SELECT</span> DATEPART<span class="token punctuation">(</span><span class="token keyword">day</span><span class="token punctuation">,</span> <span class="token string">'2021-07-14'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token string">'Day'</span><span class="token punctuation">;</span>
-<span class="token comment">-- 日期时间中提取小时、分钟或秒</span>
-<span class="token keyword">SELECT</span> DATEPART<span class="token punctuation">(</span><span class="token keyword">hour</span><span class="token punctuation">,</span> <span class="token string">'2021-07-14T13:30:15'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token string">'Hour'</span><span class="token punctuation">,</span>
-<span class="token keyword">SELECT</span> DATEPART<span class="token punctuation">(</span><span class="token keyword">minute</span><span class="token punctuation">,</span> <span class="token string">'2021-07-14T13:30:15'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token string">'Minute'</span><span class="token punctuation">,</span>
-<span class="token keyword">SELECT</span> DATEPART<span class="token punctuation">(</span><span class="token keyword">second</span><span class="token punctuation">,</span> <span class="token string">'2021-07-14T13:30:15'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token string">'Second'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="DATEADD"><a href="#DATEADD" class="headerlink" title="DATEADD"></a>DATEADD</h3><blockquote>
-<p>语法：<br><code>DATEADD(interval, number, date)</code></p>
-<ul>
-<li>间隔类型（例如日、月、年、小时、分钟、秒）</li>
-<li>一个数字（对于未来日期可以是正数，对于过去日期可以是负数）</li>
-<li>计算所依据的日期。</li>
-</ul>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> DATEADD<span class="token punctuation">(</span><span class="token keyword">day</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token string">'2022-01-01'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> NewDate
-<span class="token comment">-- output: 2022-01-04</span>
-<span class="token comment">-- 查找未来7天的数据</span>
-<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> Orders <span class="token keyword">WHERE</span> OrderDate <span class="token operator">&lt;=</span> DATEADD<span class="token punctuation">(</span><span class="token keyword">day</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> GETDATE<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="TIMESTAMP"><a href="#TIMESTAMP" class="headerlink" title="TIMESTAMP"></a>TIMESTAMP</h3><blockquote>
-<p>SQL<code>TIMESTAMP</code>是一种允许您存储日期和时间的数据类型。它通常用于跟踪对记录所做的更新和更改，提供发生的时间顺序。</p>
-<p>根据 SQL 平台的不同，格式和存储大小可能略有不同。例如，<code>MySQL</code> 使用<code>YYYY-MM-DD HH:MI:SS</code>格式，而在 <code>PostgreSQL</code> 中，它存储为<code>YYYY-MM-DD HH:MI:SS</code>格式，但它还可以存储微秒</p>
-</blockquote>
-<p><code>TIMESTAMP</code>以下是如何在 SQL 表中定义具有类型的列：</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> table_name <span class="token punctuation">(</span>
-   column1 <span class="token keyword">TIMESTAMP</span><span class="token punctuation">,</span>
-   column2 <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-   <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>一个常见的用例<code>TIMESTAMP</code>是每次更新行时自动更新时间戳。这可以通过将<code>DEFAULT</code>约束设置为来实现<code>CURRENT_TIMESTAMP</code>：</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> table_name <span class="token punctuation">(</span>
-   column1 <span class="token keyword">TIMESTAMP</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CURRENT_TIMESTAMP</span><span class="token punctuation">,</span>
-   column2 <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-   <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>在 MySQL 中，每当行的其他字段发生任何更改时，<code>ON UPDATE CURRENT_TIMESTAMP</code>可用于自动将字段更新为当前日期和时间。<code>TIMESTAMP</code></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> table_name <span class="token punctuation">(</span>
-   column1 <span class="token keyword">TIMESTAMP</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CURRENT_TIMESTAMP</span> <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CURRENT_TIMESTAMP</span><span class="token punctuation">,</span>
-   column2 <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-   <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>您还可以插入或更新具有特定时间戳的记录：</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> table_name <span class="token punctuation">(</span>column1<span class="token punctuation">,</span> column2<span class="token punctuation">)</span> <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token string">'2019-06-10 10:20:30'</span><span class="token punctuation">,</span> <span class="token string">'example data'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token keyword">UPDATE</span> table_name <span class="token keyword">SET</span> column1 <span class="token operator">=</span> <span class="token string">'2020-07-20 15:30:45'</span> <span class="token keyword">WHERE</span> column2 <span class="token operator">=</span> <span class="token string">'example data'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h1><blockquote>
-<p>视图是一个虚拟的表，不直接存储数据，存的是SQL的查询，因此视图根据原表的数据变化而变化</p>
-</blockquote>
-<p>创建视图</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">VIEW</span> CustomerView <span class="token keyword">AS</span> <span class="token keyword">SELECT</span> CustomerID<span class="token punctuation">,</span> Name<span class="token punctuation">,</span> Address <span class="token keyword">FROM</span> Customers<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>查询视图</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> CustomerView<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>更新视图</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token operator">OR</span> <span class="token keyword">REPLACE</span> <span class="token keyword">VIEW</span> CustomerView <span class="token keyword">AS</span> <span class="token keyword">SELECT</span> CustomerID<span class="token punctuation">,</span> Name<span class="token punctuation">,</span> Address<span class="token punctuation">,</span> Phone <span class="token keyword">FROM</span> Customers<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>删除视图</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">DROP</span> <span class="token keyword">VIEW</span> <span class="token keyword">IF</span> <span class="token keyword">EXISTS</span> CustomerView<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><blockquote>
-<p>SQL中的索引是一个数据库对象，用于提高数据库表上数据检索操作的速度。与书中的索引如何帮助您快速查找信息而无需阅读整本书类似，数据库中的索引可以帮助数据库软件快速查找数据而无需扫描整个表。</p>
-</blockquote>
-<h2 id="索引的分类"><a href="#索引的分类" class="headerlink" title="索引的分类"></a>索引的分类</h2><ol>
-<li><p>根据存储结构分类:</p>
-<ul>
-<li>B-Tree索引：这是最常见的索引类型，支持随机访问、顺序访问、范围访问和部分键匹配查询。</li>
-<li>Hash索引：基于哈希表实现，适合等值查询，但不支持范围查询。</li>
-<li>R-Tree索引：适用于空间数据，如地图坐标。</li>
-<li>Bitmap索引：适用于有限离散取值的列，如性别、国家等。</li>
-</ul>
-</li>
-<li><p>根据物理实现分类:</p>
-<ul>
-<li>聚簇索引（Clustered Index）：数据行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能有一个聚簇索引。</li>
-<li>非聚簇索引（Non-Clustered Index）：索引顺序与数据行的物理存储顺序不同。</li>
-</ul>
-</li>
-<li><p>按照列的数目分类:</p>
-<ul>
-<li>单列索引：索引只包含一个列。</li>
-<li>复合索引&#x2F;组合索引：也称多列索引，索引包含两个以上的列。</li>
-</ul>
-</li>
-<li><p>按照唯一性分类:</p>
-<ul>
-<li>唯一索引（Unique Index）：确保索引键列的每行数据都是唯一的。</li>
-<li>非唯一索引：允许索引键列中有重复的值。</li>
-</ul>
-</li>
-<li><p>根据是否为表的一部分分类:</p>
-<ul>
-<li>主键索引：通常是表的主键的唯一索引。</li>
-<li>辅助索引&#x2F;二级索引：表中除了主键索引之外的索引。</li>
-</ul>
-</li>
-<li><p>功能性分类:</p>
-<ul>
-<li>全文索引（Full-text Indexes）：为了在文本数据列中支持复杂的查询，如匹配某些搜索词或短语等。</li>
-<li>部分索引（Partial Indexes）：也称为过滤索引，只为表中符合特定条件的部分数据建立索引。</li>
-</ul>
-</li>
-<li><p>其他特殊类型的索引:</p>
-<ul>
-<li>空间索引（Spatial Index）：用于地理空间数据的查询。</li>
-<li>XML索引：用于XML数据类型的字段，加快XML数据的查询效率。</li>
-</ul>
-</li>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>yum <span class="token function">install</span> -y yum-utils
+<span class="token operator">></span>yum-config-manager <span class="token punctuation">\</span>
+   --add-repo <span class="token punctuation">\</span>
+   https://download.docker.com/linux/centos/docker-ce.repo<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="4">
+<li>安装最新版doker</li>
 </ol>
-<p>索引的选择和使用应该基于数据的使用模式、查询类型、数据分布和数据库管理系统的特性。合适的索引能够大幅提高查询性能，但是也会消耗额外的存储空间，且在数据变更时需要维护，可能影响写入性能。因此，设计索引时需要权衡查询优化与资源消耗。</p>
-<h2 id="管理索引"><a href="#管理索引" class="headerlink" title="管理索引"></a>管理索引</h2><p>创建索引</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> index_name <span class="token keyword">ON</span> table_name<span class="token punctuation">(</span>column_name<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>yum <span class="token function">install</span> docker-ce docker-ce-cli containerd.io docker-compose-plugin -y<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>删除索引</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">DROP</span> <span class="token keyword">INDEX</span> index_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>修改索引</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">REINDEX <span class="token keyword">INDEX</span> index_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>查询索引</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SHOW</span> INDEXES <span class="token operator">IN</span> table_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="查询优化"><a href="#查询优化" class="headerlink" title="查询优化"></a>查询优化</h2><ol>
-<li><p>使用索引：</p>
-<ul>
-<li>为经常作为查询条件的列添加索引。</li>
-<li>使用复合索引针对包含多个条件的查询进行优化。</li>
-<li>确保索引字段的选择性好，以允许数据库快速缩小搜索结果范围。</li>
-</ul>
-</li>
-<li><p>优化查询语句：</p>
-<ul>
-<li>避免使用SELECT *，只选择所需的列。</li>
-<li>尽量使用表的别名和前缀，尤其是在连接多个表的查询中。</li>
-<li>确保WHERE子句中的条件尽可能使查询能利用索引。</li>
-</ul>
-</li>
-<li><p>调整数据模型：</p>
-<ul>
-<li>正规化数据结构以避免冗余，并减少数据的管理工作。</li>
-<li>在需要频繁读取的场景下考虑反正规化，以减少JOIN操作的需要。</li>
-</ul>
-</li>
-<li><p>使用查询缓存：</p>
-<ul>
-<li>利用数据库提供的查询缓存，对于那些不经常改变的数据，利用缓存可以大大加快查询速度。</li>
-</ul>
-</li>
-<li><p>查询计划分析：</p>
-<ul>
-<li>使用EXPLAIN或其他分析工具查看查询的执行计划。</li>
-<li>根据执行计划调整查询方式，比如改变JOIN的类型或顺序。</li>
-</ul>
-</li>
-<li><p>使用批处理：</p>
-<ul>
-<li>对于数据插入和更新操作，使用批处理可以减少I&#x2F;O次数，提高性能。</li>
-</ul>
-</li>
-<li><p>避免复杂的子查询：</p>
-<ul>
-<li>能用JOIN解决的问题就不要用子查询。</li>
-<li>尝试把复杂的子查询改写为临时表。</li>
-</ul>
-</li>
-<li><p>减少事务大小：</p>
-<ul>
-<li>长事务会锁定资源较长时间，减小事务的处理数据量可以提高并发性能。</li>
-</ul>
-</li>
-<li><p>硬件和系统优化：</p>
-<ul>
-<li>确保有足够的内存和高效的CPU。</li>
-<li>磁盘I&#x2F;O性能常常是瓶颈，选择适合的存储解决方案。</li>
-<li>良好的网络基础设施，尤其是在分布式数据库环境中。</li>
-</ul>
-</li>
-<li><p>监控和分析：</p>
-<ul>
-<li>监控数据库的性能，分析瓶颈点。</li>
-<li>定期进行数据库维护，比如索引重建和统计信息的更新。</li>
-</ul>
-</li>
+<ol start="5">
+<li>启动docker</li>
 </ol>
-<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><blockquote>
-<p>SQL中的事务是由一组有逻辑的数据库操作组成的工作单元，一个事务内的所有操作要么全部成功，要么全部失败，通过事务保证数据库数据的一致性。</p>
-</blockquote>
-<h2 id="如何使用事务"><a href="#如何使用事务" class="headerlink" title="如何使用事务"></a>如何使用事务</h2><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 开启事务</span>
-<span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span> 
-<span class="token comment">-- 提交事务</span>
-<span class="token keyword">COMMIT</span><span class="token punctuation">;</span>
-<span class="token comment">-- 回滚</span>
-<span class="token keyword">ROLLBACK</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>systemctl start <span class="token function">docker</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p><strong>保存点（<code>Savepoint</code>）</strong></p>
-<blockquote>
-<p>保存点就是快照，事务可以回滚到指定的快照节点，使用 <code>SAVEPOINT</code> 命令来设置保存点，使用 <code>ROLLBACK TO</code> 命令回滚到特定的保存点。</p>
-<p>如果一个长事务在执行过程中只有某一小部分操作失败，那么在失败之前设置一个保存点，等失败后只需回滚这一部分操作，而不用回滚整个事务，提高效率。</p>
-</blockquote>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SAVEPOINT</span> savepoint_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><strong>事务示例：</strong></p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span>
-
-<span class="token keyword">UPDATE</span> Accounts <span class="token keyword">SET</span> Balance <span class="token operator">=</span> Balance <span class="token operator">-</span> <span class="token number">100</span> <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-<span class="token keyword">UPDATE</span> Accounts <span class="token keyword">SET</span> Balance <span class="token operator">=</span> Balance <span class="token operator">+</span> <span class="token number">100</span> <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
-
-<span class="token comment">-- 检查最后一个操作是否成功。如果上一个T-SQL操作没有产生错误，`@@ERROR`的值将为0。</span>
-<span class="token keyword">IF</span> @<span class="token variable">@ERROR</span> <span class="token operator">=</span> <span class="token number">0</span> 
-   <span class="token keyword">COMMIT</span><span class="token punctuation">;</span>
-<span class="token keyword">ELSE</span>
-   <span class="token keyword">ROLLBACK</span><span class="token punctuation">;</span>
-<span class="token comment">-- 事务要么成功，要么失败</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="如何保证数据的完整性和可靠性"><a href="#如何保证数据的完整性和可靠性" class="headerlink" title="如何保证数据的完整性和可靠性"></a>如何保证数据的完整性和可靠性</h2><p><strong>1. 原子性（Atomicity）</strong></p>
-<blockquote>
-<p>一个事务（transaction）是一个原子单元，要么全部成功，要么全部不执行。</p>
-</blockquote>
-<p><strong>2. 一致性（Consistency）</strong></p>
-<blockquote>
-<p>事务操作前后，数据必须满足预定义的规则和约束，如数据类型、长度、范围等业务规则。如：一个银行应用其中一个规则是每个客户的账户余额必须大于或等于0。这是数据库的一个一致性状态。</p>
-</blockquote>
-<p><strong>3. 隔离性（Isolation）</strong></p>
-<blockquote>
-<p>一个事务执行后，它影响的数据对其他正在执行的事务是不可见的。</p>
-</blockquote>
-<p><strong>4. 持久性（Durability）</strong></p>
-<blockquote>
-<p>一个事务成功执行后，数据库中数据的更改会永久保存在数据库中。</p>
-</blockquote>
-<h2 id="事务并发时遇到的读取问题"><a href="#事务并发时遇到的读取问题" class="headerlink" title="事务并发时遇到的读取问题"></a>事务并发时遇到的读取问题</h2><p><strong>脏读（Dirty Read）</strong></p>
-<blockquote>
-<p>读取到了其他事务未提交的数据</p>
-</blockquote>
-<p><strong>不可重复读（Non-repeatable Read）</strong></p>
-<blockquote>
-<p>在一个事务内，不同的时刻读到的单个数据行的内容不一致，可能会受到其他事务的执行更新语句，改变了数据内容。</p>
-</blockquote>
-<p><strong>幻读（Phantom Read）</strong></p>
-<blockquote>
-<p>在一个事务，不同时刻读到的同一个数据范围（数据条数）不一致，可能受到了其他事务执行了插入语句后，改变了数据范围。</p>
-</blockquote>
-<h2 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h2><blockquote>
-<p>事务的隔离级别在事务并发执行时，来管理事务之间的交互，以防范可能引发的数据不一致问题。</p>
-</blockquote>
-<ol>
-<li><p><strong>读未提交（READ UNCOMMITTED）</strong> 一个事务可以读取其他事务未提交的更改后数据，也称为”脏读”,属于最低的隔离级别。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 以下是如何设置此级别的示例：</span>
-<span class="token keyword">SET</span> <span class="token keyword">TRANSACTION</span> <span class="token keyword">ISOLATION</span> <span class="token keyword">LEVEL</span> <span class="token keyword">READ</span> <span class="token keyword">UNCOMMITTED</span><span class="token punctuation">;</span>
-<span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span>
-<span class="token comment">-- Execute your SQL commands here</span>
-<span class="token keyword">COMMIT</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><strong>读已提交（READ COMMITTED）</strong> 一个事务要等到另一个事务提交后才能读取数据，解决了脏读问题，可能会遇到不可重复读的问题。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 设置此级别的方法如下：</span>
-<span class="token keyword">SET</span> <span class="token keyword">TRANSACTION</span> <span class="token keyword">ISOLATION</span> <span class="token keyword">LEVEL</span> <span class="token keyword">READ</span> <span class="token keyword">COMMITTED</span><span class="token punctuation">;</span>
-<span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span>
-<span class="token comment">-- Execute your SQL commands here</span>
-<span class="token keyword">COMMIT</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><strong>可重复读（REPEATABLE READ）</strong> 一个事务内读到的数据保持一致，不允许其他事务进行修改操作，解决了不可重复读问题，但可能出现幻读问题。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 设置此级别的方法如下：</span>
-<span class="token keyword">SET</span> <span class="token keyword">TRANSACTION</span> <span class="token keyword">ISOLATION</span> <span class="token keyword">LEVEL</span> <span class="token keyword">REPEATABLE</span> <span class="token keyword">READ</span><span class="token punctuation">;</span>
-<span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span>
-<span class="token comment">-- Execute your SQL commands here</span>
-<span class="token keyword">COMMIT</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><strong>串行化（SERIALIZABLE）</strong> 序列化时最高级别的隔离，对查询中使用的数据获取读锁和写锁，以防止其他事务访问相应的数据。它避免了脏读、不可重复读和幻读的问题。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 设置此级别的方法如下：</span>
-<span class="token keyword">SET</span> <span class="token keyword">TRANSACTION</span> <span class="token keyword">ISOLATION</span> <span class="token keyword">LEVEL</span> <span class="token keyword">SERIALIZABLE</span><span class="token punctuation">;</span>
-<span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span>
-<span class="token comment">-- Execute your SQL commands here</span>
-<span class="token keyword">COMMIT</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<ol start="6">
+<li>设置开机自启</li>
 </ol>
-<blockquote>
-<p><strong>更高级别的隔离通常会提供更高的一致性，但可能会由于锁等待时间的增加而降低性能。</strong></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>systemctl <span class="token builtin class-name">enable</span> <span class="token function">docker</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Software%20cracking.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Software%20cracking.html" class="post-title-link" itemprop="url">Software cracking</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Typro破解"><a href="#Typro破解" class="headerlink" title="Typro破解"></a>Typro破解</h1><blockquote>
+<p>亲测几个版本都有效，主要破解方式为修改注册表，不要给typro检测注册表修改的权限就可以了</p>
 </blockquote>
-<h1 id="存储过程和函数"><a href="#存储过程和函数" class="headerlink" title="存储过程和函数"></a>存储过程和函数</h1><h2 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h2><blockquote>
-<p>SQL存储过程是保存了一组经过预编译的可重用的SQL代码</p>
-</blockquote>
-<h3 id="存储过程的优点"><a href="#存储过程的优点" class="headerlink" title="存储过程的优点"></a>存储过程的优点</h3><ol>
-<li><p>预编译：存储过程在创建时会被编译并存储在数据库中。之后的调用不需要重新编译，只是执行已编译的代码，这可以提高执行效率。</p>
-</li>
-<li><p>减少网络流量：可以将多个SQL语句封装在一个存储过程中，用户只需一次调用，而非将多个语句分别从客户端发送到服务器，这样可以减少网络通信量。</p>
-</li>
-<li><p>重用和封装：存储过程可以被多个程序或应用重用。同时也可以将复杂的业务逻辑封装在存储过程内部，简化应用开发。</p>
-</li>
-<li><p>安全性：可以通过数据库的权限机制对存储过程进行权限控制，只允许特定用户执行特定的存储过程，从而增强了数据库操作的安全性。</p>
-</li>
-<li><p>事务管理：存储过程可以使用事务来确保数据的一致性。在存储过程中可以根据需要开始事务、提交事务或者在遇到错误时回滚事务。</p>
-</li>
-</ol>
-<h3 id="存储过程如何使用"><a href="#存储过程如何使用" class="headerlink" title="存储过程如何使用"></a>存储过程如何使用</h3><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 创建一个存储过程</span>
-<span class="token keyword">CREATE</span> <span class="token keyword">PROCEDURE</span> getEmployeesBySalary
-  <span class="token variable">@minSalary</span> <span class="token keyword">int</span>
-<span class="token keyword">AS</span>
-<span class="token keyword">BEGIN</span>
-  <span class="token keyword">SELECT</span> firstName<span class="token punctuation">,</span> lastName
-  <span class="token keyword">FROM</span> Employees
-  <span class="token keyword">WHERE</span> salary <span class="token operator">></span> <span class="token variable">@minSalary</span>
-<span class="token keyword">END</span>
-GO
-<span class="token comment">-- 执行存储过程</span>
-<span class="token keyword">EXEC</span> getEmployeesBySalary <span class="token number">50000</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>1.通过win+r,输入regedit打开注册表</p>
+<img src="https://telegraph-image-2ni.pages.dev/file/6ac2175e435ab73248b76.png" style="zoom:50%;">
 
-<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><blockquote>
-<p>SQL 函数是执行特定任务的一组 SQL 语句,函数必须返回一个值或结果。</p>
-</blockquote>
-<p><strong>1. 标量函数（Scalar functions）</strong>返回单个值，可以在使用单个表达式的地方使用。例如：</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">FUNCTION</span> addNumbers<span class="token punctuation">(</span><span class="token variable">@a</span> <span class="token keyword">int</span><span class="token punctuation">,</span> <span class="token variable">@b</span> <span class="token keyword">int</span><span class="token punctuation">)</span>
-<span class="token keyword">RETURNS</span> <span class="token keyword">int</span> 
-<span class="token keyword">AS</span> 
-<span class="token keyword">BEGIN</span>
-   <span class="token keyword">RETURN</span> <span class="token variable">@a</span> <span class="token operator">+</span> <span class="token variable">@b</span>
-<span class="token keyword">END</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>2.根据图上的路径，找到Typro</p>
+<img src="https://telegraph-image-2ni.pages.dev/file/68fce7738c28d8017a590.png" style="zoom:33%;">
 
-<p><strong>2. 表值函数（Table-valued functions）</strong>返回一个表。它们可以像普通表一样在 JOIN 子句中使用</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">FUNCTION</span> getBooks <span class="token punctuation">(</span><span class="token variable">@authorID</span> <span class="token keyword">INT</span><span class="token punctuation">)</span>
-<span class="token keyword">RETURNS</span> <span class="token keyword">TABLE</span>
-<span class="token keyword">AS</span> 
-<span class="token keyword">RETURN</span> <span class="token punctuation">(</span>
-   <span class="token keyword">SELECT</span> books<span class="token punctuation">.</span>title<span class="token punctuation">,</span> books<span class="token punctuation">.</span>publicationYear 
-   <span class="token keyword">FROM</span> books 
-   <span class="token keyword">WHERE</span> books<span class="token punctuation">.</span>authorID <span class="token operator">=</span> <span class="token variable">@authorID</span>
-<span class="token punctuation">)</span>
-<span class="token comment">-- 调用getBooks函数</span>
-<span class="token keyword">SELECT</span> title<span class="token punctuation">,</span> publicationYear <span class="token keyword">FROM</span> getBooks<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>3.在注册表编辑器中，双击修改IDate的值,将其改为一个未来日期。比如2099-01-01。这样就可以试用Typora到2099-01-01。</p>
+<img src="https://telegraph-image-2ni.pages.dev/file/c8c93f58d4cabd60e3eed.png" style="zoom:50%;">
 
-<h2 id="存储过程和表值函数的区别"><a href="#存储过程和表值函数的区别" class="headerlink" title="存储过程和表值函数的区别"></a>存储过程和表值函数的区别</h2><ol>
-<li><p>返回类型：</p>
-<ul>
-<li>存储过程可以返回零个、一个或多个结果集，也可以返回输出参数，或者根本不返回任何东西。</li>
-<li>表值函数返回一个表对象，可以像使用普通表一样查询这个对象。</li>
-</ul>
-</li>
-<li><p>使用上下文：</p>
-<ul>
-<li>存储过程不能在 SQL 语句（如 SELECT、UPDATE、INSERT、DELETE）中直接调用，通常需要使用特定的调用语句（如 CALL 或 EXECUTE）。</li>
-<li>表值函数可以直接在 SQL 查询中作为数据源使用，就像一个表一样。</li>
-</ul>
-</li>
-<li><p>副作用：</p>
-<ul>
-<li>存储过程可以包含产生副作用的 SQL 语句，如插入、更新、删除记录等。</li>
-<li>表值函数通常不允许包括有副作用的操作，它们设计来用作只读操作，并且期望是确定性的。</li>
-</ul>
-</li>
-<li><p>执行方式：</p>
-<ul>
-<li>存储过程需要显式执行，并且可以接受输入和输出参数。</li>
-<li>表值函数可以像其他任何列或表一样参与查询，并且通常只接受输入参数。</li>
-</ul>
-</li>
-<li><p>事务管理：</p>
-<ul>
-<li>存储过程中可以包含事务逻辑（如开始事务、提交事务、回滚事务）。</li>
-<li>表值函数不能使用事务逻辑。</li>
-</ul>
-</li>
-<li><p>调用方式：</p>
-<ul>
-<li>存储过程可以独立调用。</li>
-<li>表值函数需要在 SELECT 语句中被调用，可以像表一样被 JOIN。</li>
-</ul>
-</li>
-</ol>
-<h1 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h1><blockquote>
-<p>SQL性能优化对于加速SQL查询和提高数据库整体性能至关重要。最重要的是，它可以确保 SQL 语句的顺利高效执行，从而带来更好的应用程序性能和用户体验。</p>
-</blockquote>
-<h2 id="索引-1"><a href="#索引-1" class="headerlink" title="索引"></a>索引</h2><p>创建索引是优化 SQL 性能的重要方法之一。它们加速从数据库中查找和检索数据。</p>
-<pre class="line-numbers language-none"><code class="language-none">CREATE INDEX index_name
-ON table_name (column1, column2, ...);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>4.修改管理员的访问权限，typro就不会检测到修改过注册表了</p>
+<img src="https://telegraph-image-2ni.pages.dev/file/2c9493624aaf44e0908c4.png" style="zoom:33%;">
 
-<p>请记住，虽然索引可以加快数据检索速度，但它们可能会减慢数据修改速度，例如<code>INSERT</code>、<code>UPDATE</code>、 和<code>DELETE</code>。</p>
-<h2 id="避免选择"><a href="#避免选择" class="headerlink" title="避免选择*"></a>避免选择*</h2><p>仅获取所需的列，而不是使用 获取所有列<code>SELECT *</code>。它减少了需要从磁盘读取的数据量。</p>
-<pre class="line-numbers language-none"><code class="language-none">SELECT required_column FROM table_name;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="使用Join代替多个查询"><a href="#使用Join代替多个查询" class="headerlink" title="使用Join代替多个查询"></a>使用Join代替多个查询</h2><p>使用联接子句可以根据两个或多个表之间的相关列将两个或多个表中的行组合到单个查询中。这减少了访问数据库的查询数量，从而提高了性能。</p>
-<pre class="line-numbers language-none"><code class="language-none">SELECT Orders.OrderID, Customers.CustomerName
-FROM Orders
-INNER JOIN Customers
-ON Orders.CustomerID&#x3D;Customers.CustomerID;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="使用限制"><a href="#使用限制" class="headerlink" title="使用限制"></a>使用限制</h2><p>如果只需要一定数量的行，请使用 LIMIT 关键字来限制查询返回的行数。</p>
-<pre class="line-numbers language-none"><code class="language-none">SELECT column FROM table LIMIT 10;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="避免在开头使用带通配符的-LIKE-运算符"><a href="#避免在开头使用带通配符的-LIKE-运算符" class="headerlink" title="避免在开头使用带通配符的 LIKE 运算符"></a>避免在开头使用带通配符的 LIKE 运算符</h2><p>在查询开头使用通配符 ( <code>LIKE &#39;%search_term&#39;</code>) 可能会导致全表扫描。</p>
-<pre class="line-numbers language-none"><code class="language-none">SELECT column FROM table WHERE column LIKE &#39;search_term%&#39;;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="优化数据库架构"><a href="#优化数据库架构" class="headerlink" title="优化数据库架构"></a>优化数据库架构</h2><p>数据库模式涉及数据的组织方式以及如何优化以获得更好的性能。</p>
-<h2 id="使用解释"><a href="#使用解释" class="headerlink" title="使用解释"></a>使用解释</h2><p>许多数据库具有“解释计划”功能，可以显示数据库引擎执行查询的计划。</p>
-<pre class="line-numbers language-none"><code class="language-none">EXPLAIN SELECT * FROM table_name WHERE column &#x3D; &#39;value&#39;;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>这可以深入了解性能瓶颈，例如全表扫描、缺失索引等。</p>
+<p>5.执行完第四步后，点击应用和确认，直接就可以打开typro了</p>
 
       
     </div>
@@ -3516,14 +2382,14 @@ ON Orders.CustomerID&#x3D;Customers.CustomerID;<span aria-hidden="true" class="l
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
