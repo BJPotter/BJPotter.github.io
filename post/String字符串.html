@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"bjpotter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="String属于基本数据类型吗？ String是一个字符串对象，属于引用数据类型，不属于基本数据类型  String常用的方法获取类int length() 获取字符串长度 char charAt(int) 获取指定索引的字符  int indexOf(String) 获取指定字符串的索引 int lastIndexOf(String) 获取指定字符串的最后一次的索引 String substri">
+  <meta name="description" content="完整学习字符串相关知识">
 <meta property="og:type" content="article">
 <meta property="og:title" content="String字符串">
 <meta property="og:url" content="https://bjpotter.github.io/post/String%E5%AD%97%E7%AC%A6%E4%B8%B2.html">
 <meta property="og:site_name" content="Potter&#39;s 个人博客">
-<meta property="og:description" content="String属于基本数据类型吗？ String是一个字符串对象，属于引用数据类型，不属于基本数据类型  String常用的方法获取类int length() 获取字符串长度 char charAt(int) 获取指定索引的字符  int indexOf(String) 获取指定字符串的索引 int lastIndexOf(String) 获取指定字符串的最后一次的索引 String substri">
+<meta property="og:description" content="完整学习字符串相关知识">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-04-01T13:31:44.957Z">
-<meta property="article:modified_time" content="2024-04-01T13:31:44.957Z">
+<meta property="article:modified_time" content="2024-04-04T07:29:12.124Z">
 <meta property="article:author" content="potter">
 <meta name="twitter:card" content="summary">
 
@@ -195,8 +195,16 @@
 
               <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-04 15:29:12" itemprop="dateModified" datetime="2024-04-04T15:29:12+08:00">2024-04-04</time>
+              </span>
 
           
+            <div class="post-description">完整学习字符串相关知识</div>
 
         </div>
       </header>
@@ -255,8 +263,8 @@
 <p>在Java中，字符串常量池是一个特殊的内存区域（位于方法区），用于存储字符串字面量（也称为字符串常量）。当创建一个字符串对象时，如果它的值来源于字面量或者已经存在于字符串常量池中的字符串对象，则不会创建新的对象，而是直接引用池中的已存在对象，这样可以减少内存消耗并提升性能。</p>
 </blockquote>
 <h2 id="关于创建对象的个数，考虑以下几种场景："><a href="#关于创建对象的个数，考虑以下几种场景：" class="headerlink" title="关于创建对象的个数，考虑以下几种场景："></a>关于创建对象的个数，考虑以下几种场景：</h2><ol>
-<li>使用字面量创建字符串：String s1 &#x3D; “abc”; String s2 &#x3D; “abc”;<br>  java在这种情况下，尽管有两个引用s1和s2，但在内存中只会有一个字符串对象”abc”存储在字符串常量池中。因为编译器会确保相同内容的字符串字面量只创建一次对象。</li>
-<li>使用new关键字创建字符串：String s3 &#x3D; new String(“abc”);<br>  java使用new关键字创建字符串时，会在堆内存中创建一个新的字符串对象，即使”abc”已经存在于字符串常量池中也是如此。因此，这里会有两个对象，一个是常量池中的”abc”，另一个是在堆上新建的”abc”对象。</li>
+<li>使用字面量创建字符串：String s1 &#x3D; “abc”; String s2 &#x3D; “abc”;<br> java在这种情况下，尽管有两个引用s1和s2，但在内存中只会有一个字符串对象”abc”存储在字符串常量池中。因为编译器会确保相同内容的字符串字面量只创建一次对象。</li>
+<li>使用new关键字创建字符串：String s3 &#x3D; new String(“abc”);<br> java使用new关键字创建字符串时，会在堆内存中创建一个新的字符串对象，即使”abc”已经存在于字符串常量池中也是如此。因此，这里会有两个对象，一个是常量池中的”abc”，另一个是在堆上新建的”abc”对象。</li>
 <li>使用intern()方法：String s4 &#x3D; new String(“abc”).intern();<br>java的intern()方法会尝试将当前字符串对象添加到字符串常量池中，如果常量池已有该字符串，则返回池中该字符串的引用。所以，如果上述代码运行时，常量池没有”abc”，则会将新建的”abc”对象的引用复制到常量池，并使s4指向常量池中的”abc”；如果有，则直接返回池中已有的”abc”引用，此时堆上的新对象可能会被垃圾回收。</li>
 </ol>
 
@@ -274,12 +282,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/post/Web%20Frameworks.html" rel="prev" title="Web Frameworks">
-      <i class="fa fa-chevron-left"></i> Web Frameworks
+    <a href="/post/Orm.html" rel="prev" title="Orm">
+      <i class="fa fa-chevron-left"></i> Orm
     </a></div>
       <div class="post-nav-item">
-    <a href="/post/SQL%20Tutorial.html" rel="next" title="Sql Tutourial">
-      Sql Tutourial <i class="fa fa-chevron-right"></i>
+    <a href="/post/Web%20Frameworks.html" rel="next" title="Web Frameworks">
+      Web Frameworks <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -360,7 +368,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
