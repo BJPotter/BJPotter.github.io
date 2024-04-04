@@ -660,7 +660,7 @@ jobs:
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Flowable.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/FTP%E5%92%8CSFTP.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -674,7 +674,7 @@ jobs:
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/Flowable.html" class="post-title-link" itemprop="url">工作流</a>
+            <a href="/post/FTP%E5%92%8CSFTP.html" class="post-title-link" itemprop="url">SFTP实践</a>
         </h2>
 
         <div class="post-meta">
@@ -698,9 +698,61 @@ jobs:
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="1-开始"><a href="#1-开始" class="headerlink" title="1. 开始"></a>1. 开始</h2><h3 id="1-1-Flowable是什么？"><a href="#1-1-Flowable是什么？" class="headerlink" title="1.1 Flowable是什么？"></a>1.1 Flowable是什么？</h3><p>Flowable是一个使用Java编写的轻量级业务流程引擎。Flowable流程引擎可用于部署BPMN 2.0流程定义（用于定义流程的行业XML标准）， 创建这些流程定义的流程实例，进行查询，访问运行中或历史的流程实例与相关数据等。</p>
-<h3 id="1-2-Flowable与Activiti"><a href="#1-2-Flowable与Activiti" class="headerlink" title="1.2 Flowable与Activiti"></a>1.2 Flowable与Activiti</h3><p>flowable项目源自于activiti，通过两个框架的发展史即知。在2016.7~2017.5期间activiti团队内部已经产生了重大的分歧，于是原班核心人员（activiti5以及6比较核心的leader）Tijs Rademakers和Joram Barrez等便去开发flowable框架了，原来的activiti6以及activiti5代码则留给 Salaboy团队进行开发和维护。flowable是基于activiti-6.0.0.Beta4分支开发的。目前Flowable已经修复了activiti6很多的bug，可以实现零成本从activiti迁移到flowable。</p>
-<h3 id="1-3-构建命令行程序"><a href="#1-3-构建命令行程序" class="headerlink" title="1.3 构建命令行程序"></a>1.3 构建命令行程序</h3>
+          <h1 id="SFTP"><a href="#SFTP" class="headerlink" title="SFTP"></a>SFTP</h1><h2 id="SFTP介绍"><a href="#SFTP介绍" class="headerlink" title="SFTP介绍"></a>SFTP介绍</h2><p> sftp是Secure File Transfer Protocol的缩写，安全文件传送协议。可以为传输文件提供一种安全的网络的加密方法。SFTP 为 SSH的其中一部分，是一种传输档案至 Blogger 伺服器的安全方式。其实在SSH软件包中，已经包含了一个叫作SFTP(Secure File Transfer Protocol)的安全文件信息传输子系统，SFTP本身没有单独的守护进程，它必须使用sshd守护进程（端口号默认是22）来完成相应的连接和答复操作，所以从某种意义上来说，SFTP并不像一个服务器程序，而更像是一个客户端程序。SFTP同样是使用加密传输认证信息和传输的数据，所以，使用SFTP是非常安全的。但是，由于这种传输方式使用了加密&#x2F;解密技术，所以传输效率比普通的FTP要低得多。</p>
+<h2 id="SFTP安装"><a href="#SFTP安装" class="headerlink" title="SFTP安装"></a>SFTP安装</h2><h3 id="检查openssh版本"><a href="#检查openssh版本" class="headerlink" title="检查openssh版本"></a>检查openssh版本</h3><blockquote>
+<p>使用系统自带的internal-sftp搭建sftp，因为需要用到chroot，所以openssh 版本不能低于4.8p1</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># ssh -V</span>
+OpenSSH_7.4p1, OpenSSL <span class="token number">1.0</span>.2k-fips  <span class="token number">26</span> Jan <span class="token number">2017</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="创建用户组"><a href="#创建用户组" class="headerlink" title="创建用户组"></a>创建用户组</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># groupadd sftp</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="添加用户到sftp用户组"><a href="#添加用户到sftp用户组" class="headerlink" title="添加用户到sftp用户组"></a>添加用户到sftp用户组</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># useradd -g sftp -s /sbin/nologin tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="修改sftp用户的密码"><a href="#修改sftp用户的密码" class="headerlink" title="修改sftp用户的密码"></a>修改sftp用户的密码</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># passwd tom</span>
+更改用户 tom 的密码 。
+新的 密码：
+无效的密码： 密码少于 <span class="token number">8</span> 个字符
+重新输入新的 密码：
+passwd：所有的身份验证令牌已经成功更新。
+密码设置为: <span class="token function">cat</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="创建SFTP目录"><a href="#创建SFTP目录" class="headerlink" title="创建SFTP目录"></a>创建SFTP目录</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/</span>
+<span class="token comment"># 创建该用户能用的目录</span>
+<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="修改sshd-config的配置文件"><a href="#修改sshd-config的配置文件" class="headerlink" title="修改sshd_config的配置文件"></a>修改sshd_config的配置文件</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># vim /etc/ssh/sshd_config</span>
+<span class="token comment">#Subsystem      sftp    /usr/libexec/openssh/sftp-server 需要注释掉</span>
+<span class="token comment"># 添加以下配置</span>
+Subsystem <span class="token function">sftp</span> internal-sftp
+Match Group <span class="token function">sftp</span>
+ChrootDirectory /sftp/%u
+ForceCommand internal-sftp
+AllowTcpForwarding no
+X11Forwarding no<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="设定Chroot权限"><a href="#设定Chroot权限" class="headerlink" title="设定Chroot权限"></a>设定Chroot权限</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown root:sftp /sftp</span>
+<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown root:sftp /sftp/tom</span>
+<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp</span>
+<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp/tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="设置用户对应的权限"><a href="#设置用户对应的权限" class="headerlink" title="设置用户对应的权限"></a>设置用户对应的权限</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/tom/files</span>
+<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown tom /sftp/tom/files</span>
+<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp/tom/files</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="重启sshd"><a href="#重启sshd" class="headerlink" title="重启sshd"></a>重启sshd</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># systemctl restart sshd</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="连接测试"><a href="#连接测试" class="headerlink" title="连接测试"></a>连接测试</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># sftp tom@127.0.0.1</span>
+tom@127.0.0.1's password:
+Connected to <span class="token number">127.0</span>.0.1.
+sftp<span class="token operator">></span>
+sftp<span class="token operator">></span> <span class="token builtin class-name">exit</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+
+
+
       
     </div>
 
@@ -854,7 +906,7 @@ X-Frame-Options: SAMEORIGIN<span aria-hidden="true" class="line-numbers-rows"><s
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/FTP%E5%92%8CSFTP.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Flowable.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -868,7 +920,7 @@ X-Frame-Options: SAMEORIGIN<span aria-hidden="true" class="line-numbers-rows"><s
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/FTP%E5%92%8CSFTP.html" class="post-title-link" itemprop="url">SFTP实践</a>
+            <a href="/post/Flowable.html" class="post-title-link" itemprop="url">工作流</a>
         </h2>
 
         <div class="post-meta">
@@ -892,61 +944,9 @@ X-Frame-Options: SAMEORIGIN<span aria-hidden="true" class="line-numbers-rows"><s
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="SFTP"><a href="#SFTP" class="headerlink" title="SFTP"></a>SFTP</h1><h2 id="SFTP介绍"><a href="#SFTP介绍" class="headerlink" title="SFTP介绍"></a>SFTP介绍</h2><p> sftp是Secure File Transfer Protocol的缩写，安全文件传送协议。可以为传输文件提供一种安全的网络的加密方法。SFTP 为 SSH的其中一部分，是一种传输档案至 Blogger 伺服器的安全方式。其实在SSH软件包中，已经包含了一个叫作SFTP(Secure File Transfer Protocol)的安全文件信息传输子系统，SFTP本身没有单独的守护进程，它必须使用sshd守护进程（端口号默认是22）来完成相应的连接和答复操作，所以从某种意义上来说，SFTP并不像一个服务器程序，而更像是一个客户端程序。SFTP同样是使用加密传输认证信息和传输的数据，所以，使用SFTP是非常安全的。但是，由于这种传输方式使用了加密&#x2F;解密技术，所以传输效率比普通的FTP要低得多。</p>
-<h2 id="SFTP安装"><a href="#SFTP安装" class="headerlink" title="SFTP安装"></a>SFTP安装</h2><h3 id="检查openssh版本"><a href="#检查openssh版本" class="headerlink" title="检查openssh版本"></a>检查openssh版本</h3><blockquote>
-<p>使用系统自带的internal-sftp搭建sftp，因为需要用到chroot，所以openssh 版本不能低于4.8p1</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># ssh -V</span>
-OpenSSH_7.4p1, OpenSSL <span class="token number">1.0</span>.2k-fips  <span class="token number">26</span> Jan <span class="token number">2017</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h3 id="创建用户组"><a href="#创建用户组" class="headerlink" title="创建用户组"></a>创建用户组</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># groupadd sftp</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="添加用户到sftp用户组"><a href="#添加用户到sftp用户组" class="headerlink" title="添加用户到sftp用户组"></a>添加用户到sftp用户组</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># useradd -g sftp -s /sbin/nologin tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="修改sftp用户的密码"><a href="#修改sftp用户的密码" class="headerlink" title="修改sftp用户的密码"></a>修改sftp用户的密码</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># passwd tom</span>
-更改用户 tom 的密码 。
-新的 密码：
-无效的密码： 密码少于 <span class="token number">8</span> 个字符
-重新输入新的 密码：
-passwd：所有的身份验证令牌已经成功更新。
-密码设置为: <span class="token function">cat</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="创建SFTP目录"><a href="#创建SFTP目录" class="headerlink" title="创建SFTP目录"></a>创建SFTP目录</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/</span>
-<span class="token comment"># 创建该用户能用的目录</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="修改sshd-config的配置文件"><a href="#修改sshd-config的配置文件" class="headerlink" title="修改sshd_config的配置文件"></a>修改sshd_config的配置文件</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># vim /etc/ssh/sshd_config</span>
-<span class="token comment">#Subsystem      sftp    /usr/libexec/openssh/sftp-server 需要注释掉</span>
-<span class="token comment"># 添加以下配置</span>
-Subsystem <span class="token function">sftp</span> internal-sftp
-Match Group <span class="token function">sftp</span>
-ChrootDirectory /sftp/%u
-ForceCommand internal-sftp
-AllowTcpForwarding no
-X11Forwarding no<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="设定Chroot权限"><a href="#设定Chroot权限" class="headerlink" title="设定Chroot权限"></a>设定Chroot权限</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown root:sftp /sftp</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown root:sftp /sftp/tom</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp/tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="设置用户对应的权限"><a href="#设置用户对应的权限" class="headerlink" title="设置用户对应的权限"></a>设置用户对应的权限</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/tom/files</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown tom /sftp/tom/files</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp/tom/files</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="重启sshd"><a href="#重启sshd" class="headerlink" title="重启sshd"></a>重启sshd</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># systemctl restart sshd</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="连接测试"><a href="#连接测试" class="headerlink" title="连接测试"></a>连接测试</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># sftp tom@127.0.0.1</span>
-tom@127.0.0.1's password:
-Connected to <span class="token number">127.0</span>.0.1.
-sftp<span class="token operator">></span>
-sftp<span class="token operator">></span> <span class="token builtin class-name">exit</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-
-
-
+          <h2 id="1-开始"><a href="#1-开始" class="headerlink" title="1. 开始"></a>1. 开始</h2><h3 id="1-1-Flowable是什么？"><a href="#1-1-Flowable是什么？" class="headerlink" title="1.1 Flowable是什么？"></a>1.1 Flowable是什么？</h3><p>Flowable是一个使用Java编写的轻量级业务流程引擎。Flowable流程引擎可用于部署BPMN 2.0流程定义（用于定义流程的行业XML标准）， 创建这些流程定义的流程实例，进行查询，访问运行中或历史的流程实例与相关数据等。</p>
+<h3 id="1-2-Flowable与Activiti"><a href="#1-2-Flowable与Activiti" class="headerlink" title="1.2 Flowable与Activiti"></a>1.2 Flowable与Activiti</h3><p>flowable项目源自于activiti，通过两个框架的发展史即知。在2016.7~2017.5期间activiti团队内部已经产生了重大的分歧，于是原班核心人员（activiti5以及6比较核心的leader）Tijs Rademakers和Joram Barrez等便去开发flowable框架了，原来的activiti6以及activiti5代码则留给 Salaboy团队进行开发和维护。flowable是基于activiti-6.0.0.Beta4分支开发的。目前Flowable已经修复了activiti6很多的bug，可以实现零成本从activiti迁移到flowable。</p>
+<h3 id="1-3-构建命令行程序"><a href="#1-3-构建命令行程序" class="headerlink" title="1.3 构建命令行程序"></a>1.3 构建命令行程序</h3>
       
     </div>
 

@@ -266,195 +266,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6.html" class="post-title-link" itemprop="url">java类的加载机制</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>Java类加载机制是Java虚拟机（JVM）的核心组成部分之一，负责在运行时加载、链接和初始化类。通俗的来讲就是每个.java文件经过javac编译工具编译后生成.class文件，类加载机制就是把这些.class文件中的二进制读到内存中，并对数据进行链接（验证、准备、解析）和初始化，初始化完成后，会在方法区保存一份该类的元数据，同时在堆中创建一个与之对应的<code>Class</code>对象，该<code>Class</code>对象包含了该类的相关信息。</p>
-</blockquote>
-<h1 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h1><p>加载（Loading）-&gt; 验证（Verification）-&gt; 准备（Preparation）-&gt; 解析（Resolution）-&gt; 初始化（Initialization）-&gt; 使用（Usage）-&gt; 卸载（unloading）</p>
-<p>1.加载指将字节码文件加载到JVM</p>
-<p>2.验证指是否符合JVM虚拟机的规范</p>
-<p>3.准备指给静态变量分配内存空间，并设置置默认初始值</p>
-<p>4.解析指将类的符号引用转换为直接引用，让虚拟机可以找到对应的内存地址</p>
-<p>5.初始化指对静态代码块和静态变量进行初始化操作</p>
-<p>6.使用指可以被程序其他的类调用或者说直接引用</p>
-<p>7.卸载指在java虚拟机中，如果某个类不再使用，那就认为这个类是无用的，可以被卸载。</p>
-<h1 id="类什么时候会加载"><a href="#类什么时候会加载" class="headerlink" title="类什么时候会加载"></a>类什么时候会加载</h1><p>1.创建类的实例：当程序中使用<code>new</code>关键字创建类的实例时，对应的类会被加载。例如：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">MyClass</span> obj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>2.<strong>访问类的静态变量或静态方法</strong>：当程序中访问类的静态变量或静态方法时，对应的类也会被加载。例如：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">MyClass</span><span class="token punctuation">.</span><span class="token function">staticMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>3.<strong>通过反射动态加载类</strong>：通过Java的反射机制，可以在运行时动态加载类。例如：**</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"com.example.MyClass"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>4.<strong>启动应用程序时的入口类加载</strong>：当启动Java应用程序时，会指定一个入口类，该入口类会被加载并执行<code>main()</code>方法。这也会触发入口类所依赖的其他类的加载。</p>
-<p>5.<strong>继承</strong>：当一个类继承了另一个类时，子类的加载会导致父类也被加载，除非父类已经被加载过。</p>
-<p>6.<strong>实现接口</strong>：当一个类实现了某个接口时，接口中定义的常量会被加载。</p>
-<h1 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h1><img src="https://telegraph-image-2ni.pages.dev/file/2dded58d88ad824bb04c3.png" style="zoom:33%;">
-
-<p>类的加载过程有五个阶段，其中验证、准备、解析这个子阶段属于链接阶段。下面详细说下，类的加载过程的每个阶段</p>
-<p>1.<strong>加载</strong>：将类的字节码被加载到JVM中。包括从文件系统或者网络中读取.class文件，并将其转换为内存中的二进制数据。在加载阶段，还会为类创建一个<code>java.lang.Class</code>对象。</p>
-<p>2.<strong>验证</strong>：确保类的字节码符合JVM规范，不会导致安全问题或运行时异常。</p>
-<p>3.<strong>准备</strong>：为类的静态变量分配内存空间，并设置默认初始值。</p>
-<p>4.<strong>解析</strong>：将类中的符号引用转换为直接引用，使得虚拟机能够找到对应的内存地址。</p>
-<p>5.<strong>初始化</strong>：在初始化阶段，执行类的静态初始化器（static initializer）和静态变量初始化。静态初始化器是类中的静态代码块，用于初始化类的静态成员变量或执行其他静态初始化操作。</p>
-<h1 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h1><blockquote>
-<p>在<strong>加载</strong>阶段，类加载器通过类的全限定名，获取该类字节流数据。</p>
-</blockquote>
-<p>1.<strong>启动类加载器（Bootstrap Class Loader）：</strong>负责加载jre\lib 目录下的jar，由C++实现，不是ClassLoader子类。</p>
-<p>2.<strong>拓展类加载器（Extension Class Loader）：</strong>负责加载Java平台中扩展功能的一些jar包，包括jre\lib\ext 目录中 jar包。由Java代码实现。</p>
-<p>3.<strong>应用程序类加载器（Application Class Loader）：</strong>我们自己开发的应用程序，就是由它进行加载的，负责加载ClassPath路径下所有jar包。</p>
-<p>4.<strong>自定义类加载器（Custom Class Loader）</strong>：可以加载任何类，包括Java标准库中的类、第三方库中的类以及自己编写的类。其加载范围和方式可以根据需求进行灵活定制。</p>
-<img src="https://telegraph-image-2ni.pages.dev/file/e1208860284124c277d23.png" style="zoom: 50%;">
-
-
-
-
-
-<h1 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h1><blockquote>
-<p>简单说就是爹能干的，儿子肯定不干，就是任何一个类加载器在接到一个类的加载请求时，都会先让其父类进行加载，只有父类无法加载（或者没有父类）的情况下，才尝试自己加载。</p>
-</blockquote>
-<ol>
-<li><strong>安全性（Security）</strong>：双亲委派模型可以确保Java核心类库不会被替换或篡改，从而提高了Java程序的安全性。由于Java核心类库由启动类加载器加载，且无法被覆盖，因此不容易受到恶意攻击。</li>
-<li><strong>避免类的重复加载（Avoidance of Duplicate Loading）</strong>：双亲委派模型可以避免同一个类被不同的类加载器加载多次，从而节省了内存空间并减少了资源浪费。</li>
-<li><strong>统一标准（Standardization）</strong>：双亲委派模型提供了一个统一的类加载机制，使得Java应用程序具有一致的行为。无论是在Java虚拟机的实现上，还是在开发Java应用程序时，都能够遵循同样的加载规则，减少了不必要的复杂性和混乱。</li>
-<li><strong>类的隔离性（Isolation）</strong>：双亲委派模型通过委派链的方式实现了类的隔离，每个类加载器只负责加载自己能够访问到的类，从而有效地隔离了不同模块或组件的类，防止了类之间的相互干扰和冲突。</li>
-<li><strong>性能优化（Performance Optimization）</strong>：双亲委派模型在加载类时会先检查父类加载器是否已经加载过该类，如果已经加载过，则直接返回已加载的类，从而减少了重复加载和搜索的时间，提高了加载性能。</li>
-</ol>
-<h1 id="自定义类加载器"><a href="#自定义类加载器" class="headerlink" title="自定义类加载器"></a>自定义类加载器</h1><p>自定义类加载器的好处：</p>
-<ol>
-<li><strong>动态更新（Dynamic Updating）</strong>：自定义类加载器可以实现动态更新类的功能。例如，当应用程序运行时，可以检测到新的类文件并加载，从而实现热部署或动态扩展应用程序的功能。</li>
-<li><strong>类的加密解密（Class Encryption and Decryption）</strong>：自定义类加载器可以在加载类文件时进行解密操作，从而保护类文件的安全性。通过在加载过程中实现解密逻辑，可以防止类文件被恶意篡改或者盗用。</li>
-<li><strong>加载非标准文件格式（Loading Non-Standard File Formats）</strong>：自定义类加载器可以加载非标准的类文件格式，例如从数据库、网络或者自定义的存储介质中加载类文件。</li>
-<li><strong>从特定位置加载类（Loading Classes from Specific Locations）</strong>：自定义类加载器可以从特定的位置加载类文件，例如从特定的目录、JAR文件或者远程服务器加载类文件。</li>
-<li><strong>实现类加载策略（Implementing Class Loading Strategies）</strong>：自定义类加载器可以根据特定的策略加载类文件，例如按需加载、按版本加载或者按条件加载。</li>
-<li><strong>解决类加载冲突（Resolving Class Loading Conflicts）</strong>：自定义类加载器可以解决类加载冲突问题，例如当多个模块中存在相同类名但不同版本的类文件时，可以使用自定义类加载器实现类隔离和版本管理。</li>
-<li><strong>实现类加载的权限控制（Implementing Class Loading Permissions）</strong>：自定义类加载器可以实现对类加载的权限控制，例如根据用户身份或者访问权限加载不同的类文件。</li>
-<li><strong>实现类的热替换（Implementing Class Hot Swapping）</strong>：自定义类加载器可以实现类的热替换功能，即在运行时替换正在使用的类，而不需要重启应用程序。</li>
-</ol>
-<blockquote>
-<p>下面我们使用自定义的类加载器加载指定的类，并通过反射调用类的方法。</p>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>example</span><span class="token punctuation">;</span>
-
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span></span><span class="token class-name">Method</span></span><span class="token punctuation">;</span>
-
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CustomClassLoader</span> <span class="token keyword">extends</span> <span class="token class-name">ClassLoader</span><span class="token punctuation">&#123;</span>
-    <span class="token comment">// 定义加载类的路径</span>
-    <span class="token keyword">private</span> <span class="token class-name">String</span> classPath<span class="token punctuation">;</span>
-
-    <span class="token keyword">public</span> <span class="token class-name">CustomClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">public</span> <span class="token class-name">CustomClassLoader</span><span class="token punctuation">(</span><span class="token class-name">String</span> classPath<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>classPath <span class="token operator">=</span> classPath<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">protected</span> <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> <span class="token function">findClass</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ClassNotFoundException</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-            <span class="token comment">// 读取指定路径下的类文件的二进制数据</span>
-            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data <span class="token operator">=</span> <span class="token function">loadClassData</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token comment">// 调用defineClass方法将二进制数据转换为Class对象</span>
-            <span class="token keyword">return</span> <span class="token function">defineClass</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> data<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> data<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">ClassNotFoundException</span><span class="token punctuation">(</span><span class="token string">"Class "</span> <span class="token operator">+</span> name <span class="token operator">+</span> <span class="token string">" not found."</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token comment">// 加载类文件的二进制数据</span>
-    <span class="token keyword">private</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">loadClassData</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">String</span> fileName <span class="token operator">=</span> classPath <span class="token operator">+</span> <span class="token class-name">File</span><span class="token punctuation">.</span>separatorChar <span class="token operator">+</span> name<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token char">'.'</span><span class="token punctuation">,</span> <span class="token class-name">File</span><span class="token punctuation">.</span>separatorChar<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">".class"</span><span class="token punctuation">;</span>
-        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">InputStream</span> inputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>fileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
-             <span class="token class-name">ByteArrayOutputStream</span> outputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">int</span> len<span class="token punctuation">;</span>
-            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> buffer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token number">4096</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>len <span class="token operator">=</span> inputStream<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                outputStream<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-            <span class="token keyword">return</span> outputStream<span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
-        <span class="token comment">// 自定义类加载器实例化</span>
-        <span class="token class-name">CustomClassLoader</span> classLoader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CustomClassLoader</span><span class="token punctuation">(</span><span class="token string">"D:\\Project\\JAVA\\src\\com.example.CustomClassLoader.class"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// 使用自定义类加载器加载指定类</span>
-        <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> clazz <span class="token operator">=</span> classLoader<span class="token punctuation">.</span><span class="token function">loadClass</span><span class="token punctuation">(</span><span class="token string">"com.example.CustomClassLoader"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// 创建实例</span>
-        <span class="token class-name">Object</span> instance <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// 调用方法</span>
-        <span class="token class-name">Method</span> method <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"sayHello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>instance<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"say hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h1 id="类加载器的作用域"><a href="#类加载器的作用域" class="headerlink" title="类加载器的作用域"></a>类加载器的作用域</h1><blockquote>
-<p>类加载器的作用域（Scope）指的是类加载器加载类的可见范围和生命周期管理。类加载器的作用域决定了类的可见性、类的隔离性以及类的生命周期。</p>
-</blockquote>
-<ol>
-<li><strong>可见性（Visibility）</strong>：每个类加载器实例都有自己的加载路径和类加载命名空间，它只能看到自己加载的类和其父类加载器加载的类。因此，类加载器的可见性决定了哪些类对于特定的类加载器是可见的。</li>
-<li><strong>隔离性（Isolation）</strong>：类加载器的隔离性确保了每个类加载器实例加载的类相互之间是隔离的，即同一个类在不同的类加载器实例中被加载时，会被认为是不同的类。这种隔离性保护了应用程序的安全性和稳定性，防止不同模块或组件之间的类产生冲突和干扰。</li>
-<li><strong>生命周期管理（Lifecycle Management）</strong>：类加载器的生命周期管理包括类加载器的创建、使用和销毁。在Java应用程序中，类加载器的生命周期通常与应用程序的生命周期相对应。例如，在应用程序启动时创建类加载器实例，在应用程序结束时销毁类加载器实例。</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -961,6 +772,195 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6.html" class="post-title-link" itemprop="url">java类的加载机制</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>Java类加载机制是Java虚拟机（JVM）的核心组成部分之一，负责在运行时加载、链接和初始化类。通俗的来讲就是每个.java文件经过javac编译工具编译后生成.class文件，类加载机制就是把这些.class文件中的二进制读到内存中，并对数据进行链接（验证、准备、解析）和初始化，初始化完成后，会在方法区保存一份该类的元数据，同时在堆中创建一个与之对应的<code>Class</code>对象，该<code>Class</code>对象包含了该类的相关信息。</p>
+</blockquote>
+<h1 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h1><p>加载（Loading）-&gt; 验证（Verification）-&gt; 准备（Preparation）-&gt; 解析（Resolution）-&gt; 初始化（Initialization）-&gt; 使用（Usage）-&gt; 卸载（unloading）</p>
+<p>1.加载指将字节码文件加载到JVM</p>
+<p>2.验证指是否符合JVM虚拟机的规范</p>
+<p>3.准备指给静态变量分配内存空间，并设置置默认初始值</p>
+<p>4.解析指将类的符号引用转换为直接引用，让虚拟机可以找到对应的内存地址</p>
+<p>5.初始化指对静态代码块和静态变量进行初始化操作</p>
+<p>6.使用指可以被程序其他的类调用或者说直接引用</p>
+<p>7.卸载指在java虚拟机中，如果某个类不再使用，那就认为这个类是无用的，可以被卸载。</p>
+<h1 id="类什么时候会加载"><a href="#类什么时候会加载" class="headerlink" title="类什么时候会加载"></a>类什么时候会加载</h1><p>1.创建类的实例：当程序中使用<code>new</code>关键字创建类的实例时，对应的类会被加载。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">MyClass</span> obj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>2.<strong>访问类的静态变量或静态方法</strong>：当程序中访问类的静态变量或静态方法时，对应的类也会被加载。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">MyClass</span><span class="token punctuation">.</span><span class="token function">staticMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>3.<strong>通过反射动态加载类</strong>：通过Java的反射机制，可以在运行时动态加载类。例如：**</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"com.example.MyClass"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>4.<strong>启动应用程序时的入口类加载</strong>：当启动Java应用程序时，会指定一个入口类，该入口类会被加载并执行<code>main()</code>方法。这也会触发入口类所依赖的其他类的加载。</p>
+<p>5.<strong>继承</strong>：当一个类继承了另一个类时，子类的加载会导致父类也被加载，除非父类已经被加载过。</p>
+<p>6.<strong>实现接口</strong>：当一个类实现了某个接口时，接口中定义的常量会被加载。</p>
+<h1 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h1><img src="https://telegraph-image-2ni.pages.dev/file/2dded58d88ad824bb04c3.png" style="zoom:33%;">
+
+<p>类的加载过程有五个阶段，其中验证、准备、解析这个子阶段属于链接阶段。下面详细说下，类的加载过程的每个阶段</p>
+<p>1.<strong>加载</strong>：将类的字节码被加载到JVM中。包括从文件系统或者网络中读取.class文件，并将其转换为内存中的二进制数据。在加载阶段，还会为类创建一个<code>java.lang.Class</code>对象。</p>
+<p>2.<strong>验证</strong>：确保类的字节码符合JVM规范，不会导致安全问题或运行时异常。</p>
+<p>3.<strong>准备</strong>：为类的静态变量分配内存空间，并设置默认初始值。</p>
+<p>4.<strong>解析</strong>：将类中的符号引用转换为直接引用，使得虚拟机能够找到对应的内存地址。</p>
+<p>5.<strong>初始化</strong>：在初始化阶段，执行类的静态初始化器（static initializer）和静态变量初始化。静态初始化器是类中的静态代码块，用于初始化类的静态成员变量或执行其他静态初始化操作。</p>
+<h1 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h1><blockquote>
+<p>在<strong>加载</strong>阶段，类加载器通过类的全限定名，获取该类字节流数据。</p>
+</blockquote>
+<p>1.<strong>启动类加载器（Bootstrap Class Loader）：</strong>负责加载jre\lib 目录下的jar，由C++实现，不是ClassLoader子类。</p>
+<p>2.<strong>拓展类加载器（Extension Class Loader）：</strong>负责加载Java平台中扩展功能的一些jar包，包括jre\lib\ext 目录中 jar包。由Java代码实现。</p>
+<p>3.<strong>应用程序类加载器（Application Class Loader）：</strong>我们自己开发的应用程序，就是由它进行加载的，负责加载ClassPath路径下所有jar包。</p>
+<p>4.<strong>自定义类加载器（Custom Class Loader）</strong>：可以加载任何类，包括Java标准库中的类、第三方库中的类以及自己编写的类。其加载范围和方式可以根据需求进行灵活定制。</p>
+<img src="https://telegraph-image-2ni.pages.dev/file/e1208860284124c277d23.png" style="zoom: 50%;">
+
+
+
+
+
+<h1 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h1><blockquote>
+<p>简单说就是爹能干的，儿子肯定不干，就是任何一个类加载器在接到一个类的加载请求时，都会先让其父类进行加载，只有父类无法加载（或者没有父类）的情况下，才尝试自己加载。</p>
+</blockquote>
+<ol>
+<li><strong>安全性（Security）</strong>：双亲委派模型可以确保Java核心类库不会被替换或篡改，从而提高了Java程序的安全性。由于Java核心类库由启动类加载器加载，且无法被覆盖，因此不容易受到恶意攻击。</li>
+<li><strong>避免类的重复加载（Avoidance of Duplicate Loading）</strong>：双亲委派模型可以避免同一个类被不同的类加载器加载多次，从而节省了内存空间并减少了资源浪费。</li>
+<li><strong>统一标准（Standardization）</strong>：双亲委派模型提供了一个统一的类加载机制，使得Java应用程序具有一致的行为。无论是在Java虚拟机的实现上，还是在开发Java应用程序时，都能够遵循同样的加载规则，减少了不必要的复杂性和混乱。</li>
+<li><strong>类的隔离性（Isolation）</strong>：双亲委派模型通过委派链的方式实现了类的隔离，每个类加载器只负责加载自己能够访问到的类，从而有效地隔离了不同模块或组件的类，防止了类之间的相互干扰和冲突。</li>
+<li><strong>性能优化（Performance Optimization）</strong>：双亲委派模型在加载类时会先检查父类加载器是否已经加载过该类，如果已经加载过，则直接返回已加载的类，从而减少了重复加载和搜索的时间，提高了加载性能。</li>
+</ol>
+<h1 id="自定义类加载器"><a href="#自定义类加载器" class="headerlink" title="自定义类加载器"></a>自定义类加载器</h1><p>自定义类加载器的好处：</p>
+<ol>
+<li><strong>动态更新（Dynamic Updating）</strong>：自定义类加载器可以实现动态更新类的功能。例如，当应用程序运行时，可以检测到新的类文件并加载，从而实现热部署或动态扩展应用程序的功能。</li>
+<li><strong>类的加密解密（Class Encryption and Decryption）</strong>：自定义类加载器可以在加载类文件时进行解密操作，从而保护类文件的安全性。通过在加载过程中实现解密逻辑，可以防止类文件被恶意篡改或者盗用。</li>
+<li><strong>加载非标准文件格式（Loading Non-Standard File Formats）</strong>：自定义类加载器可以加载非标准的类文件格式，例如从数据库、网络或者自定义的存储介质中加载类文件。</li>
+<li><strong>从特定位置加载类（Loading Classes from Specific Locations）</strong>：自定义类加载器可以从特定的位置加载类文件，例如从特定的目录、JAR文件或者远程服务器加载类文件。</li>
+<li><strong>实现类加载策略（Implementing Class Loading Strategies）</strong>：自定义类加载器可以根据特定的策略加载类文件，例如按需加载、按版本加载或者按条件加载。</li>
+<li><strong>解决类加载冲突（Resolving Class Loading Conflicts）</strong>：自定义类加载器可以解决类加载冲突问题，例如当多个模块中存在相同类名但不同版本的类文件时，可以使用自定义类加载器实现类隔离和版本管理。</li>
+<li><strong>实现类加载的权限控制（Implementing Class Loading Permissions）</strong>：自定义类加载器可以实现对类加载的权限控制，例如根据用户身份或者访问权限加载不同的类文件。</li>
+<li><strong>实现类的热替换（Implementing Class Hot Swapping）</strong>：自定义类加载器可以实现类的热替换功能，即在运行时替换正在使用的类，而不需要重启应用程序。</li>
+</ol>
+<blockquote>
+<p>下面我们使用自定义的类加载器加载指定的类，并通过反射调用类的方法。</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>example</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span></span><span class="token class-name">Method</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CustomClassLoader</span> <span class="token keyword">extends</span> <span class="token class-name">ClassLoader</span><span class="token punctuation">&#123;</span>
+    <span class="token comment">// 定义加载类的路径</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> classPath<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">CustomClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">CustomClassLoader</span><span class="token punctuation">(</span><span class="token class-name">String</span> classPath<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>classPath <span class="token operator">=</span> classPath<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> <span class="token function">findClass</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ClassNotFoundException</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 读取指定路径下的类文件的二进制数据</span>
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data <span class="token operator">=</span> <span class="token function">loadClassData</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 调用defineClass方法将二进制数据转换为Class对象</span>
+            <span class="token keyword">return</span> <span class="token function">defineClass</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> data<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> data<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">ClassNotFoundException</span><span class="token punctuation">(</span><span class="token string">"Class "</span> <span class="token operator">+</span> name <span class="token operator">+</span> <span class="token string">" not found."</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment">// 加载类文件的二进制数据</span>
+    <span class="token keyword">private</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">loadClassData</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> fileName <span class="token operator">=</span> classPath <span class="token operator">+</span> <span class="token class-name">File</span><span class="token punctuation">.</span>separatorChar <span class="token operator">+</span> name<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token char">'.'</span><span class="token punctuation">,</span> <span class="token class-name">File</span><span class="token punctuation">.</span>separatorChar<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">".class"</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">InputStream</span> inputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>fileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+             <span class="token class-name">ByteArrayOutputStream</span> outputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">int</span> len<span class="token punctuation">;</span>
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> buffer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token number">4096</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>len <span class="token operator">=</span> inputStream<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                outputStream<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">return</span> outputStream<span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 自定义类加载器实例化</span>
+        <span class="token class-name">CustomClassLoader</span> classLoader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CustomClassLoader</span><span class="token punctuation">(</span><span class="token string">"D:\\Project\\JAVA\\src\\com.example.CustomClassLoader.class"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 使用自定义类加载器加载指定类</span>
+        <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> clazz <span class="token operator">=</span> classLoader<span class="token punctuation">.</span><span class="token function">loadClass</span><span class="token punctuation">(</span><span class="token string">"com.example.CustomClassLoader"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 创建实例</span>
+        <span class="token class-name">Object</span> instance <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 调用方法</span>
+        <span class="token class-name">Method</span> method <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"sayHello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>instance<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"say hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h1 id="类加载器的作用域"><a href="#类加载器的作用域" class="headerlink" title="类加载器的作用域"></a>类加载器的作用域</h1><blockquote>
+<p>类加载器的作用域（Scope）指的是类加载器加载类的可见范围和生命周期管理。类加载器的作用域决定了类的可见性、类的隔离性以及类的生命周期。</p>
+</blockquote>
+<ol>
+<li><strong>可见性（Visibility）</strong>：每个类加载器实例都有自己的加载路径和类加载命名空间，它只能看到自己加载的类和其父类加载器加载的类。因此，类加载器的可见性决定了哪些类对于特定的类加载器是可见的。</li>
+<li><strong>隔离性（Isolation）</strong>：类加载器的隔离性确保了每个类加载器实例加载的类相互之间是隔离的，即同一个类在不同的类加载器实例中被加载时，会被认为是不同的类。这种隔离性保护了应用程序的安全性和稳定性，防止不同模块或组件之间的类产生冲突和干扰。</li>
+<li><strong>生命周期管理（Lifecycle Management）</strong>：类加载器的生命周期管理包括类加载器的创建、使用和销毁。在Java应用程序中，类加载器的生命周期通常与应用程序的生命周期相对应。例如，在应用程序启动时创建类加载器实例，在应用程序结束时销毁类加载器实例。</li>
+</ol>
 
       
     </div>
@@ -2877,7 +2877,7 @@ $$
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/object.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/springboot.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -2891,7 +2891,7 @@ $$
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/object.html" class="post-title-link" itemprop="url">Object类介绍</a>
+            <a href="/post/springboot.html" class="post-title-link" itemprop="url">springBoot</a>
         </h2>
 
         <div class="post-meta">
@@ -2915,123 +2915,311 @@ $$
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Object类的常见方法"><a href="#Object类的常见方法" class="headerlink" title="Object类的常见方法"></a>Object类的常见方法</h1><blockquote>
-<p>Object是所有类的父类，它主要提供了11个方法</p>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
- * native 方法，用于返回当前运行时对象的 Class 对象，使用了 final 关键字修饰，故不允许子类重写。
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token comment">/**
- * native 方法，用于返回对象的哈希码，主要使用在哈希表中，比如 JDK 中的HashMap。
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">native</span> <span class="token keyword">int</span> <span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token comment">/**
- * 用于比较 2 个对象的内存地址是否相等，String 类对该方法进行了重写以用于比较字符串的值是否相等。
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> obj<span class="token punctuation">)</span>
-<span class="token comment">/**
- * native 方法，用于创建并返回当前对象的一份拷贝。
- */</span>
-<span class="token keyword">protected</span> <span class="token keyword">native</span> <span class="token class-name">Object</span> <span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">CloneNotSupportedException</span>
-<span class="token comment">/**
- * 返回类的名字实例的哈希码的 16 进制的字符串。建议 Object 所有的子类都重写这个方法。
- */</span>
-<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token comment">/**
- * native 方法，并且不能重写。唤醒一个在此对象监视器上等待的线程(监视器相当于就是锁的概念)。如果有多个线程在等待只会任意唤醒一个。
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">notify</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token comment">/**
- * native 方法，并且不能重写。跟 notify 一样，唯一的区别就是会唤醒在此对象监视器上等待的所有线程，而不是一个线程。
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">notifyAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token comment">/**
- * native方法，并且不能重写。暂停线程的执行。注意：sleep 方法没有释放锁，而 wait 方法释放了锁 ，timeout 是等待时间。
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span>
-<span class="token comment">/**
- * 多了 nanos 参数，这个参数表示额外时间（以纳秒为单位，范围是 0-999999）。 所以超时的时间还需要加上 nanos 纳秒。。
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">,</span> <span class="token keyword">int</span> nanos<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span>
-<span class="token comment">/**
- * 跟之前的2个wait方法一样，只不过该方法一直等待，没有超时时间这个概念
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span>
-<span class="token comment">/**
- * 实例被垃圾回收器回收的时候触发的操作
- */</span>
-<span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">finalize</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Throwable</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h1 id="x3D-x3D-和-equals的区别"><a href="#x3D-x3D-和-equals的区别" class="headerlink" title="&#x3D;&#x3D; 和 equals的区别"></a>&#x3D;&#x3D; 和 equals的区别</h1><ol>
-<li><code>==</code>对于基本类型和引用类型是不同的<ul>
-<li>基本数据类型：<code>==</code>比较的是值</li>
-<li>引用数据类型：<code>==</code>比较的是内存地址</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<p>java只有值传递，没有引用传递，基本数据类型传递的是值，引用数据类型传递的是对象的内存地址</p>
-</blockquote>
-<ol start="2">
-<li>equals是object类的一个方法，所有类都有equals方法，默认调用的是<code>==</code>进行比较两个对象是否相等。</li>
-</ol>
-<blockquote>
-<p><code>equals()</code>方法有两种用法，一种是没有重写equals方法，默认比较两个对象内存地址是否相等，一种是重写了equals方法，比较的是对象的值是否相等。</p>
-<p>如：Object类的equals()方法和String的equals()方法</p>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//Object类的equals()方法</span>
-<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> obj<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> obj<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token comment">//String的equals()方法</span>
-<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> anObject<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> anObject<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>anObject <span class="token keyword">instanceof</span> <span class="token class-name">String</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">String</span> anotherString <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span>anObject<span class="token punctuation">;</span>
-        <span class="token keyword">int</span> n <span class="token operator">=</span> value<span class="token punctuation">.</span>length<span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">==</span> anotherString<span class="token punctuation">.</span>value<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">char</span> v1<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> value<span class="token punctuation">;</span>
-            <span class="token keyword">char</span> v2<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> anotherString<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
-            <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-            <span class="token keyword">while</span> <span class="token punctuation">(</span>n<span class="token operator">--</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                <span class="token keyword">if</span> <span class="token punctuation">(</span>v1<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">!=</span> v2<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
-                    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
-                i<span class="token operator">++</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-            <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="hashcode的作用"><a href="#hashcode的作用" class="headerlink" title="hashcode的作用"></a>hashcode的作用</h1><blockquote>
-<p><code>hashcode（）</code>的作用是获取hash码（int 整数）也称散列码，这个hash码的作用是确定对象在hash表的位置,所有类都有这个函数</p>
-<p><code>public native int hashCode();</code></p>
-</blockquote>
-<h1 id="为什么要有hashcode，hashset是如何检查重复的"><a href="#为什么要有hashcode，hashset是如何检查重复的" class="headerlink" title="为什么要有hashcode，hashset是如何检查重复的"></a>为什么要有hashcode，hashset是如何检查重复的</h1><blockquote>
-<p>提高执行效率，以hashset如何检查重复说明，怎么提高效率的，当把对象加入到hashset的时候，hashset会首先根据对象的hashcode值来判断加入的位置下标，如果下标位置没值就直接插入了，有值的话再调用equals方法判断两个对象是否相等，如果相等就不会让其加入，如果不相等就会重新散列到新的位置，这样做的好处是减少了equals执行次数，提高了执行效率。</p>
-</blockquote>
-<p>总结：</p>
-<p>如果两个对象的<code>hashCode</code> 值相等，那这两个对象不一定相等（哈希碰撞）。</p>
-<p>如果两个对象的<code>hashCode</code> 值相等并且<code>equals()</code>方法也返回 <code>true</code>，我们才认为这两个对象相等。</p>
-<p>如果两个对象的<code>hashCode</code> 值不相等，我们就可以直接认为这两个对象不相等。</p>
-<h1 id="为什么重写equals必须重写hashcode"><a href="#为什么重写equals必须重写hashcode" class="headerlink" title="为什么重写equals必须重写hashcode"></a>为什么重写equals必须重写hashcode</h1><blockquote>
-<p>Java API规范要求：</p>
-<p>Object类中hashCode()方法的文档明确规定，如果两个对象通过equals()方法认为是相等的，那么它们必须产生相同的哈希码。这意味着当你自定义了对象的相等性规则（通过重写equals()方法），也应该相应地重写hashCode()方法以保持一致性。</p>
-<p>每个对象都有hashcode方法，可能会产生hash冲突，导致两个不同的对象，返回相同的hash码。</p>
-<p>如果equals（）方法判断两个对象相等，那么两个对象的hashcode肯定是相等的，如果重写equals（）方法，没有重写hashcode可能会导致，两个对象equals相等，hashcode不相同，不符合Java API规范。</p>
-</blockquote>
-<p>总结：</p>
+          <h3 id="一、入门"><a href="#一、入门" class="headerlink" title="一、入门"></a>一、入门</h3><h4 id="1-入门介绍"><a href="#1-入门介绍" class="headerlink" title="1.入门介绍"></a>1.入门介绍</h4><p>Spring Boot帮助你创建可以运行的独立的、基于Spring的生产级应用程序。 我们对Spring平台和第三方库采取了有主见的观点，这样你就能以最少的麻烦开始工作。 大多数Spring Boot应用程序只需要很少的Spring配置。</p>
+<p>你可以使用Spring Boot来创建Java应用程序，可以通过使用 <code>java -jar</code> 或更传统的war部署来启动。</p>
+<p>我们的主要目标是。</p>
 <ul>
-<li><code>equals</code> 方法判断两个对象是相等的，那这两个对象的 <code>hashCode</code> 值也要相等。</li>
-<li>两个对象有相同的 <code>hashCode</code> 值，他们也不一定是相等的（哈希碰撞）。</li>
+<li>为所有的Spring开发提供一个根本性的更快、更广泛的入门体验。</li>
+<li>开箱即用，但随着需求开始偏离默认值，请迅速摆脱困境。</li>
+<li>提供一系列大类项目常见的非功能特性（如嵌入式服务器、安全、度量、健康检查和外部化配置）。</li>
+<li>绝对没有代码生成（当不以原生镜像为目标时），也不要求XML配置。</li>
 </ul>
+<h4 id="2-安装要求"><a href="#2-安装要求" class="headerlink" title="2.安装要求"></a>2.安装要求</h4><ul>
+<li>jdk</li>
+<li>maven</li>
+</ul>
+<p><strong>pom.xml配置情况</strong></p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>project</span> <span class="token attr-name">xmlns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://maven.apache.org/POM/4.0.0<span class="token punctuation">"</span></span>
+         <span class="token attr-name"><span class="token namespace">xmlns:</span>xsi</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.w3.org/2001/XMLSchema-instance<span class="token punctuation">"</span></span>
+         <span class="token attr-name"><span class="token namespace">xsi:</span>schemaLocation</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>modelVersion</span><span class="token punctuation">></span></span>4.0.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>modelVersion</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.example<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>person_use<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.0-SNAPSHOT<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>parent</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-parent<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.6.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>parent</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>properties</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>maven.compiler.source</span><span class="token punctuation">></span></span>8<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>maven.compiler.source</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>maven.compiler.target</span><span class="token punctuation">></span></span>8<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>maven.compiler.target</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>properties</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-web<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependencies</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>build</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugins</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugins</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>build</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>project</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<p><strong>MainApplication.java</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">RestController</span>
+<span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MainApplication</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">home</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"hello,world"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">MainApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h4 id="3-RestController-和-RequestMapping-注解"><a href="#3-RestController-和-RequestMapping-注解" class="headerlink" title="3. @RestController 和 @RequestMapping 注解"></a>3. @RestController 和 @RequestMapping 注解</h4><ul>
+<li><code>@RestController =@Controller +@ResponseBody</code>将返回的结果字符串直接响应给客户端</li>
+<li><code>@RequestMapping</code>提供了routing路由信息</li>
+</ul>
+<h4 id="4-SpringBootApplication-注解"><a href="#4-SpringBootApplication-注解" class="headerlink" title="4.@SpringBootApplication 注解"></a>4.@SpringBootApplication 注解</h4><p><code>@SpringBootApplication</code>&#x3D;<code>@SpringBootConfiguration</code>+<code>@EnableAutoConfiguration</code>+<code>@ComponentScan</code></p>
+<p><code>@EnableAutoConfiguration</code>告诉Spring Boot根据你添加的jar依赖项 “猜测” 你想如何配置Spring</p>
+<h4 id="5-main-方法"><a href="#5-main-方法" class="headerlink" title="5.main 方法"></a>5.main 方法</h4><p>main方法通过调用 <code>run</code> 方法，把应用委托给Spring Boot的 <code>SpringApplication</code> 类。 <code>SpringApplication</code> 引导我们的应用程序启动Spring，而Spring又会启动自动配置的Tomcat网络服务器。 我们需要将 <code>启动类得类名.class</code> 作为参数传递给 <code>run</code> 方法，以告诉 <code>SpringApplication</code> 哪个是主要的Spring组件。 <code>args</code> 数组也被传入，这是命令行参数。</p>
+<h4 id="6-创建一个可执行-Jar"><a href="#6-创建一个可执行-Jar" class="headerlink" title="6.创建一个可执行 Jar"></a>6.创建一个可执行 Jar</h4><p>打包为一个独立可执行jar包，它完全可以运行在生产环境中。 可执行的jar文件（有时被称为 “fat jar”）是包含你的编译类以及你的代码运行所需的所有jar依赖项的压缩包。springboot采取了直接嵌套jar,为了创建一个可执行的jar，我们需要在 <code>pom.xml</code> 中添加 <code>spring-boot-maven-plugin</code> 插件。在 <code>pom.xml</code> 的 <code>dependencies</code> 节点下面插入以下几行。</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>build</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugins</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugins</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>build</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="二、使用Spring-Boot进行开发"><a href="#二、使用Spring-Boot进行开发" class="headerlink" title="二、使用Spring Boot进行开发"></a>二、使用Spring Boot进行开发</h3><h4 id="1-构建系统"><a href="#1-构建系统" class="headerlink" title="1. 构建系统"></a>1. 构建系统</h4><p>Spring Boot的每个版本都提供了一个它所支持的依赖的列表。 在实践中，你不需要在构建配置中为这些依赖声明版本，因为Spring Boot会帮你管理这些。 当你升级Spring Boot本身时，这些依赖也会一同升级。</p>
+<h5 id="1-1-Maven"><a href="#1-1-Maven" class="headerlink" title="1.1 Maven"></a>1.1 Maven</h5><blockquote>
+<p>在Maven中使用Spring Boot</p>
+</blockquote>
+<h5 id="1-2-官方starter"><a href="#1-2-官方starter" class="headerlink" title="1.2 官方starter"></a>1.2 官方starter</h5><p>Starter是一系列开箱即用的依赖，你可以在你的应用程序中导入它们。 通过你Starter，可以获得所有你需要的Spring和相关技术的一站式服务，免去了需要到处大量复制粘贴依赖的烦恼。 例如，如果你想开始使用Spring和JPA进行数据库访问，那么可以直接在你的项目中导入 <code>spring-boot-starter-data-jpa</code> 依赖。</p>
+<p>Starter含了很多你需要的依赖，以使项目快速启动和运行，并拥有一套一致的、受支持的可管理的过渡性依赖。</p>
+<blockquote>
+<p><strong>关于Starter的命名</strong></p>
+<p>所有<strong>官方的</strong>Starter都遵循一个类似的命名模式；<code>spring-boot-starter-*</code>，其中 <code>*</code> 是一个特定类型的应用程序。 这种命名结构是为了在你需要寻找Starter时提供帮助。 许多IDE中集成的Maven可以让你按名称搜索依赖。 例如，如果安装了相应的Eclipse或Spring Tools插件，你可以在POM编辑器中按下 <code>ctrl-space</code> ，然后输入 “spring-boot-starter” 来获取完整的列表。</p>
+<p>第三方启动器不应该以 <code>spring-boot</code> 开头，因为它是留给Spring Boot官方组件的。 相反，第三方启动器通常以项目的名称开始。 例如，一个名为 <code>thirdpartyproject</code> 的第三方启动器项目通常被命名为 <code>thirdpartyproject-spring-boot-starter</code>。</p>
+</blockquote>
+<h4 id="2-代码结构"><a href="#2-代码结构" class="headerlink" title="2. 代码结构"></a>2. 代码结构</h4><p>Spring Boot对代码的布局，没有特别的要求。 但是，有一些最佳实践。</p>
+<h5 id="2-1-避免使用default包"><a href="#2-1-避免使用default包" class="headerlink" title="2.1 避免使用default包"></a>2.1 避免使用default包</h5><p>当一个类不包括 <code>package</code> 的声明时，它被认为是在 “default package” 中。 通常应避免使 “default package”。 对于使用了 <code>@ComponentScan</code>, <code>@ConfigurationPropertiesScan</code>, <code>@EntityScan</code> 或者 <code>@SpringBootApplication</code> 注解的Spring Boot应用程序来说，它可能会造成一个问题：项目中的所有jar里面的所有class都会被读取（扫描）。</p>
+<blockquote>
+<p>遵循Java推荐的包的命名惯例，使用域名反转作为包名（例如， <code>com.example.project</code>）。</p>
+</blockquote>
+<h5 id="2-2-启动类的位置"><a href="#2-2-启动类的位置" class="headerlink" title="2.2 启动类的位置"></a>2.2 启动类的位置</h5><p>启动类放在一个根package中，高于其他的类，<a target="_blank" rel="noopener" href="https://springdoc.cn/spring-boot/using.html#using.using-the-springbootapplication-annotation"><code>@SpringBootApplication</code></a> 注解一般都是注解在启动类上的。它默认会扫描当前类下的所有子包。例如，如果你正在编写一个JPA应用程序，你的 <code>@Entity</code> 类只有定义在启动类的子包下才能被扫描加载到。这样的好处也显而易见，<code>@SpringBootApplication</code> 默认只会扫描加载你项目工程中的组件。</p>
+<p><strong>项目布局</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">com
+ +- example
+     +- myapplication
+         +- MyApplication.java
+         |
+         +- customer
+         |   +- Customer.java
+         |   +- CustomerController.java
+         |   +- CustomerService.java
+         |   +- CustomerRepository.java
+         |
+         +- order
+             +- Order.java
+             +- OrderController.java
+             +- OrderService.java
+             +- OrderRepository.java<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="3-Configuration-类"><a href="#3-Configuration-类" class="headerlink" title="3. Configuration 类"></a>3. Configuration 类</h4><p>Spring Boot倾向于通过Java代码来进行配置的定义。 虽然也可以使用XML来配置 <code>SpringApplication</code> ，但还是建议你通过 <code>@Configuration</code> 类来进行配置。 通常，可以把启动类是作为主要的 <code>@Configuration</code> 类。</p>
+<h5 id="3-1-导入额外的-Configuration-类"><a href="#3-1-导入额外的-Configuration-类" class="headerlink" title="3.1 导入额外的 Configuration 类"></a>3.1 导入额外的 Configuration 类</h5><p>不需要把所有的 <code>@Configuration</code> 放在一个类中。 <code>@Import</code> 注解可以用来导入额外的配置类。 另外，你可以使用 <code>@ComponentScan</code> 来自动扫描加载所有Spring组件，包括 <code>@Configuration</code> 类。</p>
+<h5 id="3-2-导入-XML-Configuration"><a href="#3-2-导入-XML-Configuration" class="headerlink" title="3.2 导入 XML Configuration"></a>3.2 导入 XML Configuration</h5><p>需要使用基于XML的配置，我们建议你仍然从 <code>@Configuration</code> 类开始，然后通过 <code>@ImportResource</code> 注解来加载XML配置文件。</p>
+<h4 id="4-自动装配（配置）"><a href="#4-自动装配（配置）" class="headerlink" title="4. 自动装配（配置）"></a>4. 自动装配（配置）</h4><p>Spring Boot的自动装配机制会试图根据你所添加的依赖来自动配置你的Spring应用程序。 例如，如果你添加了 <code>HSQLDB</code> 依赖，而且你没有手动配置任何DataSource Bean，那么Spring Boot就会自动配置内存数据库。</p>
+<p>你需要将 <code>@EnableAutoConfiguration</code> 或 <code>@SpringBootApplication</code> 注解添加到你的 <code>@Configuration</code> 类中，从而开启自动配置功能。</p>
+<h5 id="4-1-逐步取代自动配置"><a href="#4-1-逐步取代自动配置" class="headerlink" title="4.1. 逐步取代自动配置"></a>4.1. 逐步取代自动配置</h5><p>自动配置是非侵入性的。自定义你自己的配置来取代自动配置的特定部分。 例如，如果你添加了你自己的 <code>DataSource</code> bean，默认的嵌入式数据库支持就会“退步”从而让你的自定义配置生效。</p>
+<p>如果想知道在应用中使用了哪些自动配置，你可以在启动命令后添加 <code>--debug</code> 参数。 这个参数会为核心的logger开启debug级别的日志，会在控制台输出自动装配项目以及触发自动装配的条件。</p>
+<h5 id="4-2-禁用指定的自动装配类"><a href="#4-2-禁用指定的自动装配类" class="headerlink" title="4.2. 禁用指定的自动装配类"></a>4.2. 禁用指定的自动装配类</h5><p>如果你想禁用掉项目中某些自动装配类，你可以在 <code>@SpringBootApplication</code> 注解的 <code>exclude</code> 属性中指定，如下例所示。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span><span class="token punctuation">(</span>exclude <span class="token operator">=</span> <span class="token punctuation">&#123;</span> <span class="token class-name">DataSourceAutoConfiguration</span><span class="token punctuation">.</span><span class="token keyword">class</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h4 id="5-Spring-Bean-和-依赖注入"><a href="#5-Spring-Bean-和-依赖注入" class="headerlink" title="5. Spring Bean 和 依赖注入"></a>5. Spring Bean 和 依赖注入</h4><p>推荐使用构造函数注入，并使用 <code>@ComponentScan</code> 注解来扫描Bean。可以在启动类添加 <code>@ComponentScan</code> 注解，也不需要定义它任何参数， 你的所有应用组件（<code>@Component</code>、<code>@Service</code>、<code>@Repository</code>、<code>@Controller</code> 和其他）都会自动注册为Spring Bean。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyAccountService</span> <span class="token keyword">implements</span> <span class="token class-name">AccountService</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">MyAccountService</span><span class="token punctuation">(</span><span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>riskAssessor <span class="token operator">=</span> riskAssessor<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">//如果一个Bean有多个构造函数，你需要用 @Autowired 注解来告诉Spring该用哪个构造函数进行注入。</span>
+<span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyAccountService</span> <span class="token keyword">implements</span> <span class="token class-name">AccountService</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">PrintStream</span> out<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">public</span> <span class="token class-name">MyAccountService</span><span class="token punctuation">(</span><span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>riskAssessor <span class="token operator">=</span> riskAssessor<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>out <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">MyAccountService</span><span class="token punctuation">(</span><span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">,</span> <span class="token class-name">PrintStream</span> out<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>riskAssessor <span class="token operator">=</span> riskAssessor<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>out <span class="token operator">=</span> out<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="6-使用-SpringBootApplication-注解"><a href="#6-使用-SpringBootApplication-注解" class="headerlink" title="6.使用@SpringBootApplication 注解"></a>6.使用@SpringBootApplication 注解</h4><p>应用程序能够使用自动配置、组件扫描，并且能够在他们的 “application class “上定义额外的配置。 一个 <code>@SpringBootApplication</code> 注解就可以用来启用这三个功能，如下。</p>
+<ul>
+<li><code>@EnableAutoConfiguration</code>：启用Spring Boot的自动配置机制。</li>
+<li><code>@ComponentScan</code>：对应用程序所在的包启用 <code>@Component</code> 扫描</li>
+<li><code>@SpringBootConfiguration</code>：允许在Context中注册额外的Bean或导入额外的配置类</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// Same as @SpringBootConfiguration @EnableAutoConfiguration @ComponentScan</span>
+<span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">MyApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="7-运行你的应用"><a href="#7-运行你的应用" class="headerlink" title="7.运行你的应用"></a>7.运行你的应用</h4><p>如果你使用Spring Boot的Maven或Gradle插件来创建可执行jar，你可以使用 <code>java -jar</code> 来运行你的打包后应用程序，如下例所示。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ java -jar target/myapplication-0.0.1-SNAPSHOT.jar
+//打包后的jar程序，也支持通过命令行参数开启远程调试服务，如下。
+$ java -Xdebug -Xrunjdwp:server<span class="token operator">=</span>y,transport<span class="token operator">=</span>dt_socket,address<span class="token operator">=</span><span class="token number">8000</span>,suspend<span class="token operator">=</span>n <span class="token punctuation">\</span>
+       -jar target/myapplication-0.0.1-SNAPSHOT.jar
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="8-开发者工具（Developer-Tools）"><a href="#8-开发者工具（Developer-Tools）" class="headerlink" title="8.开发者工具（Developer Tools）"></a>8.开发者工具（Developer Tools）</h4><p>Spring Boot 提供了一套额外的工具，可以让你更加愉快的开发应用。 <code>spring-boot-devtools</code> 模块可以包含在任何项目中，以在开发期间提供一些有用的特性。 要使用devtools，请添加以下依赖到项目中。</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-devtools<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>optional</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>optional</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependencies</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>要启用devtools，无论用于启动应用程序的类加载器是什么，请设置启动参数 <code>-Dspring.devtools.restart.enabled=true</code> 。 在生产环境中不能这样做，因为运行devtools会有安全风险。 要禁用devtools，请删除该依赖或者设置启动参数 <code>-Dspring.devtools.restart.enabled=false</code>。</p>
+<p>在 Maven 中，<code>&lt;optional&gt;true&lt;/optional&gt;</code> 的作用是将依赖项标记为可选的。当一个依赖项被标记为可选时，它不会被自动包含在项目的依赖关系中。</p>
+<p>当其他项目引用你的项目时，这些可选的依赖项将不会被传递性地引入。只有当其他开发者明确地将这些可选依赖项添加到他们的项目中，这些依赖项才会被包含。</p>
+</blockquote>
+<h3 id="三、核心特性"><a href="#三、核心特性" class="headerlink" title="三、核心特性"></a>三、核心特性</h3><h4 id="1-SpringApplication"><a href="#1-SpringApplication" class="headerlink" title="1. SpringApplication"></a>1. SpringApplication</h4><p>通过 <code>SpringApplication</code> 类，你可以从 <code>main()</code> 方法中启动Spring应用程序。 在许多情况下，你可以直接调动 <code>SpringApplication.run</code> 静态方法，如以下例子所示。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">MyApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>默认情况下，会显示 <code>INFO</code> 级别的日志信息，包括一些相关的启动细节，比如启动应用程序的用户。 如果你需要 <code>INFO</code> 以外级别的日志，你可以设置它，如日志级别中所述。 应用程序的版本是使用main方法所在类的包的实现版本来确定的。 启动信息的记录可以通过设置 <code>spring.main.log-startup-info</code> 为 <code>false</code> 来关闭。 这也将关闭应用程序的激活的profiles的日志记录。</p>
+<h5 id="1-1-启用失败"><a href="#1-1-启用失败" class="headerlink" title="1.1. 启用失败"></a>1.1. 启用失败</h5><p>如果你的应用程序启动失败，注册的 <code>FailureAnalyzers</code> 会尝试提供一个专门的错误信息提示和具体的解决办法。 例如，如果你在端口 <code>8080</code> 上启动一个网络应用，而该端口已经被使用，你应该看到类似于下面的信息。</p>
+<pre class="line-numbers language-none"><code class="language-none">***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Embedded servlet container failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that is listening on port 8080 or configure this application to listen on another port.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如果 failure analyzer 不能够处理异常，你仍然可以显示完整的条件报告以更好地了解出错的原因。例如，如果你通过使用 <code>java -jar</code> 来运行你的应用程序，你可以按以下方式启用 <code>debug</code> 属性。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ java -jar myproject-0.0.1-SNAPSHOT.jar --debug<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h5 id="1-2-懒初始化（Lazy-Initialization）"><a href="#1-2-懒初始化（Lazy-Initialization）" class="headerlink" title="1.2. 懒初始化（Lazy Initialization）"></a>1.2. 懒初始化（Lazy Initialization）</h5><p><code>SpringApplication</code> 允许应用程序被懒初始化。 当启用懒初始化时，Bean在需要时被创建，而不是在应用程序启动时。 因此，懒初始化可以减少应用程序的启动时间。 在一个Web应用程序中，启用懒初始化后将导致许多与Web相关的Bean在收到HTTP请求之后才会进行初始化。</p>
+<p>懒初始化的一个缺点是它会延迟发现应用程序的问题。 如果一个配置错误的Bean被懒初始化了，那么在启动过程中就不会再出现故障，问题只有在Bean被初始化时才会显现出来。 还必须注意确保JVM有足够的内存来容纳应用程序的所有Bean，而不仅仅是那些在启动期间被初始化的Bean。 由于这些原因，默认情况下不启用懒初始化，建议在启用懒初始化之前，对JVM的堆大小进行微调。</p>
+<p>可以使用 <code>SpringApplicationBuilder</code> 的 <code>lazyInitialization</code> 方法或 <code>SpringApplication</code> 的 <code>setLazyInitialization</code> 方法以编程方式启用懒初始化。 另外，也可以使用 <code>spring.main.lazy-initialization</code> 属性来启用，如下例所示。</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">spring</span><span class="token punctuation">:</span>
+  <span class="token key atrule">main</span><span class="token punctuation">:</span>
+    <span class="token key atrule">lazy-initialization</span><span class="token punctuation">:</span> <span class="token boolean important">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>如果你想禁用某些Bean的懒初始化，同时对应用程序的其他部分使用懒初始化，你可以使用 <code>@Lazy(false)</code> 注解将其<code>Lazy</code> 属性显式地设置为 false。</p>
+</blockquote>
+<h5 id="1-3-自定义-Banner"><a href="#1-3-自定义-Banner" class="headerlink" title="1.3 自定义 Banner"></a>1.3 自定义 Banner</h5><p>启动时打印的Banner可以通过在 classpath 中添加 <code>banner.txt</code> 文件或通过将 <code>spring.banner.location</code> 属性设置为该文件的位置来自定义。 如果该文件的编码不是UTF-8，你可以通过 <code>spring.banner.charset</code> 属性设置其字符编码。</p>
+<h5 id="1-4-自定义-SpringApplication"><a href="#1-4-自定义-SpringApplication" class="headerlink" title="1.4. 自定义 SpringApplication"></a>1.4. 自定义 SpringApplication</h5><p>如果 <code>SpringApplication</code> 的默认值不符合你的需求，你可以创建一个实例并对其进行自定义。 例如，要关闭Banner，你可以这样写。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">SpringApplication</span> application <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SpringApplication</span><span class="token punctuation">(</span><span class="token class-name">MyApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        application<span class="token punctuation">.</span><span class="token function">setBannerMode</span><span class="token punctuation">(</span><span class="token class-name">Banner<span class="token punctuation">.</span>Mode</span><span class="token punctuation">.</span>OFF<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        application<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>传递给 <code>SpringApplication</code> 的构造参数是 Spring Bean 的配置源。 在大多数情况下，这些是对 <code>@Configuration</code> 类的引用，但它们也可能是对 <code>@Component</code> 类的直接引用。</p>
+<h5 id="1-5-Builder-API"><a href="#1-5-Builder-API" class="headerlink" title="1.5. Builder API"></a>1.5. Builder API</h5><p><code>SpringApplicationBuilder</code> 允许你链式调用多个方法，包括调用 <code>parent</code> 和 <code>child</code> 方法，创建一个层次结构，如下例所示。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">new</span> <span class="token class-name">SpringApplicationBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">sources</span><span class="token punctuation">(</span><span class="token class-name">Parent</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">child</span><span class="token punctuation">(</span><span class="token class-name">Application</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">bannerMode</span><span class="token punctuation">(</span><span class="token class-name">Banner<span class="token punctuation">.</span>Mode</span><span class="token punctuation">.</span>OFF<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h5 id="1-6-Application-可用性"><a href="#1-6-Application-可用性" class="headerlink" title="1.6. Application 可用性"></a>1.6. Application 可用性</h5><p>在平台上部署时，应用程序可以使用 Kubernetes Probes等基础设施向平台提供有关其可用性的信息。Spring Boot对常用的 “liveness” 和 “readiness” 可用性状态提供了开箱即用的支持。如果你使用Spring Boot的 “actuator” ，那么这些状态将作为健康端点组（health endpoint groups）暴露出来。</p>
+<h6 id="1-6-1-Liveness-State"><a href="#1-6-1-Liveness-State" class="headerlink" title="1.6.1. Liveness State"></a>1.6.1. Liveness State</h6><p>一个应用程序的 “Liveness” 状态告诉我们它的内部状态是否允许它正常工作，或者在当前失败的情况下自行恢复。 一个broken状态的 “Liveness” 状态意味着应用程序处于一个无法恢复的状态，基础设施应该重新启动应用程序。Spring Boot应用程序的内部状态大多由Spring <code>ApplicationContext</code> 表示。如果 application context 已成功启动，Spring Boot就认为应用程序处于有效状态。一旦context被刷新，应用程序就被认为是活的</p>
+<h6 id="1-6-2-Readiness-State"><a href="#1-6-2-Readiness-State" class="headerlink" title="1.6.2. Readiness State"></a>1.6.2. Readiness State</h6><p>应用程序的 “Readiness” 状态告诉平台，该应用程序是否准备好处理流量。 failing状态的 “Readiness” 告诉平台，它暂时不应该将流量发送到该应用程序。 这通常发生在启动期间，当 <code>CommandLineRunner</code> 和 <code>ApplicationRunner</code> 组件还在被处理的时候，或者是应用程序觉得目前负载已经到了极限，不能再处理额外的请求的时候。</p>
+<p>一旦 <code>ApplicationRunner</code> 和 <code>CommandLineRunner</code> 被调用完成，就认为应用程序已经准备好了</p>
+<h6 id="1-6-3-管理应用程序的可用性状态"><a href="#1-6-3-管理应用程序的可用性状态" class="headerlink" title="1.6.3. 管理应用程序的可用性状态"></a>1.6.3. 管理应用程序的可用性状态</h6><h5 id="1-7-Application-事件和监听器"><a href="#1-7-Application-事件和监听器" class="headerlink" title="1.7. Application 事件和监听器"></a>1.7. Application 事件和监听器</h5><p>有些事件实际上是在 <code>ApplicationContext</code> 被创建之前触发的，所以你不能以 <code>@Bean</code> 的形式注册一个监听器。 你可以通过 <code>SpringApplication.addListeners(…)</code> 方法或 <code>SpringApplicationBuilder.listeners(…)</code> 方法注册它们。</p>
+<p>如果你想让这些监听器自动注册，不管应用程序是如何创建的，你可以在你的项目中添加一个 <code>META-INF/spring.factories</code> 文件，并通过 <code>org.springframework.context.ApplicationListener</code> 属性来配置你的监听器，如以下例子所示。</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">org.springframework.context.ApplicationListener=com.example.project.MyListener<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>当应用程序运行时，Application event按以下顺序发布。</p>
+<ol>
+<li>一个 <code>ApplicationStartingEvent</code> 在运行开始时被发布，但在任何处理之前，除了注册监听器和初始化器之外。</li>
+<li>当在上下文中使用的 <code>Environment</code> 已知，但在创建上下文之前，将发布 <code>ApplicationEnvironmentPreparedEvent</code>。</li>
+<li>当 <code>ApplicationContext</code> 已准备好并且 <code>ApplicationContextInitializers</code> 被调用，但在任何Bean定义被加载之前，<code>ApplicationContextInitializedEvent</code> 被发布。</li>
+<li>一个 <code>ApplicationPreparedEvent</code> 将在刷新开始前但在Bean定义加载后被发布。</li>
+<li>在上下文被刷新之后，但在任何应用程序和命令行运行程序被调用之前，将发布一个 <code>ApplicationStartedEvent</code>。</li>
+<li>紧接着发布 <code>LivenessState.CORRECT</code> 状态的 <code>AvailabilityChangeEvent</code>，表明应用程序被认为是存活的。</li>
+<li>在任何<a target="_blank" rel="noopener" href="https://springdoc.cn/spring-boot/features.html#features.spring-application.command-line-runner">ApplicationRunner 和 CommandLineRunner</a>被调用后，将发布一个 <code>ApplicationReadyEvent</code>。</li>
+<li>紧接着发布 <code>ReadinessState.ACCEPTING_TRAFFIC</code> 状态的 <code>AvailabilityChangeEvent</code>，表明应用程序已经准备好为请求提供服务。</li>
+<li>如果启动时出现异常，将发布一个 <code>ApplicationFailedEvent</code>。</li>
+</ol>
+<p>Application event 是通过使用Spring框架的事件发布机制来发布的。 该机制的一部分确保了发布给子context中的listener的事件也会发布给任何祖先context的listener。 因此，如果你的应用程序使用了多层级的 <code>SpringApplication</code>，一个监听器可能会收到同一类型应用程序事件的多个实例（重复收到事件通知）。</p>
+<p>为了让你的listener能够区分事件是由哪个context（子、父）发送的，可以注入其application context，然后将注入的context与事件的context进行比较。 context可以通过实现 <code>ApplicationContextAware</code> 来注入，如果监听器是一个Bean，则可以通过使用 <code>@Autowired</code> 来注入。</p>
+<h5 id="1-8-WEB-环境（Environment）"><a href="#1-8-WEB-环境（Environment）" class="headerlink" title="1.8. WEB 环境（Environment）"></a>1.8. WEB 环境（Environment）</h5><p><code>SpringApplication</code> 会试图帮你创建正确类型的 <code>ApplicationContext</code>。 确定为 <code>WebApplicationType</code> 的算法如下。</p>
+<ul>
+<li>如果Spring MVC存在，就会使用 <code>AnnotationConfigServletWebServerApplicationContext</code>。</li>
+<li>如果Spring MVC不存在而Spring WebFlux存在，则使用 <code>AnnotationConfigReactiveWebServerApplicationContext</code>。</li>
+<li>否则，将使用 <code>AnnotationConfigApplicationContext</code>。</li>
+</ul>
+<p>这意味着，如果你在同一个应用程序中使用Spring MVC和新的 <code>WebClient</code>（来自于Spring WebFlux），Spring MVC将被默认使用。 你可以通过调用 <code>setWebApplicationType(WebApplicationType)</code> 来轻松覆盖。</p>
+<p>也可以通过调用 <code>setApplicationContextFactory(…)</code> 来完全控制使用的 <code>ApplicationContext</code> 类型。</p>
+<h5 id="1-9-访问应用参数"><a href="#1-9-访问应用参数" class="headerlink" title="1.9. 访问应用参数"></a>1.9. 访问应用参数</h5><p>如果你需要访问传递给 <code>SpringApplication.run(..)</code> 的命令行参数，你可以注入一个 <code>org.springframework.boot.ApplicationArguments</code> bean。 通过 <code>ApplicationArguments</code> 接口，你可以访问原始的 <code>String[]</code> 参数以及经过解析的 <code>option</code> 和 <code>non-option</code> 参数。如以下例子所示。</p>
+<h5 id="1-10-使用-ApplicationRunner-或-CommandLineRunner"><a href="#1-10-使用-ApplicationRunner-或-CommandLineRunner" class="headerlink" title="1.10. 使用 ApplicationRunner 或 CommandLineRunner"></a>1.10. 使用 ApplicationRunner 或 CommandLineRunner</h5><p>如果你需要在 <code>SpringApplication</code> 启动后运行一些特定的代码，你可以实现 <code>ApplicationRunner</code> 或 <code>CommandLineRunner</code> 接口。 这两个接口以相同的方式工作，并提供一个单一的 <code>run</code> 方法，该方法在 <code>SpringApplication.run(…)</code> 执行完毕之前被调用。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyCommandLineRunner</span> <span class="token keyword">implements</span> <span class="token class-name">CommandLineRunner</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// Do something...</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如果定义了多个 <code>CommandLineRunner</code> 或 <code>ApplicationRunner</code> Bean，并且需要它们按照特定的顺序先后执行。那么可以实现 <code>org.springframework.core.Ordered</code> 接口或使用 <code>org.springframework.core.annotation.Order</code> 注解来指定顺序。</p>
+<h5 id="1-11-程序退出"><a href="#1-11-程序退出" class="headerlink" title="1.11. 程序退出"></a>1.11. 程序退出</h5><p>每个 <code>SpringApplication</code> 都向JVM注册了一个shutdown hook，以确保 <code>ApplicationContext</code> 在退出时优雅地关闭。 所有标准的Spring生命周期回调（如 <code>DisposableBean</code> 接口或 <code>@PreDestroy</code> 注解）都可以使用。</p>
+<p>此外，如果Bean希望在调用 <code>SpringApplication.exit()</code> 时返回特定的退出代码，可以实现 <code>org.springframework.boot.ExitCodeGenerator</code> 接口。 然后，这个退出代码可以被传递给 <code>System.exit()</code> ，将其作为状态代码返回，如下面的例子所示。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Bean</span>
+<span class="token keyword">public</span> <span class="token class-name">ExitCodeGenerator</span> <span class="token function">exitCodeGenerator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+       <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token number">42</span><span class="token punctuation">;</span>
+   <span class="token punctuation">&#125;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">exit</span><span class="token punctuation">(</span><span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">exit</span><span class="token punctuation">(</span><span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">MainApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span>args<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>另外，<code>ExitCodeGenerator</code> 接口可以由异常（Exception）实现。 当遇到这种异常时，Spring Boot会返回由实现的 <code>getExitCode()</code> 方法提供的退出代码。</p>
+<p>如果有多个 <code>ExitCodeGenerator</code> ，则使用第一个生成的非零退出代码。 要控制生成器（Generator）的调用顺序，你可以实现 <code>org.springframework.core.Ordered</code> 接口或使用 <code>org.springframework.core.annotation.Order</code> 注解。</p>
+<h5 id="1-12-管理功能"><a href="#1-12-管理功能" class="headerlink" title="1.12. 管理功能"></a>1.12. 管理功能</h5><p>通过指定 <code>spring.application.admin.enabled</code> 属性，可以启用应用程序的管理相关功能。 这在 <code>MBeanServer</code> 平台上暴露了 <a target="_blank" rel="noopener" href="https://github.com/spring-projects/spring-boot/tree/main/spring-boot-project/spring-boot/src/main/java/org/springframework/boot/admin/SpringApplicationAdminMXBean.java"><code>SpringApplicationAdminMXBean</code></a>。 你可以使用这个功能来远程管理你的Spring Boot应用程序。 这个功能对任何服务包装器的实现也很有用。</p>
+<h5 id="1-13-应用程序启动追踪"><a href="#1-13-应用程序启动追踪" class="headerlink" title="1.13. 应用程序启动追踪"></a>1.13. 应用程序启动追踪</h5><p>在应用程序启动期间，<code>SpringApplication</code> 和 <code>ApplicationContext</code> 执行许多与应用程序生命周期相关的任务。 beans的生命周期，甚至是处理应用事件。 通过 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/6.1.0-M1/javadoc-api/org/springframework/core/metrics/ApplicationStartup.html"><code>ApplicationStartup</code></a>, ，Spring框架 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/6.1.0-M1/reference/html/core.html#context-functionality-startup">允许你用 <code>StartupStep</code> 对象来跟踪应用程序的启动顺序</a>。 这些数据可以为分析目的而收集，或者只是为了更好地了解应用程序的启动过程。</p>
+<p>你可以在设置 <code>SpringApplication</code> 实例时选择一个 <code>ApplicationStartup</code> 实现。 例如，要使用 <code>BufferingApplicationStartup</code>，你可以这么写。</p>
+<h3 id="2-外部化的配置"><a href="#2-外部化的配置" class="headerlink" title="2. 外部化的配置"></a>2. 外部化的配置</h3>
       
     </div>
 
