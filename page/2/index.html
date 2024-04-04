@@ -165,7 +165,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/springboot.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/object.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -179,7 +179,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/springboot.html" class="post-title-link" itemprop="url">springBoot</a>
+            <a href="/post/object.html" class="post-title-link" itemprop="url">Object类介绍</a>
         </h2>
 
         <div class="post-meta">
@@ -203,311 +203,123 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="一、入门"><a href="#一、入门" class="headerlink" title="一、入门"></a>一、入门</h3><h4 id="1-入门介绍"><a href="#1-入门介绍" class="headerlink" title="1.入门介绍"></a>1.入门介绍</h4><p>Spring Boot帮助你创建可以运行的独立的、基于Spring的生产级应用程序。 我们对Spring平台和第三方库采取了有主见的观点，这样你就能以最少的麻烦开始工作。 大多数Spring Boot应用程序只需要很少的Spring配置。</p>
-<p>你可以使用Spring Boot来创建Java应用程序，可以通过使用 <code>java -jar</code> 或更传统的war部署来启动。</p>
-<p>我们的主要目标是。</p>
-<ul>
-<li>为所有的Spring开发提供一个根本性的更快、更广泛的入门体验。</li>
-<li>开箱即用，但随着需求开始偏离默认值，请迅速摆脱困境。</li>
-<li>提供一系列大类项目常见的非功能特性（如嵌入式服务器、安全、度量、健康检查和外部化配置）。</li>
-<li>绝对没有代码生成（当不以原生镜像为目标时），也不要求XML配置。</li>
+          <h1 id="Object类的常见方法"><a href="#Object类的常见方法" class="headerlink" title="Object类的常见方法"></a>Object类的常见方法</h1><blockquote>
+<p>Object是所有类的父类，它主要提供了11个方法</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * native 方法，用于返回当前运行时对象的 Class 对象，使用了 final 关键字修饰，故不允许子类重写。
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">/**
+ * native 方法，用于返回对象的哈希码，主要使用在哈希表中，比如 JDK 中的HashMap。
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">native</span> <span class="token keyword">int</span> <span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">/**
+ * 用于比较 2 个对象的内存地址是否相等，String 类对该方法进行了重写以用于比较字符串的值是否相等。
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> obj<span class="token punctuation">)</span>
+<span class="token comment">/**
+ * native 方法，用于创建并返回当前对象的一份拷贝。
+ */</span>
+<span class="token keyword">protected</span> <span class="token keyword">native</span> <span class="token class-name">Object</span> <span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">CloneNotSupportedException</span>
+<span class="token comment">/**
+ * 返回类的名字实例的哈希码的 16 进制的字符串。建议 Object 所有的子类都重写这个方法。
+ */</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">/**
+ * native 方法，并且不能重写。唤醒一个在此对象监视器上等待的线程(监视器相当于就是锁的概念)。如果有多个线程在等待只会任意唤醒一个。
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">notify</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">/**
+ * native 方法，并且不能重写。跟 notify 一样，唯一的区别就是会唤醒在此对象监视器上等待的所有线程，而不是一个线程。
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">notifyAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">/**
+ * native方法，并且不能重写。暂停线程的执行。注意：sleep 方法没有释放锁，而 wait 方法释放了锁 ，timeout 是等待时间。
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span>
+<span class="token comment">/**
+ * 多了 nanos 参数，这个参数表示额外时间（以纳秒为单位，范围是 0-999999）。 所以超时的时间还需要加上 nanos 纳秒。。
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">,</span> <span class="token keyword">int</span> nanos<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span>
+<span class="token comment">/**
+ * 跟之前的2个wait方法一样，只不过该方法一直等待，没有超时时间这个概念
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span>
+<span class="token comment">/**
+ * 实例被垃圾回收器回收的时候触发的操作
+ */</span>
+<span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">finalize</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Throwable</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h1 id="x3D-x3D-和-equals的区别"><a href="#x3D-x3D-和-equals的区别" class="headerlink" title="&#x3D;&#x3D; 和 equals的区别"></a>&#x3D;&#x3D; 和 equals的区别</h1><ol>
+<li><code>==</code>对于基本类型和引用类型是不同的<ul>
+<li>基本数据类型：<code>==</code>比较的是值</li>
+<li>引用数据类型：<code>==</code>比较的是内存地址</li>
 </ul>
-<h4 id="2-安装要求"><a href="#2-安装要求" class="headerlink" title="2.安装要求"></a>2.安装要求</h4><ul>
-<li>jdk</li>
-<li>maven</li>
-</ul>
-<p><strong>pom.xml配置情况</strong></p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>project</span> <span class="token attr-name">xmlns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://maven.apache.org/POM/4.0.0<span class="token punctuation">"</span></span>
-         <span class="token attr-name"><span class="token namespace">xmlns:</span>xsi</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.w3.org/2001/XMLSchema-instance<span class="token punctuation">"</span></span>
-         <span class="token attr-name"><span class="token namespace">xsi:</span>schemaLocation</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>modelVersion</span><span class="token punctuation">></span></span>4.0.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>modelVersion</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.example<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>person_use<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.0-SNAPSHOT<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>parent</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-parent<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.6.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>parent</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>properties</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>maven.compiler.source</span><span class="token punctuation">></span></span>8<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>maven.compiler.source</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>maven.compiler.target</span><span class="token punctuation">></span></span>8<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>maven.compiler.target</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>properties</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-web<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependencies</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>build</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugins</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugins</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>build</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>project</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>MainApplication.java</strong></p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">RestController</span>
-<span class="token annotation punctuation">@SpringBootApplication</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MainApplication</span> <span class="token punctuation">&#123;</span>
-    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">)</span>
-    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">home</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> <span class="token string">"hello,world"</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">MainApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h4 id="3-RestController-和-RequestMapping-注解"><a href="#3-RestController-和-RequestMapping-注解" class="headerlink" title="3. @RestController 和 @RequestMapping 注解"></a>3. @RestController 和 @RequestMapping 注解</h4><ul>
-<li><code>@RestController =@Controller +@ResponseBody</code>将返回的结果字符串直接响应给客户端</li>
-<li><code>@RequestMapping</code>提供了routing路由信息</li>
-</ul>
-<h4 id="4-SpringBootApplication-注解"><a href="#4-SpringBootApplication-注解" class="headerlink" title="4.@SpringBootApplication 注解"></a>4.@SpringBootApplication 注解</h4><p><code>@SpringBootApplication</code>&#x3D;<code>@SpringBootConfiguration</code>+<code>@EnableAutoConfiguration</code>+<code>@ComponentScan</code></p>
-<p><code>@EnableAutoConfiguration</code>告诉Spring Boot根据你添加的jar依赖项 “猜测” 你想如何配置Spring</p>
-<h4 id="5-main-方法"><a href="#5-main-方法" class="headerlink" title="5.main 方法"></a>5.main 方法</h4><p>main方法通过调用 <code>run</code> 方法，把应用委托给Spring Boot的 <code>SpringApplication</code> 类。 <code>SpringApplication</code> 引导我们的应用程序启动Spring，而Spring又会启动自动配置的Tomcat网络服务器。 我们需要将 <code>启动类得类名.class</code> 作为参数传递给 <code>run</code> 方法，以告诉 <code>SpringApplication</code> 哪个是主要的Spring组件。 <code>args</code> 数组也被传入，这是命令行参数。</p>
-<h4 id="6-创建一个可执行-Jar"><a href="#6-创建一个可执行-Jar" class="headerlink" title="6.创建一个可执行 Jar"></a>6.创建一个可执行 Jar</h4><p>打包为一个独立可执行jar包，它完全可以运行在生产环境中。 可执行的jar文件（有时被称为 “fat jar”）是包含你的编译类以及你的代码运行所需的所有jar依赖项的压缩包。springboot采取了直接嵌套jar,为了创建一个可执行的jar，我们需要在 <code>pom.xml</code> 中添加 <code>spring-boot-maven-plugin</code> 插件。在 <code>pom.xml</code> 的 <code>dependencies</code> 节点下面插入以下几行。</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>build</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugins</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugins</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>build</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="二、使用Spring-Boot进行开发"><a href="#二、使用Spring-Boot进行开发" class="headerlink" title="二、使用Spring Boot进行开发"></a>二、使用Spring Boot进行开发</h3><h4 id="1-构建系统"><a href="#1-构建系统" class="headerlink" title="1. 构建系统"></a>1. 构建系统</h4><p>Spring Boot的每个版本都提供了一个它所支持的依赖的列表。 在实践中，你不需要在构建配置中为这些依赖声明版本，因为Spring Boot会帮你管理这些。 当你升级Spring Boot本身时，这些依赖也会一同升级。</p>
-<h5 id="1-1-Maven"><a href="#1-1-Maven" class="headerlink" title="1.1 Maven"></a>1.1 Maven</h5><blockquote>
-<p>在Maven中使用Spring Boot</p>
-</blockquote>
-<h5 id="1-2-官方starter"><a href="#1-2-官方starter" class="headerlink" title="1.2 官方starter"></a>1.2 官方starter</h5><p>Starter是一系列开箱即用的依赖，你可以在你的应用程序中导入它们。 通过你Starter，可以获得所有你需要的Spring和相关技术的一站式服务，免去了需要到处大量复制粘贴依赖的烦恼。 例如，如果你想开始使用Spring和JPA进行数据库访问，那么可以直接在你的项目中导入 <code>spring-boot-starter-data-jpa</code> 依赖。</p>
-<p>Starter含了很多你需要的依赖，以使项目快速启动和运行，并拥有一套一致的、受支持的可管理的过渡性依赖。</p>
-<blockquote>
-<p><strong>关于Starter的命名</strong></p>
-<p>所有<strong>官方的</strong>Starter都遵循一个类似的命名模式；<code>spring-boot-starter-*</code>，其中 <code>*</code> 是一个特定类型的应用程序。 这种命名结构是为了在你需要寻找Starter时提供帮助。 许多IDE中集成的Maven可以让你按名称搜索依赖。 例如，如果安装了相应的Eclipse或Spring Tools插件，你可以在POM编辑器中按下 <code>ctrl-space</code> ，然后输入 “spring-boot-starter” 来获取完整的列表。</p>
-<p>第三方启动器不应该以 <code>spring-boot</code> 开头，因为它是留给Spring Boot官方组件的。 相反，第三方启动器通常以项目的名称开始。 例如，一个名为 <code>thirdpartyproject</code> 的第三方启动器项目通常被命名为 <code>thirdpartyproject-spring-boot-starter</code>。</p>
-</blockquote>
-<h4 id="2-代码结构"><a href="#2-代码结构" class="headerlink" title="2. 代码结构"></a>2. 代码结构</h4><p>Spring Boot对代码的布局，没有特别的要求。 但是，有一些最佳实践。</p>
-<h5 id="2-1-避免使用default包"><a href="#2-1-避免使用default包" class="headerlink" title="2.1 避免使用default包"></a>2.1 避免使用default包</h5><p>当一个类不包括 <code>package</code> 的声明时，它被认为是在 “default package” 中。 通常应避免使 “default package”。 对于使用了 <code>@ComponentScan</code>, <code>@ConfigurationPropertiesScan</code>, <code>@EntityScan</code> 或者 <code>@SpringBootApplication</code> 注解的Spring Boot应用程序来说，它可能会造成一个问题：项目中的所有jar里面的所有class都会被读取（扫描）。</p>
-<blockquote>
-<p>遵循Java推荐的包的命名惯例，使用域名反转作为包名（例如， <code>com.example.project</code>）。</p>
-</blockquote>
-<h5 id="2-2-启动类的位置"><a href="#2-2-启动类的位置" class="headerlink" title="2.2 启动类的位置"></a>2.2 启动类的位置</h5><p>启动类放在一个根package中，高于其他的类，<a target="_blank" rel="noopener" href="https://springdoc.cn/spring-boot/using.html#using.using-the-springbootapplication-annotation"><code>@SpringBootApplication</code></a> 注解一般都是注解在启动类上的。它默认会扫描当前类下的所有子包。例如，如果你正在编写一个JPA应用程序，你的 <code>@Entity</code> 类只有定义在启动类的子包下才能被扫描加载到。这样的好处也显而易见，<code>@SpringBootApplication</code> 默认只会扫描加载你项目工程中的组件。</p>
-<p><strong>项目布局</strong></p>
-<pre class="line-numbers language-none"><code class="language-none">com
- +- example
-     +- myapplication
-         +- MyApplication.java
-         |
-         +- customer
-         |   +- Customer.java
-         |   +- CustomerController.java
-         |   +- CustomerService.java
-         |   +- CustomerRepository.java
-         |
-         +- order
-             +- Order.java
-             +- OrderController.java
-             +- OrderService.java
-             +- OrderRepository.java<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="3-Configuration-类"><a href="#3-Configuration-类" class="headerlink" title="3. Configuration 类"></a>3. Configuration 类</h4><p>Spring Boot倾向于通过Java代码来进行配置的定义。 虽然也可以使用XML来配置 <code>SpringApplication</code> ，但还是建议你通过 <code>@Configuration</code> 类来进行配置。 通常，可以把启动类是作为主要的 <code>@Configuration</code> 类。</p>
-<h5 id="3-1-导入额外的-Configuration-类"><a href="#3-1-导入额外的-Configuration-类" class="headerlink" title="3.1 导入额外的 Configuration 类"></a>3.1 导入额外的 Configuration 类</h5><p>不需要把所有的 <code>@Configuration</code> 放在一个类中。 <code>@Import</code> 注解可以用来导入额外的配置类。 另外，你可以使用 <code>@ComponentScan</code> 来自动扫描加载所有Spring组件，包括 <code>@Configuration</code> 类。</p>
-<h5 id="3-2-导入-XML-Configuration"><a href="#3-2-导入-XML-Configuration" class="headerlink" title="3.2 导入 XML Configuration"></a>3.2 导入 XML Configuration</h5><p>需要使用基于XML的配置，我们建议你仍然从 <code>@Configuration</code> 类开始，然后通过 <code>@ImportResource</code> 注解来加载XML配置文件。</p>
-<h4 id="4-自动装配（配置）"><a href="#4-自动装配（配置）" class="headerlink" title="4. 自动装配（配置）"></a>4. 自动装配（配置）</h4><p>Spring Boot的自动装配机制会试图根据你所添加的依赖来自动配置你的Spring应用程序。 例如，如果你添加了 <code>HSQLDB</code> 依赖，而且你没有手动配置任何DataSource Bean，那么Spring Boot就会自动配置内存数据库。</p>
-<p>你需要将 <code>@EnableAutoConfiguration</code> 或 <code>@SpringBootApplication</code> 注解添加到你的 <code>@Configuration</code> 类中，从而开启自动配置功能。</p>
-<h5 id="4-1-逐步取代自动配置"><a href="#4-1-逐步取代自动配置" class="headerlink" title="4.1. 逐步取代自动配置"></a>4.1. 逐步取代自动配置</h5><p>自动配置是非侵入性的。自定义你自己的配置来取代自动配置的特定部分。 例如，如果你添加了你自己的 <code>DataSource</code> bean，默认的嵌入式数据库支持就会“退步”从而让你的自定义配置生效。</p>
-<p>如果想知道在应用中使用了哪些自动配置，你可以在启动命令后添加 <code>--debug</code> 参数。 这个参数会为核心的logger开启debug级别的日志，会在控制台输出自动装配项目以及触发自动装配的条件。</p>
-<h5 id="4-2-禁用指定的自动装配类"><a href="#4-2-禁用指定的自动装配类" class="headerlink" title="4.2. 禁用指定的自动装配类"></a>4.2. 禁用指定的自动装配类</h5><p>如果你想禁用掉项目中某些自动装配类，你可以在 <code>@SpringBootApplication</code> 注解的 <code>exclude</code> 属性中指定，如下例所示。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span><span class="token punctuation">(</span>exclude <span class="token operator">=</span> <span class="token punctuation">&#123;</span> <span class="token class-name">DataSourceAutoConfiguration</span><span class="token punctuation">.</span><span class="token keyword">class</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h4 id="5-Spring-Bean-和-依赖注入"><a href="#5-Spring-Bean-和-依赖注入" class="headerlink" title="5. Spring Bean 和 依赖注入"></a>5. Spring Bean 和 依赖注入</h4><p>推荐使用构造函数注入，并使用 <code>@ComponentScan</code> 注解来扫描Bean。可以在启动类添加 <code>@ComponentScan</code> 注解，也不需要定义它任何参数， 你的所有应用组件（<code>@Component</code>、<code>@Service</code>、<code>@Repository</code>、<code>@Controller</code> 和其他）都会自动注册为Spring Bean。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Service</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyAccountService</span> <span class="token keyword">implements</span> <span class="token class-name">AccountService</span> <span class="token punctuation">&#123;</span>
-
-    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">;</span>
-
-    <span class="token keyword">public</span> <span class="token class-name">MyAccountService</span><span class="token punctuation">(</span><span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>riskAssessor <span class="token operator">=</span> riskAssessor<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token comment">//如果一个Bean有多个构造函数，你需要用 @Autowired 注解来告诉Spring该用哪个构造函数进行注入。</span>
-<span class="token annotation punctuation">@Service</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyAccountService</span> <span class="token keyword">implements</span> <span class="token class-name">AccountService</span> <span class="token punctuation">&#123;</span>
-
-    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">;</span>
-
-    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">PrintStream</span> out<span class="token punctuation">;</span>
-
-    <span class="token annotation punctuation">@Autowired</span>
-    <span class="token keyword">public</span> <span class="token class-name">MyAccountService</span><span class="token punctuation">(</span><span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>riskAssessor <span class="token operator">=</span> riskAssessor<span class="token punctuation">;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>out <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">public</span> <span class="token class-name">MyAccountService</span><span class="token punctuation">(</span><span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">,</span> <span class="token class-name">PrintStream</span> out<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>riskAssessor <span class="token operator">=</span> riskAssessor<span class="token punctuation">;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>out <span class="token operator">=</span> out<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="6-使用-SpringBootApplication-注解"><a href="#6-使用-SpringBootApplication-注解" class="headerlink" title="6.使用@SpringBootApplication 注解"></a>6.使用@SpringBootApplication 注解</h4><p>应用程序能够使用自动配置、组件扫描，并且能够在他们的 “application class “上定义额外的配置。 一个 <code>@SpringBootApplication</code> 注解就可以用来启用这三个功能，如下。</p>
-<ul>
-<li><code>@EnableAutoConfiguration</code>：启用Spring Boot的自动配置机制。</li>
-<li><code>@ComponentScan</code>：对应用程序所在的包启用 <code>@Component</code> 扫描</li>
-<li><code>@SpringBootConfiguration</code>：允许在Context中注册额外的Bean或导入额外的配置类</li>
-</ul>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// Same as @SpringBootConfiguration @EnableAutoConfiguration @ComponentScan</span>
-<span class="token annotation punctuation">@SpringBootApplication</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">MyApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="7-运行你的应用"><a href="#7-运行你的应用" class="headerlink" title="7.运行你的应用"></a>7.运行你的应用</h4><p>如果你使用Spring Boot的Maven或Gradle插件来创建可执行jar，你可以使用 <code>java -jar</code> 来运行你的打包后应用程序，如下例所示。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ java -jar target/myapplication-0.0.1-SNAPSHOT.jar
-//打包后的jar程序，也支持通过命令行参数开启远程调试服务，如下。
-$ java -Xdebug -Xrunjdwp:server<span class="token operator">=</span>y,transport<span class="token operator">=</span>dt_socket,address<span class="token operator">=</span><span class="token number">8000</span>,suspend<span class="token operator">=</span>n <span class="token punctuation">\</span>
-       -jar target/myapplication-0.0.1-SNAPSHOT.jar
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="8-开发者工具（Developer-Tools）"><a href="#8-开发者工具（Developer-Tools）" class="headerlink" title="8.开发者工具（Developer Tools）"></a>8.开发者工具（Developer Tools）</h4><p>Spring Boot 提供了一套额外的工具，可以让你更加愉快的开发应用。 <code>spring-boot-devtools</code> 模块可以包含在任何项目中，以在开发期间提供一些有用的特性。 要使用devtools，请添加以下依赖到项目中。</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-devtools<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>optional</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>optional</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependencies</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<blockquote>
-<p>要启用devtools，无论用于启动应用程序的类加载器是什么，请设置启动参数 <code>-Dspring.devtools.restart.enabled=true</code> 。 在生产环境中不能这样做，因为运行devtools会有安全风险。 要禁用devtools，请删除该依赖或者设置启动参数 <code>-Dspring.devtools.restart.enabled=false</code>。</p>
-<p>在 Maven 中，<code>&lt;optional&gt;true&lt;/optional&gt;</code> 的作用是将依赖项标记为可选的。当一个依赖项被标记为可选时，它不会被自动包含在项目的依赖关系中。</p>
-<p>当其他项目引用你的项目时，这些可选的依赖项将不会被传递性地引入。只有当其他开发者明确地将这些可选依赖项添加到他们的项目中，这些依赖项才会被包含。</p>
-</blockquote>
-<h3 id="三、核心特性"><a href="#三、核心特性" class="headerlink" title="三、核心特性"></a>三、核心特性</h3><h4 id="1-SpringApplication"><a href="#1-SpringApplication" class="headerlink" title="1. SpringApplication"></a>1. SpringApplication</h4><p>通过 <code>SpringApplication</code> 类，你可以从 <code>main()</code> 方法中启动Spring应用程序。 在许多情况下，你可以直接调动 <code>SpringApplication.run</code> 静态方法，如以下例子所示。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">MyApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>默认情况下，会显示 <code>INFO</code> 级别的日志信息，包括一些相关的启动细节，比如启动应用程序的用户。 如果你需要 <code>INFO</code> 以外级别的日志，你可以设置它，如日志级别中所述。 应用程序的版本是使用main方法所在类的包的实现版本来确定的。 启动信息的记录可以通过设置 <code>spring.main.log-startup-info</code> 为 <code>false</code> 来关闭。 这也将关闭应用程序的激活的profiles的日志记录。</p>
-<h5 id="1-1-启用失败"><a href="#1-1-启用失败" class="headerlink" title="1.1. 启用失败"></a>1.1. 启用失败</h5><p>如果你的应用程序启动失败，注册的 <code>FailureAnalyzers</code> 会尝试提供一个专门的错误信息提示和具体的解决办法。 例如，如果你在端口 <code>8080</code> 上启动一个网络应用，而该端口已经被使用，你应该看到类似于下面的信息。</p>
-<pre class="line-numbers language-none"><code class="language-none">***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Embedded servlet container failed to start. Port 8080 was already in use.
-
-Action:
-
-Identify and stop the process that is listening on port 8080 or configure this application to listen on another port.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>如果 failure analyzer 不能够处理异常，你仍然可以显示完整的条件报告以更好地了解出错的原因。例如，如果你通过使用 <code>java -jar</code> 来运行你的应用程序，你可以按以下方式启用 <code>debug</code> 属性。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ java -jar myproject-0.0.1-SNAPSHOT.jar --debug<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h5 id="1-2-懒初始化（Lazy-Initialization）"><a href="#1-2-懒初始化（Lazy-Initialization）" class="headerlink" title="1.2. 懒初始化（Lazy Initialization）"></a>1.2. 懒初始化（Lazy Initialization）</h5><p><code>SpringApplication</code> 允许应用程序被懒初始化。 当启用懒初始化时，Bean在需要时被创建，而不是在应用程序启动时。 因此，懒初始化可以减少应用程序的启动时间。 在一个Web应用程序中，启用懒初始化后将导致许多与Web相关的Bean在收到HTTP请求之后才会进行初始化。</p>
-<p>懒初始化的一个缺点是它会延迟发现应用程序的问题。 如果一个配置错误的Bean被懒初始化了，那么在启动过程中就不会再出现故障，问题只有在Bean被初始化时才会显现出来。 还必须注意确保JVM有足够的内存来容纳应用程序的所有Bean，而不仅仅是那些在启动期间被初始化的Bean。 由于这些原因，默认情况下不启用懒初始化，建议在启用懒初始化之前，对JVM的堆大小进行微调。</p>
-<p>可以使用 <code>SpringApplicationBuilder</code> 的 <code>lazyInitialization</code> 方法或 <code>SpringApplication</code> 的 <code>setLazyInitialization</code> 方法以编程方式启用懒初始化。 另外，也可以使用 <code>spring.main.lazy-initialization</code> 属性来启用，如下例所示。</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">spring</span><span class="token punctuation">:</span>
-  <span class="token key atrule">main</span><span class="token punctuation">:</span>
-    <span class="token key atrule">lazy-initialization</span><span class="token punctuation">:</span> <span class="token boolean important">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<blockquote>
-<p>如果你想禁用某些Bean的懒初始化，同时对应用程序的其他部分使用懒初始化，你可以使用 <code>@Lazy(false)</code> 注解将其<code>Lazy</code> 属性显式地设置为 false。</p>
-</blockquote>
-<h5 id="1-3-自定义-Banner"><a href="#1-3-自定义-Banner" class="headerlink" title="1.3 自定义 Banner"></a>1.3 自定义 Banner</h5><p>启动时打印的Banner可以通过在 classpath 中添加 <code>banner.txt</code> 文件或通过将 <code>spring.banner.location</code> 属性设置为该文件的位置来自定义。 如果该文件的编码不是UTF-8，你可以通过 <code>spring.banner.charset</code> 属性设置其字符编码。</p>
-<h5 id="1-4-自定义-SpringApplication"><a href="#1-4-自定义-SpringApplication" class="headerlink" title="1.4. 自定义 SpringApplication"></a>1.4. 自定义 SpringApplication</h5><p>如果 <code>SpringApplication</code> 的默认值不符合你的需求，你可以创建一个实例并对其进行自定义。 例如，要关闭Banner，你可以这样写。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">SpringApplication</span> application <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SpringApplication</span><span class="token punctuation">(</span><span class="token class-name">MyApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        application<span class="token punctuation">.</span><span class="token function">setBannerMode</span><span class="token punctuation">(</span><span class="token class-name">Banner<span class="token punctuation">.</span>Mode</span><span class="token punctuation">.</span>OFF<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        application<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>传递给 <code>SpringApplication</code> 的构造参数是 Spring Bean 的配置源。 在大多数情况下，这些是对 <code>@Configuration</code> 类的引用，但它们也可能是对 <code>@Component</code> 类的直接引用。</p>
-<h5 id="1-5-Builder-API"><a href="#1-5-Builder-API" class="headerlink" title="1.5. Builder API"></a>1.5. Builder API</h5><p><code>SpringApplicationBuilder</code> 允许你链式调用多个方法，包括调用 <code>parent</code> 和 <code>child</code> 方法，创建一个层次结构，如下例所示。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">new</span> <span class="token class-name">SpringApplicationBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">sources</span><span class="token punctuation">(</span><span class="token class-name">Parent</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token function">child</span><span class="token punctuation">(</span><span class="token class-name">Application</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token function">bannerMode</span><span class="token punctuation">(</span><span class="token class-name">Banner<span class="token punctuation">.</span>Mode</span><span class="token punctuation">.</span>OFF<span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h5 id="1-6-Application-可用性"><a href="#1-6-Application-可用性" class="headerlink" title="1.6. Application 可用性"></a>1.6. Application 可用性</h5><p>在平台上部署时，应用程序可以使用 Kubernetes Probes等基础设施向平台提供有关其可用性的信息。Spring Boot对常用的 “liveness” 和 “readiness” 可用性状态提供了开箱即用的支持。如果你使用Spring Boot的 “actuator” ，那么这些状态将作为健康端点组（health endpoint groups）暴露出来。</p>
-<h6 id="1-6-1-Liveness-State"><a href="#1-6-1-Liveness-State" class="headerlink" title="1.6.1. Liveness State"></a>1.6.1. Liveness State</h6><p>一个应用程序的 “Liveness” 状态告诉我们它的内部状态是否允许它正常工作，或者在当前失败的情况下自行恢复。 一个broken状态的 “Liveness” 状态意味着应用程序处于一个无法恢复的状态，基础设施应该重新启动应用程序。Spring Boot应用程序的内部状态大多由Spring <code>ApplicationContext</code> 表示。如果 application context 已成功启动，Spring Boot就认为应用程序处于有效状态。一旦context被刷新，应用程序就被认为是活的</p>
-<h6 id="1-6-2-Readiness-State"><a href="#1-6-2-Readiness-State" class="headerlink" title="1.6.2. Readiness State"></a>1.6.2. Readiness State</h6><p>应用程序的 “Readiness” 状态告诉平台，该应用程序是否准备好处理流量。 failing状态的 “Readiness” 告诉平台，它暂时不应该将流量发送到该应用程序。 这通常发生在启动期间，当 <code>CommandLineRunner</code> 和 <code>ApplicationRunner</code> 组件还在被处理的时候，或者是应用程序觉得目前负载已经到了极限，不能再处理额外的请求的时候。</p>
-<p>一旦 <code>ApplicationRunner</code> 和 <code>CommandLineRunner</code> 被调用完成，就认为应用程序已经准备好了</p>
-<h6 id="1-6-3-管理应用程序的可用性状态"><a href="#1-6-3-管理应用程序的可用性状态" class="headerlink" title="1.6.3. 管理应用程序的可用性状态"></a>1.6.3. 管理应用程序的可用性状态</h6><h5 id="1-7-Application-事件和监听器"><a href="#1-7-Application-事件和监听器" class="headerlink" title="1.7. Application 事件和监听器"></a>1.7. Application 事件和监听器</h5><p>有些事件实际上是在 <code>ApplicationContext</code> 被创建之前触发的，所以你不能以 <code>@Bean</code> 的形式注册一个监听器。 你可以通过 <code>SpringApplication.addListeners(…)</code> 方法或 <code>SpringApplicationBuilder.listeners(…)</code> 方法注册它们。</p>
-<p>如果你想让这些监听器自动注册，不管应用程序是如何创建的，你可以在你的项目中添加一个 <code>META-INF/spring.factories</code> 文件，并通过 <code>org.springframework.context.ApplicationListener</code> 属性来配置你的监听器，如以下例子所示。</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">org.springframework.context.ApplicationListener=com.example.project.MyListener<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>当应用程序运行时，Application event按以下顺序发布。</p>
-<ol>
-<li>一个 <code>ApplicationStartingEvent</code> 在运行开始时被发布，但在任何处理之前，除了注册监听器和初始化器之外。</li>
-<li>当在上下文中使用的 <code>Environment</code> 已知，但在创建上下文之前，将发布 <code>ApplicationEnvironmentPreparedEvent</code>。</li>
-<li>当 <code>ApplicationContext</code> 已准备好并且 <code>ApplicationContextInitializers</code> 被调用，但在任何Bean定义被加载之前，<code>ApplicationContextInitializedEvent</code> 被发布。</li>
-<li>一个 <code>ApplicationPreparedEvent</code> 将在刷新开始前但在Bean定义加载后被发布。</li>
-<li>在上下文被刷新之后，但在任何应用程序和命令行运行程序被调用之前，将发布一个 <code>ApplicationStartedEvent</code>。</li>
-<li>紧接着发布 <code>LivenessState.CORRECT</code> 状态的 <code>AvailabilityChangeEvent</code>，表明应用程序被认为是存活的。</li>
-<li>在任何<a target="_blank" rel="noopener" href="https://springdoc.cn/spring-boot/features.html#features.spring-application.command-line-runner">ApplicationRunner 和 CommandLineRunner</a>被调用后，将发布一个 <code>ApplicationReadyEvent</code>。</li>
-<li>紧接着发布 <code>ReadinessState.ACCEPTING_TRAFFIC</code> 状态的 <code>AvailabilityChangeEvent</code>，表明应用程序已经准备好为请求提供服务。</li>
-<li>如果启动时出现异常，将发布一个 <code>ApplicationFailedEvent</code>。</li>
+</li>
 </ol>
-<p>Application event 是通过使用Spring框架的事件发布机制来发布的。 该机制的一部分确保了发布给子context中的listener的事件也会发布给任何祖先context的listener。 因此，如果你的应用程序使用了多层级的 <code>SpringApplication</code>，一个监听器可能会收到同一类型应用程序事件的多个实例（重复收到事件通知）。</p>
-<p>为了让你的listener能够区分事件是由哪个context（子、父）发送的，可以注入其application context，然后将注入的context与事件的context进行比较。 context可以通过实现 <code>ApplicationContextAware</code> 来注入，如果监听器是一个Bean，则可以通过使用 <code>@Autowired</code> 来注入。</p>
-<h5 id="1-8-WEB-环境（Environment）"><a href="#1-8-WEB-环境（Environment）" class="headerlink" title="1.8. WEB 环境（Environment）"></a>1.8. WEB 环境（Environment）</h5><p><code>SpringApplication</code> 会试图帮你创建正确类型的 <code>ApplicationContext</code>。 确定为 <code>WebApplicationType</code> 的算法如下。</p>
-<ul>
-<li>如果Spring MVC存在，就会使用 <code>AnnotationConfigServletWebServerApplicationContext</code>。</li>
-<li>如果Spring MVC不存在而Spring WebFlux存在，则使用 <code>AnnotationConfigReactiveWebServerApplicationContext</code>。</li>
-<li>否则，将使用 <code>AnnotationConfigApplicationContext</code>。</li>
-</ul>
-<p>这意味着，如果你在同一个应用程序中使用Spring MVC和新的 <code>WebClient</code>（来自于Spring WebFlux），Spring MVC将被默认使用。 你可以通过调用 <code>setWebApplicationType(WebApplicationType)</code> 来轻松覆盖。</p>
-<p>也可以通过调用 <code>setApplicationContextFactory(…)</code> 来完全控制使用的 <code>ApplicationContext</code> 类型。</p>
-<h5 id="1-9-访问应用参数"><a href="#1-9-访问应用参数" class="headerlink" title="1.9. 访问应用参数"></a>1.9. 访问应用参数</h5><p>如果你需要访问传递给 <code>SpringApplication.run(..)</code> 的命令行参数，你可以注入一个 <code>org.springframework.boot.ApplicationArguments</code> bean。 通过 <code>ApplicationArguments</code> 接口，你可以访问原始的 <code>String[]</code> 参数以及经过解析的 <code>option</code> 和 <code>non-option</code> 参数。如以下例子所示。</p>
-<h5 id="1-10-使用-ApplicationRunner-或-CommandLineRunner"><a href="#1-10-使用-ApplicationRunner-或-CommandLineRunner" class="headerlink" title="1.10. 使用 ApplicationRunner 或 CommandLineRunner"></a>1.10. 使用 ApplicationRunner 或 CommandLineRunner</h5><p>如果你需要在 <code>SpringApplication</code> 启动后运行一些特定的代码，你可以实现 <code>ApplicationRunner</code> 或 <code>CommandLineRunner</code> 接口。 这两个接口以相同的方式工作，并提供一个单一的 <code>run</code> 方法，该方法在 <code>SpringApplication.run(…)</code> 执行完毕之前被调用。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyCommandLineRunner</span> <span class="token keyword">implements</span> <span class="token class-name">CommandLineRunner</span> <span class="token punctuation">&#123;</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token comment">// Do something...</span>
+<blockquote>
+<p>java只有值传递，没有引用传递，基本数据类型传递的是值，引用数据类型传递的是对象的内存地址</p>
+</blockquote>
+<ol start="2">
+<li>equals是object类的一个方法，所有类都有equals方法，默认调用的是<code>==</code>进行比较两个对象是否相等。</li>
+</ol>
+<blockquote>
+<p><code>equals()</code>方法有两种用法，一种是没有重写equals方法，默认比较两个对象内存地址是否相等，一种是重写了equals方法，比较的是对象的值是否相等。</p>
+<p>如：Object类的equals()方法和String的equals()方法</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//Object类的equals()方法</span>
+<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> obj<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> obj<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment">//String的equals()方法</span>
+<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> anObject<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> anObject<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>anObject <span class="token keyword">instanceof</span> <span class="token class-name">String</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> anotherString <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span>anObject<span class="token punctuation">;</span>
+        <span class="token keyword">int</span> n <span class="token operator">=</span> value<span class="token punctuation">.</span>length<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">==</span> anotherString<span class="token punctuation">.</span>value<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">char</span> v1<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> value<span class="token punctuation">;</span>
+            <span class="token keyword">char</span> v2<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> anotherString<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+            <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span>n<span class="token operator">--</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>v1<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">!=</span> v2<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+                    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+                i<span class="token operator">++</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>如果定义了多个 <code>CommandLineRunner</code> 或 <code>ApplicationRunner</code> Bean，并且需要它们按照特定的顺序先后执行。那么可以实现 <code>org.springframework.core.Ordered</code> 接口或使用 <code>org.springframework.core.annotation.Order</code> 注解来指定顺序。</p>
-<h5 id="1-11-程序退出"><a href="#1-11-程序退出" class="headerlink" title="1.11. 程序退出"></a>1.11. 程序退出</h5><p>每个 <code>SpringApplication</code> 都向JVM注册了一个shutdown hook，以确保 <code>ApplicationContext</code> 在退出时优雅地关闭。 所有标准的Spring生命周期回调（如 <code>DisposableBean</code> 接口或 <code>@PreDestroy</code> 注解）都可以使用。</p>
-<p>此外，如果Bean希望在调用 <code>SpringApplication.exit()</code> 时返回特定的退出代码，可以实现 <code>org.springframework.boot.ExitCodeGenerator</code> 接口。 然后，这个退出代码可以被传递给 <code>System.exit()</code> ，将其作为状态代码返回，如下面的例子所示。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Bean</span>
-<span class="token keyword">public</span> <span class="token class-name">ExitCodeGenerator</span> <span class="token function">exitCodeGenerator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-       <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token number">42</span><span class="token punctuation">;</span>
-   <span class="token punctuation">&#125;</span>
+<h1 id="hashcode的作用"><a href="#hashcode的作用" class="headerlink" title="hashcode的作用"></a>hashcode的作用</h1><blockquote>
+<p><code>hashcode（）</code>的作用是获取hash码（int 整数）也称散列码，这个hash码的作用是确定对象在hash表的位置,所有类都有这个函数</p>
+<p><code>public native int hashCode();</code></p>
+</blockquote>
+<h1 id="为什么要有hashcode，hashset是如何检查重复的"><a href="#为什么要有hashcode，hashset是如何检查重复的" class="headerlink" title="为什么要有hashcode，hashset是如何检查重复的"></a>为什么要有hashcode，hashset是如何检查重复的</h1><blockquote>
+<p>提高执行效率，以hashset如何检查重复说明，怎么提高效率的，当把对象加入到hashset的时候，hashset会首先根据对象的hashcode值来判断加入的位置下标，如果下标位置没值就直接插入了，有值的话再调用equals方法判断两个对象是否相等，如果相等就不会让其加入，如果不相等就会重新散列到新的位置，这样做的好处是减少了equals执行次数，提高了执行效率。</p>
+</blockquote>
+<p>总结：</p>
+<p>如果两个对象的<code>hashCode</code> 值相等，那这两个对象不一定相等（哈希碰撞）。</p>
+<p>如果两个对象的<code>hashCode</code> 值相等并且<code>equals()</code>方法也返回 <code>true</code>，我们才认为这两个对象相等。</p>
+<p>如果两个对象的<code>hashCode</code> 值不相等，我们就可以直接认为这两个对象不相等。</p>
+<h1 id="为什么重写equals必须重写hashcode"><a href="#为什么重写equals必须重写hashcode" class="headerlink" title="为什么重写equals必须重写hashcode"></a>为什么重写equals必须重写hashcode</h1><blockquote>
+<p>Java API规范要求：</p>
+<p>Object类中hashCode()方法的文档明确规定，如果两个对象通过equals()方法认为是相等的，那么它们必须产生相同的哈希码。这意味着当你自定义了对象的相等性规则（通过重写equals()方法），也应该相应地重写hashCode()方法以保持一致性。</p>
+<p>每个对象都有hashcode方法，可能会产生hash冲突，导致两个不同的对象，返回相同的hash码。</p>
+<p>如果equals（）方法判断两个对象相等，那么两个对象的hashcode肯定是相等的，如果重写equals（）方法，没有重写hashcode可能会导致，两个对象equals相等，hashcode不相同，不符合Java API规范。</p>
+</blockquote>
+<p>总结：</p>
+<ul>
+<li><code>equals</code> 方法判断两个对象是相等的，那这两个对象的 <code>hashCode</code> 值也要相等。</li>
+<li>两个对象有相同的 <code>hashCode</code> 值，他们也不一定是相等的（哈希碰撞）。</li>
+</ul>
 
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-       <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">exit</span><span class="token punctuation">(</span><span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">exit</span><span class="token punctuation">(</span><span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">MainApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span>args<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-   <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>另外，<code>ExitCodeGenerator</code> 接口可以由异常（Exception）实现。 当遇到这种异常时，Spring Boot会返回由实现的 <code>getExitCode()</code> 方法提供的退出代码。</p>
-<p>如果有多个 <code>ExitCodeGenerator</code> ，则使用第一个生成的非零退出代码。 要控制生成器（Generator）的调用顺序，你可以实现 <code>org.springframework.core.Ordered</code> 接口或使用 <code>org.springframework.core.annotation.Order</code> 注解。</p>
-<h5 id="1-12-管理功能"><a href="#1-12-管理功能" class="headerlink" title="1.12. 管理功能"></a>1.12. 管理功能</h5><p>通过指定 <code>spring.application.admin.enabled</code> 属性，可以启用应用程序的管理相关功能。 这在 <code>MBeanServer</code> 平台上暴露了 <a target="_blank" rel="noopener" href="https://github.com/spring-projects/spring-boot/tree/main/spring-boot-project/spring-boot/src/main/java/org/springframework/boot/admin/SpringApplicationAdminMXBean.java"><code>SpringApplicationAdminMXBean</code></a>。 你可以使用这个功能来远程管理你的Spring Boot应用程序。 这个功能对任何服务包装器的实现也很有用。</p>
-<h5 id="1-13-应用程序启动追踪"><a href="#1-13-应用程序启动追踪" class="headerlink" title="1.13. 应用程序启动追踪"></a>1.13. 应用程序启动追踪</h5><p>在应用程序启动期间，<code>SpringApplication</code> 和 <code>ApplicationContext</code> 执行许多与应用程序生命周期相关的任务。 beans的生命周期，甚至是处理应用事件。 通过 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/6.1.0-M1/javadoc-api/org/springframework/core/metrics/ApplicationStartup.html"><code>ApplicationStartup</code></a>, ，Spring框架 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/6.1.0-M1/reference/html/core.html#context-functionality-startup">允许你用 <code>StartupStep</code> 对象来跟踪应用程序的启动顺序</a>。 这些数据可以为分析目的而收集，或者只是为了更好地了解应用程序的启动过程。</p>
-<p>你可以在设置 <code>SpringApplication</code> 实例时选择一个 <code>ApplicationStartup</code> 实现。 例如，要使用 <code>BufferingApplicationStartup</code>，你可以这么写。</p>
-<h3 id="2-外部化的配置"><a href="#2-外部化的配置" class="headerlink" title="2. 外部化的配置"></a>2. 外部化的配置</h3>
       
     </div>
 
@@ -736,6 +548,380 @@ Identify and stop the process that is listening on port 8080 or configure this a
 </ul>
 </li>
 </ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%B8%89.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%B8%89.html" class="post-title-link" itemprop="url">Java基础常用类</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h1><blockquote>
+<p>异常是在程序执行过程中遇到的一种意外情况或错误，它会干扰正常的程序执行流程。</p>
+</blockquote>
+<h2 id="异常的类型"><a href="#异常的类型" class="headerlink" title="异常的类型"></a>异常的类型</h2><blockquote>
+<p>异常的父类是Throwable有两个⼦类Exception和Error。</p>
+<p>Error是程序⽆法处理的错误，⼀旦出现这个错误，虚拟机将被迫停⽌运⾏。</p>
+<p>Exception不会导致程序停⽌，⼜分为两个部分RunTimeException运⾏时异常和CheckedException检查异常</p>
+<p>RunTimeException常常发⽣在程序运⾏过程中，会导致程序当前线程执⾏失败。CheckedException常常发⽣在程序编译过程中，会导致程序编译不通过。</p>
+</blockquote>
+<img src="https://telegraph-image-2ni.pages.dev/file/f5fc08365d6eedc7d186d.png" alt="img" style="zoom:50%;">
+
+<h2 id="Throwable类的常用方法"><a href="#Throwable类的常用方法" class="headerlink" title="Throwable类的常用方法"></a>Throwable类的常用方法</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//返回异常发生时的简要描述</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> detailMessage<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token comment">//返回异常发生时的详细信息</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> s <span class="token operator">=</span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> message <span class="token operator">=</span> <span class="token function">getLocalizedMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span>message <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token punctuation">(</span>s <span class="token operator">+</span> <span class="token string">": "</span> <span class="token operator">+</span> message<span class="token punctuation">)</span> <span class="token operator">:</span> s<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token comment">//在控制台上打印 Throwable 对象封装的异常信息</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><blockquote>
+<p>当出现异常我们要捕获并处理异常，或者抛出异常两种方式</p>
+</blockquote>
+<p><strong>1.抛出异常</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span> <span class="token keyword">throw</span>  <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"异常了"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>2.捕获并处理</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//使用try-catch代码块捕获并处理异常</span>
+<span class="token keyword">public</span>  <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+       <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+           <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">0</span><span class="token punctuation">;</span>
+       <span class="token punctuation">&#125;</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+           <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"0不能做除数"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">//也可以使用try-catch-finally finally代码块中一般出现异常也会执行，常用来进行资源的关闭</span>
+<span class="token comment">//使用try-with-source替代try-catch-finally代码更简短，更清晰，会自动进行资源的关闭</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><blockquote>
+<p>泛型（Generics）是Java中一种参数化类型的概念，它允许在定义类、接口和方法时使用类型参数。通过泛型，可以使类、接口和方法在定义时不指定具体的数据类型，而是在实例化或调用时再指定具体的类型。</p>
+<p>使用泛型的主要目的是提高代码的灵活性、可重用性和安全性，同时减少重复代码的编写。泛型可以在编译时进行类型检查，避免在运行时出现类型转换错误，提高了代码的安全性。</p>
+</blockquote>
+<h2 id="泛型的使用方式"><a href="#泛型的使用方式" class="headerlink" title="泛型的使用方式"></a>泛型的使用方式</h2><p><strong>泛型类</strong>：使用泛型参数化的类，可以在定义时指定类型参数。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">MyClass</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 泛型类中的方法或成员变量可以使用泛型类型参数T</span>
+    <span class="token keyword">private</span> <span class="token class-name">T</span> value<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">T</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> value<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token class-name">T</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> value<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>泛型接口</strong>：使用泛型参数化的接口，可以在实现时指定类型参数。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">interface</span> <span class="token class-name">MyInterface</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">T</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token class-name">T</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>泛型方法</strong>：在方法定义中使用泛型参数，可以在调用时指定具体的类型参数。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Utils</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token class-name">T</span> <span class="token function">getLastElement</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> list<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">return</span> list<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="项目中哪些使用泛型"><a href="#项目中哪些使用泛型" class="headerlink" title="项目中哪些使用泛型"></a>项目中哪些使用泛型</h2><p>1.前后端返回的统一接口CommonResult</p>
+<p>2.自定义的excel处理类ExcelUtil动态的指定的类型导出数据</p>
+<p>3.集合类，例如，<code>ArrayList&lt;String&gt;</code>表示一个只能存储字符串类型的ArrayList。</p>
+<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><h2 id="什么是反射（Reflection）"><a href="#什么是反射（Reflection）" class="headerlink" title="什么是反射（Reflection）"></a>什么是反射（Reflection）</h2><blockquote>
+<p>允许在运行时动态地检查类、获取类的信息（如字段、方法、构造函数等），以及调用类的方法、访问或修改类的属性等。</p>
+</blockquote>
+<h2 id="反射可以做什么"><a href="#反射可以做什么" class="headerlink" title="反射可以做什么"></a>反射可以做什么</h2><ol>
+<li><strong>获取类的信息</strong>：可以获取类的名称、包名、父类、实现的接口等信息。</li>
+<li><strong>获取类的字段（Field）信息</strong>：可以获取类中定义的字段的名称、类型、修饰符等信息。</li>
+<li><strong>获取类的方法（Method）信息</strong>：可以获取类中定义的方法的名称、参数类型、返回类型、修饰符等信息。</li>
+<li><strong>获取类的构造函数信息</strong>：可以获取类中定义的构造函数的参数类型、修饰符等信息。</li>
+<li><strong>动态调用方法</strong>：可以在运行时动态地调用类的方法，传递参数并获取返回值。</li>
+<li><strong>动态创建对象</strong>：可以在运行时动态地创建类的对象，并对对象进行操作。</li>
+</ol>
+<h2 id="反射的使用场景"><a href="#反射的使用场景" class="headerlink" title="反射的使用场景"></a>反射的使用场景</h2><ol>
+<li><strong>框架和库</strong>：许多Java框架和库，如Spring框架、Hibernate ORM框架等，都广泛使用了反射。框架需要在运行时动态地加载和操作类，以实现诸如依赖注入、AOP（面向切面编程）、ORM（对象关系映射）等功能。</li>
+<li><strong>动态代理</strong>：反射可以用来创建动态代理对象，实现动态地在运行时生成代理类并拦截方法调用，用于实现诸如远程调用、事务管理等功能。</li>
+<li><strong>序列化和反序列化</strong>：Java中的序列化和反序列化机制通常使用了反射来动态地读取和写入对象的字段信息，以实现对象的序列化和反序列化。</li>
+<li><strong>单元测试</strong>：在单元测试中，反射可以用来访问私有方法、私有字段等，以便进行单元测试。</li>
+<li><strong>注解处理器</strong>：反射可以用来解析和处理注解，例如编写自定义的注解处理器，根据注解来生成代码或进行其他操作。</li>
+<li><strong>工具类</strong>：一些工具类或开发工具（如IDE）可能会使用反射来获取和操作类的信息，以实现一些功能，例如自动生成代码、代码检查、代码重构等。</li>
+<li><strong>动态加载类</strong>：反射可以用来动态加载类和资源文件，例如通过ClassLoader动态加载类、读取配置文件等。</li>
+</ol>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//下面为jdk动态代理，通过反射实现的</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DebugInvocationHandler</span> <span class="token keyword">implements</span> <span class="token class-name">InvocationHandler</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">/**
+     * 代理类中的真实对象
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Object</span> target<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">DebugInvocationHandler</span><span class="token punctuation">(</span><span class="token class-name">Object</span> target<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>target <span class="token operator">=</span> target<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">invoke</span><span class="token punctuation">(</span><span class="token class-name">Object</span> proxy<span class="token punctuation">,</span> <span class="token class-name">Method</span> method<span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InvocationTargetException</span><span class="token punctuation">,</span> <span class="token class-name">IllegalAccessException</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"before method "</span> <span class="token operator">+</span> method<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Object</span> result <span class="token operator">=</span> method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>target<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"after method "</span> <span class="token operator">+</span> method<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h1><h2 id="什么是注解"><a href="#什么是注解" class="headerlink" title="什么是注解"></a>什么是注解</h2><blockquote>
+<p><code>Annotation</code> （注解） 是 Java5 开始引入的新特性，可以看作是一种特殊的注释，主要用于修饰类、方法或者变量，提供某些信息供程序在编译或者运行时使用。</p>
+<p>注解本质是一个继承了<code>Annotation</code> 的特殊接口：</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Target</span><span class="token punctuation">(</span><span class="token class-name">ElementType</span><span class="token punctuation">.</span>METHOD<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Retention</span><span class="token punctuation">(</span><span class="token class-name">RetentionPolicy</span><span class="token punctuation">.</span>SOURCE<span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token annotation punctuation">@interface</span> <span class="token class-name">Override</span> <span class="token punctuation">&#123;</span>
+<span class="token punctuation">&#125;</span>
+相当于
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Override</span> <span class="token keyword">extends</span> <span class="token class-name">Annotation</span><span class="token punctuation">&#123;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>JDK 提供了很多内置的注解（比如 <code>@Override</code>、<code>@Deprecated</code>），同时，我们还可以自定义注解。</p>
+</blockquote>
+<h2 id="注解解析的方式"><a href="#注解解析的方式" class="headerlink" title="注解解析的方式"></a>注解解析的方式</h2><blockquote>
+<p>注解只有被解析之后才会生效，常见的解析方法有两种：</p>
+</blockquote>
+<ul>
+<li><strong>编译期直接扫描</strong>：编译器在编译 Java 代码的时候扫描对应的注解并处理，比如某个方法使用<code>@Override</code> 注解，编译器在编译的时候就会检测当前的方法是否重写了父类对应的方法。</li>
+<li><strong>运行期通过反射处理</strong>：像框架中自带的注解(比如 Spring 框架的 <code>@Value</code>、<code>@Component</code>)都是通过反射来进行处理的。</li>
+</ul>
+<h2 id="注解的使用场景"><a href="#注解的使用场景" class="headerlink" title="注解的使用场景"></a>注解的使用场景</h2><ol>
+<li><strong>代码说明和文档生成</strong>：可以使用注解来添加说明、作者、版本等信息，帮助理解和使用代码，也可以通过注解生成文档。</li>
+<li><strong>编译时检查</strong>：可以使用注解进行编译时的静态检查，例如 <code>@Override</code> 注解用于检查是否正确覆盖了父类的方法。</li>
+<li><strong>运行时处理</strong>：可以使用注解在运行时进行处理，例如依赖注入、AOP（面向切面编程）、配置解析等。</li>
+<li><strong>代码生成</strong>：可以使用注解来生成代码或配置文件，例如使用注解来配置ORM框架。</li>
+<li><strong>元数据处理</strong>：可以使用注解获取和处理类、方法、字段等的元数据信息，例如自定义注解处理器。</li>
+</ol>
+<h1 id="SPI"><a href="#SPI" class="headerlink" title="SPI"></a>SPI</h1><blockquote>
+<p>SPI 即 Service Provider Interface ，字面意思就是：“服务提供者的接口”，我的理解是：专门提供给服务提供者或者扩展框架功能的开发者去使用的一个接口。</p>
+<p>SPI 将服务接口和具体的服务实现分离开来，将服务调用方和服务实现者解耦，能够提升程序的扩展性、可维护性。修改或者替换服务实现并不需要修改调用方。</p>
+<p>很多框架都使用了 Java 的 SPI 机制，比如：Spring 框架、数据库加载驱动、日志接口、以及 Dubbo 的扩展实现等等。</p>
+</blockquote>
+<h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><blockquote>
+<p>序列化是指将对象转换为字节流的过程，以便将其存储到文件中、通过网络传输或在内存中进行传递。序列化的主要目的是将对象的状态保存下来，以便在需要时可以重新创建对象或者传输对象数据。</p>
+<p>在Java中，序列化是通过实现Serializable接口来实现的。Serializable接口是一个标记接口，没有任何方法，它只是用于指示Java虚拟机这个类可以被序列化。当一个类实现了Serializable接口后，它的对象就可以被序列化成字节流，从而可以进行持久化存储或网络传输。</p>
+</blockquote>
+<p>简单来说：</p>
+<ul>
+<li><strong>序列化</strong>：将数据结构或对象转换成二进制字节流的过程</li>
+<li><strong>反序列化</strong>：将在序列化过程中所生成的二进制字节流转换成数据结构或者对象的过程</li>
+</ul>
+<p>下面是序列化和反序列化常见应用场景：</p>
+<ul>
+<li>对象在进行网络传输（比如远程方法调用 RPC 的时候）之前需要先被序列化，接收到序列化的对象之后需要再进行反序列化；</li>
+<li>将对象存储到文件之前需要进行序列化，将对象从文件中读取出来需要进行反序列化；</li>
+<li>将对象存储到数据库（如 Redis）之前需要用到序列化，将对象从缓存数据库中读取出来需要反序列化；</li>
+<li>将对象存储到内存之前需要进行序列化，从内存中读取出来之后需要进行反序列化。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%BA%8C.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%BA%8C.html" class="post-title-link" itemprop="url">面向对象</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是面向对象"><a href="#什么是面向对象" class="headerlink" title="什么是面向对象"></a>什么是面向对象</h1><p>面向对象编程，OOP（Object Oriented Programming）它是一种编程思想，把数据和行为封装成一个对象，以模拟现实世界的实体和交互。</p>
+<h1 id="如何区分面向对象和面向过程"><a href="#如何区分面向对象和面向过程" class="headerlink" title="如何区分面向对象和面向过程"></a>如何区分面向对象和面向过程</h1><ul>
+<li>面向过程：将问题看作一系列步骤，通过一个个方法执行解决问题，重点在于算法和流程控制。</li>
+<li>面向对象：将问题拆分成一系列对象，这些对象有自己的属性和方法，通过对象间方法调用解决问题，重点在于封装、继承和多态，以及对象之间的关系。</li>
+</ul>
+<h1 id="对象实例和对象引用的区别"><a href="#对象实例和对象引用的区别" class="headerlink" title="对象实例和对象引用的区别"></a>对象实例和对象引用的区别</h1><ul>
+<li>对象实例：在程序运行时new关键字创建的对象，存储在堆内存中，具有属性和方法。</li>
+<li>对象引用：指向对象实例的变量，存储在栈中，它存储的是对象实例内存地址。</li>
+</ul>
+<blockquote>
+<p>一般说的对象相等指的是对象实例相等，指的是两个对象实例在内存中的内容是一致的，引用相等指的两个或多个引用指向同一个对象实例，比较的是内存地址。</p>
+<ul>
+<li>一个对象引用可以指向0个或者1个对象实例</li>
+<li>一个对象实例可以被多个对象引用指向</li>
+</ul>
+</blockquote>
+<h1 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h1><blockquote>
+<p>构造方法（Constructor）是一种特殊类型的方法，用于在创建对象实例时初始化对象的状态。构造方法的名称必须与类名相同，并且没有返回类型（甚至不是void），因为它们不返回任何值。</p>
+<p>如果一个类没有明确定义构造方法，编译器会自动生成一个默认的无参构造方法，该构造方法仅仅执行了一些默认的初始化操作。但是，如果你显式地定义了构造方法，编译器就不会再生成默认构造方法，所以需要注意是否需要手动提供无参构造方法。</p>
+</blockquote>
+<ol>
+<li><strong>初始化对象</strong>：构造方法用于初始化新创建的对象实例的状态。它们通常会对对象的属性进行初始化，以确保对象在创建后处于一种合适的初始状态。</li>
+<li><strong>与类名相同</strong>：构造方法的名称必须与类名完全相同，包括大小写。这是为了告诉编译器这个方法是一个构造方法。</li>
+<li><strong>没有返回类型</strong>：构造方法没有返回类型，甚至不是void。这是因为构造方法的目的不是返回值，而是初始化对象实例。</li>
+<li><strong>可以重载</strong>：一个类可以有多个构造方法，它们可以根据参数列表的不同进行重载。这使得我们可以根据不同的需求来创建对象实例。</li>
+</ol>
+<h1 id="重写与重载"><a href="#重写与重载" class="headerlink" title="重写与重载"></a>重写与重载</h1><p>重写（Override）：子类重写父类的方法，但是方法的名称、参数列表、返回类型和父类保持一致，只改变方法体的内容，实现多态性。</p>
+<p>重载（Overload）：同一个类中定义多个有相同名称但参数列表（参数的个数、顺序、类型）不同的方法，可以根据不同的参数列表调用不同的方法。</p>
+<h1 id="面向对象的特性"><a href="#面向对象的特性" class="headerlink" title="面向对象的特性"></a>面向对象的特性</h1><h2 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h2><blockquote>
+<p>封装是把对象的属性和方法封装成一个类，通过封装可以把一个对象的属性隐藏在对象内部，对外提供公共的接口（方法）来操作内部数据，以保护数据安全，防止外部直接修改。</p>
+</blockquote>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><blockquote>
+<p>继承是在已存在的类的基础上创建子类，子类可以实现自己的属性和方法，也可以用父类的功能，但不能选择性地继承父类。通过使用继承，可以快速地创建新的类，可以提高代码的重用。</p>
+</blockquote>
+<ol>
+<li>子类拥有父类对象所有的属性和方法（包括私有属性和私有方法），但是父类中的私有属性和方法子类是无法访问，<strong>只是拥有</strong>。</li>
+<li>子类可以拥有自己属性和方法，即子类可以对父类进行扩展。</li>
+<li>子类可以用自己的方式实现父类的方法。（以后介绍）。</li>
+</ol>
+<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><blockquote>
+<p>多态是指对象在不同情况下可以以不同的形态呈现出来，体现在方法的重写上，子类重写父类的方法，父类的引用指向子类的实例并且调用子类重写的方法。</p>
+</blockquote>
+<p>Java实现多态有三个必要条件：继承、重写、向上转型。</p>
+<p>继承：在多态中必须存在有继承关系的子类和父类。</p>
+<p>重写：子类对父类中某些方法进行重新定义，在调用这些方法时就会调用子类的方法。</p>
+<p>向上转型：是指子类对象可以赋值给父类引用变量，会调用子类的重写的方法。</p>
+<h1 id="接口和抽象类的区别"><a href="#接口和抽象类的区别" class="headerlink" title="接口和抽象类的区别"></a>接口和抽象类的区别</h1><blockquote>
+<p>接口：通过interface关键字来表明这是接口，定义了一组抽象方法，没有具体的实现，方法默认是public abstract修饰、变量默认为public static final修饰</p>
+<p>抽象类：通过abstract关键字来表明这是接口，既可以包含抽象方法也可以包含非抽象方法，可以有构造函数，也可以有成员变量，作为一个基类，提供通用功能的实现，但直接不能被实例化。</p>
+</blockquote>
+<p>相同点：</p>
+<ol>
+<li><strong>抽象性</strong>：接口和抽象类都是抽象的，不能直接实例化。</li>
+<li><strong>模板性</strong>：接口和抽象类都可以作为其他类的模板或基类，提供通用的行为规范或实现。</li>
+<li><strong>多态性</strong>：接口和抽象类都支持多态性，即同一方法调用可能会有不同的实现，具体取决于对象的类型。</li>
+<li><strong>扩展性</strong>：接口和抽象类都可以被子类实现或继承，并且可以通过添加新的方法或修改现有的方法来扩展功能。</li>
+</ol>
+<p>区别：</p>
+<ol>
+<li>方法：<ul>
+<li><strong>接口</strong>：只有抽象方法，但不包含方法的具体实现。</li>
+<li><strong>抽象类</strong>：可以有抽象方法，也可以有非抽象方法</li>
+</ul>
+</li>
+<li>构造函数：<ul>
+<li>抽象类可以有构造函数，而接口不能有构造函数。</li>
+</ul>
+</li>
+<li>继承：<ul>
+<li><strong>接口</strong>：多实现</li>
+<li><strong>抽象类</strong>：单继承，继承具有传递性。</li>
+</ul>
+</li>
+<li>变量：<ul>
+<li><strong>接口</strong>：变量默认是public static final的</li>
+<li><strong>抽象类</strong>：可以定义实例变量，可以是各种访问修饰符。</li>
+</ul>
+</li>
+<li>使用场景：<ul>
+<li><strong>接口</strong>：如果不同的类需要具有相似但不同的行为，可以考虑使用接口来实现。</li>
+<li><strong>抽象类</strong>：如果多个类有相似的行为，可以将这些行为提取到一个抽象类中，并让这些类继承该抽象类来实现代码复用。</li>
+</ul>
+</li>
+</ol>
+<h1 id="深拷贝、浅拷贝、引用拷贝"><a href="#深拷贝、浅拷贝、引用拷贝" class="headerlink" title="深拷贝、浅拷贝、引用拷贝"></a>深拷贝、浅拷贝、引用拷贝</h1><p>深拷贝和浅拷贝都是指对对象的拷贝，例如一个对象如果有两种类型的属性，基本数据类型和引用数据类型</p>
+<p>浅拷贝（<strong>Shallow Copy</strong>）就是指会拷贝基本数据类型的值，以及引用数据类型的引用，不会拷贝引用数据类型指向的对象，浅拷贝出来的对象内部的引用数据类型指向原来对象，通过clone()方法可以实现</p>
+<p>深拷贝（<strong>Deep Copy</strong>）即会拷贝基本数据类型的值，也会拷贝引用数据类型指向的对象，是完全都复制了一份，通过递归复制或者序列化和反序列化实现。</p>
+<p>引用拷贝（<strong>Reference Copy</strong>）就是两个不同的引用指向同一个对象。</p>
 
       
     </div>
@@ -1066,380 +1252,6 @@ Identify and stop the process that is listening on port 8080 or configure this a
 <li>如果参数是引用类型，传递的就是实参所引用的对象在堆中地址值的拷贝，同样也会创建副本</li>
 </ul>
 </blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%BA%8C.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%BA%8C.html" class="post-title-link" itemprop="url">面向对象</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="什么是面向对象"><a href="#什么是面向对象" class="headerlink" title="什么是面向对象"></a>什么是面向对象</h1><p>面向对象编程，OOP（Object Oriented Programming）它是一种编程思想，把数据和行为封装成一个对象，以模拟现实世界的实体和交互。</p>
-<h1 id="如何区分面向对象和面向过程"><a href="#如何区分面向对象和面向过程" class="headerlink" title="如何区分面向对象和面向过程"></a>如何区分面向对象和面向过程</h1><ul>
-<li>面向过程：将问题看作一系列步骤，通过一个个方法执行解决问题，重点在于算法和流程控制。</li>
-<li>面向对象：将问题拆分成一系列对象，这些对象有自己的属性和方法，通过对象间方法调用解决问题，重点在于封装、继承和多态，以及对象之间的关系。</li>
-</ul>
-<h1 id="对象实例和对象引用的区别"><a href="#对象实例和对象引用的区别" class="headerlink" title="对象实例和对象引用的区别"></a>对象实例和对象引用的区别</h1><ul>
-<li>对象实例：在程序运行时new关键字创建的对象，存储在堆内存中，具有属性和方法。</li>
-<li>对象引用：指向对象实例的变量，存储在栈中，它存储的是对象实例内存地址。</li>
-</ul>
-<blockquote>
-<p>一般说的对象相等指的是对象实例相等，指的是两个对象实例在内存中的内容是一致的，引用相等指的两个或多个引用指向同一个对象实例，比较的是内存地址。</p>
-<ul>
-<li>一个对象引用可以指向0个或者1个对象实例</li>
-<li>一个对象实例可以被多个对象引用指向</li>
-</ul>
-</blockquote>
-<h1 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h1><blockquote>
-<p>构造方法（Constructor）是一种特殊类型的方法，用于在创建对象实例时初始化对象的状态。构造方法的名称必须与类名相同，并且没有返回类型（甚至不是void），因为它们不返回任何值。</p>
-<p>如果一个类没有明确定义构造方法，编译器会自动生成一个默认的无参构造方法，该构造方法仅仅执行了一些默认的初始化操作。但是，如果你显式地定义了构造方法，编译器就不会再生成默认构造方法，所以需要注意是否需要手动提供无参构造方法。</p>
-</blockquote>
-<ol>
-<li><strong>初始化对象</strong>：构造方法用于初始化新创建的对象实例的状态。它们通常会对对象的属性进行初始化，以确保对象在创建后处于一种合适的初始状态。</li>
-<li><strong>与类名相同</strong>：构造方法的名称必须与类名完全相同，包括大小写。这是为了告诉编译器这个方法是一个构造方法。</li>
-<li><strong>没有返回类型</strong>：构造方法没有返回类型，甚至不是void。这是因为构造方法的目的不是返回值，而是初始化对象实例。</li>
-<li><strong>可以重载</strong>：一个类可以有多个构造方法，它们可以根据参数列表的不同进行重载。这使得我们可以根据不同的需求来创建对象实例。</li>
-</ol>
-<h1 id="重写与重载"><a href="#重写与重载" class="headerlink" title="重写与重载"></a>重写与重载</h1><p>重写（Override）：子类重写父类的方法，但是方法的名称、参数列表、返回类型和父类保持一致，只改变方法体的内容，实现多态性。</p>
-<p>重载（Overload）：同一个类中定义多个有相同名称但参数列表（参数的个数、顺序、类型）不同的方法，可以根据不同的参数列表调用不同的方法。</p>
-<h1 id="面向对象的特性"><a href="#面向对象的特性" class="headerlink" title="面向对象的特性"></a>面向对象的特性</h1><h2 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h2><blockquote>
-<p>封装是把对象的属性和方法封装成一个类，通过封装可以把一个对象的属性隐藏在对象内部，对外提供公共的接口（方法）来操作内部数据，以保护数据安全，防止外部直接修改。</p>
-</blockquote>
-<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><blockquote>
-<p>继承是在已存在的类的基础上创建子类，子类可以实现自己的属性和方法，也可以用父类的功能，但不能选择性地继承父类。通过使用继承，可以快速地创建新的类，可以提高代码的重用。</p>
-</blockquote>
-<ol>
-<li>子类拥有父类对象所有的属性和方法（包括私有属性和私有方法），但是父类中的私有属性和方法子类是无法访问，<strong>只是拥有</strong>。</li>
-<li>子类可以拥有自己属性和方法，即子类可以对父类进行扩展。</li>
-<li>子类可以用自己的方式实现父类的方法。（以后介绍）。</li>
-</ol>
-<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><blockquote>
-<p>多态是指对象在不同情况下可以以不同的形态呈现出来，体现在方法的重写上，子类重写父类的方法，父类的引用指向子类的实例并且调用子类重写的方法。</p>
-</blockquote>
-<p>Java实现多态有三个必要条件：继承、重写、向上转型。</p>
-<p>继承：在多态中必须存在有继承关系的子类和父类。</p>
-<p>重写：子类对父类中某些方法进行重新定义，在调用这些方法时就会调用子类的方法。</p>
-<p>向上转型：是指子类对象可以赋值给父类引用变量，会调用子类的重写的方法。</p>
-<h1 id="接口和抽象类的区别"><a href="#接口和抽象类的区别" class="headerlink" title="接口和抽象类的区别"></a>接口和抽象类的区别</h1><blockquote>
-<p>接口：通过interface关键字来表明这是接口，定义了一组抽象方法，没有具体的实现，方法默认是public abstract修饰、变量默认为public static final修饰</p>
-<p>抽象类：通过abstract关键字来表明这是接口，既可以包含抽象方法也可以包含非抽象方法，可以有构造函数，也可以有成员变量，作为一个基类，提供通用功能的实现，但直接不能被实例化。</p>
-</blockquote>
-<p>相同点：</p>
-<ol>
-<li><strong>抽象性</strong>：接口和抽象类都是抽象的，不能直接实例化。</li>
-<li><strong>模板性</strong>：接口和抽象类都可以作为其他类的模板或基类，提供通用的行为规范或实现。</li>
-<li><strong>多态性</strong>：接口和抽象类都支持多态性，即同一方法调用可能会有不同的实现，具体取决于对象的类型。</li>
-<li><strong>扩展性</strong>：接口和抽象类都可以被子类实现或继承，并且可以通过添加新的方法或修改现有的方法来扩展功能。</li>
-</ol>
-<p>区别：</p>
-<ol>
-<li>方法：<ul>
-<li><strong>接口</strong>：只有抽象方法，但不包含方法的具体实现。</li>
-<li><strong>抽象类</strong>：可以有抽象方法，也可以有非抽象方法</li>
-</ul>
-</li>
-<li>构造函数：<ul>
-<li>抽象类可以有构造函数，而接口不能有构造函数。</li>
-</ul>
-</li>
-<li>继承：<ul>
-<li><strong>接口</strong>：多实现</li>
-<li><strong>抽象类</strong>：单继承，继承具有传递性。</li>
-</ul>
-</li>
-<li>变量：<ul>
-<li><strong>接口</strong>：变量默认是public static final的</li>
-<li><strong>抽象类</strong>：可以定义实例变量，可以是各种访问修饰符。</li>
-</ul>
-</li>
-<li>使用场景：<ul>
-<li><strong>接口</strong>：如果不同的类需要具有相似但不同的行为，可以考虑使用接口来实现。</li>
-<li><strong>抽象类</strong>：如果多个类有相似的行为，可以将这些行为提取到一个抽象类中，并让这些类继承该抽象类来实现代码复用。</li>
-</ul>
-</li>
-</ol>
-<h1 id="深拷贝、浅拷贝、引用拷贝"><a href="#深拷贝、浅拷贝、引用拷贝" class="headerlink" title="深拷贝、浅拷贝、引用拷贝"></a>深拷贝、浅拷贝、引用拷贝</h1><p>深拷贝和浅拷贝都是指对对象的拷贝，例如一个对象如果有两种类型的属性，基本数据类型和引用数据类型</p>
-<p>浅拷贝（<strong>Shallow Copy</strong>）就是指会拷贝基本数据类型的值，以及引用数据类型的引用，不会拷贝引用数据类型指向的对象，浅拷贝出来的对象内部的引用数据类型指向原来对象，通过clone()方法可以实现</p>
-<p>深拷贝（<strong>Deep Copy</strong>）即会拷贝基本数据类型的值，也会拷贝引用数据类型指向的对象，是完全都复制了一份，通过递归复制或者序列化和反序列化实现。</p>
-<p>引用拷贝（<strong>Reference Copy</strong>）就是两个不同的引用指向同一个对象。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%B8%89.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%B8%89.html" class="post-title-link" itemprop="url">Java基础常用类</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h1><blockquote>
-<p>异常是在程序执行过程中遇到的一种意外情况或错误，它会干扰正常的程序执行流程。</p>
-</blockquote>
-<h2 id="异常的类型"><a href="#异常的类型" class="headerlink" title="异常的类型"></a>异常的类型</h2><blockquote>
-<p>异常的父类是Throwable有两个⼦类Exception和Error。</p>
-<p>Error是程序⽆法处理的错误，⼀旦出现这个错误，虚拟机将被迫停⽌运⾏。</p>
-<p>Exception不会导致程序停⽌，⼜分为两个部分RunTimeException运⾏时异常和CheckedException检查异常</p>
-<p>RunTimeException常常发⽣在程序运⾏过程中，会导致程序当前线程执⾏失败。CheckedException常常发⽣在程序编译过程中，会导致程序编译不通过。</p>
-</blockquote>
-<img src="https://telegraph-image-2ni.pages.dev/file/f5fc08365d6eedc7d186d.png" alt="img" style="zoom:50%;">
-
-<h2 id="Throwable类的常用方法"><a href="#Throwable类的常用方法" class="headerlink" title="Throwable类的常用方法"></a>Throwable类的常用方法</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//返回异常发生时的简要描述</span>
-<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> detailMessage<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token comment">//返回异常发生时的详细信息</span>
-<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">String</span> s <span class="token operator">=</span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">String</span> message <span class="token operator">=</span> <span class="token function">getLocalizedMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token punctuation">(</span>message <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token punctuation">(</span>s <span class="token operator">+</span> <span class="token string">": "</span> <span class="token operator">+</span> message<span class="token punctuation">)</span> <span class="token operator">:</span> s<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token comment">//在控制台上打印 Throwable 对象封装的异常信息</span>
-<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><blockquote>
-<p>当出现异常我们要捕获并处理异常，或者抛出异常两种方式</p>
-</blockquote>
-<p><strong>1.抛出异常</strong></p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span>
-<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span> <span class="token keyword">throw</span>  <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"异常了"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p><strong>2.捕获并处理</strong></p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//使用try-catch代码块捕获并处理异常</span>
-<span class="token keyword">public</span>  <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-       <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-           <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">0</span><span class="token punctuation">;</span>
-       <span class="token punctuation">&#125;</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-           <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"0不能做除数"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-           e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token comment">//也可以使用try-catch-finally finally代码块中一般出现异常也会执行，常用来进行资源的关闭</span>
-<span class="token comment">//使用try-with-source替代try-catch-finally代码更简短，更清晰，会自动进行资源的关闭</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><blockquote>
-<p>泛型（Generics）是Java中一种参数化类型的概念，它允许在定义类、接口和方法时使用类型参数。通过泛型，可以使类、接口和方法在定义时不指定具体的数据类型，而是在实例化或调用时再指定具体的类型。</p>
-<p>使用泛型的主要目的是提高代码的灵活性、可重用性和安全性，同时减少重复代码的编写。泛型可以在编译时进行类型检查，避免在运行时出现类型转换错误，提高了代码的安全性。</p>
-</blockquote>
-<h2 id="泛型的使用方式"><a href="#泛型的使用方式" class="headerlink" title="泛型的使用方式"></a>泛型的使用方式</h2><p><strong>泛型类</strong>：使用泛型参数化的类，可以在定义时指定类型参数。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">MyClass</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// 泛型类中的方法或成员变量可以使用泛型类型参数T</span>
-    <span class="token keyword">private</span> <span class="token class-name">T</span> value<span class="token punctuation">;</span>
-
-    <span class="token keyword">public</span> <span class="token class-name">T</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> value<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token class-name">T</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> value<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>泛型接口</strong>：使用泛型参数化的接口，可以在实现时指定类型参数。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">interface</span> <span class="token class-name">MyInterface</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
-    <span class="token class-name">T</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token class-name">T</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>泛型方法</strong>：在方法定义中使用泛型参数，可以在调用时指定具体的类型参数。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Utils</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token class-name">T</span> <span class="token function">getLastElement</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> list<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token keyword">return</span> list<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="项目中哪些使用泛型"><a href="#项目中哪些使用泛型" class="headerlink" title="项目中哪些使用泛型"></a>项目中哪些使用泛型</h2><p>1.前后端返回的统一接口CommonResult</p>
-<p>2.自定义的excel处理类ExcelUtil动态的指定的类型导出数据</p>
-<p>3.集合类，例如，<code>ArrayList&lt;String&gt;</code>表示一个只能存储字符串类型的ArrayList。</p>
-<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><h2 id="什么是反射（Reflection）"><a href="#什么是反射（Reflection）" class="headerlink" title="什么是反射（Reflection）"></a>什么是反射（Reflection）</h2><blockquote>
-<p>允许在运行时动态地检查类、获取类的信息（如字段、方法、构造函数等），以及调用类的方法、访问或修改类的属性等。</p>
-</blockquote>
-<h2 id="反射可以做什么"><a href="#反射可以做什么" class="headerlink" title="反射可以做什么"></a>反射可以做什么</h2><ol>
-<li><strong>获取类的信息</strong>：可以获取类的名称、包名、父类、实现的接口等信息。</li>
-<li><strong>获取类的字段（Field）信息</strong>：可以获取类中定义的字段的名称、类型、修饰符等信息。</li>
-<li><strong>获取类的方法（Method）信息</strong>：可以获取类中定义的方法的名称、参数类型、返回类型、修饰符等信息。</li>
-<li><strong>获取类的构造函数信息</strong>：可以获取类中定义的构造函数的参数类型、修饰符等信息。</li>
-<li><strong>动态调用方法</strong>：可以在运行时动态地调用类的方法，传递参数并获取返回值。</li>
-<li><strong>动态创建对象</strong>：可以在运行时动态地创建类的对象，并对对象进行操作。</li>
-</ol>
-<h2 id="反射的使用场景"><a href="#反射的使用场景" class="headerlink" title="反射的使用场景"></a>反射的使用场景</h2><ol>
-<li><strong>框架和库</strong>：许多Java框架和库，如Spring框架、Hibernate ORM框架等，都广泛使用了反射。框架需要在运行时动态地加载和操作类，以实现诸如依赖注入、AOP（面向切面编程）、ORM（对象关系映射）等功能。</li>
-<li><strong>动态代理</strong>：反射可以用来创建动态代理对象，实现动态地在运行时生成代理类并拦截方法调用，用于实现诸如远程调用、事务管理等功能。</li>
-<li><strong>序列化和反序列化</strong>：Java中的序列化和反序列化机制通常使用了反射来动态地读取和写入对象的字段信息，以实现对象的序列化和反序列化。</li>
-<li><strong>单元测试</strong>：在单元测试中，反射可以用来访问私有方法、私有字段等，以便进行单元测试。</li>
-<li><strong>注解处理器</strong>：反射可以用来解析和处理注解，例如编写自定义的注解处理器，根据注解来生成代码或进行其他操作。</li>
-<li><strong>工具类</strong>：一些工具类或开发工具（如IDE）可能会使用反射来获取和操作类的信息，以实现一些功能，例如自动生成代码、代码检查、代码重构等。</li>
-<li><strong>动态加载类</strong>：反射可以用来动态加载类和资源文件，例如通过ClassLoader动态加载类、读取配置文件等。</li>
-</ol>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//下面为jdk动态代理，通过反射实现的</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DebugInvocationHandler</span> <span class="token keyword">implements</span> <span class="token class-name">InvocationHandler</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">/**
-     * 代理类中的真实对象
-     */</span>
-    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Object</span> target<span class="token punctuation">;</span>
-
-    <span class="token keyword">public</span> <span class="token class-name">DebugInvocationHandler</span><span class="token punctuation">(</span><span class="token class-name">Object</span> target<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>target <span class="token operator">=</span> target<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">invoke</span><span class="token punctuation">(</span><span class="token class-name">Object</span> proxy<span class="token punctuation">,</span> <span class="token class-name">Method</span> method<span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InvocationTargetException</span><span class="token punctuation">,</span> <span class="token class-name">IllegalAccessException</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"before method "</span> <span class="token operator">+</span> method<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">Object</span> result <span class="token operator">=</span> method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>target<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"after method "</span> <span class="token operator">+</span> method<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h1><h2 id="什么是注解"><a href="#什么是注解" class="headerlink" title="什么是注解"></a>什么是注解</h2><blockquote>
-<p><code>Annotation</code> （注解） 是 Java5 开始引入的新特性，可以看作是一种特殊的注释，主要用于修饰类、方法或者变量，提供某些信息供程序在编译或者运行时使用。</p>
-<p>注解本质是一个继承了<code>Annotation</code> 的特殊接口：</p>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Target</span><span class="token punctuation">(</span><span class="token class-name">ElementType</span><span class="token punctuation">.</span>METHOD<span class="token punctuation">)</span>
-<span class="token annotation punctuation">@Retention</span><span class="token punctuation">(</span><span class="token class-name">RetentionPolicy</span><span class="token punctuation">.</span>SOURCE<span class="token punctuation">)</span>
-<span class="token keyword">public</span> <span class="token annotation punctuation">@interface</span> <span class="token class-name">Override</span> <span class="token punctuation">&#123;</span>
-<span class="token punctuation">&#125;</span>
-相当于
-<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Override</span> <span class="token keyword">extends</span> <span class="token class-name">Annotation</span><span class="token punctuation">&#123;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<blockquote>
-<p>JDK 提供了很多内置的注解（比如 <code>@Override</code>、<code>@Deprecated</code>），同时，我们还可以自定义注解。</p>
-</blockquote>
-<h2 id="注解解析的方式"><a href="#注解解析的方式" class="headerlink" title="注解解析的方式"></a>注解解析的方式</h2><blockquote>
-<p>注解只有被解析之后才会生效，常见的解析方法有两种：</p>
-</blockquote>
-<ul>
-<li><strong>编译期直接扫描</strong>：编译器在编译 Java 代码的时候扫描对应的注解并处理，比如某个方法使用<code>@Override</code> 注解，编译器在编译的时候就会检测当前的方法是否重写了父类对应的方法。</li>
-<li><strong>运行期通过反射处理</strong>：像框架中自带的注解(比如 Spring 框架的 <code>@Value</code>、<code>@Component</code>)都是通过反射来进行处理的。</li>
-</ul>
-<h2 id="注解的使用场景"><a href="#注解的使用场景" class="headerlink" title="注解的使用场景"></a>注解的使用场景</h2><ol>
-<li><strong>代码说明和文档生成</strong>：可以使用注解来添加说明、作者、版本等信息，帮助理解和使用代码，也可以通过注解生成文档。</li>
-<li><strong>编译时检查</strong>：可以使用注解进行编译时的静态检查，例如 <code>@Override</code> 注解用于检查是否正确覆盖了父类的方法。</li>
-<li><strong>运行时处理</strong>：可以使用注解在运行时进行处理，例如依赖注入、AOP（面向切面编程）、配置解析等。</li>
-<li><strong>代码生成</strong>：可以使用注解来生成代码或配置文件，例如使用注解来配置ORM框架。</li>
-<li><strong>元数据处理</strong>：可以使用注解获取和处理类、方法、字段等的元数据信息，例如自定义注解处理器。</li>
-</ol>
-<h1 id="SPI"><a href="#SPI" class="headerlink" title="SPI"></a>SPI</h1><blockquote>
-<p>SPI 即 Service Provider Interface ，字面意思就是：“服务提供者的接口”，我的理解是：专门提供给服务提供者或者扩展框架功能的开发者去使用的一个接口。</p>
-<p>SPI 将服务接口和具体的服务实现分离开来，将服务调用方和服务实现者解耦，能够提升程序的扩展性、可维护性。修改或者替换服务实现并不需要修改调用方。</p>
-<p>很多框架都使用了 Java 的 SPI 机制，比如：Spring 框架、数据库加载驱动、日志接口、以及 Dubbo 的扩展实现等等。</p>
-</blockquote>
-<h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><blockquote>
-<p>序列化是指将对象转换为字节流的过程，以便将其存储到文件中、通过网络传输或在内存中进行传递。序列化的主要目的是将对象的状态保存下来，以便在需要时可以重新创建对象或者传输对象数据。</p>
-<p>在Java中，序列化是通过实现Serializable接口来实现的。Serializable接口是一个标记接口，没有任何方法，它只是用于指示Java虚拟机这个类可以被序列化。当一个类实现了Serializable接口后，它的对象就可以被序列化成字节流，从而可以进行持久化存储或网络传输。</p>
-</blockquote>
-<p>简单来说：</p>
-<ul>
-<li><strong>序列化</strong>：将数据结构或对象转换成二进制字节流的过程</li>
-<li><strong>反序列化</strong>：将在序列化过程中所生成的二进制字节流转换成数据结构或者对象的过程</li>
-</ul>
-<p>下面是序列化和反序列化常见应用场景：</p>
-<ul>
-<li>对象在进行网络传输（比如远程方法调用 RPC 的时候）之前需要先被序列化，接收到序列化的对象之后需要再进行反序列化；</li>
-<li>将对象存储到文件之前需要进行序列化，将对象从文件中读取出来需要进行反序列化；</li>
-<li>将对象存储到数据库（如 Redis）之前需要用到序列化，将对象从缓存数据库中读取出来需要反序列化；</li>
-<li>将对象存储到内存之前需要进行序列化，从内存中读取出来之后需要进行反序列化。</li>
-</ul>
 
       
     </div>
@@ -2244,7 +2056,7 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Software%20cracking.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Web%20Frameworks.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -2258,7 +2070,7 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/Software%20cracking.html" class="post-title-link" itemprop="url">Software cracking</a>
+            <a href="/post/Web%20Frameworks.html" class="post-title-link" itemprop="url">Web Frameworks</a>
         </h2>
 
         <div class="post-meta">
@@ -2282,23 +2094,7 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Typro破解"><a href="#Typro破解" class="headerlink" title="Typro破解"></a>Typro破解</h1><blockquote>
-<p>亲测几个版本都有效，主要破解方式为修改注册表，不要给typro检测注册表修改的权限就可以了</p>
-</blockquote>
-<p>1.通过win+r,输入regedit打开注册表</p>
-<img src="https://telegraph-image-2ni.pages.dev/file/6ac2175e435ab73248b76.png" style="zoom:50%;">
-
-<p>2.根据图上的路径，找到Typro</p>
-<img src="https://telegraph-image-2ni.pages.dev/file/68fce7738c28d8017a590.png" style="zoom:33%;">
-
-<p>3.在注册表编辑器中，双击修改IDate的值,将其改为一个未来日期。比如2099-01-01。这样就可以试用Typora到2099-01-01。</p>
-<img src="https://telegraph-image-2ni.pages.dev/file/c8c93f58d4cabd60e3eed.png" style="zoom:50%;">
-
-<p>4.修改管理员的访问权限，typro就不会检测到修改过注册表了</p>
-<img src="https://telegraph-image-2ni.pages.dev/file/2c9493624aaf44e0908c4.png" style="zoom:33%;">
-
-<p>5.执行完第四步后，点击应用和确认，直接就可以打开typro了</p>
-
+          <h1 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h1><h1 id="SpringBoot"><a href="#SpringBoot" class="headerlink" title="SpringBoot"></a>SpringBoot</h1><h1 id="Play-Framework"><a href="#Play-Framework" class="headerlink" title="Play Framework"></a>Play Framework</h1><h1 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a>Spark</h1>
       
     </div>
 
