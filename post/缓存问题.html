@@ -28,7 +28,7 @@
 <meta property="og:description" content="本篇博客主要介绍了缓存在系统设计中可能会遇到的一些问题及其解决方案">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-04-05T12:37:03.876Z">
-<meta property="article:modified_time" content="2024-04-05T15:25:29.456Z">
+<meta property="article:modified_time" content="2024-04-06T14:13:32.690Z">
 <meta property="article:author" content="potter">
 <meta property="article:tag" content="System Design">
 <meta property="article:tag" content="Cache">
@@ -194,10 +194,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-04-05 20:37:03 / 修改时间：23:25:29" itemprop="dateCreated datePublished" datetime="2024-04-05T20:37:03+08:00">2024-04-05</time>
+              <time title="创建时间：2024-04-05 20:37:03" itemprop="dateCreated datePublished" datetime="2024-04-05T20:37:03+08:00">2024-04-05</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-06 22:13:32" itemprop="dateModified" datetime="2024-04-06T22:13:32+08:00">2024-04-06</time>
+              </span>
 
           
             <div class="post-description">本篇博客主要介绍了缓存在系统设计中可能会遇到的一些问题及其解决方案</div>
@@ -212,9 +218,46 @@
 
       
         <h1 id="什么是缓存"><a href="#什么是缓存" class="headerlink" title="什么是缓存"></a>什么是缓存</h1><blockquote>
-<p>缓存就是一个内存层，存储经常访问的数据的副本Kubernetes</p>
+<p>缓存就是一个内存层，存储经常访问的数据的副本，加快客户端的响应</p>
 </blockquote>
-<h1 id="缓存一致性"><a href="#缓存一致性" class="headerlink" title="缓存一致性"></a>缓存一致性</h1><h1 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h1><h1 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h1><h1 id="缓存穿刺"><a href="#缓存穿刺" class="headerlink" title="缓存穿刺"></a>缓存穿刺</h1>
+<h1 id="缓存一致性"><a href="#缓存一致性" class="headerlink" title="缓存一致性"></a>缓存一致性</h1><blockquote>
+<p>数据库中的数据更新，缓存中的数据还是旧数据，缓存的数据内容和数据库中的数据无法保持一致性。</p>
+</blockquote>
+<h1 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h1><blockquote>
+<p>缓存中没有请求的数据，并且数据库也没有该数据时（比如非法的ID或路径），会导致每个请求都直接到达数据库，从而影响性能。</p>
+</blockquote>
+<h1 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h1><blockquote>
+<p>缓存服务器重启或缓存中大量缓存数据同时过期可能导致原本将要访问缓存的请求全部转向数据库，可能会导致数据库访问瓶颈甚至崩溃。</p>
+</blockquote>
+<h1 id="缓存预热"><a href="#缓存预热" class="headerlink" title="缓存预热"></a>缓存预热</h1><blockquote>
+<p>为了防止缓存雪崩，需要在缓存启动后立即向缓存中加载数据</p>
+</blockquote>
+<h1 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h1><blockquote>
+<p>缓存中没有但数据库中有的数据（一般是缓存时间到期），大量请求同时读缓存没读到数据，又同时去数据库去取数据，引起数据库压力瞬间增大，造成过大压力。</p>
+</blockquote>
+<h1 id="缓存更新策略"><a href="#缓存更新策略" class="headerlink" title="缓存更新策略"></a>缓存更新策略</h1><ol>
+<li><p>强制缓存 (Cache-Control): 设置强制缓存时间，在此期间内，不向服务器发送请求，直接使用缓存中的数据。</p>
+</li>
+<li><p>协商缓存 (ETag&#x2F;If-None-Match, Last-Modified&#x2F;If-Modified-Since): 当强制缓存过期后，利用协商缓存来决定是否使用缓存中的数据。客户端通过发送带有 ETag 或者 Last-Modified 标识的请求到服务器，服务器通过对比来决定数据是否有更新，如果没有更新则返回304状态码，告知客户端直接使用本地缓存。</p>
+</li>
+<li><p>过期机制 (Expires): 定义数据在缓存中保持有效的时间，过了这个时间则需要重新请求数据。</p>
+</li>
+<li><p>缓存策略指定 (Cache-Control Directives): 使用某些指令如no-cache、no-store、must-revalidate等来具体指定缓存的行为。</p>
+</li>
+<li><p>版本控制：通过给文件名（特别是静态资源如JS、CSS）添加版本号或者哈希值，当文件发生变化时更改版本号，从而使缓存失效。</p>
+</li>
+<li><p>动态缓存更新：使用服务端推送或客户端拉取方法动态刷新缓存数据。</p>
+</li>
+<li><p>定时刷新：在特定时间间隔后，自动更新缓存。</p>
+</li>
+<li><p>用户操作触发：依据用户的特定操作来清除或更新缓存，如用户发帖后清除论坛的帖子列表缓存。</p>
+</li>
+<li><p>数据变更触发：依据后端数据变更自动触发缓存的更新或失效。</p>
+</li>
+<li><p>淘汰算法 (LRU, FIFO, LFU等): 当缓存的存储空间达到上限时，根据特定的算法来删除一些老旧的缓存数据。</p>
+</li>
+</ol>
+
     </div>
 
     
@@ -298,7 +341,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98"><span class="nav-number">1.</span> <span class="nav-text">什么是缓存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text">缓存一致性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-number">3.</span> <span class="nav-text">缓存穿透</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-number">4.</span> <span class="nav-text">缓存雪崩</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E5%88%BA"><span class="nav-number">5.</span> <span class="nav-text">缓存穿刺</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98"><span class="nav-number">1.</span> <span class="nav-text">什么是缓存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text">缓存一致性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-number">3.</span> <span class="nav-text">缓存穿透</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-number">4.</span> <span class="nav-text">缓存雪崩</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E9%A2%84%E7%83%AD"><span class="nav-number">5.</span> <span class="nav-text">缓存预热</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-number">6.</span> <span class="nav-text">缓存击穿</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-number">7.</span> <span class="nav-text">缓存更新策略</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
