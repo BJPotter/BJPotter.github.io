@@ -165,6 +165,218 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Canal.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Canal.html" class="post-title-link" itemprop="url">Canal</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-03-20 09:03:13" itemprop="dateCreated datePublished" datetime="2024-03-20T09:03:13+08:00">2024-03-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="一、数据库复制和同步的基本概念"><a href="#一、数据库复制和同步的基本概念" class="headerlink" title="一、数据库复制和同步的基本概念"></a>一、数据库复制和同步的基本概念</h4><blockquote>
+<p>作用：实现了数据在多个数据库实例之间的保持一致和同步。应用程序能够获得高可用性、灾备性和读取负载均衡等好处。</p>
+</blockquote>
+<ol>
+<li>主从复制（Master-Slave Replication）：主从复制是最常见的数据库复制方法之一。在主从复制中，有一个主数据库（Master）和一个或多个从数据库（Slaves）。主数据库是数据的源头，它负责接收来自应用程序的写操作，并将这些写操作记录为称为日志（Log）的格式。从数据库则通过读取这些日志，将主数据库的写操作进行重演，以保持数据的一致性。</li>
+<li>数据一致性（Data Consistency）：数据一致性是指主数据库和从数据库之间的数据保持一致。当在主数据库上进行写操作时，主数据库会将这些操作的日志记录下来，并将其发送给从数据库。从数据库会按照相同的顺序重现这些操作，确保数据的一致性。一致性的实现可以通过各种机制，例如基于事务日志（Transaction Log）或二进制日志（Binary Log）。</li>
+<li>数据传输（Data Transfer）：数据传输是指将主数据库的数据从一个位置传输到另一个位置。在数据库复制和同步过程中，数据传输通常通过网络进行。主数据库将写操作记录为日志，并通过网络传输给从数据库，从数据库接收日志并执行相应的操作。</li>
+<li>增量复制（Incremental Replication）：增量复制是一种常见的复制方式，其中只有发生了更改的部分数据会被复制和同步。这种方式可以减少网络传输的数据量，并提高复制效率。增量复制通常使用日志来跟踪数据的更改，只传输和应用这些更改。</li>
+<li>数据延迟（Data Latency）：在数据库复制和同步中，主数据库和从数据库之间可能存在一定的延迟。这是因为数据在传输和应用过程中需要一定的时间。数据延迟可能会导致从数据库上的数据不是实时的，在某些情况下可能会有一定的时间窗口内的数据不一致。</li>
+</ol>
+<h4 id="二、canal作用及原理"><a href="#二、canal作用及原理" class="headerlink" title="二、canal作用及原理"></a>二、canal作用及原理</h4><p><img src="https://camo.githubusercontent.com/63881e271f889d4a424c55cea2f9c2065f63494fecac58432eac415f6e47e959/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139313130343130313733353934372e706e67"></p>
+<p>canal作用：根据Mysql数据库增量日志进行解析，提供增量数据的订阅和消费。</p>
+<p>canal原理：canal模拟Mysql slave交互协议，伪装成slave发送dump报文，主数据库master收到dump请求后，推送binary log给canal。</p>
+<h4 id="三、数据库准备"><a href="#三、数据库准备" class="headerlink" title="三、数据库准备"></a>三、数据库准备</h4><p>1.开启binlog,&#x2F;etc&#x2F;my.cnf 中配置如下</p>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">mysqld</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">server-id</span><span class="token punctuation">=</span><span class="token value attr-value">1</span>
+<span class="token key attr-name">log_bin</span><span class="token punctuation">=</span><span class="token value attr-value">mysql-bin</span>
+<span class="token key attr-name">binlog-format</span><span class="token punctuation">=</span><span class="token value attr-value">row</span>
+<span class="token key attr-name">bind-address</span><span class="token punctuation">=</span><span class="token value attr-value">0.0.0.0</span>
+<span class="token key attr-name">port</span><span class="token punctuation">=</span><span class="token value attr-value">3306</span>
+<span class="token key attr-name">basedir</span><span class="token punctuation">=</span><span class="token value attr-value">/usr/local/mysql</span>
+<span class="token key attr-name">datadir</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql</span>
+<span class="token key attr-name">socket</span><span class="token punctuation">=</span><span class="token value attr-value">/tmp/mysql.sock</span>
+<span class="token key attr-name">log-error</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql/mysql.err</span>
+<span class="token key attr-name">pid-file</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql/mysql.pid</span>
+<span class="token comment">#character config</span>
+<span class="token key attr-name">character_set_server</span><span class="token punctuation">=</span><span class="token value attr-value">utf8mb4</span>
+<span class="token key attr-name">symbolic-links</span><span class="token punctuation">=</span><span class="token value attr-value">0</span>
+<span class="token key attr-name">explicit_defaults_for_timestamp</span><span class="token punctuation">=</span><span class="token value attr-value">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>2.授权 canal 链接 MySQL 账号具有作为 MySQL slave 的权限, 如果已有账户可直接 grant</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">USER</span> canal IDENTIFIED <span class="token keyword">BY</span> <span class="token string">'canal'</span><span class="token punctuation">;</span>  
+<span class="token keyword">GRANT</span> <span class="token keyword">SELECT</span><span class="token punctuation">,</span> <span class="token keyword">REPLICATION</span> SLAVE<span class="token punctuation">,</span> <span class="token keyword">REPLICATION</span> CLIENT <span class="token keyword">ON</span> <span class="token operator">*</span><span class="token punctuation">.</span><span class="token operator">*</span> <span class="token keyword">TO</span> <span class="token string">'canal'</span><span class="token variable">@'%'</span><span class="token punctuation">;</span>
+FLUSH <span class="token keyword">PRIVILEGES</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h4 id="四、安装Server"><a href="#四、安装Server" class="headerlink" title="四、安装Server"></a>四、安装Server</h4><blockquote>
+<p>下载：canal.deployer-1.1.6.tar.gz</p>
+</blockquote>
+<p>1.conf&#x2F;example&#x2F;instance.properties配置修改</p>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment">#position info，需要改成自己的数据库信息</span>
+<span class="token key attr-name">canal.instance.master.address</span> <span class="token punctuation">=</span> <span class="token value attr-value">127.0.0.1:3306 </span>
+<span class="token key attr-name">canal.instance.master.journal.name</span> <span class="token value attr-value">= </span>
+<span class="token key attr-name">canal.instance.master.position</span> <span class="token value attr-value">= </span>
+<span class="token key attr-name">canal.instance.master.timestamp</span> <span class="token value attr-value">= </span>
+<span class="token comment">#canal.instance.standby.address = </span>
+<span class="token comment">#canal.instance.standby.journal.name =</span>
+<span class="token comment">#canal.instance.standby.position = </span>
+<span class="token comment">#canal.instance.standby.timestamp = </span>
+<span class="token comment">#username/password，需要改成自己的数据库信息</span>
+<span class="token key attr-name">canal.instance.dbUsername</span> <span class="token punctuation">=</span> <span class="token value attr-value">canal  </span>
+<span class="token key attr-name">canal.instance.dbPassword</span> <span class="token punctuation">=</span> <span class="token value attr-value">canal</span>
+<span class="token key attr-name">canal.instance.defaultDatabaseName</span> <span class="token value attr-value">=</span>
+<span class="token key attr-name">canal.instance.connectionCharset</span> <span class="token punctuation">=</span> <span class="token value attr-value">UTF-8</span>
+<span class="token comment">#table regex</span>
+<span class="token key attr-name">canal.instance.filter.regex</span> <span class="token punctuation">=</span> <span class="token value attr-value">.\*\\\\..\*</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>2.启动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> bin/startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="五、安装RDB适配器"><a href="#五、安装RDB适配器" class="headerlink" title="五、安装RDB适配器"></a>五、安装RDB适配器</h4><blockquote>
+<p>下载：canal.adapter-1.1.7-SNAPSHOT.tar.gz</p>
+</blockquote>
+<h5 id="1-修改启动器配置-application-yml-这里以mysql目标库为例-将bootstrap-yml注释掉"><a href="#1-修改启动器配置-application-yml-这里以mysql目标库为例-将bootstrap-yml注释掉" class="headerlink" title="1.修改启动器配置: application.yml, 这里以mysql目标库为例,将bootstrap.yml注释掉"></a>1.修改启动器配置: application.yml, 这里以mysql目标库为例,将bootstrap.yml注释掉</h5><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">srcDataSources:
+    defaultDS:
+      url: jdbc:mysql://192.168.67.24:3306/mytest?useUnicode=true
+      username: root
+      password: *******
+  canalAdapters:
+  - instance: example # canal instance Name or mq topic name
+    groups:
+    - groupId: g1
+      outerAdapters:
+      - name: rdb                                               # 指定为rdb类型同步
+        key: mysql1                                            # 指定adapter的唯一key, 与表映射配置中outerAdapterKey对应
+        properties:
+          jdbc.driverClassName: com.mysql.jdbc.Driver        # jdbc驱动名, 部分jdbc的jar包需要自行放致lib目录下
+          jdbc.url: jdbc:mysql://192.168.67.16:31185/mytest?useUnicode=true        # jdbc url
+          jdbc.username: dongzhimen                                 # jdbc username
+          jdbc.password: **********                                # jdbc password
+          druid.stat.enable: false                                           
+		  druid.stat.slowSqlMillis: 1000	<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h5 id="2-修改conf-x2F-rdb-x2F-mytest-user-yml文件"><a href="#2-修改conf-x2F-rdb-x2F-mytest-user-yml文件" class="headerlink" title="2.修改conf&#x2F;rdb&#x2F;mytest_user.yml文件"></a>2.修改conf&#x2F;rdb&#x2F;mytest_user.yml文件</h5><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">dataSourceKey: defaultDS
+destination: example
+outerAdapterKey: mysql1
+concurrent: true
+dbMapping:
+  mirrorDb: true
+  database: mytest<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>其中dbMapping.database的值代表源库和目标库的schema名称，即两库的schema要一模一样</p>
+</blockquote>
+<p>3.启动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Build%20tools.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Build%20tools.html" class="post-title-link" itemprop="url">Build Tools</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-03-20 09:03:13" itemprop="dateCreated datePublished" datetime="2024-03-20T09:03:13+08:00">2024-03-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h1><h1 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h1><h1 id="Ant"><a href="#Ant" class="headerlink" title="Ant"></a>Ant</h1>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Api.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -584,6 +796,78 @@ Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ&#x3D;<span aria-hidden="true" class
 <p>Apache Flink是一个用于分布式流和批处理数据处理的开源平台。Flink的核心是流数据流引擎，为数据流上的分布式计算提供数据分发，通信和容错。Flink在流引擎之上构建批处理，覆盖本机迭代支持，托管内存和程序优化</p>
 </blockquote>
 
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Git.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Git.html" class="post-title-link" itemprop="url">git</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-24 00:00:00" itemprop="dateCreated datePublished" datetime="2024-01-24T00:00:00+08:00">2024-01-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-07 09:03:38" itemprop="dateModified" datetime="2024-04-07T09:03:38+08:00">2024-04-07</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>学习如何使用Git</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/Git.html">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1958,7 +2242,7 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Git.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/SQL%20Tutorial.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1972,7 +2256,7 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/Git.html" class="post-title-link" itemprop="url">git</a>
+            <a href="/post/SQL%20Tutorial.html" class="post-title-link" itemprop="url">Sql Tutourial</a>
         </h2>
 
         <div class="post-meta">
@@ -1982,14 +2266,14 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2024-01-24 00:00:00" itemprop="dateCreated datePublished" datetime="2024-01-24T00:00:00+08:00">2024-01-24</time>
+              <time title="创建时间：2022-06-18 00:00:00" itemprop="dateCreated datePublished" datetime="2022-06-18T00:00:00+08:00">2022-06-18</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-03-20 09:03:13" itemprop="dateModified" datetime="2024-03-20T09:03:13+08:00">2024-03-20</time>
+                <time title="修改时间：2024-04-07 09:03:38" itemprop="dateModified" datetime="2024-04-07T09:03:38+08:00">2024-04-07</time>
               </span>
 
           
@@ -2003,197 +2287,231 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="git介绍"><a href="#git介绍" class="headerlink" title="git介绍"></a>git介绍</h1><blockquote>
-<p>Git是一个版本控制系统</p>
-<p>Git可以追踪代码的更改</p>
-<p>Git可以让多人一起协作编写代码</p>
-</blockquote>
-<h2 id="什么是git"><a href="#什么是git" class="headerlink" title="什么是git"></a>什么是git</h2><p>git是一个版本控制系统，由Linus Torvalds在2005年创建的，后来一直由Junio Hamano维护，git经常用来跟踪代码变更，跟踪谁变更了代码，协作处理。</p>
-<h2 id="git能做什么"><a href="#git能做什么" class="headerlink" title="git能做什么"></a>git能做什么</h2><p>主要用来管理项目，包括拉取远程仓库到本地，推送本地代码到远程仓库，合并分支到主分支。</p>
-<h2 id="git工作流程"><a href="#git工作流程" class="headerlink" title="git工作流程"></a>git工作流程</h2><blockquote>
-<p>首先初始化一个本地文件夹作为一个工作区域，会默认生成一个.git的隐藏文件，当工作区域的文件发生添加或者删除的时候，git会认为进行了修改，我们add执行后把修改后的状态暂存到暂存区，commit执行后把暂存区的文件，提交到head区，commit可以添加提交原因，也会记录提交时间、提交人等信息，可以通过log命令查看，执行push以后，我们就把本地的改动推送到了远程仓库，当其他人对项目进行了修改，并且提交到了远程，我们可以通过pull获取远程最新的代码到本地工作区。</p>
-</blockquote>
-<p><img src="/images/git%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.png"></p>
-<h2 id="为什么使用git"><a href="#为什么使用git" class="headerlink" title="为什么使用git"></a>为什么使用git</h2><ul>
-<li>超过70%的开发者都在使用git</li>
-<li>开发者可以通过git在世界上任何地方都可以一起办公</li>
-<li>开发者可以看到这个项目整个历史</li>
-<li>开发者也可以回退到更早之前的历史版本</li>
-</ul>
-<h2 id="什么是github"><a href="#什么是github" class="headerlink" title="什么是github"></a>什么是github</h2><p>首先git不等于github,github的制作工具使用了git，github是一个大的开源公司。github是一个远程的仓库平台，常见的远程仓库平台有github、gitlab、Bitbucket</p>
-<h1 id="git开始"><a href="#git开始" class="headerlink" title="git开始"></a>git开始</h1><h2 id="git安装"><a href="#git安装" class="headerlink" title="git安装"></a>git安装</h2><blockquote>
-<p>下载安装<a target="_blank" rel="noopener" href="https://git-scm.com/">https://www.git-scm.com/</a></p>
-</blockquote>
-<h2 id="git全局配置"><a href="#git全局配置" class="headerlink" title="git全局配置"></a>git全局配置</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#设置全局用户名</span>
-<span class="token function">git</span> config --global user.name <span class="token string">"test"</span>
-<span class="token comment">#设置全局用户邮箱</span>
-<span class="token function">git</span> config --global user.email <span class="token string">"test@gmail.com"</span>
-<span class="token comment">#设置全局用户密码</span>
-<span class="token function">git</span> config --global user.password <span class="token string">"testpassword"</span>
-<span class="token comment">#设置全局代理</span>
-<span class="token function">git</span> config --global http.proxy<span class="token operator">=</span>xxxx
-<span class="token function">git</span> config --global https.proxy<span class="token operator">=</span>xxxx
-<span class="token comment">#查看全局配置</span>
-<span class="token function">git</span> config --global --list<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+          <p>重新学习如何使用SQL</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/SQL%20Tutorial.html">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
 
-<p><strong>注意：</strong>如果你相对某个仓库单独设置，移除–global命令就可以了</p>
-<h2 id="初始化git"><a href="#初始化git" class="headerlink" title="初始化git"></a>初始化git</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#创建一个文件夹</span>
-<span class="token function">mkdir</span> myproject
-<span class="token comment">#切换到当前文件夹</span>
-<span class="token builtin class-name">cd</span> myproject
-<span class="token comment">#初始化git</span>
-<span class="token function">git</span> init 
-Initialized empty Git repository <span class="token keyword">in</span> /Users/user/myproject/.git/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
-<p>现在已经创建并初始化了一个git仓库，会自动生成一个隐藏的.git文件负责对代码进行追踪更改。</p>
-<h1 id="git新增文件"><a href="#git新增文件" class="headerlink" title="git新增文件"></a>git新增文件</h1><blockquote>
-<p>我们创建git仓库，但是他现在是空的，我们在工作区随便创建一个文件</p>
-<p>touch test.txt</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#查看仓库状态</span>
-<span class="token function">git</span> status
-On branch master
-No commits yet
-Untracked files:
-  <span class="token punctuation">(</span>use <span class="token string">"git add ..."</span> to include <span class="token keyword">in</span> what will be committed<span class="token punctuation">)</span>
-    test.txt
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/kafka.html">
 
-nothing added to commit but untracked files present <span class="token punctuation">(</span>use <span class="token string">"git add"</span> to track<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
 
-<blockquote>
-<p>On branch master  说明我们在master分支</p>
-<p>No commits yet 我们还没有提交过</p>
-<p>Untracked files  test.txt文件没有被提交</p>
-</blockquote>
-<h1 id="git暂存环境"><a href="#git暂存环境" class="headerlink" title="git暂存环境"></a>git暂存环境</h1><blockquote>
-<p>Git的核心功能是暂存环境和提交两个概念。</p>
-<p>工作中，我们可能添加、编辑、删除文件，但是无论是什么操作，我们结束后都应该把它放到暂存环境，暂存环境的文件准备提交到仓库。</p>
-<p>例如：我们创建test.txt，此时我们把它添加到暂存环境</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#把test.txt添加到暂存环境</span>
-<span class="token function">git</span> <span class="token function">add</span> test.txt
-<span class="token comment">#查看下状态</span>
-<span class="token function">git</span> status
-On branch master
-No commits yet
-Changes to be committed:
-  <span class="token punctuation">(</span>use <span class="token string">"git rm --cached ..."</span> to unstage<span class="token punctuation">)</span>
-    new file: test.txt
-<span class="token comment">#test.txt已经添加到暂存环境了，等着被提交的状态</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/kafka.html" class="post-title-link" itemprop="url">kafka</a>
+        </h2>
 
-<h2 id="添加一个文件"><a href="#添加一个文件" class="headerlink" title="添加一个文件"></a>添加一个文件</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> <span class="token function">add</span> test.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
 
-<h2 id="添加多个文件"><a href="#添加多个文件" class="headerlink" title="添加多个文件"></a>添加多个文件</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> <span class="token function">add</span> <span class="token punctuation">[</span>file1<span class="token punctuation">]</span> <span class="token punctuation">[</span>file2<span class="token punctuation">]</span> <span class="token punctuation">[</span>file3<span class="token punctuation">]</span>
-<span class="token comment">#或者</span>
-<span class="token function">git</span> <span class="token function">add</span> --all
-<span class="token comment">#使用--all参数，将会暂存所有的改变的文件（新增、修改、删除的文件）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+              <time title="创建时间：2022-05-04 00:00:00" itemprop="dateCreated datePublished" datetime="2022-05-04T00:00:00+08:00">2022-05-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-07 09:03:38" itemprop="dateModified" datetime="2024-04-07T09:03:38+08:00">2024-04-07</time>
+              </span>
 
-<p><strong>注意：</strong>git add –all 等同于 git add -A</p>
-<h1 id="git提交"><a href="#git提交" class="headerlink" title="git提交"></a>git提交</h1><h2 id="暂存提交"><a href="#暂存提交" class="headerlink" title="暂存提交"></a>暂存提交</h2><blockquote>
-<p>我们完成工作后将文件添加到暂存区，之后需要提交到本地仓库，git每次提交都会保留一个节点，如果发现bug，可以根据节点id进行回退，当我们提交的时候可以携带提交信息，例如：</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#使用-m 参数可以添加消息</span>
-<span class="token function">git</span> commit -m <span class="token string">"First commit"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+          
 
-<h2 id="不暂存提交"><a href="#不暂存提交" class="headerlink" title="不暂存提交"></a>不暂存提交</h2><blockquote>
-<p>当进行小的更改时，使用暂存环境有点浪费时间，我们可以直接提交更改，跳过暂存环境。 </p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#使用-a 参数将自动暂存每个已更改的、已跟踪的文件。</span>
-<span class="token function">git</span> commit -a -m <span class="token string">"Updated test.txt"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+        </div>
+      </header>
 
-<h2 id="提交日志"><a href="#提交日志" class="headerlink" title="提交日志"></a>提交日志</h2><blockquote>
-<p>我们要查看仓库的历史提交记录，可以查看日志</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#查看历史提交记录</span>
-<span class="token function">git</span> log <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
-<h1 id="分支"><a href="#分支" class="headerlink" title="分支"></a>分支</h1><h2 id="新建分支"><a href="#新建分支" class="headerlink" title="新建分支"></a>新建分支</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#新增分支</span>
-<span class="token function">git</span> branch newBranchName
-<span class="token comment">#查看当前分支</span>
-<span class="token function">git</span> branch
-<span class="token comment"># 查看当前分支包含远程的</span>
-<span class="token function">git</span> branch -a <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+      
+          <p>学习如何使用kafka</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/kafka.html">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
 
-<h2 id="切换分支"><a href="#切换分支" class="headerlink" title="切换分支"></a>切换分支</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># git checkout 分支名称进行切换分支</span>
-<span class="token function">git</span> checkout master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
-<h2 id="紧急分支"><a href="#紧急分支" class="headerlink" title="紧急分支"></a>紧急分支</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 创建新分支并切换到新分支</span>
-<span class="token function">git</span> checkout -b newBranchName<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.html">
 
-<h2 id="分支合并"><a href="#分支合并" class="headerlink" title="分支合并"></a>分支合并</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 把其他分支合并到主分支</span>
-<span class="token comment"># 切换到主分支</span>
-<span class="token function">git</span> checkout master
-<span class="token comment"># 合并其他分支到主分支</span>
-<span class="token function">git</span> merge otherBranchName
-<span class="token comment"># 删除其他分支</span>
-<span class="token function">git</span> branch -d otherBranchName<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
 
-<h2 id="分支冲突"><a href="#分支冲突" class="headerlink" title="分支冲突"></a>分支冲突</h2><blockquote>
-<p>一般产生的冲突的原因是，其他分支修改了test.txt文件，你的主分支也进行了对test.txt文件的修改，导致其他分支合并到主分支，不知道按照谁的为准导致产生了冲突</p>
-<p>解决步骤：</p>
-<p>1.git status 查看冲突的文件(或者查看分支的区别：git diff <source_branch> <target_branch>)</target_branch></source_branch></p>
-<p>2.找到冲突的的文件在主分支中修改成我们想要的</p>
-<p>3.git add 冲突文件 提交我们的冲突文件到暂存环境</p>
-<p>4.git commit -m “fix conflict” 提交到本地仓库，分支就会自动合并了，冲突就可以解决了</p>
-<p>5.删除被合并的分支就可以了 git branch -d otherBranchName</p>
-</blockquote>
-<h1 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h1><blockquote>
-<ol>
-<li>克隆本地仓库 git clone &#x2F;path&#x2F;repository</li>
-<li>克隆远程仓库 git clone username@host:&#x2F;path&#x2F;repository</li>
-</ol>
-</blockquote>
-<h1 id="git拉取"><a href="#git拉取" class="headerlink" title="git拉取"></a>git拉取</h1><h2 id="添加远程仓库"><a href="#添加远程仓库" class="headerlink" title="添加远程仓库"></a>添加远程仓库</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 给本地仓库添加远程仓库</span>
-<span class="token function">git</span> remote <span class="token function">add</span> origin https://github.com/BJPotter/BJPotter.github.io.git<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.html" class="post-title-link" itemprop="url">𝟖 𝐌𝐮𝐬𝐭 𝐊𝐧𝐨𝐰 𝐋𝐨𝐚𝐝 𝐁𝐚𝐥𝐚𝐧𝐜𝐢𝐧𝐠 𝐀𝐥𝐠𝐨𝐫𝐢𝐭𝐡𝐦𝐬</a>
+        </h2>
 
-<h2 id="拉取远程仓库"><a href="#拉取远程仓库" class="headerlink" title="拉取远程仓库"></a>拉取远程仓库</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># git pull 可以拉取远程仓库的内容</span>
-<span class="token function">git</span> pull 
-<span class="token comment"># git pull 是两个命令的结合，分别是 git fetch  和 git merge</span>
-<span class="token comment"># git fetch 获取远程仓库最新的内容</span>
-<span class="token comment"># git merge 将获取到最新的内容合并到本地分支</span>
-<span class="token comment"># 更新本地仓库</span>
-<span class="token function">git</span> pull origin<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
 
-<h1 id="git推送"><a href="#git推送" class="headerlink" title="git推送"></a>git推送</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 提交本地的更改到本地仓库</span>
-<span class="token function">git</span> commit -a -m <span class="token string">"Updated local repo"</span>
-<span class="token comment"># 推送到远程仓库</span>
-<span class="token function">git</span> push origin<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+              <time title="创建时间：2022-02-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-02-03T00:00:00+08:00">2022-02-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-07 09:03:38" itemprop="dateModified" datetime="2024-04-07T09:03:38+08:00">2024-04-07</time>
+              </span>
 
-<h1 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h1><blockquote>
-<p>查看本地仓库的操作记录： git log</p>
-<p>查看具体某个人的操作记录： git log –author&#x3D;”xxxx”</p>
-</blockquote>
-<h1 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h1><h2 id="git-reset"><a href="#git-reset" class="headerlink" title="git reset"></a>git reset</h2><blockquote>
-<p>版本重置，根据git log 提交的id，可以以重置到某个提交节点id，类似于快照的概念。</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 重置到节点id</span>
-<span class="token function">git</span> reset --hard 节点id
-<span class="token comment"># 推送到远程</span>
-<span class="token function">git</span> push
-<span class="token comment"># 如果git push 报错，可能是本地库HEAD指向的版本比远程库的要旧，使用-f参数强制覆盖远程</span>
-<span class="token function">git</span> push -f <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+          
 
-<h2 id="git-revert"><a href="#git-revert" class="headerlink" title="git revert"></a>git revert</h2><blockquote>
-<p>版本还原，在现在的基础上剔除掉之前提交的某个版本，形成一个新的版本</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 覆盖节点id</span>
-<span class="token function">git</span> revert -n 节点id
-<span class="token comment"># 这里可能会出现冲突，那么需要手动修改冲突的文件</span>
-<span class="token comment"># 添加到暂存区</span>
-<span class="token function">git</span> <span class="token function">add</span> 文件名
-<span class="token comment"># 提交到本地仓库</span>
-<span class="token function">git</span> commit -m <span class="token string">"版本还原"</span>
-<span class="token comment"># 推送到远程</span>
-<span class="token function">git</span> push<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+        </div>
+      </header>
 
-<h2 id="远程强制覆盖本地"><a href="#远程强制覆盖本地" class="headerlink" title="远程强制覆盖本地"></a>远程强制覆盖本地</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 拉取所有更新，不同步</span>
-<span class="token function">git</span> fetch --all
-<span class="token comment"># 本地代码同步线上最新版本(会覆盖本地所有与远程仓库上同名的文件)；</span>
-<span class="token function">git</span> reset --hard origin/master
-<span class="token comment"># 再更新一次（其实也可以不用，第二步命令做过了其实）</span>
-<span class="token function">git</span> pull<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
+      
+          <p>学习8种负载均衡算法</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.html">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
 
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%8D%95%E4%BD%93%E7%9A%84%E5%8C%BA%E5%88%AB.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%8D%95%E4%BD%93%E7%9A%84%E5%8C%BA%E5%88%AB.html" class="post-title-link" itemprop="url">Difference between Microservices vs Monolithic Applications</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-05 00:00:00" itemprop="dateCreated datePublished" datetime="2020-01-05T00:00:00+08:00">2020-01-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-07 09:03:38" itemprop="dateModified" datetime="2024-04-07T09:03:38+08:00">2024-04-07</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Microservices vs Monolithic Applications Understanding the Core Differences</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%8D%95%E4%BD%93%E7%9A%84%E5%8C%BA%E5%88%AB.html">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -2211,7 +2529,7 @@ Changes to be committed:
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2277,14 +2595,14 @@ Changes to be committed:
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">52</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
