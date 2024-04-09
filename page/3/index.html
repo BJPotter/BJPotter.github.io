@@ -165,6 +165,614 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%BA%8C.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%BA%8C.html" class="post-title-link" itemprop="url">面向对象</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是面向对象"><a href="#什么是面向对象" class="headerlink" title="什么是面向对象"></a>什么是面向对象</h1><p>面向对象编程，OOP（Object Oriented Programming）它是一种编程思想，把数据和行为封装成一个对象，以模拟现实世界的实体和交互。</p>
+<h1 id="如何区分面向对象和面向过程"><a href="#如何区分面向对象和面向过程" class="headerlink" title="如何区分面向对象和面向过程"></a>如何区分面向对象和面向过程</h1><ul>
+<li>面向过程：将问题看作一系列步骤，通过一个个方法执行解决问题，重点在于算法和流程控制。</li>
+<li>面向对象：将问题拆分成一系列对象，这些对象有自己的属性和方法，通过对象间方法调用解决问题，重点在于封装、继承和多态，以及对象之间的关系。</li>
+</ul>
+<h1 id="对象实例和对象引用的区别"><a href="#对象实例和对象引用的区别" class="headerlink" title="对象实例和对象引用的区别"></a>对象实例和对象引用的区别</h1><ul>
+<li>对象实例：在程序运行时new关键字创建的对象，存储在堆内存中，具有属性和方法。</li>
+<li>对象引用：指向对象实例的变量，存储在栈中，它存储的是对象实例内存地址。</li>
+</ul>
+<blockquote>
+<p>一般说的对象相等指的是对象实例相等，指的是两个对象实例在内存中的内容是一致的，引用相等指的两个或多个引用指向同一个对象实例，比较的是内存地址。</p>
+<ul>
+<li>一个对象引用可以指向0个或者1个对象实例</li>
+<li>一个对象实例可以被多个对象引用指向</li>
+</ul>
+</blockquote>
+<h1 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h1><blockquote>
+<p>构造方法（Constructor）是一种特殊类型的方法，用于在创建对象实例时初始化对象的状态。构造方法的名称必须与类名相同，并且没有返回类型（甚至不是void），因为它们不返回任何值。</p>
+<p>如果一个类没有明确定义构造方法，编译器会自动生成一个默认的无参构造方法，该构造方法仅仅执行了一些默认的初始化操作。但是，如果你显式地定义了构造方法，编译器就不会再生成默认构造方法，所以需要注意是否需要手动提供无参构造方法。</p>
+</blockquote>
+<ol>
+<li><strong>初始化对象</strong>：构造方法用于初始化新创建的对象实例的状态。它们通常会对对象的属性进行初始化，以确保对象在创建后处于一种合适的初始状态。</li>
+<li><strong>与类名相同</strong>：构造方法的名称必须与类名完全相同，包括大小写。这是为了告诉编译器这个方法是一个构造方法。</li>
+<li><strong>没有返回类型</strong>：构造方法没有返回类型，甚至不是void。这是因为构造方法的目的不是返回值，而是初始化对象实例。</li>
+<li><strong>可以重载</strong>：一个类可以有多个构造方法，它们可以根据参数列表的不同进行重载。这使得我们可以根据不同的需求来创建对象实例。</li>
+</ol>
+<h1 id="重写与重载"><a href="#重写与重载" class="headerlink" title="重写与重载"></a>重写与重载</h1><p>重写（Override）：子类重写父类的方法，但是方法的名称、参数列表、返回类型和父类保持一致，只改变方法体的内容，实现多态性。</p>
+<p>重载（Overload）：同一个类中定义多个有相同名称但参数列表（参数的个数、顺序、类型）不同的方法，可以根据不同的参数列表调用不同的方法。</p>
+<h1 id="面向对象的特性"><a href="#面向对象的特性" class="headerlink" title="面向对象的特性"></a>面向对象的特性</h1><h2 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h2><blockquote>
+<p>封装是把对象的属性和方法封装成一个类，通过封装可以把一个对象的属性隐藏在对象内部，对外提供公共的接口（方法）来操作内部数据，以保护数据安全，防止外部直接修改。</p>
+</blockquote>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><blockquote>
+<p>继承是在已存在的类的基础上创建子类，子类可以实现自己的属性和方法，也可以用父类的功能，但不能选择性地继承父类。通过使用继承，可以快速地创建新的类，可以提高代码的重用。</p>
+</blockquote>
+<ol>
+<li>子类拥有父类对象所有的属性和方法（包括私有属性和私有方法），但是父类中的私有属性和方法子类是无法访问，<strong>只是拥有</strong>。</li>
+<li>子类可以拥有自己属性和方法，即子类可以对父类进行扩展。</li>
+<li>子类可以用自己的方式实现父类的方法。（以后介绍）。</li>
+</ol>
+<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><blockquote>
+<p>多态是指对象在不同情况下可以以不同的形态呈现出来，体现在方法的重写上，子类重写父类的方法，父类的引用指向子类的实例并且调用子类重写的方法。</p>
+</blockquote>
+<p>Java实现多态有三个必要条件：继承、重写、向上转型。</p>
+<p>继承：在多态中必须存在有继承关系的子类和父类。</p>
+<p>重写：子类对父类中某些方法进行重新定义，在调用这些方法时就会调用子类的方法。</p>
+<p>向上转型：是指子类对象可以赋值给父类引用变量，会调用子类的重写的方法。</p>
+<h1 id="接口和抽象类的区别"><a href="#接口和抽象类的区别" class="headerlink" title="接口和抽象类的区别"></a>接口和抽象类的区别</h1><blockquote>
+<p>接口：通过interface关键字来表明这是接口，定义了一组抽象方法，没有具体的实现，方法默认是public abstract修饰、变量默认为public static final修饰</p>
+<p>抽象类：通过abstract关键字来表明这是接口，既可以包含抽象方法也可以包含非抽象方法，可以有构造函数，也可以有成员变量，作为一个基类，提供通用功能的实现，但直接不能被实例化。</p>
+</blockquote>
+<p>相同点：</p>
+<ol>
+<li><strong>抽象性</strong>：接口和抽象类都是抽象的，不能直接实例化。</li>
+<li><strong>模板性</strong>：接口和抽象类都可以作为其他类的模板或基类，提供通用的行为规范或实现。</li>
+<li><strong>多态性</strong>：接口和抽象类都支持多态性，即同一方法调用可能会有不同的实现，具体取决于对象的类型。</li>
+<li><strong>扩展性</strong>：接口和抽象类都可以被子类实现或继承，并且可以通过添加新的方法或修改现有的方法来扩展功能。</li>
+</ol>
+<p>区别：</p>
+<ol>
+<li>方法：<ul>
+<li><strong>接口</strong>：只有抽象方法，但不包含方法的具体实现。</li>
+<li><strong>抽象类</strong>：可以有抽象方法，也可以有非抽象方法</li>
+</ul>
+</li>
+<li>构造函数：<ul>
+<li>抽象类可以有构造函数，而接口不能有构造函数。</li>
+</ul>
+</li>
+<li>继承：<ul>
+<li><strong>接口</strong>：多实现</li>
+<li><strong>抽象类</strong>：单继承，继承具有传递性。</li>
+</ul>
+</li>
+<li>变量：<ul>
+<li><strong>接口</strong>：变量默认是public static final的</li>
+<li><strong>抽象类</strong>：可以定义实例变量，可以是各种访问修饰符。</li>
+</ul>
+</li>
+<li>使用场景：<ul>
+<li><strong>接口</strong>：如果不同的类需要具有相似但不同的行为，可以考虑使用接口来实现。</li>
+<li><strong>抽象类</strong>：如果多个类有相似的行为，可以将这些行为提取到一个抽象类中，并让这些类继承该抽象类来实现代码复用。</li>
+</ul>
+</li>
+</ol>
+<h1 id="深拷贝、浅拷贝、引用拷贝"><a href="#深拷贝、浅拷贝、引用拷贝" class="headerlink" title="深拷贝、浅拷贝、引用拷贝"></a>深拷贝、浅拷贝、引用拷贝</h1><p>深拷贝和浅拷贝都是指对对象的拷贝，例如一个对象如果有两种类型的属性，基本数据类型和引用数据类型</p>
+<p>浅拷贝（<strong>Shallow Copy</strong>）就是指会拷贝基本数据类型的值，以及引用数据类型的引用，不会拷贝引用数据类型指向的对象，浅拷贝出来的对象内部的引用数据类型指向原来对象，通过clone()方法可以实现</p>
+<p>深拷贝（<strong>Deep Copy</strong>）即会拷贝基本数据类型的值，也会拷贝引用数据类型指向的对象，是完全都复制了一份，通过递归复制或者序列化和反序列化实现。</p>
+<p>引用拷贝（<strong>Reference Copy</strong>）就是两个不同的引用指向同一个对象。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/flume.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/flume.html" class="post-title-link" itemprop="url">Flume</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="系统要求"><a href="#系统要求" class="headerlink" title="系统要求"></a>系统要求</h1><blockquote>
+<p>Apache Flume 是一个分布式、高可靠、高可用的用来收集、聚合、转移不同来源的大量日志数据到中央数据仓库的工具</p>
+</blockquote>
+<ol>
+<li>Jre - Java 1.8或更高版本</li>
+<li>内存 - 足够的内存 用来配置Sources、Channels和Sinks</li>
+<li>硬盘空间 - 足够的硬盘用来配置Channels 和 Sinks</li>
+<li>目录权限 - Agent用来读写目录的权限</li>
+</ol>
+<h1 id="数据流模型"><a href="#数据流模型" class="headerlink" title="数据流模型"></a>数据流模型</h1><p><strong>Event是Flume定义的一个数据流传输的最小单元</strong>。Agent就是一个Flume的实例，本质是一个JVM进程，该JVM进程控制Event数据流从外部日志生产者那里传输到目的地（或者是下一个Agent）。</p>
+<h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><p><img src="https://flume.liyifeng.org/_images/UserGuide_image00.png"></p>
+<p>Agent就是Flume的一个部署实例，一个完整的Agent中包含了必须的三个组件Source、Channel和Sink。</p>
+<ul>
+<li><p>Source 数据的来源和方式</p>
+</li>
+<li><p>Channel 数据的缓冲池</p>
+</li>
+<li><p>Sink 数据输出的方式和目的地</p>
+</li>
+<li><p>Event 被flume收集的数据</p>
+</li>
+</ul>
+<blockquote>
+<p>当Source接收Event（Web Server）时，它将其存储到一个或多个channel。该channel是一个被动存储器（或者说叫存储池），可以存储Event直到它被Sink消耗。</p>
+<p>Agent中的source和sink与channel存取Event是异步的。</p>
+</blockquote>
+<p>可靠性</p>
+<blockquote>
+<p>Event会在每个Agent的Channel上进行缓存，随后Event将会传递到流中的下一个Agent或目的地（比如HDFS）。只有成功地发送到下一个Agent或目的地后Event才会从Channel中删除。这一步保证了Event数据流在Flume Agent中传输时端到端的可靠性。</p>
+<p>channel作用：1.保证数据的可靠传输的 2.数据流入和流出的异步执行</p>
+<p>Flume使用事务来保证Event的 <strong>可靠传输</strong>。Source和Sink对Channel提供的每个Event数据分别封装一个事务用于存储和恢复，这样就保证了数据流的集合在点对点之间的可靠传输。在多层架构的情况下，来自前一层的sink和来自下一层的Source 都会有事务在运行以确保数据安全地传输到下一层的Channel中。</p>
+</blockquote>
+<p>可恢复性</p>
+<blockquote>
+<p>Event数据会缓存在Channel中用来在失败的时候恢复出来。Flume支持保存在本地文件系统中的『文件channel』，也支持保存在内存中的『内存Channel』，『内存Channel』显然速度会更快，缺点是万一Agent挂掉『内存Channel』中缓存的数据也就丢失了。</p>
+</blockquote>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><blockquote>
+<p>下载地址：<a target="_blank" rel="noopener" href="https://www.apache.org/dyn/closer.lua/flume/1.11.0/apache-flume-1.11.0-bin.tar.gz">https://www.apache.org/dyn/closer.lua/flume/1.11.0/apache-flume-1.11.0-bin.tar.gz</a></p>
+</blockquote>
+<pre class="line-numbers language-config" data-language="config"><code class="language-config"># example.conf: 一个单节点的 Flume 实例配置
+
+# 配置Agent a1各个组件的名称
+a1.sources &#x3D; r1    #Agent a1 的source有一个，叫做r1
+a1.sinks &#x3D; k1      #Agent a1 的sink也有一个，叫做k1
+a1.channels &#x3D; c1   #Agent a1 的channel有一个，叫做c1
+
+# 配置Agent a1的source r1的属性
+a1.sources.r1.type &#x3D; netcat       #使用的是NetCat TCP Source，这里配的是别名，Flume内置的一些组件都是有别名的，没有别名填全限定类名
+a1.sources.r1.bind &#x3D; localhost    #NetCat TCP Source监听的hostname，这个是本机
+a1.sources.r1.port &#x3D; 44444        #监听的端口
+
+# 配置Agent a1的sink k1的属性
+a1.sinks.k1.type &#x3D; logger         # sink使用的是Logger Sink，这个配的也是别名
+
+# 配置Agent a1的channel c1的属性，channel是用来缓冲Event数据的
+a1.channels.c1.type &#x3D; memory                #channel的类型是内存channel，顾名思义这个channel是使用内存来缓冲数据
+a1.channels.c1.capacity &#x3D; 1000              #内存channel的容量大小是1000，注意这个容量不是越大越好，配置越大一旦Flume挂掉丢失的event也就越多
+a1.channels.c1.transactionCapacity &#x3D; 100    #source和sink从内存channel每次事务传输的event数量
+
+# 把source和sink绑定到channel上
+a1.sources.r1.channels &#x3D; c1       #与source r1绑定的channel有一个，叫做c1
+a1.sinks.k1.channel &#x3D; c1          #与sink k1绑定的channel有一个，叫做c1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="数据获取方式"><a href="#数据获取方式" class="headerlink" title="数据获取方式"></a>数据获取方式</h1><blockquote>
+<p>Flume支持多种从外部获取数据的方式。</p>
+</blockquote>
+<p>1.RPC</p>
+<p>2.执行命令</p>
+<p>3.网络流(Avro、Thrift、Syslog、Netcat）</p>
+<p>4.Spooling Directory Source（将监视这个目录中产生的新文件，并在新文件出现时从新文件中解析数据出来）</p>
+<h2 id="Spooling-Directory-Source"><a href="#Spooling-Directory-Source" class="headerlink" title="Spooling Directory Source"></a>Spooling Directory Source</h2><p>这个Source允许你把要收集的文件放入磁盘上的某个指定目录。它会将监视这个目录中产生的新文件，并在新文件出现时从新文件中解析数据出来。数据解析逻辑是可配置的。 在新文件被完全读入Channel之后默认会重命名该文件以示完成（也可以配置成读完后立即删除、也可以配置trackerDir来跟踪已经收集过的文件）。</p>
+<p>Spooling Directory Source是可靠的，即使Flume重新启动或被kill，也不会丢失数据。同时作为这种可靠性的代价，指定目录中的被收集的文件必须是不可变的、唯一命名的。Flume会自动检测避免这种情况发生，如果发现问题，则会抛出异常：</p>
+<ol>
+<li>如果文件在写入完成后又被再次写入新内容，Flume将向其日志文件（这是指Flume自己logs目录下的日志文件）打印错误并停止处理。</li>
+<li>如果在以后重新使用以前的文件名，Flume将向其日志文件打印错误并停止处理。</li>
+</ol>
+<p>为了避免上述问题，生成新文件的时候文件名加上时间戳是个不错的办法。</p>
+<p>尽管有这个Source的可靠性保证，但是仍然存在这样的情况，某些下游故障发生时会出现重复Event的情况。这与其他Flume组件提供的保证是一致的。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性名</th>
+<th align="left">默认值</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>channels</strong></td>
+<td align="left">–</td>
+<td align="left">与Source绑定的channel，多个用空格分开</td>
+</tr>
+<tr>
+<td align="left"><strong>type</strong></td>
+<td align="left">–</td>
+<td align="left">组件类型，这个是： <code>spooldir</code>.</td>
+</tr>
+<tr>
+<td align="left"><strong>spoolDir</strong></td>
+<td align="left">–</td>
+<td align="left">Flume Source监控的文件夹目录，该目录下的文件会被Flume收集</td>
+</tr>
+<tr>
+<td align="left">fileSuffix</td>
+<td align="left">.COMPLETED</td>
+<td align="left">被Flume收集完成的文件被重命名的后缀。1.txt被Flume收集完成后会重命名为1.txt.COMPLETED</td>
+</tr>
+<tr>
+<td align="left">deletePolicy</td>
+<td align="left">never</td>
+<td align="left">是否删除已完成收集的文件，可选值: <code>never</code> 或 <code>immediate</code></td>
+</tr>
+<tr>
+<td align="left">fileHeader</td>
+<td align="left">false</td>
+<td align="left">是否添加文件的绝对路径名（绝对路径+文件名）到header中。</td>
+</tr>
+<tr>
+<td align="left">fileHeaderKey</td>
+<td align="left">file</td>
+<td align="left">添加绝对路径名到header里面所使用的key（配合上面的fileHeader一起使用）</td>
+</tr>
+<tr>
+<td align="left">basenameHeader</td>
+<td align="left">false</td>
+<td align="left">是否添加文件名（只是文件名，不包括路径）到header 中</td>
+</tr>
+<tr>
+<td align="left">basenameHeaderKey</td>
+<td align="left">basename</td>
+<td align="left">添加文件名到header里面所使用的key（配合上面的basenameHeader一起使用）</td>
+</tr>
+<tr>
+<td align="left">includePattern</td>
+<td align="left">^.*$</td>
+<td align="left">指定会被收集的文件名正则表达式，它跟下面的ignorePattern不冲突，可以一起使用。如果一个文件名同时被这两个正则匹配到，则会被忽略，换句话说ignorePattern的优先级更高</td>
+</tr>
+<tr>
+<td align="left">ignorePattern</td>
+<td align="left">^$</td>
+<td align="left">指定要忽略的文件名称正则表达式。它可以跟 <em>includePattern</em> 一起使用，如果一个文件被 <em>ignorePattern</em> 和 <em>includePattern</em> 两个正则都匹配到，这个文件会被忽略。</td>
+</tr>
+<tr>
+<td align="left">trackerDir</td>
+<td align="left">.flumespool</td>
+<td align="left">用于存储与文件处理相关的元数据的目录。如果配置的是相对目录地址，它会在spoolDir中开始创建</td>
+</tr>
+<tr>
+<td align="left">trackingPolicy</td>
+<td align="left">rename</td>
+<td align="left">这个参数定义了如何跟踪记录文件的读取进度，可选值有：<code>rename</code> 、 <code>tracker_dir</code> ，这个参数只有在 <em>deletePolicy</em> 设置为 <code>never</code> 的时候才生效。 当设置为 <code>rename</code> ，文件处理完成后，将根据 <em>fileSuffix</em> 参数的配置将其重命名。 当设置为 <code>tracker_dir</code> ，文件处理完成后不会被重命名或其他任何改动，会在 <em>trackerDir</em> 配置的目录中创建一个新的空文件，而这个空文件的文件名就是原文件 + <em>fileSuffix</em> 参数配置的后缀</td>
+</tr>
+<tr>
+<td align="left">consumeOrder</td>
+<td align="left">oldest</td>
+<td align="left">设定收集目录内文件的顺序。默认是“先来先走”（也就是最早生成的文件最先被收集），可选值有： <code>oldest</code> 、 <code>youngest</code> 和 <code>random</code> 。当使用oldest和youngest这两种选项的时候，Flume会扫描整个文件夹进行对比排序，当文件夹里面有大量的文件的时候可能会运行缓慢。 当使用random时候，如果一直在产生新的文件，有一部分老文件可能会很久才会被收集</td>
+</tr>
+<tr>
+<td align="left">pollDelay</td>
+<td align="left">500</td>
+<td align="left">Flume监视目录内新文件产生的时间间隔，单位：毫秒</td>
+</tr>
+<tr>
+<td align="left">recursiveDirectorySearch</td>
+<td align="left">false</td>
+<td align="left">是否收集子目录下的日志文件</td>
+</tr>
+<tr>
+<td align="left">maxBackoff</td>
+<td align="left">4000</td>
+<td align="left">等待写入channel的最长退避时间，如果channel已满实例启动时会自动设定一个很低的值，当遇到ChannelException异常时会自动以指数级增加这个超时时间，直到达到设定的这个最大值为止。</td>
+</tr>
+<tr>
+<td align="left">batchSize</td>
+<td align="left">100</td>
+<td align="left">每次批量传输到channel时的size大小</td>
+</tr>
+<tr>
+<td align="left">inputCharset</td>
+<td align="left">UTF-8</td>
+<td align="left">解析器读取文件时使用的编码（解析器会把所有文件当做文本读取）</td>
+</tr>
+<tr>
+<td align="left">decodeErrorPolicy</td>
+<td align="left"><code>FAIL</code></td>
+<td align="left">当从文件读取时遇到不可解析的字符时如何处理。 <code>FAIL</code> ：抛出异常，解析文件失败； <code>REPLACE</code> ：替换掉这些无法解析的字符，通常是用U+FFFD； <code>IGNORE</code> ：忽略无法解析的字符。</td>
+</tr>
+<tr>
+<td align="left">deserializer</td>
+<td align="left"><code>LINE</code></td>
+<td align="left">指定一个把文件中的数据行解析成Event的解析器。默认是把每一行当做一个Event进行解析，所有解析器必须实现EventDeserializer.Builder接口</td>
+</tr>
+<tr>
+<td align="left">deserializer.*</td>
+<td align="left"></td>
+<td align="left">解析器的相关属性，根据解析器不同而不同</td>
+</tr>
+<tr>
+<td align="left">bufferMaxLines</td>
+<td align="left">–</td>
+<td align="left">（已废弃）</td>
+</tr>
+<tr>
+<td align="left">bufferMaxLineLength</td>
+<td align="left">5000</td>
+<td align="left">（已废弃）每行的最大长度。改用 <em>deserializer.maxLineLength</em> 代替</td>
+</tr>
+<tr>
+<td align="left">selector.type</td>
+<td align="left">replicating</td>
+<td align="left">可选值：<code>replicating</code> 或 <code>multiplexing</code> ，分别表示： 复制、多路复用</td>
+</tr>
+<tr>
+<td align="left">selector.*</td>
+<td align="left"></td>
+<td align="left">channel选择器的相关属性，具体属性根据设定的 <em>selector.type</em> 值不同而不同</td>
+</tr>
+<tr>
+<td align="left">interceptors</td>
+<td align="left">–</td>
+<td align="left">该source所使用的拦截器，多个用空格分开</td>
+</tr>
+<tr>
+<td align="left">interceptors.*</td>
+<td align="left"></td>
+<td align="left">拦截器相关的属性配置</td>
+</tr>
+</tbody></table>
+<p>配置范例：</p>
+<pre class="line-numbers language-none"><code class="language-none">a1.channels &#x3D; ch-1
+a1.sources &#x3D; src-1
+
+a1.sources.src-1.type &#x3D; spooldir
+a1.sources.src-1.channels &#x3D; ch-1
+a1.sources.src-1.spoolDir &#x3D; &#x2F;var&#x2F;log&#x2F;apache&#x2F;flumeSpool
+a1.sources.src-1.fileHeader &#x3D; true<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Kafka-Sink"><a href="#Kafka-Sink" class="headerlink" title="Kafka Sink"></a>Kafka Sink</h2><p>这个 Sink 可以把数据发送到 <a target="_blank" rel="noopener" href="http://kafka.apache.org/">Kafka</a> topic上。目的就是将 Flume 与 Kafka 集成，以便基于拉的处理系统可以处理来自各种 Flume Source 的数据。</p>
+<p>目前支持Kafka 0.10.1.0以上版本，最高已经在Kafka 2.0.1版本上完成了测试，这已经是Flume 1.9发行时候的最高的Kafka版本了。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">默认值</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>type</strong></td>
+<td align="left">–</td>
+<td align="left">组件类型，这个是： <code>org.apache.flume.sink.kafka.KafkaSink</code></td>
+</tr>
+<tr>
+<td align="left"><strong>kafka.bootstrap.servers</strong></td>
+<td align="left">–</td>
+<td align="left">Kafka Sink 使用的 Kafka 集群的实例列表，可以是实例的部分列表。但是更建议至少两个用于高可用（HA）支持。格式为 hostname:port，多个用逗号分隔</td>
+</tr>
+<tr>
+<td align="left">kafka.topic</td>
+<td align="left">default-flume-topic</td>
+<td align="left">用于发布消息的 Kafka topic 名称 。如果这个参数配置了值，消息就会被发布到这个 topic 上。如果Event header中包含叫做“topic”的属性， Event 就会被发布到 header 中指定的 topic 上，而不会发布到 <em>kafka.topic</em> 指定的 topic 上。支持任意的 header 属性动态替换， 比如%{lyf}就会被 Event header 中叫做“lyf”的属性值替换（如果使用了这种动态替换，建议将 Kafka 的 <em>auto.create.topics.enable</em> 属性设置为 <code>true</code> ）。</td>
+</tr>
+<tr>
+<td align="left">flumeBatchSize</td>
+<td align="left">100</td>
+<td align="left">一批中要处理的消息数。设置较大的值可以提高吞吐量，但是会增加延迟。</td>
+</tr>
+<tr>
+<td align="left">kafka.producer.acks</td>
+<td align="left">1</td>
+<td align="left">在考虑成功写入之前，要有多少个副本必须确认消息。可选值， <code>0</code> ：（从不等待确认）； <code>1</code> ：只等待leader确认； <code>-1</code> ：等待所有副本确认。 设置为-1可以避免某些情况 leader 实例失败的情况下丢失数据。</td>
+</tr>
+<tr>
+<td align="left">useFlumeEventFormat</td>
+<td align="left">false</td>
+<td align="left">默认情况下，会直接将 Event body 的字节数组作为消息内容直接发送到 Kafka topic 。如果设置为true，会以 Flume Avro 二进制格式进行读取。 与 Kafka Source 上的同名参数或者 Kafka channel 的 <em>parseAsFlumeEvent</em> 参数相关联，这样以对象的形式处理能使生成端发送过来的 Event header 信息得以保留。</td>
+</tr>
+<tr>
+<td align="left">defaultPartitionId</td>
+<td align="left">–</td>
+<td align="left">指定所有 Event 将要发送到的 Kafka 分区ID，除非被 <em>partitionIdHeader</em> 参数的配置覆盖。 默认情况下，如果没有设置此参数，Event 会被 Kafka 生产者的分发程序分发，包括 key（如果指定了的话），或者被 <em>kafka.partitioner.class</em> 指定的分发程序来分发</td>
+</tr>
+<tr>
+<td align="left">partitionIdHeader</td>
+<td align="left">–</td>
+<td align="left">设置后，Sink将使用 Event header 中使用此属性的值命名的字段的值，并将消息发送到 topic 的指定分区。 如果该值表示无效分区，则将抛出 EventDeliveryException。 如果存在标头值，则此设置将覆盖 <em>defaultPartitionId</em> 。假如这个参数设置为“lyf”，这个 Sink 就会读取 Event header 中的 lyf 属性的值，用该值作为分区ID</td>
+</tr>
+<tr>
+<td align="left">allowTopicOverride</td>
+<td align="left">true</td>
+<td align="left">如果设置为 <code>true</code>，会读取 Event header 中的名为 <em>topicHeader</em> 的的属性值，用它作为目标 topic。</td>
+</tr>
+<tr>
+<td align="left">topicHeader</td>
+<td align="left">topic</td>
+<td align="left">与上面的 <em>allowTopicOverride</em> 一起使用，<em>allowTopicOverride</em> 会用当前参数配置的名字从 Event header 获取该属性的值，来作为目标 topic 名称</td>
+</tr>
+<tr>
+<td align="left">kafka.producer.security.protocol</td>
+<td align="left">PLAINTEXT</td>
+<td align="left">设置使用哪种安全协议写入 Kafka。可选值：<code>SASL_PLAINTEXT</code> 、 <code>SASL_SSL</code> 和 <code>SSL</code>， 有关安全设置的其他信息，请参见下文。</td>
+</tr>
+<tr>
+<td align="left"><em>more producer security props</em></td>
+<td align="left"></td>
+<td align="left">如果使用了 <code>SASL_PLAINTEXT</code> 、 <code>SASL_SSL</code> 或 <code>SSL</code> 等安全协议，参考 <a target="_blank" rel="noopener" href="http://kafka.apache.org/documentation.html#security">Kafka security</a> 来为生产者增加安全相关的参数配置</td>
+</tr>
+<tr>
+<td align="left">Other Kafka Producer Properties</td>
+<td align="left">–</td>
+<td align="left">其他一些 Kafka 生产者配置参数。任何 Kafka 支持的生产者参数都可以使用。唯一的要求是使用“kafka.producer.”这个前缀来配置参数，比如：<em>kafka.producer.linger.ms</em></td>
+</tr>
+</tbody></table>
+<p>注解</p>
+<p>Kafka Sink使用 Event header 中的 topic 和其他关键属性将 Event 发送到 Kafka。 如果 header 中存在 topic，则会将Event发送到该特定 topic，从而覆盖为Sink配置的 topic。 如果 header 中存在指定分区相关的参数，则Kafka将使用相关参数发送到指定分区。 header中特定参数相同的 Event 将被发送到同一分区。 如果为空，则将 Event 会被发送到随机分区。 Kafka Sink 还提供了key.deserializer（org.apache.kafka.common.serialization.StringSerializer） 和value.deserializer（org.apache.kafka.common.serialization.ByteArraySerializer）的默认值，不建议修改这些参数。</p>
+<p>弃用的一些参数：</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">默认值</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">brokerList</td>
+<td align="left">–</td>
+<td align="left">改用 kafka.bootstrap.servers</td>
+</tr>
+<tr>
+<td align="left">topic</td>
+<td align="left">default-flume-topic</td>
+<td align="left">改用 kafka.topic</td>
+</tr>
+<tr>
+<td align="left">batchSize</td>
+<td align="left">100</td>
+<td align="left">改用 kafka.flumeBatchSize</td>
+</tr>
+<tr>
+<td align="left">requiredAcks</td>
+<td align="left">1</td>
+<td align="left">改用 kafka.producer.acks</td>
+</tr>
+</tbody></table>
+<p>下面给出 Kafka Sink 的配置示例。Kafka 生产者的属性都是以 kafka.producer 为前缀。Kafka 生产者的属性不限于下面示例的几个。此外，可以在此处包含您的自定义属性，并通过作为方法参数传入的Flume Context对象在预处理器中访问它们。</p>
+<pre class="line-numbers language-none"><code class="language-none">a1.sinks.k1.channel &#x3D; c1
+a1.sinks.k1.type &#x3D; org.apache.flume.sink.kafka.KafkaSink
+a1.sinks.k1.kafka.topic &#x3D; mytopic
+a1.sinks.k1.kafka.bootstrap.servers &#x3D; localhost:9092
+a1.sinks.k1.kafka.flumeBatchSize &#x3D; 20
+a1.sinks.k1.kafka.producer.acks &#x3D; 1
+a1.sinks.k1.kafka.producer.linger.ms &#x3D; 1
+a1.sinks.k1.kafka.producer.compression.type &#x3D; snappy<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Flume-Channels"><a href="#Flume-Channels" class="headerlink" title="Flume Channels"></a>Flume Channels</h2><p>channel 是在 Agent 上暂存 Event 的缓冲池。 Event由source添加，由sink消费后删除。</p>
+<h2 id="Memory-Channel"><a href="#Memory-Channel" class="headerlink" title="Memory Channel"></a>Memory Channel</h2><p>内存 channel 是把 Event 队列存储到内存上，队列的最大数量就是 <em>capacity</em> 的设定值。它非常适合对吞吐量有较高要求的场景，但也是有代价的，当发生故障的时候会丢失当时内存中的所有 Event。 必需的参数已用 <strong>粗体</strong> 标明。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">默认值</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>type</strong></td>
+<td align="left">–</td>
+<td align="left">组件类型，这个是： <code>memory</code></td>
+</tr>
+<tr>
+<td align="left">capacity</td>
+<td align="left">100</td>
+<td align="left">内存中存储 Event 的最大数</td>
+</tr>
+<tr>
+<td align="left">transactionCapacity</td>
+<td align="left">100</td>
+<td align="left">source 或者 sink 每个事务中存取 Event 的操作数量（不能比 <em>capacity</em> 大）</td>
+</tr>
+<tr>
+<td align="left">keep-alive</td>
+<td align="left">3</td>
+<td align="left">添加或删除一个 Event 的超时时间（秒）</td>
+</tr>
+<tr>
+<td align="left">byteCapacityBufferPercentage</td>
+<td align="left">20</td>
+<td align="left">指定 Event header 所占空间大小与 channel 中所有 Event 的总大小之间的百分比</td>
+</tr>
+<tr>
+<td align="left">byteCapacity</td>
+<td align="left"></td>
+<td align="left">Channel 中最大允许存储所有 Event 的总字节数（bytes）。默认情况下会使用JVM可用内存的80%作为最大可用内存（就是JVM启动参数里面配置的-Xmx的值）。 计算总字节时只计算 Event 的主体，这也是提供 <em>byteCapacityBufferPercentage</em> 配置参数的原因。注意，当你在一个 Agent 里面有多个内存 channel 的时候， 而且碰巧这些 channel 存储相同的物理 Event（例如：这些 channel 通过复制机制（ <a target="_blank" rel="noopener" href="https://flume.liyifeng.org/#id43">复制选择器</a> ）接收同一个 source 中的 Event）， 这时候这些 Event 占用的空间是累加的，并不会只计算一次。如果这个值设置为0（不限制），就会达到200G左右的内部硬件限制。</td>
+</tr>
+</tbody></table>
+<p>提示</p>
+<p>举2个例子来帮助理解最后两个参数吧：</p>
+<p>两个例子都有共同的前提，假设JVM最大的可用内存是100M（或者说JVM启动时指定了-Xmx&#x3D;100m）。</p>
+<p>例子1： <em>byteCapacityBufferPercentage</em> 设置为20， <em>byteCapacity</em> 设置为52428800（就是50M），此时内存中所有 Event body 的总大小就被限制为50M *（1-20%）&#x3D;40M，内存channel可用内存是50M。</p>
+<p>例子2： <em>byteCapacityBufferPercentage</em> 设置为10， <em>byteCapacity</em> 不设置，此时内存中所有 Event body 的总大小就被限制为100M * 80% *（1-10%）&#x3D;72M，内存channel可用内存是80M。</p>
+<p>配置范例：</p>
+<pre class="line-numbers language-none"><code class="language-none">a1.channels &#x3D; c1
+a1.channels.c1.type &#x3D; memory
+a1.channels.c1.capacity &#x3D; 10000
+a1.channels.c1.transactionCapacity &#x3D; 10000
+a1.channels.c1.byteCapacityBufferPercentage &#x3D; 20
+a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/cs.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -486,63 +1094,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Web%20Frameworks.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Web%20Frameworks.html" class="post-title-link" itemprop="url">Web Frameworks</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h1><h1 id="SpringBoot"><a href="#SpringBoot" class="headerlink" title="SpringBoot"></a>SpringBoot</h1><h1 id="Play-Framework"><a href="#Play-Framework" class="headerlink" title="Play Framework"></a>Play Framework</h1><h1 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a>Spark</h1>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/String%E5%AD%97%E7%AC%A6%E4%B8%B2.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -615,7 +1166,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Orm.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Web%20Frameworks.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -629,7 +1180,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/Orm.html" class="post-title-link" itemprop="url">Orm</a>
+            <a href="/post/Web%20Frameworks.html" class="post-title-link" itemprop="url">Web Frameworks</a>
         </h2>
 
         <div class="post-meta">
@@ -653,7 +1204,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="mybatis"><a href="#mybatis" class="headerlink" title="mybatis"></a>mybatis</h1><h1 id="mybatis-plus"><a href="#mybatis-plus" class="headerlink" title="mybatis-plus"></a>mybatis-plus</h1><h1 id="jpa"><a href="#jpa" class="headerlink" title="jpa"></a>jpa</h1><h1 id="Hibernate"><a href="#Hibernate" class="headerlink" title="Hibernate"></a>Hibernate</h1><h1 id="EBean"><a href="#EBean" class="headerlink" title="EBean"></a>EBean</h1>
+          <h1 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h1><h1 id="SpringBoot"><a href="#SpringBoot" class="headerlink" title="SpringBoot"></a>SpringBoot</h1><h1 id="Play-Framework"><a href="#Play-Framework" class="headerlink" title="Play Framework"></a>Play Framework</h1><h1 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a>Spark</h1>
       
     </div>
 
@@ -1294,7 +1845,7 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Redis.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Orm.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1308,7 +1859,7 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/Redis.html" class="post-title-link" itemprop="url">redis-学习</a>
+            <a href="/post/Orm.html" class="post-title-link" itemprop="url">Orm</a>
         </h2>
 
         <div class="post-meta">
@@ -1332,145 +1883,7 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="redis安装"><a href="#redis安装" class="headerlink" title="redis安装"></a>redis安装</h2><p><strong>官方snapd商店安装</strong></p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> yum <span class="token function">install</span> epel-release -y
-<span class="token function">sudo</span> yum <span class="token function">install</span> snapd -y 
-<span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> --now snapd.socket 
-<span class="token function">sudo</span> <span class="token function">ln</span> -s /var/lib/snapd/snap /snap
-<span class="token function">sudo</span> snap <span class="token function">install</span> redis<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>官方源码安装[推荐]</strong></p>
-<p>1.安装阿里源</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># CentOS 7</span>
-<span class="token function">wget</span> -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>2.安装编译器</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yum <span class="token function">install</span> gcc-c++ -y<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>3.下载源码</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://download.redis.io/redis-stable.tar.gz<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>4.编译redis</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">tar</span> -xzvf redis-stable.tar.gz
-<span class="token builtin class-name">cd</span> redis-stable
-<span class="token function">make</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>5.安装生成的可执行文件</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">make</span> <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>6.启动redis</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">redis-server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="简单动态字符串"><a href="#简单动态字符串" class="headerlink" title="简单动态字符串"></a>简单动态字符串</h2><blockquote>
-<p>Redis没有使用C语言的字符串，而是自己构建了一种名为简单动态字符串SDS（simple dynamic string）的抽象类型，并把sds用作默认redis的默认字符串表示。Redis数据库里面的键值对最底层都是由SDS实现的</p>
-</blockquote>
-<h4 id="1-SDS定义"><a href="#1-SDS定义" class="headerlink" title="1.SDS定义"></a>1.SDS定义</h4><p>C语言表示</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">sdshdr</span><span class="token punctuation">&#123;</span>
-    <span class="token comment">// 记录buf 数组中已使用的字节数</span>
-    <span class="token comment">// 等于sds 所保存的长度</span>
-    <span class="token keyword">int</span> len<span class="token punctuation">;</span>
-    <span class="token comment">// 记录buf 数组中未使用的字节的数量</span>
-    <span class="token keyword">int</span>  free<span class="token punctuation">;</span>
-    <span class="token comment">//字节数组，用于保存字符串</span>
-    <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<blockquote>
-<p>buf字节数组和c语言的字符串保持一致，都以空字符结尾</p>
-</blockquote>
-<h4 id="2-SDS与C字符串的区别"><a href="#2-SDS与C字符串的区别" class="headerlink" title="2.SDS与C字符串的区别"></a>2.SDS与C字符串的区别</h4><blockquote>
-<p>C语言使用长度为N+1的字节数组表示长度为N的字符串，字节数组最后都是以空字符（’\0’）结尾</p>
-</blockquote>
-<p>2.1 常数复杂度获取长度</p>
-<ul>
-<li>C字符串不记录长度，需要依次遍历，直到空字符串返回长度，时间复杂度为O(N)</li>
-<li>SDS中记录了长度的属性len,时间复杂度为O(1)</li>
-</ul>
-<p>即使字符串的长度很长，使用strlen的命令的时间复杂度是O(1)</p>
-<p>2.2 杜绝缓冲区溢出</p>
-<ul>
-<li>C语言字符串拼接必须先分配空间，要不然会内存溢出</li>
-<li>SDS会自动扩容所拼接字符串大小</li>
-</ul>
-<p>2.3 减少字符串修改带来的内存分配次数</p>
-<ul>
-<li>空间预分配</li>
-<li>惰性空间释放</li>
-</ul>
-<blockquote>
-<p>空间预分配：当字符串的长度（len）小于1MB,预分配给free的空间大小和len长度一致，当字符串长度大于30Mb，预分配1Mb给free</p>
-<p>惰性空间释放：当要删除部分字符的时候，会将删除的空间保留到free里面</p>
-</blockquote>
-<p>2.4 二进制安全</p>
-<blockquote>
-<p>C字符串中不能包含’\0’,否则会被程序认为是字符串结尾，这限制了只能保存文本数据，不能保存图片、音频、视频等二进制数据。</p>
-<p>SDS的api都是二进制安全的，不会对数据进行限制、过滤等数据存进来是什么样的，他读取就是什么样的，redis用的buf数组不是用来保存字符，而是保存二进制数据。因此redis可以保存任意格式的二进制数据</p>
-</blockquote>
-<p>2.5 兼容部分c字符串函数</p>
-<blockquote>
-<p>sds保留了空字符结尾的特性，可以重用部分c语言的函数，从而避免重复代码编写。</p>
-</blockquote>
-<h2 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h2><blockquote>
-<p>链表提供了高效的节点重排能力，以及顺序性节点访问方式，并且可以通过增删节点来调整链表的长度</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%9F%BA%E7%A1%80.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Java%E5%9F%BA%E7%A1%80.html" class="post-title-link" itemprop="url">java 基础</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="install"><a href="#install" class="headerlink" title="install"></a>install</h1><h1 id="basic"><a href="#basic" class="headerlink" title="basic"></a>basic</h1><h2 id="Syntax"><a href="#Syntax" class="headerlink" title="Syntax"></a>Syntax</h2><h2 id="Output"><a href="#Output" class="headerlink" title="Output"></a>Output</h2><h2 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h2><h2 id="Variables"><a href="#Variables" class="headerlink" title="Variables"></a>Variables</h2><h2 id="Data-Types"><a href="#Data-Types" class="headerlink" title="Data Types"></a>Data Types</h2><h2 id="Type-Casting"><a href="#Type-Casting" class="headerlink" title="Type Casting"></a>Type Casting</h2><h2 id="Operators"><a href="#Operators" class="headerlink" title="Operators"></a>Operators</h2><h2 id="Strings"><a href="#Strings" class="headerlink" title="Strings"></a>Strings</h2><h2 id="Math"><a href="#Math" class="headerlink" title="Math"></a>Math</h2><h2 id="Booleans"><a href="#Booleans" class="headerlink" title="Booleans"></a>Booleans</h2><h2 id="If-x2F-Else"><a href="#If-x2F-Else" class="headerlink" title="If&#x2F;Else"></a>If&#x2F;Else</h2><h2 id="Switch"><a href="#Switch" class="headerlink" title="Switch"></a>Switch</h2><h2 id="While-Loop"><a href="#While-Loop" class="headerlink" title="While Loop"></a>While Loop</h2><h2 id="For-Loop"><a href="#For-Loop" class="headerlink" title="For Loop"></a>For Loop</h2><h2 id="Break-x2F-Continue"><a href="#Break-x2F-Continue" class="headerlink" title="Break&#x2F;Continue"></a>Break&#x2F;Continue</h2><h2 id="Arrays"><a href="#Arrays" class="headerlink" title="Arrays"></a>Arrays</h2><h1 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h1><h2 id="Methods-1"><a href="#Methods-1" class="headerlink" title="Methods"></a>Methods</h2><h2 id="Method-Parameters"><a href="#Method-Parameters" class="headerlink" title="Method Parameters"></a>Method Parameters</h2><h2 id="Method-Overloading"><a href="#Method-Overloading" class="headerlink" title="Method Overloading"></a>Method Overloading</h2><h2 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h2><h2 id="Recursion"><a href="#Recursion" class="headerlink" title="Recursion"></a>Recursion</h2><h1 id="Classes"><a href="#Classes" class="headerlink" title="Classes"></a>Classes</h1><h2 id="OOP"><a href="#OOP" class="headerlink" title="OOP"></a>OOP</h2><h2 id="Classes-and-Objects"><a href="#Classes-and-Objects" class="headerlink" title="Classes and Objects"></a>Classes and Objects</h2><h2 id="Class-Attributes"><a href="#Class-Attributes" class="headerlink" title="Class Attributes"></a>Class Attributes</h2><h2 id="Class-Methods"><a href="#Class-Methods" class="headerlink" title="Class Methods"></a>Class Methods</h2><h2 id="Constructors"><a href="#Constructors" class="headerlink" title="Constructors"></a>Constructors</h2><h2 id="Modifiers"><a href="#Modifiers" class="headerlink" title="Modifiers"></a>Modifiers</h2><h2 id="Encapsulation"><a href="#Encapsulation" class="headerlink" title="Encapsulation"></a>Encapsulation</h2><h2 id="Packages"><a href="#Packages" class="headerlink" title="Packages"></a>Packages</h2><h2 id="Inheritance"><a href="#Inheritance" class="headerlink" title="Inheritance"></a>Inheritance</h2><h2 id="Polymorphism"><a href="#Polymorphism" class="headerlink" title="Polymorphism"></a>Polymorphism</h2><h2 id="Inner-Classes"><a href="#Inner-Classes" class="headerlink" title="Inner Classes"></a>Inner Classes</h2><h2 id="Abstraction"><a href="#Abstraction" class="headerlink" title="Abstraction"></a>Abstraction</h2><h2 id="Interface"><a href="#Interface" class="headerlink" title="Interface"></a>Interface</h2><h2 id="Enums"><a href="#Enums" class="headerlink" title="Enums"></a>Enums</h2><h2 id="User-Input"><a href="#User-Input" class="headerlink" title="User Input"></a>User Input</h2><h2 id="Date"><a href="#Date" class="headerlink" title="Date"></a>Date</h2><h2 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h2><h2 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h2><h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><h2 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h2><h2 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h2><h2 id="Wrapper-Classes"><a href="#Wrapper-Classes" class="headerlink" title="Wrapper Classes"></a>Wrapper Classes</h2><h2 id="Exceptions"><a href="#Exceptions" class="headerlink" title="Exceptions"></a>Exceptions</h2><h2 id="Regular-Expressions"><a href="#Regular-Expressions" class="headerlink" title="Regular Expressions"></a>Regular Expressions</h2><h2 id="Threads"><a href="#Threads" class="headerlink" title="Threads"></a>Threads</h2><h2 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h2><h1 id="File-Handing"><a href="#File-Handing" class="headerlink" title="File Handing"></a>File Handing</h1><h2 id="Files"><a href="#Files" class="headerlink" title="Files"></a>Files</h2><h2 id="Create-x2F-Write-Files"><a href="#Create-x2F-Write-Files" class="headerlink" title="Create&#x2F;Write Files"></a>Create&#x2F;Write Files</h2><h2 id="Read-Files"><a href="#Read-Files" class="headerlink" title="Read Files"></a>Read Files</h2><h2 id="Delete-Files"><a href="#Delete-Files" class="headerlink" title="Delete Files"></a>Delete Files</h2>
+          <h1 id="mybatis"><a href="#mybatis" class="headerlink" title="mybatis"></a>mybatis</h1><h1 id="mybatis-plus"><a href="#mybatis-plus" class="headerlink" title="mybatis-plus"></a>mybatis-plus</h1><h1 id="jpa"><a href="#jpa" class="headerlink" title="jpa"></a>jpa</h1><h1 id="Hibernate"><a href="#Hibernate" class="headerlink" title="Hibernate"></a>Hibernate</h1><h1 id="EBean"><a href="#EBean" class="headerlink" title="EBean"></a>EBean</h1>
       
     </div>
 
@@ -1554,14 +1967,14 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">53</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
