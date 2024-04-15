@@ -1488,6 +1488,113 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/PostgreSQL.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/PostgreSQL.html" class="post-title-link" itemprop="url">PostgreSQL 学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="安装PostgreSQL"><a href="#安装PostgreSQL" class="headerlink" title="安装PostgreSQL"></a>安装PostgreSQL</h1><h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><ul>
+<li>make &gt;&#x3D; 3.8.0</li>
+<li>推荐gcc最新版</li>
+<li>bzip、bzip2、tar、readline、readline-devel、zlib-devel</li>
+<li>Perl</li>
+</ul>
+<h2 id="下载源代码"><a href="#下载源代码" class="headerlink" title="下载源代码"></a>下载源代码</h2><pre class="line-numbers language-uri" data-language="uri"><code class="language-uri"><span class="token path">https</span> ://www.postgresql.org/download/
+<span class="token fragment"><span class="token fragment-delimiter">#</span></span> 下载名为postgresql-10.21.tar.gz  解压
+<span class="token path">gunzip</span> postgresql-10.21.tar.gz
+<span class="token path">tar</span> xf postgresql-10.21.tar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./configure --prefix<span class="token operator">=</span>/usr/local/postgresql<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">make</span> <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="创建data、log目录"><a href="#创建data、log目录" class="headerlink" title="创建data、log目录"></a>创建data、log目录</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /usr/local/postgresql
+<span class="token function">mkdir</span> /usr/local/postgresql/data
+<span class="token function">mkdir</span> /usr/local/postgresql/log<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a>设置环境变量</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/profile
+<span class="token comment"># 添加</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">PGHOME</span><span class="token operator">=</span>/usr/local/postgresql
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">PGDATA</span><span class="token operator">=</span>/usr/local/postgresql/data
+<span class="token comment"># 保存后生效</span>
+<span class="token builtin class-name">source</span> /etc/profile<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="增加用户-postgres-并赋权"><a href="#增加用户-postgres-并赋权" class="headerlink" title="增加用户 postgres 并赋权"></a>增加用户 postgres 并赋权</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">useradd</span> postgres
+<span class="token function">chown</span> -R postgres:root /usr/local/postgresql<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="初始化数据库"><a href="#初始化数据库" class="headerlink" title="初始化数据库"></a>初始化数据库</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">su</span> postgres
+/usr/local/postgresql/bin/initdb -D /usr/local/postgresql/data/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /usr/local/postgresql/data/postgresql.conf
+<span class="token comment"># 修改</span>
+listen_addresses <span class="token operator">=</span> <span class="token string">'*'</span>
+port <span class="token operator">=</span> <span class="token number">5432</span>
+
+<span class="token function">vim</span> /usr/local/postgresql/data/pg_hba.conf
+<span class="token comment"># 添加一行</span>
+<span class="token function">host</span>    all             all             <span class="token number">0.0</span>.0.0/0               trust<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pg_ctl start -l /usr/local/postgresql/log/pg_server.log<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="登录默认数据库"><a href="#登录默认数据库" class="headerlink" title="登录默认数据库"></a>登录默认数据库</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">/usr/local/postgresql/bin/psql postgres<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="为默认用户设置密码"><a href="#为默认用户设置密码" class="headerlink" title="为默认用户设置密码"></a>为默认用户设置密码</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">postgres</span><span class="token operator">=</span><span class="token comment"># sudo -u postgres psql postgres</span>
+postgres-<span class="token comment">#  \password postgres</span>
+Enter new password: 
+Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="基础教程"><a href="#基础教程" class="headerlink" title="基础教程"></a>基础教程</h1><h2 id="Querying-Data"><a href="#Querying-Data" class="headerlink" title="Querying Data"></a>Querying Data</h2><h2 id="Filtering-Data"><a href="#Filtering-Data" class="headerlink" title="Filtering Data"></a>Filtering Data</h2><h2 id="Joining-Multiple-Tables"><a href="#Joining-Multiple-Tables" class="headerlink" title="Joining Multiple Tables"></a>Joining Multiple Tables</h2><h2 id="Grouping-Data"><a href="#Grouping-Data" class="headerlink" title="Grouping Data"></a>Grouping Data</h2><h2 id="Set-Operations"><a href="#Set-Operations" class="headerlink" title="Set Operations"></a>Set Operations</h2><h2 id="Grouping-sets-Cube-and-Rollup"><a href="#Grouping-sets-Cube-and-Rollup" class="headerlink" title="Grouping sets, Cube, and Rollup"></a>Grouping sets, Cube, and Rollup</h2><h2 id="Subquery"><a href="#Subquery" class="headerlink" title="Subquery"></a>Subquery</h2><h2 id="Common-Table-Expressions"><a href="#Common-Table-Expressions" class="headerlink" title="Common Table Expressions"></a>Common Table Expressions</h2><h2 id="Modifying-Data"><a href="#Modifying-Data" class="headerlink" title="Modifying Data"></a>Modifying Data</h2><h2 id="Transactions"><a href="#Transactions" class="headerlink" title="Transactions"></a>Transactions</h2><h2 id="Import-amp-Export-Data"><a href="#Import-amp-Export-Data" class="headerlink" title="Import &amp; Export Data"></a>Import &amp; Export Data</h2><h2 id="Managing-Tables"><a href="#Managing-Tables" class="headerlink" title="Managing Tables"></a>Managing Tables</h2><h2 id="Understanding-PostgreSQL-Constraints"><a href="#Understanding-PostgreSQL-Constraints" class="headerlink" title="Understanding PostgreSQL Constraints"></a>Understanding PostgreSQL Constraints</h2><h2 id="PostgreSQL-Data-Types-in-Depth"><a href="#PostgreSQL-Data-Types-in-Depth" class="headerlink" title="PostgreSQL Data Types in Depth"></a>PostgreSQL Data Types in Depth</h2><h2 id="Conditional-Expressions-amp-Operators"><a href="#Conditional-Expressions-amp-Operators" class="headerlink" title="Conditional Expressions &amp; Operators"></a>Conditional Expressions &amp; Operators</h2><h2 id="PostgreSQL-Utilities"><a href="#PostgreSQL-Utilities" class="headerlink" title="PostgreSQL Utilities"></a>PostgreSQL Utilities</h2><h2 id="PostgreSQL-Recipes"><a href="#PostgreSQL-Recipes" class="headerlink" title="PostgreSQL Recipes"></a>PostgreSQL Recipes</h2><h1 id="高级教程"><a href="#高级教程" class="headerlink" title="高级教程"></a>高级教程</h1><h2 id="PL-x2F-pgSQL"><a href="#PL-x2F-pgSQL" class="headerlink" title="PL&#x2F;pgSQL"></a>PL&#x2F;pgSQL</h2><h2 id="Triggers"><a href="#Triggers" class="headerlink" title="Triggers"></a>Triggers</h2><h2 id="Views"><a href="#Views" class="headerlink" title="Views"></a>Views</h2><h2 id="Indexes"><a href="#Indexes" class="headerlink" title="Indexes"></a>Indexes</h2><h2 id="Administration"><a href="#Administration" class="headerlink" title="Administration"></a>Administration</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Redis.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1615,113 +1722,6 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
 <p>链表提供了高效的节点重排能力，以及顺序性节点访问方式，并且可以通过增删节点来调整链表的长度</p>
 </blockquote>
 
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/PostgreSQL.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/PostgreSQL.html" class="post-title-link" itemprop="url">PostgreSQL 学习</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="安装PostgreSQL"><a href="#安装PostgreSQL" class="headerlink" title="安装PostgreSQL"></a>安装PostgreSQL</h1><h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><ul>
-<li>make &gt;&#x3D; 3.8.0</li>
-<li>推荐gcc最新版</li>
-<li>bzip、bzip2、tar、readline、readline-devel、zlib-devel</li>
-<li>Perl</li>
-</ul>
-<h2 id="下载源代码"><a href="#下载源代码" class="headerlink" title="下载源代码"></a>下载源代码</h2><pre class="line-numbers language-uri" data-language="uri"><code class="language-uri"><span class="token path">https</span> ://www.postgresql.org/download/
-<span class="token fragment"><span class="token fragment-delimiter">#</span></span> 下载名为postgresql-10.21.tar.gz  解压
-<span class="token path">gunzip</span> postgresql-10.21.tar.gz
-<span class="token path">tar</span> xf postgresql-10.21.tar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./configure --prefix<span class="token operator">=</span>/usr/local/postgresql<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">make</span> <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="创建data、log目录"><a href="#创建data、log目录" class="headerlink" title="创建data、log目录"></a>创建data、log目录</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /usr/local/postgresql
-<span class="token function">mkdir</span> /usr/local/postgresql/data
-<span class="token function">mkdir</span> /usr/local/postgresql/log<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a>设置环境变量</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/profile
-<span class="token comment"># 添加</span>
-<span class="token builtin class-name">export</span> <span class="token assign-left variable">PGHOME</span><span class="token operator">=</span>/usr/local/postgresql
-<span class="token builtin class-name">export</span> <span class="token assign-left variable">PGDATA</span><span class="token operator">=</span>/usr/local/postgresql/data
-<span class="token comment"># 保存后生效</span>
-<span class="token builtin class-name">source</span> /etc/profile<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="增加用户-postgres-并赋权"><a href="#增加用户-postgres-并赋权" class="headerlink" title="增加用户 postgres 并赋权"></a>增加用户 postgres 并赋权</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">useradd</span> postgres
-<span class="token function">chown</span> -R postgres:root /usr/local/postgresql<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h2 id="初始化数据库"><a href="#初始化数据库" class="headerlink" title="初始化数据库"></a>初始化数据库</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">su</span> postgres
-/usr/local/postgresql/bin/initdb -D /usr/local/postgresql/data/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h2 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /usr/local/postgresql/data/postgresql.conf
-<span class="token comment"># 修改</span>
-listen_addresses <span class="token operator">=</span> <span class="token string">'*'</span>
-port <span class="token operator">=</span> <span class="token number">5432</span>
-
-<span class="token function">vim</span> /usr/local/postgresql/data/pg_hba.conf
-<span class="token comment"># 添加一行</span>
-<span class="token function">host</span>    all             all             <span class="token number">0.0</span>.0.0/0               trust<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pg_ctl start -l /usr/local/postgresql/log/pg_server.log<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="登录默认数据库"><a href="#登录默认数据库" class="headerlink" title="登录默认数据库"></a>登录默认数据库</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">/usr/local/postgresql/bin/psql postgres<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="为默认用户设置密码"><a href="#为默认用户设置密码" class="headerlink" title="为默认用户设置密码"></a>为默认用户设置密码</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">postgres</span><span class="token operator">=</span><span class="token comment"># sudo -u postgres psql postgres</span>
-postgres-<span class="token comment">#  \password postgres</span>
-Enter new password: 
-Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="基础教程"><a href="#基础教程" class="headerlink" title="基础教程"></a>基础教程</h1><h2 id="Querying-Data"><a href="#Querying-Data" class="headerlink" title="Querying Data"></a>Querying Data</h2><h2 id="Filtering-Data"><a href="#Filtering-Data" class="headerlink" title="Filtering Data"></a>Filtering Data</h2><h2 id="Joining-Multiple-Tables"><a href="#Joining-Multiple-Tables" class="headerlink" title="Joining Multiple Tables"></a>Joining Multiple Tables</h2><h2 id="Grouping-Data"><a href="#Grouping-Data" class="headerlink" title="Grouping Data"></a>Grouping Data</h2><h2 id="Set-Operations"><a href="#Set-Operations" class="headerlink" title="Set Operations"></a>Set Operations</h2><h2 id="Grouping-sets-Cube-and-Rollup"><a href="#Grouping-sets-Cube-and-Rollup" class="headerlink" title="Grouping sets, Cube, and Rollup"></a>Grouping sets, Cube, and Rollup</h2><h2 id="Subquery"><a href="#Subquery" class="headerlink" title="Subquery"></a>Subquery</h2><h2 id="Common-Table-Expressions"><a href="#Common-Table-Expressions" class="headerlink" title="Common Table Expressions"></a>Common Table Expressions</h2><h2 id="Modifying-Data"><a href="#Modifying-Data" class="headerlink" title="Modifying Data"></a>Modifying Data</h2><h2 id="Transactions"><a href="#Transactions" class="headerlink" title="Transactions"></a>Transactions</h2><h2 id="Import-amp-Export-Data"><a href="#Import-amp-Export-Data" class="headerlink" title="Import &amp; Export Data"></a>Import &amp; Export Data</h2><h2 id="Managing-Tables"><a href="#Managing-Tables" class="headerlink" title="Managing Tables"></a>Managing Tables</h2><h2 id="Understanding-PostgreSQL-Constraints"><a href="#Understanding-PostgreSQL-Constraints" class="headerlink" title="Understanding PostgreSQL Constraints"></a>Understanding PostgreSQL Constraints</h2><h2 id="PostgreSQL-Data-Types-in-Depth"><a href="#PostgreSQL-Data-Types-in-Depth" class="headerlink" title="PostgreSQL Data Types in Depth"></a>PostgreSQL Data Types in Depth</h2><h2 id="Conditional-Expressions-amp-Operators"><a href="#Conditional-Expressions-amp-Operators" class="headerlink" title="Conditional Expressions &amp; Operators"></a>Conditional Expressions &amp; Operators</h2><h2 id="PostgreSQL-Utilities"><a href="#PostgreSQL-Utilities" class="headerlink" title="PostgreSQL Utilities"></a>PostgreSQL Utilities</h2><h2 id="PostgreSQL-Recipes"><a href="#PostgreSQL-Recipes" class="headerlink" title="PostgreSQL Recipes"></a>PostgreSQL Recipes</h2><h1 id="高级教程"><a href="#高级教程" class="headerlink" title="高级教程"></a>高级教程</h1><h2 id="PL-x2F-pgSQL"><a href="#PL-x2F-pgSQL" class="headerlink" title="PL&#x2F;pgSQL"></a>PL&#x2F;pgSQL</h2><h2 id="Triggers"><a href="#Triggers" class="headerlink" title="Triggers"></a>Triggers</h2><h2 id="Views"><a href="#Views" class="headerlink" title="Views"></a>Views</h2><h2 id="Indexes"><a href="#Indexes" class="headerlink" title="Indexes"></a>Indexes</h2><h2 id="Administration"><a href="#Administration" class="headerlink" title="Administration"></a>Administration</h2>
       
     </div>
 
