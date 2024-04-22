@@ -165,6 +165,178 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98.html" class="post-title-link" itemprop="url">缓存问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本篇博客主要介绍了缓存在系统设计中可能会遇到的一些问题及其解决方案</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98.html">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E5%BA%8F%E5%88%97%E5%8C%96.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/%E5%BA%8F%E5%88%97%E5%8C%96.html" class="post-title-link" itemprop="url">序列化</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是序列化和反序列化"><a href="#什么是序列化和反序列化" class="headerlink" title="什么是序列化和反序列化"></a>什么是序列化和反序列化</h1><blockquote>
+<p>将对象转化成字节流，可以将其保存在文件系统、数据库或其他持久性存储介质中，以实现数据的持久化存储。</p>
+<p>简单说：</p>
+<ul>
+<li><strong>序列化</strong>：把对象转换成二进制字节流的过程</li>
+<li><strong>反序列化</strong>：将在序列化过程中所生成的二进制字节流转换成对象的过程</li>
+</ul>
+</blockquote>
+<img src="https://telegraph-image-2ni.pages.dev/file/1fff0f9d66252dbcbf26e.png" style="zoom:33%;">
+
+
+
+<h1 id="为什么要用序列化呢，序列化的好处"><a href="#为什么要用序列化呢，序列化的好处" class="headerlink" title="为什么要用序列化呢，序列化的好处"></a>为什么要用序列化呢，序列化的好处</h1><ol>
+<li><strong>持久化数据</strong>：序列化允许将对象转换为字节流或其他格式，从而可以将其保存在文件系统、数据库或其他持久性存储介质中。通过序列化，数据可以在不同的应用程序执行之间进行持久化，并且在程序重新启动后仍然可用。</li>
+<li><strong>数据交换</strong>：序列化使得数据可以在网络上传输或在进程之间进行通信。通过将对象序列化为字节流或其他格式，可以轻松地在不同的系统或平台之间交换数据。</li>
+<li><strong>跨平台兼容性</strong>：序列化可以帮助解决不同操作系统、编程语言或硬件架构之间的兼容性问题。通过序列化，数据可以以通用格式存储，从而使得不同系统之间的数据交换更加简单。</li>
+<li><strong>对象传递</strong>：在分布式系统中，序列化可以使得对象可以在网络上传输并在远程系统上重建。这对于远程过程调用（RPC）和分布式系统通信非常有用。</li>
+<li><strong>数据备份和恢复</strong>：通过序列化，可以将应用程序的状态保存为数据流，并在需要时进行恢复。这对于实现备份和恢复功能非常有用，以及在应用程序发生崩溃或异常情况下保存数据状态。</li>
+</ol>
+<h1 id="序列化协议在哪层"><a href="#序列化协议在哪层" class="headerlink" title="序列化协议在哪层"></a>序列化协议在哪层</h1><p>osi的7层模型中表示层主要做数据处理包括编解码、加解密、压缩和解压缩，包括对用户数据进行转换成二进制流，正好对应序列化协议。</p>
+<h1 id="序列化协议有哪些"><a href="#序列化协议有哪些" class="headerlink" title="序列化协议有哪些"></a>序列化协议有哪些</h1><ul>
+<li>JDK 自带的序列化，要实现 <code>java.io.Serializable</code>接口</li>
+<li>Kryo：运行速度快，生成的二进制流体积小，Hive和Storm中用</li>
+<li>Protobuf: 谷歌出的，支持多种语言，跨平台的，但是操作复杂。</li>
+<li>Hessian: 跨语言，高效的二进制序列化</li>
+</ul>
+<h1 id="如何实现序列化呢"><a href="#如何实现序列化呢" class="headerlink" title="如何实现序列化呢"></a>如何实现序列化呢</h1><blockquote>
+<p>例如：JDK 自带的序列化，只需实现 <code>java.io.Serializable</code>接口即可</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token keyword">implements</span> <span class="token class-name">Serializable</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">long</span> serialVersionUID <span class="token operator">=</span> <span class="token number">1807122061950651809L</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> username<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> password<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>serialVersionUID 有什么作用？</strong></p>
+<p>序列化号 <code>serialVersionUID</code> 属于版本控制的作用。反序列化时，会检查 <code>serialVersionUID</code> 是否和当前类的 <code>serialVersionUID</code> 一致。如果 <code>serialVersionUID</code> 不一致则会抛出 <code>InvalidClassException</code> 异常。强烈推荐每个序列化类都手动指定其 <code>serialVersionUID</code>，如果不手动指定，那么编译器会动态生成默认的 <code>serialVersionUID</code>。</p>
+<p><strong>如果有些字段不想进行序列化怎么办？</strong></p>
+<p>对于不想进行序列化的变量，可以使用 <code>transient</code> 关键字修饰。</p>
+<p><code>transient</code> 关键字的作用是：阻止实例中那些用此关键字修饰的的变量序列化；当对象被反序列化时，被 <code>transient</code> 修饰的变量值不会被持久化和恢复。</p>
+<p>关于 <code>transient</code> 还有几点注意：</p>
+<ul>
+<li><code>transient</code> 只能修饰变量，不能修饰类和方法。</li>
+<li><code>transient</code> 修饰的变量，在反序列化后变量值将会被置成类型的默认值。例如，如果是修饰 <code>int</code> 类型，那么反序列后结果就是 <code>0</code>。</li>
+<li><code>static</code> 变量因为不属于任何对象(Object)，所以无论有没有 <code>transient</code> 关键字修饰，均不会被序列化。</li>
+</ul>
+<p><strong>JDK自带序列化的问题</strong></p>
+<p>1.<strong>不支持跨语言</strong> : 只支持java语言开发的程序调用</p>
+<p>2.<strong>性能差</strong>：序列化之后的字节数组体积较大，导致传输成本加大。</p>
+<p>3.<strong>存在安全问题</strong>：序列化和反序列化本身并不存在问题。但当输入的反序列化的数据可被用户控制，那么攻击者即可通过构造恶意输入，让反序列化产生非预期的对象，在此过程中执行构造的任意代码。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -346,6 +518,64 @@
 <h2 id="ADS层"><a href="#ADS层" class="headerlink" title="ADS层"></a>ADS层</h2><blockquote>
 <p>分别对设备主题、会员主题、商品主题和营销主题进行指标分析，其中营销主题是用户主题和商品主题的跨主题分析案例</p>
 </blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E6%96%B0%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/%E6%96%B0%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF.html" class="post-title-link" itemprop="url">新学习路线</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="/images/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF%E5%9B%BE.drawio.svg"></p>
 
       
     </div>
@@ -1899,1067 +2129,6 @@ Identify and stop the process that is listening on port 8080 or configure this a
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/cs.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/cs.html" class="post-title-link" itemprop="url">UUID</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="唯一ID由来"><a href="#唯一ID由来" class="headerlink" title="唯一ID由来"></a>唯一ID由来</h1><blockquote>
-<p>分布式系统中，需要对大量的数据和消息进行唯一标识，如金融行业产品系统中，数据日益增长，对数据进行分库分表后，需要用唯一ID来标识一条数据，数据库的自增ID已经不能满足，此时就需要一个全局唯一ID标识。</p>
-</blockquote>
-<h2 id="唯一ID特点"><a href="#唯一ID特点" class="headerlink" title="唯一ID特点"></a>唯一ID特点</h2><blockquote>
-<ol>
-<li>全局唯一：全局唯一，不会出现重复项。</li>
-<li>趋势递增：B+树的索引下进行递增，保证写入性能</li>
-<li>单调递增：下一个id肯定大于上一个id</li>
-<li>信息安全：ID无规则、不规则</li>
-</ol>
-</blockquote>
-<h2 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h2><ul>
-<li>数据库自增ID</li>
-</ul>
-<blockquote>
-<p>数据库中一般给主键设置自增。</p>
-<p>优点：简单，由数据库自己操作完成，id是单调自增</p>
-<p>缺点：主从切换的时候不一致，容易导致重复发号</p>
-</blockquote>
-<ul>
-<li>UUID</li>
-</ul>
-<blockquote>
-<p>由32个16进制数字组成，形式为8-4-4-4-12的32个字符。</p>
-<p>优点：性能高，本地生成，无网络消耗。</p>
-<p>缺点：存储占用空间大，基于MAC地址生成的UUID存在信息安全问题。</p>
-</blockquote>
-<ul>
-<li>Redis唯一ID</li>
-</ul>
-<blockquote>
-<p>Redis是单线程的，可以依据redis的原子操作incr和incrby实现。</p>
-<p>优点：数字ID天然排序，对分页和排序的结果有帮助。</p>
-</blockquote>
-<ul>
-<li>zookeeper唯一ID</li>
-</ul>
-<blockquote>
-<p>zookeeper通过其znode数据版本生成序列号，可以生成32位和64位数据版本号，客户端可以使用这个版本号作为唯一序列号</p>
-</blockquote>
-<ul>
-<li>snowflake算法</li>
-</ul>
-<blockquote>
-<p>由64个二进制数字组成一般分为1-41-10-12,snowflake方案的QPS约为409.6w&#x2F;s</p>
-<p>第一部分：表示正数</p>
-<p>第二部分：41表示毫秒时间</p>
-<p>第三部分：工作机器ID，5位表示数据中心，5位表示机器id</p>
-<p>第四部分：12位的序列号，每毫秒可生成4096个id</p>
-<p>优点：毫秒在高位，自增序列号在低位，整体是递增趋势</p>
-<p>缺点：依赖时间，如果时间回拨，会导致发号重复或者不可用状态</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/flume.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/flume.html" class="post-title-link" itemprop="url">Flume</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="系统要求"><a href="#系统要求" class="headerlink" title="系统要求"></a>系统要求</h1><blockquote>
-<p>Apache Flume 是一个分布式、高可靠、高可用的用来收集、聚合、转移不同来源的大量日志数据到中央数据仓库的工具</p>
-</blockquote>
-<ol>
-<li>Jre - Java 1.8或更高版本</li>
-<li>内存 - 足够的内存 用来配置Sources、Channels和Sinks</li>
-<li>硬盘空间 - 足够的硬盘用来配置Channels 和 Sinks</li>
-<li>目录权限 - Agent用来读写目录的权限</li>
-</ol>
-<h1 id="数据流模型"><a href="#数据流模型" class="headerlink" title="数据流模型"></a>数据流模型</h1><p><strong>Event是Flume定义的一个数据流传输的最小单元</strong>。Agent就是一个Flume的实例，本质是一个JVM进程，该JVM进程控制Event数据流从外部日志生产者那里传输到目的地（或者是下一个Agent）。</p>
-<h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><p><img src="https://flume.liyifeng.org/_images/UserGuide_image00.png"></p>
-<p>Agent就是Flume的一个部署实例，一个完整的Agent中包含了必须的三个组件Source、Channel和Sink。</p>
-<ul>
-<li><p>Source 数据的来源和方式</p>
-</li>
-<li><p>Channel 数据的缓冲池</p>
-</li>
-<li><p>Sink 数据输出的方式和目的地</p>
-</li>
-<li><p>Event 被flume收集的数据</p>
-</li>
-</ul>
-<blockquote>
-<p>当Source接收Event（Web Server）时，它将其存储到一个或多个channel。该channel是一个被动存储器（或者说叫存储池），可以存储Event直到它被Sink消耗。</p>
-<p>Agent中的source和sink与channel存取Event是异步的。</p>
-</blockquote>
-<p>可靠性</p>
-<blockquote>
-<p>Event会在每个Agent的Channel上进行缓存，随后Event将会传递到流中的下一个Agent或目的地（比如HDFS）。只有成功地发送到下一个Agent或目的地后Event才会从Channel中删除。这一步保证了Event数据流在Flume Agent中传输时端到端的可靠性。</p>
-<p>channel作用：1.保证数据的可靠传输的 2.数据流入和流出的异步执行</p>
-<p>Flume使用事务来保证Event的 <strong>可靠传输</strong>。Source和Sink对Channel提供的每个Event数据分别封装一个事务用于存储和恢复，这样就保证了数据流的集合在点对点之间的可靠传输。在多层架构的情况下，来自前一层的sink和来自下一层的Source 都会有事务在运行以确保数据安全地传输到下一层的Channel中。</p>
-</blockquote>
-<p>可恢复性</p>
-<blockquote>
-<p>Event数据会缓存在Channel中用来在失败的时候恢复出来。Flume支持保存在本地文件系统中的『文件channel』，也支持保存在内存中的『内存Channel』，『内存Channel』显然速度会更快，缺点是万一Agent挂掉『内存Channel』中缓存的数据也就丢失了。</p>
-</blockquote>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><blockquote>
-<p>下载地址：<a target="_blank" rel="noopener" href="https://www.apache.org/dyn/closer.lua/flume/1.11.0/apache-flume-1.11.0-bin.tar.gz">https://www.apache.org/dyn/closer.lua/flume/1.11.0/apache-flume-1.11.0-bin.tar.gz</a></p>
-</blockquote>
-<pre class="line-numbers language-config" data-language="config"><code class="language-config"># example.conf: 一个单节点的 Flume 实例配置
-
-# 配置Agent a1各个组件的名称
-a1.sources &#x3D; r1    #Agent a1 的source有一个，叫做r1
-a1.sinks &#x3D; k1      #Agent a1 的sink也有一个，叫做k1
-a1.channels &#x3D; c1   #Agent a1 的channel有一个，叫做c1
-
-# 配置Agent a1的source r1的属性
-a1.sources.r1.type &#x3D; netcat       #使用的是NetCat TCP Source，这里配的是别名，Flume内置的一些组件都是有别名的，没有别名填全限定类名
-a1.sources.r1.bind &#x3D; localhost    #NetCat TCP Source监听的hostname，这个是本机
-a1.sources.r1.port &#x3D; 44444        #监听的端口
-
-# 配置Agent a1的sink k1的属性
-a1.sinks.k1.type &#x3D; logger         # sink使用的是Logger Sink，这个配的也是别名
-
-# 配置Agent a1的channel c1的属性，channel是用来缓冲Event数据的
-a1.channels.c1.type &#x3D; memory                #channel的类型是内存channel，顾名思义这个channel是使用内存来缓冲数据
-a1.channels.c1.capacity &#x3D; 1000              #内存channel的容量大小是1000，注意这个容量不是越大越好，配置越大一旦Flume挂掉丢失的event也就越多
-a1.channels.c1.transactionCapacity &#x3D; 100    #source和sink从内存channel每次事务传输的event数量
-
-# 把source和sink绑定到channel上
-a1.sources.r1.channels &#x3D; c1       #与source r1绑定的channel有一个，叫做c1
-a1.sinks.k1.channel &#x3D; c1          #与sink k1绑定的channel有一个，叫做c1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="数据获取方式"><a href="#数据获取方式" class="headerlink" title="数据获取方式"></a>数据获取方式</h1><blockquote>
-<p>Flume支持多种从外部获取数据的方式。</p>
-</blockquote>
-<p>1.RPC</p>
-<p>2.执行命令</p>
-<p>3.网络流(Avro、Thrift、Syslog、Netcat）</p>
-<p>4.Spooling Directory Source（将监视这个目录中产生的新文件，并在新文件出现时从新文件中解析数据出来）</p>
-<h2 id="Spooling-Directory-Source"><a href="#Spooling-Directory-Source" class="headerlink" title="Spooling Directory Source"></a>Spooling Directory Source</h2><p>这个Source允许你把要收集的文件放入磁盘上的某个指定目录。它会将监视这个目录中产生的新文件，并在新文件出现时从新文件中解析数据出来。数据解析逻辑是可配置的。 在新文件被完全读入Channel之后默认会重命名该文件以示完成（也可以配置成读完后立即删除、也可以配置trackerDir来跟踪已经收集过的文件）。</p>
-<p>Spooling Directory Source是可靠的，即使Flume重新启动或被kill，也不会丢失数据。同时作为这种可靠性的代价，指定目录中的被收集的文件必须是不可变的、唯一命名的。Flume会自动检测避免这种情况发生，如果发现问题，则会抛出异常：</p>
-<ol>
-<li>如果文件在写入完成后又被再次写入新内容，Flume将向其日志文件（这是指Flume自己logs目录下的日志文件）打印错误并停止处理。</li>
-<li>如果在以后重新使用以前的文件名，Flume将向其日志文件打印错误并停止处理。</li>
-</ol>
-<p>为了避免上述问题，生成新文件的时候文件名加上时间戳是个不错的办法。</p>
-<p>尽管有这个Source的可靠性保证，但是仍然存在这样的情况，某些下游故障发生时会出现重复Event的情况。这与其他Flume组件提供的保证是一致的。</p>
-<table>
-<thead>
-<tr>
-<th align="left">属性名</th>
-<th align="left">默认值</th>
-<th align="left">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><strong>channels</strong></td>
-<td align="left">–</td>
-<td align="left">与Source绑定的channel，多个用空格分开</td>
-</tr>
-<tr>
-<td align="left"><strong>type</strong></td>
-<td align="left">–</td>
-<td align="left">组件类型，这个是： <code>spooldir</code>.</td>
-</tr>
-<tr>
-<td align="left"><strong>spoolDir</strong></td>
-<td align="left">–</td>
-<td align="left">Flume Source监控的文件夹目录，该目录下的文件会被Flume收集</td>
-</tr>
-<tr>
-<td align="left">fileSuffix</td>
-<td align="left">.COMPLETED</td>
-<td align="left">被Flume收集完成的文件被重命名的后缀。1.txt被Flume收集完成后会重命名为1.txt.COMPLETED</td>
-</tr>
-<tr>
-<td align="left">deletePolicy</td>
-<td align="left">never</td>
-<td align="left">是否删除已完成收集的文件，可选值: <code>never</code> 或 <code>immediate</code></td>
-</tr>
-<tr>
-<td align="left">fileHeader</td>
-<td align="left">false</td>
-<td align="left">是否添加文件的绝对路径名（绝对路径+文件名）到header中。</td>
-</tr>
-<tr>
-<td align="left">fileHeaderKey</td>
-<td align="left">file</td>
-<td align="left">添加绝对路径名到header里面所使用的key（配合上面的fileHeader一起使用）</td>
-</tr>
-<tr>
-<td align="left">basenameHeader</td>
-<td align="left">false</td>
-<td align="left">是否添加文件名（只是文件名，不包括路径）到header 中</td>
-</tr>
-<tr>
-<td align="left">basenameHeaderKey</td>
-<td align="left">basename</td>
-<td align="left">添加文件名到header里面所使用的key（配合上面的basenameHeader一起使用）</td>
-</tr>
-<tr>
-<td align="left">includePattern</td>
-<td align="left">^.*$</td>
-<td align="left">指定会被收集的文件名正则表达式，它跟下面的ignorePattern不冲突，可以一起使用。如果一个文件名同时被这两个正则匹配到，则会被忽略，换句话说ignorePattern的优先级更高</td>
-</tr>
-<tr>
-<td align="left">ignorePattern</td>
-<td align="left">^$</td>
-<td align="left">指定要忽略的文件名称正则表达式。它可以跟 <em>includePattern</em> 一起使用，如果一个文件被 <em>ignorePattern</em> 和 <em>includePattern</em> 两个正则都匹配到，这个文件会被忽略。</td>
-</tr>
-<tr>
-<td align="left">trackerDir</td>
-<td align="left">.flumespool</td>
-<td align="left">用于存储与文件处理相关的元数据的目录。如果配置的是相对目录地址，它会在spoolDir中开始创建</td>
-</tr>
-<tr>
-<td align="left">trackingPolicy</td>
-<td align="left">rename</td>
-<td align="left">这个参数定义了如何跟踪记录文件的读取进度，可选值有：<code>rename</code> 、 <code>tracker_dir</code> ，这个参数只有在 <em>deletePolicy</em> 设置为 <code>never</code> 的时候才生效。 当设置为 <code>rename</code> ，文件处理完成后，将根据 <em>fileSuffix</em> 参数的配置将其重命名。 当设置为 <code>tracker_dir</code> ，文件处理完成后不会被重命名或其他任何改动，会在 <em>trackerDir</em> 配置的目录中创建一个新的空文件，而这个空文件的文件名就是原文件 + <em>fileSuffix</em> 参数配置的后缀</td>
-</tr>
-<tr>
-<td align="left">consumeOrder</td>
-<td align="left">oldest</td>
-<td align="left">设定收集目录内文件的顺序。默认是“先来先走”（也就是最早生成的文件最先被收集），可选值有： <code>oldest</code> 、 <code>youngest</code> 和 <code>random</code> 。当使用oldest和youngest这两种选项的时候，Flume会扫描整个文件夹进行对比排序，当文件夹里面有大量的文件的时候可能会运行缓慢。 当使用random时候，如果一直在产生新的文件，有一部分老文件可能会很久才会被收集</td>
-</tr>
-<tr>
-<td align="left">pollDelay</td>
-<td align="left">500</td>
-<td align="left">Flume监视目录内新文件产生的时间间隔，单位：毫秒</td>
-</tr>
-<tr>
-<td align="left">recursiveDirectorySearch</td>
-<td align="left">false</td>
-<td align="left">是否收集子目录下的日志文件</td>
-</tr>
-<tr>
-<td align="left">maxBackoff</td>
-<td align="left">4000</td>
-<td align="left">等待写入channel的最长退避时间，如果channel已满实例启动时会自动设定一个很低的值，当遇到ChannelException异常时会自动以指数级增加这个超时时间，直到达到设定的这个最大值为止。</td>
-</tr>
-<tr>
-<td align="left">batchSize</td>
-<td align="left">100</td>
-<td align="left">每次批量传输到channel时的size大小</td>
-</tr>
-<tr>
-<td align="left">inputCharset</td>
-<td align="left">UTF-8</td>
-<td align="left">解析器读取文件时使用的编码（解析器会把所有文件当做文本读取）</td>
-</tr>
-<tr>
-<td align="left">decodeErrorPolicy</td>
-<td align="left"><code>FAIL</code></td>
-<td align="left">当从文件读取时遇到不可解析的字符时如何处理。 <code>FAIL</code> ：抛出异常，解析文件失败； <code>REPLACE</code> ：替换掉这些无法解析的字符，通常是用U+FFFD； <code>IGNORE</code> ：忽略无法解析的字符。</td>
-</tr>
-<tr>
-<td align="left">deserializer</td>
-<td align="left"><code>LINE</code></td>
-<td align="left">指定一个把文件中的数据行解析成Event的解析器。默认是把每一行当做一个Event进行解析，所有解析器必须实现EventDeserializer.Builder接口</td>
-</tr>
-<tr>
-<td align="left">deserializer.*</td>
-<td align="left"></td>
-<td align="left">解析器的相关属性，根据解析器不同而不同</td>
-</tr>
-<tr>
-<td align="left">bufferMaxLines</td>
-<td align="left">–</td>
-<td align="left">（已废弃）</td>
-</tr>
-<tr>
-<td align="left">bufferMaxLineLength</td>
-<td align="left">5000</td>
-<td align="left">（已废弃）每行的最大长度。改用 <em>deserializer.maxLineLength</em> 代替</td>
-</tr>
-<tr>
-<td align="left">selector.type</td>
-<td align="left">replicating</td>
-<td align="left">可选值：<code>replicating</code> 或 <code>multiplexing</code> ，分别表示： 复制、多路复用</td>
-</tr>
-<tr>
-<td align="left">selector.*</td>
-<td align="left"></td>
-<td align="left">channel选择器的相关属性，具体属性根据设定的 <em>selector.type</em> 值不同而不同</td>
-</tr>
-<tr>
-<td align="left">interceptors</td>
-<td align="left">–</td>
-<td align="left">该source所使用的拦截器，多个用空格分开</td>
-</tr>
-<tr>
-<td align="left">interceptors.*</td>
-<td align="left"></td>
-<td align="left">拦截器相关的属性配置</td>
-</tr>
-</tbody></table>
-<p>配置范例：</p>
-<pre class="line-numbers language-none"><code class="language-none">a1.channels &#x3D; ch-1
-a1.sources &#x3D; src-1
-
-a1.sources.src-1.type &#x3D; spooldir
-a1.sources.src-1.channels &#x3D; ch-1
-a1.sources.src-1.spoolDir &#x3D; &#x2F;var&#x2F;log&#x2F;apache&#x2F;flumeSpool
-a1.sources.src-1.fileHeader &#x3D; true<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="Kafka-Sink"><a href="#Kafka-Sink" class="headerlink" title="Kafka Sink"></a>Kafka Sink</h2><p>这个 Sink 可以把数据发送到 <a target="_blank" rel="noopener" href="http://kafka.apache.org/">Kafka</a> topic上。目的就是将 Flume 与 Kafka 集成，以便基于拉的处理系统可以处理来自各种 Flume Source 的数据。</p>
-<p>目前支持Kafka 0.10.1.0以上版本，最高已经在Kafka 2.0.1版本上完成了测试，这已经是Flume 1.9发行时候的最高的Kafka版本了。</p>
-<table>
-<thead>
-<tr>
-<th align="left">属性</th>
-<th align="left">默认值</th>
-<th align="left">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><strong>type</strong></td>
-<td align="left">–</td>
-<td align="left">组件类型，这个是： <code>org.apache.flume.sink.kafka.KafkaSink</code></td>
-</tr>
-<tr>
-<td align="left"><strong>kafka.bootstrap.servers</strong></td>
-<td align="left">–</td>
-<td align="left">Kafka Sink 使用的 Kafka 集群的实例列表，可以是实例的部分列表。但是更建议至少两个用于高可用（HA）支持。格式为 hostname:port，多个用逗号分隔</td>
-</tr>
-<tr>
-<td align="left">kafka.topic</td>
-<td align="left">default-flume-topic</td>
-<td align="left">用于发布消息的 Kafka topic 名称 。如果这个参数配置了值，消息就会被发布到这个 topic 上。如果Event header中包含叫做“topic”的属性， Event 就会被发布到 header 中指定的 topic 上，而不会发布到 <em>kafka.topic</em> 指定的 topic 上。支持任意的 header 属性动态替换， 比如%{lyf}就会被 Event header 中叫做“lyf”的属性值替换（如果使用了这种动态替换，建议将 Kafka 的 <em>auto.create.topics.enable</em> 属性设置为 <code>true</code> ）。</td>
-</tr>
-<tr>
-<td align="left">flumeBatchSize</td>
-<td align="left">100</td>
-<td align="left">一批中要处理的消息数。设置较大的值可以提高吞吐量，但是会增加延迟。</td>
-</tr>
-<tr>
-<td align="left">kafka.producer.acks</td>
-<td align="left">1</td>
-<td align="left">在考虑成功写入之前，要有多少个副本必须确认消息。可选值， <code>0</code> ：（从不等待确认）； <code>1</code> ：只等待leader确认； <code>-1</code> ：等待所有副本确认。 设置为-1可以避免某些情况 leader 实例失败的情况下丢失数据。</td>
-</tr>
-<tr>
-<td align="left">useFlumeEventFormat</td>
-<td align="left">false</td>
-<td align="left">默认情况下，会直接将 Event body 的字节数组作为消息内容直接发送到 Kafka topic 。如果设置为true，会以 Flume Avro 二进制格式进行读取。 与 Kafka Source 上的同名参数或者 Kafka channel 的 <em>parseAsFlumeEvent</em> 参数相关联，这样以对象的形式处理能使生成端发送过来的 Event header 信息得以保留。</td>
-</tr>
-<tr>
-<td align="left">defaultPartitionId</td>
-<td align="left">–</td>
-<td align="left">指定所有 Event 将要发送到的 Kafka 分区ID，除非被 <em>partitionIdHeader</em> 参数的配置覆盖。 默认情况下，如果没有设置此参数，Event 会被 Kafka 生产者的分发程序分发，包括 key（如果指定了的话），或者被 <em>kafka.partitioner.class</em> 指定的分发程序来分发</td>
-</tr>
-<tr>
-<td align="left">partitionIdHeader</td>
-<td align="left">–</td>
-<td align="left">设置后，Sink将使用 Event header 中使用此属性的值命名的字段的值，并将消息发送到 topic 的指定分区。 如果该值表示无效分区，则将抛出 EventDeliveryException。 如果存在标头值，则此设置将覆盖 <em>defaultPartitionId</em> 。假如这个参数设置为“lyf”，这个 Sink 就会读取 Event header 中的 lyf 属性的值，用该值作为分区ID</td>
-</tr>
-<tr>
-<td align="left">allowTopicOverride</td>
-<td align="left">true</td>
-<td align="left">如果设置为 <code>true</code>，会读取 Event header 中的名为 <em>topicHeader</em> 的的属性值，用它作为目标 topic。</td>
-</tr>
-<tr>
-<td align="left">topicHeader</td>
-<td align="left">topic</td>
-<td align="left">与上面的 <em>allowTopicOverride</em> 一起使用，<em>allowTopicOverride</em> 会用当前参数配置的名字从 Event header 获取该属性的值，来作为目标 topic 名称</td>
-</tr>
-<tr>
-<td align="left">kafka.producer.security.protocol</td>
-<td align="left">PLAINTEXT</td>
-<td align="left">设置使用哪种安全协议写入 Kafka。可选值：<code>SASL_PLAINTEXT</code> 、 <code>SASL_SSL</code> 和 <code>SSL</code>， 有关安全设置的其他信息，请参见下文。</td>
-</tr>
-<tr>
-<td align="left"><em>more producer security props</em></td>
-<td align="left"></td>
-<td align="left">如果使用了 <code>SASL_PLAINTEXT</code> 、 <code>SASL_SSL</code> 或 <code>SSL</code> 等安全协议，参考 <a target="_blank" rel="noopener" href="http://kafka.apache.org/documentation.html#security">Kafka security</a> 来为生产者增加安全相关的参数配置</td>
-</tr>
-<tr>
-<td align="left">Other Kafka Producer Properties</td>
-<td align="left">–</td>
-<td align="left">其他一些 Kafka 生产者配置参数。任何 Kafka 支持的生产者参数都可以使用。唯一的要求是使用“kafka.producer.”这个前缀来配置参数，比如：<em>kafka.producer.linger.ms</em></td>
-</tr>
-</tbody></table>
-<p>注解</p>
-<p>Kafka Sink使用 Event header 中的 topic 和其他关键属性将 Event 发送到 Kafka。 如果 header 中存在 topic，则会将Event发送到该特定 topic，从而覆盖为Sink配置的 topic。 如果 header 中存在指定分区相关的参数，则Kafka将使用相关参数发送到指定分区。 header中特定参数相同的 Event 将被发送到同一分区。 如果为空，则将 Event 会被发送到随机分区。 Kafka Sink 还提供了key.deserializer（org.apache.kafka.common.serialization.StringSerializer） 和value.deserializer（org.apache.kafka.common.serialization.ByteArraySerializer）的默认值，不建议修改这些参数。</p>
-<p>弃用的一些参数：</p>
-<table>
-<thead>
-<tr>
-<th align="left">属性</th>
-<th align="left">默认值</th>
-<th align="left">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">brokerList</td>
-<td align="left">–</td>
-<td align="left">改用 kafka.bootstrap.servers</td>
-</tr>
-<tr>
-<td align="left">topic</td>
-<td align="left">default-flume-topic</td>
-<td align="left">改用 kafka.topic</td>
-</tr>
-<tr>
-<td align="left">batchSize</td>
-<td align="left">100</td>
-<td align="left">改用 kafka.flumeBatchSize</td>
-</tr>
-<tr>
-<td align="left">requiredAcks</td>
-<td align="left">1</td>
-<td align="left">改用 kafka.producer.acks</td>
-</tr>
-</tbody></table>
-<p>下面给出 Kafka Sink 的配置示例。Kafka 生产者的属性都是以 kafka.producer 为前缀。Kafka 生产者的属性不限于下面示例的几个。此外，可以在此处包含您的自定义属性，并通过作为方法参数传入的Flume Context对象在预处理器中访问它们。</p>
-<pre class="line-numbers language-none"><code class="language-none">a1.sinks.k1.channel &#x3D; c1
-a1.sinks.k1.type &#x3D; org.apache.flume.sink.kafka.KafkaSink
-a1.sinks.k1.kafka.topic &#x3D; mytopic
-a1.sinks.k1.kafka.bootstrap.servers &#x3D; localhost:9092
-a1.sinks.k1.kafka.flumeBatchSize &#x3D; 20
-a1.sinks.k1.kafka.producer.acks &#x3D; 1
-a1.sinks.k1.kafka.producer.linger.ms &#x3D; 1
-a1.sinks.k1.kafka.producer.compression.type &#x3D; snappy<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="Flume-Channels"><a href="#Flume-Channels" class="headerlink" title="Flume Channels"></a>Flume Channels</h2><p>channel 是在 Agent 上暂存 Event 的缓冲池。 Event由source添加，由sink消费后删除。</p>
-<h2 id="Memory-Channel"><a href="#Memory-Channel" class="headerlink" title="Memory Channel"></a>Memory Channel</h2><p>内存 channel 是把 Event 队列存储到内存上，队列的最大数量就是 <em>capacity</em> 的设定值。它非常适合对吞吐量有较高要求的场景，但也是有代价的，当发生故障的时候会丢失当时内存中的所有 Event。 必需的参数已用 <strong>粗体</strong> 标明。</p>
-<table>
-<thead>
-<tr>
-<th align="left">属性</th>
-<th align="left">默认值</th>
-<th align="left">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><strong>type</strong></td>
-<td align="left">–</td>
-<td align="left">组件类型，这个是： <code>memory</code></td>
-</tr>
-<tr>
-<td align="left">capacity</td>
-<td align="left">100</td>
-<td align="left">内存中存储 Event 的最大数</td>
-</tr>
-<tr>
-<td align="left">transactionCapacity</td>
-<td align="left">100</td>
-<td align="left">source 或者 sink 每个事务中存取 Event 的操作数量（不能比 <em>capacity</em> 大）</td>
-</tr>
-<tr>
-<td align="left">keep-alive</td>
-<td align="left">3</td>
-<td align="left">添加或删除一个 Event 的超时时间（秒）</td>
-</tr>
-<tr>
-<td align="left">byteCapacityBufferPercentage</td>
-<td align="left">20</td>
-<td align="left">指定 Event header 所占空间大小与 channel 中所有 Event 的总大小之间的百分比</td>
-</tr>
-<tr>
-<td align="left">byteCapacity</td>
-<td align="left"></td>
-<td align="left">Channel 中最大允许存储所有 Event 的总字节数（bytes）。默认情况下会使用JVM可用内存的80%作为最大可用内存（就是JVM启动参数里面配置的-Xmx的值）。 计算总字节时只计算 Event 的主体，这也是提供 <em>byteCapacityBufferPercentage</em> 配置参数的原因。注意，当你在一个 Agent 里面有多个内存 channel 的时候， 而且碰巧这些 channel 存储相同的物理 Event（例如：这些 channel 通过复制机制（ <a target="_blank" rel="noopener" href="https://flume.liyifeng.org/#id43">复制选择器</a> ）接收同一个 source 中的 Event）， 这时候这些 Event 占用的空间是累加的，并不会只计算一次。如果这个值设置为0（不限制），就会达到200G左右的内部硬件限制。</td>
-</tr>
-</tbody></table>
-<p>提示</p>
-<p>举2个例子来帮助理解最后两个参数吧：</p>
-<p>两个例子都有共同的前提，假设JVM最大的可用内存是100M（或者说JVM启动时指定了-Xmx&#x3D;100m）。</p>
-<p>例子1： <em>byteCapacityBufferPercentage</em> 设置为20， <em>byteCapacity</em> 设置为52428800（就是50M），此时内存中所有 Event body 的总大小就被限制为50M *（1-20%）&#x3D;40M，内存channel可用内存是50M。</p>
-<p>例子2： <em>byteCapacityBufferPercentage</em> 设置为10， <em>byteCapacity</em> 不设置，此时内存中所有 Event body 的总大小就被限制为100M * 80% *（1-10%）&#x3D;72M，内存channel可用内存是80M。</p>
-<p>配置范例：</p>
-<pre class="line-numbers language-none"><code class="language-none">a1.channels &#x3D; c1
-a1.channels.c1.type &#x3D; memory
-a1.channels.c1.capacity &#x3D; 10000
-a1.channels.c1.transactionCapacity &#x3D; 10000
-a1.channels.c1.byteCapacityBufferPercentage &#x3D; 20
-a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Redis%E9%9D%A2%E8%AF%95%E9%A2%98.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Redis%E9%9D%A2%E8%AF%95%E9%A2%98.html" class="post-title-link" itemprop="url">redis面试题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="什么是Redis，Redis有哪些特点？"><a href="#什么是Redis，Redis有哪些特点？" class="headerlink" title="什么是Redis，Redis有哪些特点？"></a>什么是Redis，Redis有哪些特点？</h1><p>Redis全称为：Remote Dictionary Server（远程数据服务），Redis是一种支持key-value等多种数据结构的存储系统。可用于缓存，事件发布或订阅，高速队列等场景。支持网络，提供字符串，哈希，列表，队列，集合结构直接存取，基于内存，可持久化。</p>
-<p><strong>特点1：丰富的数据类型</strong></p>
-<p>我们知道很多数据库只能处理一种数据结构：</p>
-<ul>
-<li>传统SQL数据库处理二维关系数据；</li>
-<li>MemCached数据库，键和值都是字符串；</li>
-<li>文档数据库（MongoDB）是由Json&#x2F;Bson组成的文档。</li>
-</ul>
-<p>当然不是他们这些数据库不好，而是一旦数据库提供数据结构不适合去做某件事情的话，程序写起来就非常麻烦和不自然。</p>
-<p>Redis虽然也是键值对数据库，但是和Memcached不同的是：Redis的值不仅可以是字符串，它还可以是其他五中数据机构中的任意一种。通过选用不同的数据结构，用户可以使用Redis解决各种各样的问题，使用Redis，你碰到一个问题，首先会想到是选用那种数据结构把哪些功能问题解决掉，有了多样的数据结构，方便你解决问题。</p>
-<p><strong>特点2：内存存储</strong></p>
-<p>数据库有两种：一种是硬盘数据库，一种是内存数据库。</p>
-<p>硬盘数据库是把值存储在硬盘上，在内存中就存储一下索引，当硬盘数据库想访问硬盘的值时，它先在内存里找到索引，然后再找值。问题在于，在读取和写入硬盘的时候，如果读写比较多的时候，它会把硬盘的IO功能堵死。</p>
-<p>内存存储是讲所有的数据都存储在内存里面，数据读取和写入速度非常快。</p>
-<p><strong>特点3：持久化功能</strong></p>
-<p>将数据存储在内存里面的数据保存到硬盘中，保证数据安全，方便进行数据备份和恢复。</p>
-<h1 id="Redis有哪些数据结构？"><a href="#Redis有哪些数据结构？" class="headerlink" title="Redis有哪些数据结构？"></a>Redis有哪些数据结构？</h1><p>Redis是key-value数据库，key的类型只能是String，但是value的数据类型就比较丰富了，主要包括五种：</p>
-<ul>
-<li>String</li>
-<li>Hash</li>
-<li>List</li>
-<li>Set</li>
-<li>Sorted Set</li>
-</ul>
-<div align="center">  <img src="https://cdn.jsdelivr.net/gh/SmileLionCoder/assets@main/202010/20201018222748.png" width="300"> </div><br>
-
-<p><strong>（1）String字符串</strong></p>
-<p>语法</p>
-<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">SET KEY_NAME VALUE<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>string类型是二进制安全的。意思是redis的string可以包含任何数据。比如jpg图片或者序列化的对象。<br>string类型是Redis最基本的数据类型，一个键最大能存储512MB。</p>
-<p><strong>（2）Hash哈希</strong></p>
-<p>语法</p>
-<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">HSET KEY_NAME FIELD VALUE<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>Redis hash 是一个键值(key&#x3D;&gt;value)对集合。<br>Redis hash是一个string类型的field和value的映射表，hash特别适合用于存储对象。</p>
-<p><strong>（3）List列表</strong></p>
-<p>语法</p>
-<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">//在 key 对应 list 的头部添加字符串元素
-LPUSH KEY_NAME VALUE1.. VALUEN
-//在 key 对应 list 的尾部添加字符串元素
-RPUSH KEY_NAME VALUE1..VALUEN
-//对应 list 中删除 count 个和 value 相同的元素
-LREM KEY_NAME COUNT VALUE
-//返回 key 对应 list 的长度
-LLEN KEY_NAME <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>Redis 列表是简单的字符串列表，按照插入顺序排序。<br>可以添加一个元素到列表的头部（左边）或者尾部（右边）</p>
-<p><strong>（4）Set集合</strong></p>
-<p>语法</p>
-<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">SADD KEY_NAME VALUE1...VALUEn<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>Redis的Set是string类型的无序集合。<br>集合是通过哈希表实现的，所以添加，删除，查找的复杂度都是O(1)。</p>
-<p><strong>（5）Sorted Set有序集合</strong></p>
-<p>语法</p>
-<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">ZADD KEY_NAME SCORE1 VALUE1.. SCOREN VALUEN<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>Redis zset 和 set 一样也是string类型元素的集合,且不允许重复的成员。<br>不同的是每个元素都会关联一个double类型的分数。</p>
-<p>redis正是通过分数来为集合中的成员进行从小到大的排序。</p>
-<p>zset的成员是唯一的,但分数(score)却可以重复。</p>
-<h1 id="一个字符串类型的值能存储最大容量是多少？"><a href="#一个字符串类型的值能存储最大容量是多少？" class="headerlink" title="一个字符串类型的值能存储最大容量是多少？"></a>一个字符串类型的值能存储最大容量是多少？</h1><p>查询官方文档（<a target="_blank" rel="noopener" href="https://redis.io/topics/data-types">https://redis.io/topics/data-types</a>）可以看到String类型的value值最多支持的长度为512M，所以正确的答案是512M。</p>
-<div align="center">  <img src="https://cdn.jsdelivr.net/gh/SmileLionCoder/assets@main/202010/20201018222920.jpeg" width> </div><br>
-
-<h1 id="能说一下Redis每种数据结构的使用场景吗？"><a href="#能说一下Redis每种数据结构的使用场景吗？" class="headerlink" title="能说一下Redis每种数据结构的使用场景吗？"></a>能说一下Redis每种数据结构的使用场景吗？</h1><p><strong>（1）String的使用场景</strong></p>
-<p>字符串类型的使用场景：信息缓存、计数器、分布式锁等等。</p>
-<p>常用命令：get&#x2F;set&#x2F;del&#x2F;incr&#x2F;decr&#x2F;incrby&#x2F;decrby</p>
-<p><strong>实战场景1：记录每一个用户的访问次数，或者记录每一个商品的浏览次数</strong></p>
-<p>方案：</p>
-<p>常用键名： userid:pageview 或者 pageview:userid，如果一个用户的id为123，那对应的redis key就为pageview:123，value就为用户的访问次数，增加次数可以使用命令：incr。</p>
-<p>使用理由：每一个用户访问次数或者商品浏览次数的修改是很频繁的，如果使用mysql这种文件系统频繁修改会造成mysql压力，效率也低。而使用redis的好处有二：使用内存，很快；单线程，所以无竞争，数据不会被改乱。</p>
-<p><strong>实战场景2：缓存频繁读取，但是不常修改的信息，如用户信息，视频信息</strong></p>
-<p>方案：</p>
-<p>业务逻辑上：先从redis读取，有值就从redis读取，没有则从mysql读取，并写一份到redis中作为缓存，注意要设置过期时间。</p>
-<p>键值设计上：</p>
-<p>直接将用户一条mysql记录做序列化(通常序列化为json)作为值，userInfo:userid 作为key，键名如：userInfo:123，value存储对应用户信息的json串。如 key为：”user:id :name:1”,  value为”{“name”:”leijia”,”age”:18}”。</p>
-<p><strong>实战场景3：限定某个ip特定时间内的访问次数</strong></p>
-<p>方案：</p>
-<p>用key记录IP，value记录访问次数，同时key的过期时间设置为60秒，如果key过期了则重新设置，否则进行判断，当一分钟内访问超过100次，则禁止访问。</p>
-<p><strong>实战场景4:分布式session</strong></p>
-<p>我们知道session是以文件的形式保存在服务器中的；如果你的应用做了负载均衡，将网站的项目放在多个服务器上，当用户在服务器A上进行登陆，session文件会写在A服务器；当用户跳转页面时，请求被分配到B服务器上的时候，就找不到这个session文件，用户就要重新登陆。</p>
-<p>如果想要多个服务器共享一个session，可以将session存放在redis中，redis可以独立于所有负载均衡服务器，也可以放在其中一台负载均衡服务器上；但是所有应用所在的服务器连接的都是同一个redis服务器。</p>
-<p><strong>（2）Hash的使用场景</strong></p>
-<p>以购物车为例子，用户id设置为key，那么购物车里所有的商品就是用户key对应的值了，每个商品有id和购买数量，对应hash的结构就是商品id为field，商品数量为value。如图所示：</p>
-<div align="center">  <img src="https://cdn.jsdelivr.net/gh/SmileLionCoder/assets@main/202010/20201018223018.jpeg" width="200"> </div><br>
-
-<p>如果将商品id和商品数量序列化成json字符串，那么也可以用上面讲的string类型存储。下面对比一下这两种数据结构：</p>
-<table>
-<thead>
-<tr>
-<th align="left">对比项</th>
-<th align="left">string（json）</th>
-<th align="left">hash</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">效率</td>
-<td align="left">很高</td>
-<td align="left">高</td>
-</tr>
-<tr>
-<td align="left">容量</td>
-<td align="left">低</td>
-<td align="left">低</td>
-</tr>
-<tr>
-<td align="left">灵活性</td>
-<td align="left"><strong>低</strong></td>
-<td align="left">高</td>
-</tr>
-<tr>
-<td align="left">序列化</td>
-<td align="left">简单</td>
-<td align="left"><strong>复杂</strong></td>
-</tr>
-</tbody></table>
-<p>总结一下：</p>
-<p>当对象的某个属性需要频繁修改时，不适合用string+json，因为它不够灵活，每次修改都需要重新将整个对象序列化并赋值；如果使用hash类型，则可以针对某个属性单独修改，没有序列化，也不需要修改整个对象。比如，商品的价格、销量、关注数、评价数等可能经常发生变化的属性，就适合存储在hash类型里。</p>
-<p><strong>（3）List的使用场景</strong></p>
-<p>列表本质是一个有序的，元素可重复的队列。</p>
-<p><strong>实战场景：定时排行榜</strong></p>
-<p>list类型的lrange命令可以分页查看队列中的数据。可将每隔一段时间计算一次的排行榜存储在list类型中，如QQ音乐内地排行榜，每周计算一次存储再list类型中，访问接口时通过page和size分页转化成lrange命令获取排行榜数据。</p>
-<div align="center">  <img src="https://cdn.jsdelivr.net/gh/SmileLionCoder/assets@main/202010/20201018223052.jpeg" width="200"> </div><br>
-
-<p>但是，并不是所有的排行榜都能用list类型实现，只有定时计算的排行榜才适合使用list类型存储，与定时计算的排行榜相对应的是实时计算的排行榜，list类型不能支持实时计算的排行榜，下面介绍有序集合sorted set的应用场景时会详细介绍实时计算的排行榜的实现。</p>
-<p><strong>（4）Set的使用场景</strong></p>
-<p>集合的特点是无序性和确定性（不重复）。</p>
-<p><strong>实战场景：收藏夹</strong></p>
-<p>例如QQ音乐中如果你喜欢一首歌，点个『喜欢』就会将歌曲放到个人收藏夹中，每一个用户做一个收藏的集合，每个收藏的集合存放用户收藏过的歌曲id。</p>
-<p>key为用户id，value为歌曲id的集合。</p>
-<div align="center">  <img src="https://cdn.jsdelivr.net/gh/SmileLionCoder/assets@main/202010/20201018223310.jpeg" width="200"> </div><br>
-
-<p><strong>（5）Sorted Set的使用场景</strong></p>
-<p>有序集合的特点是有序，无重复值。与set不同的是sorted set每个元素都会关联一个score属性，redis正是通过score来为集合中的成员进行从小到大的排序。</p>
-<p><strong>实战场景：实时排行榜</strong></p>
-<p>QQ音乐中有多种实时榜单，比如飙升榜、热歌榜、新歌榜，可以用redis key存储榜单类型，score为点击量，value为歌曲id，用户每点击一首歌曲会更新redis数据，sorted set会依据score即点击量将歌曲id排序。</p>
-<div align="center">  <img src="https://cdn.jsdelivr.net/gh/SmileLionCoder/assets@main/202010/20201018223348.jpeg" width="200"> </div><br>
-
-<h1 id="Redis如何做持久化的？能说一下RDB和AOF的实现原理吗？"><a href="#Redis如何做持久化的？能说一下RDB和AOF的实现原理吗？" class="headerlink" title="Redis如何做持久化的？能说一下RDB和AOF的实现原理吗？"></a>Redis如何做持久化的？能说一下RDB和AOF的实现原理吗？</h1><p><strong>什么是持久化？</strong></p>
-<p>持久化（Persistence），即把数据（如内存中的对象）保存到可永久保存的存储设备中（如磁盘）。持久化的主要应用是将内存中的对象存储在数据库中，或者存储在磁盘文件中、XML数据文件中等等。</p>
-<div align="center">  <img src="https://cdn.jsdelivr.net/gh/SmileLionCoder/assets@main/202010/20201018223421.png" width> </div><br>
-
-<p>还可以从如下两个层面简单的理解持久化 ：</p>
-<ul>
-<li>应用层：如果关闭(shutdown)你的应用然后重新启动则先前的数据依然存在。</li>
-<li>系统层：如果关闭(shutdown)你的系统（电脑）然后重新启动则先前的数据依然存在。</li>
-</ul>
-<p><strong>Redis为什么要持久化？</strong></p>
-<p>Redis是内存数据库，为了保证效率所有的操作都是在内存中完成。数据都是缓存在内存中，当你重启系统或者关闭系统，之前缓存在内存中的数据都会丢失再也不能找回。因此为了避免这种情况，Redis需要实现持久化将内存中的数据存储起来。</p>
-<p><strong>Redis如何实现持久化？</strong></p>
-<p>Redis官方提供了不同级别的持久化方式：</p>
-<ul>
-<li>RDB持久化：能够在指定的时间间隔能对你的数据进行快照存储。</li>
-<li>AOF持久化：记录每次对服务器写的操作，当服务器重启的时候会重新执行这些命令来恢复原始的数据，AOF命令以redis协议追加保存每次写的操作到文件末尾。Redis还能对AOF文件进行后台重写，使得AOF文件的体积不至于过大。</li>
-<li>不使用持久化：如果你只希望你的数据在服务器运行的时候存在，你也可以选择不使用任何持久化方式。</li>
-<li>同时开启RDB和AOF：你也可以同时开启两种持久化方式，在这种情况下当redis重启的时候会优先载入AOF文件来恢复原始的数据，因为在通常情况下AOF文件保存的数据集要比RDB文件保存的数据集要完整。</li>
-</ul>
-<p>这么多持久化方式我们应该怎么选？在选择之前我们需要搞清楚每种持久化方式的区别以及各自的优劣势。</p>
-<h2 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h2><p>RDB(Redis Database)持久化是把当前内存数据生成快照保存到硬盘的过程，触发RDB持久化过程分为<strong>手动触发</strong>和<strong>自动触发</strong>。</p>
-<p>（1）手动触发</p>
-<p>手动触发对应save命令，会阻塞当前Redis服务器，直到RDB过程完成为止，对于内存比较大的实例会造成长时间阻塞，线上环境不建议使用。</p>
-<p>（2）自动触发</p>
-<p>自动触发对应bgsave命令，Redis进程执行fork操作创建子进程，RDB持久化过程由子进程负责，完成后自动结束。阻塞只发生在fork阶段，一般时间很短。</p>
-<p>在redis.conf配置文件中可以配置：</p>
-<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">save &lt;seconds> &lt;changes><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>表示xx秒内数据修改xx次时自动触发bgsave。<br>如果想关闭自动触发，可以在save命令后面加一个空串，即：</p>
-<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">save ""<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>还有其他常见可以触发bgsave，如：</p>
-<ul>
-<li>如果从节点执行全量复制操作，主节点自动执行bgsave生成RDB文件并发送给从节点。</li>
-<li>默认情况下执行shutdown命令时，如果没有开启AOF持久化功能则 自动执行bgsave。</li>
-</ul>
-<p><strong>bgsave工作机制</strong></p>
-<div align="center">  <img src="https://cdn.jsdelivr.net/gh/SmileLionCoder/assets@main/202010/20201018223529.png" width="300"> </div><br>
-
-<p>（1）执行bgsave命令，Redis父进程判断当前是否存在正在执行的子进 程，如RDB&#x2F;AOF子进程，如果存在，bgsave命令直接返回。</p>
-<p>（2）父进程执行fork操作创建子进程，fork操作过程中父进程会阻塞，通 过info stats命令查看latest_fork_usec选项，可以获取最近一个fork操作的耗时，单位为微秒</p>
-<p>（3）父进程fork完成后，bgsave命令返回“Background saving started”信息并不再阻塞父进程，可以继续响应其他命令。</p>
-<p>（4）子进程创建RDB文件，根据父进程内存生成临时快照文件，完成后对原有文件进行原子替换。执行lastsave命令可以获取最后一次生成RDB的 时间，对应info统计的rdb_last_save_time选项。</p>
-<p>（5）进程发送信号给父进程表示完成，父进程更新统计信息，具体见 info Persistence下的rdb_*相关选项。</p>
-<p>– RDB持久化完 –</p>
-<h2 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h2><p>AOF（append only file）持久化：以独立日志的方式记录每次写命令， 重启时再重新执行AOF文件中的命令达到恢复数据的目的。AOF的主要作用是解决了数据持久化的实时性，目前已经是Redis持久化的主流方式。</p>
-<p><strong>AOF持久化工作机制</strong></p>
-<p>开启AOF功能需要配置：appendonly yes，默认不开启。</p>
-<p>AOF文件名 通过appendfilename配置设置，默认文件名是appendonly.aof。保存路径同 RDB持久化方式一致，通过dir配置指定。</p>
-<p>AOF的工作流程操作：命令写入 （append）、文件同步（sync）、文件重写（rewrite）、重启加载 （load）。</p>
-<div align="center">  <img src="https://cdn.jsdelivr.net/gh/SmileLionCoder/assets@main/202010/20201018223557.png" width="200"> </div><br>
-
-<p>（1）所有的写入命令会追加到aof_buf（缓冲区）中。</p>
-<p>（2）AOF缓冲区根据对应的策略向硬盘做同步操作。</p>
-<p>AOF为什么把命令追加到aof_buf中？Redis使用单线程响应命令，如果每次写AOF文件命令都直接追加到硬盘，那么性能完全取决于当前硬盘负载。先写入缓冲区aof_buf中，还有另一个好处，Redis可以提供多种缓冲区同步硬盘的策略，在性能和安全性方面做出平衡。</p>
-<p>（3）随着AOF文件越来越大，需要定期对AOF文件进行重写，达到压缩的目的。</p>
-<p>（4）当Redis服务器重启时，可以加载AOF文件进行数据恢复。</p>
-<p><strong>AOF重写（rewrite）机制</strong></p>
-<p>重写的目的：</p>
-<ul>
-<li>减小AOF文件占用空间；</li>
-<li>更小的AOF 文件可以更快地被Redis加载恢复。</li>
-</ul>
-<p>AOF重写可以分为手动触发和自动触发：</p>
-<ul>
-<li>手动触发：直接调用bgrewriteaof命令。</li>
-<li>自动触发：根据auto-aof-rewrite-min-size和auto-aof-rewrite-percentage参数确定自动触发时机。</li>
-</ul>
-<p>auto-aof-rewrite-min-size：表示运行AOF重写时文件最小体积，默认 为64MB。</p>
-<p>auto-aof-rewrite-percentage：代表当前AOF文件空间 （aof_current_size）和上一次重写后AOF文件空间（aof_base_size）的比值。</p>
-<p>自动触发时机</p>
-<p>当aof_current_size&gt;auto-aof-rewrite-minsize 并且（aof_current_size-aof_base_size）&#x2F;aof_base_size&gt;&#x3D;auto-aof-rewritepercentage。</p>
-<p>其中aof_current_size和aof_base_size可以在info Persistence统计信息中查看。</p>
-<div align="center">  <img src="https://cdn.jsdelivr.net/gh/SmileLionCoder/assets@main/202010/20201018223632.png" width="300"> </div><br>
-
-<p>AOF文件重写后为什么会变小？</p>
-<p>（1）旧的AOF文件含有无效的命令，如：del key1， hdel key2等。重写只保留最终数据的写入命令。</p>
-<p>（2）多条命令可以合并，如lpush list a，lpush list b，lpush list c可以直接转化为lpush list a b c。</p>
-<p><strong>AOF文件数据恢复</strong></p>
-<div align="center">  <img src="https://cdn.jsdelivr.net/gh/SmileLionCoder/assets@main/202010/20201018223700.png" width="300"> </div><br>
-
-<p>数据恢复流程说明：</p>
-<p>（1）AOF持久化开启且存在AOF文件时，优先加载AOF文件。</p>
-<p>（2）AOF关闭或者AOF文件不存在时，加载RDB文件。</p>
-<p>（3）加载AOF&#x2F;RDB文件成功后，Redis启动成功。</p>
-<p>（4）AOF&#x2F;RDB文件存在错误时，Redis启动失败并打印错误信息。</p>
-<p>– AOF持久化完 –</p>
-<h2 id="RDB和AOF的优缺点"><a href="#RDB和AOF的优缺点" class="headerlink" title="RDB和AOF的优缺点"></a>RDB和AOF的优缺点</h2><p><strong>RDB优点</strong></p>
-<ul>
-<li>RDB 是一个非常紧凑的文件,它保存了某个时间点的数据集,非常适用于数据集的备份,比如你可以在每个小时报保存一下过去24小时内的数据,同时每天保存过去30天的数据,这样即使出了问题你也可以根据需求恢复到不同版本的数据集。</li>
-<li>RDB 是一个紧凑的单一文件,很方便传送到另一个远端数据中心，非常适用于灾难恢复。</li>
-<li>RDB 在保存 RDB 文件时父进程唯一需要做的就是 fork 出一个子进程,接下来的工作全部由子进程来做，父进程不需要再做其他 IO 操作，所以 RDB 持久化方式可以最大化 Redis 的性能。</li>
-<li>与AOF相比,在恢复大的数据集的时候，RDB 方式会更快一些。</li>
-</ul>
-<p><strong>AOF优点</strong></p>
-<ul>
-<li>你可以使用不同的 fsync 策略：无 fsync、每秒 fsync 、每次写的时候 fsync .使用默认的每秒 fsync 策略, Redis 的性能依然很好( fsync 是由后台线程进行处理的,主线程会尽力处理客户端请求),一旦出现故障，你最多丢失1秒的数据。</li>
-<li>AOF文件是一个只进行追加的日志文件,所以不需要写入seek,即使由于某些原因(磁盘空间已满，写的过程中宕机等等)未执行完整的写入命令,你也也可使用redis-check-aof工具修复这些问题。</li>
-<li>Redis 可以在 AOF 文件体积变得过大时，自动地在后台对 AOF 进行重写： 重写后的新 AOF 文件包含了恢复当前数据集所需的最小命令集合。 整个重写操作是绝对安全的，因为 Redis 在创建新 AOF 文件的过程中，会继续将命令追加到现有的 AOF 文件里面，即使重写过程中发生停机，现有的 AOF 文件也不会丢失。 而一旦新 AOF 文件创建完毕，Redis 就会从旧 AOF 文件切换到新 AOF 文件，并开始对新 AOF 文件进行追加操作。</li>
-<li>AOF 文件有序地保存了对数据库执行的所有写入操作， 这些写入操作以 Redis 协议的格式保存， 因此 AOF 文件的内容非常容易被人读懂， 对文件进行分析（parse）也很轻松。 导出（export） AOF 文件也非常简单： 举个例子， 如果你不小心执行了 FLUSHALL 命令， 但只要 AOF 文件未被重写， 那么只要停止服务器， 移除 AOF 文件末尾的 FLUSHALL 命令， 并重启 Redis ， 就可以将数据集恢复到 FLUSHALL 执行之前的状态。</li>
-</ul>
-<p><strong>RDB缺点</strong></p>
-<ul>
-<li>Redis 要完整的保存整个数据集是一个比较繁重的工作,你通常会每隔5分钟或者更久做一次完整的保存,万一在 Redis 意外宕机,你可能会丢失几分钟的数据。</li>
-<li>RDB 需要经常 fork 子进程来保存数据集到硬盘上,当数据集比较大的时候, fork 的过程是非常耗时的,可能会导致 Redis 在一些毫秒级内不能响应客户端的请求。</li>
-</ul>
-<p><strong>AOF缺点</strong></p>
-<ul>
-<li>对于相同的数据集来说，AOF 文件的体积通常要大于 RDB 文件的体积。</li>
-<li>数据恢复（load）时AOF比RDB慢，通常RDB 可以提供更有保证的最大延迟时间。</li>
-</ul>
-<p><strong>RDB和AOF简单对比总结</strong></p>
-<p>RDB优点：</p>
-<ul>
-<li>RDB 是紧凑的二进制文件，比较适合备份，全量复制等场景</li>
-<li>RDB 恢复数据远快于 AOF</li>
-</ul>
-<p>RDB缺点：</p>
-<ul>
-<li>RDB 无法实现实时或者秒级持久化；</li>
-<li>新老版本无法兼容 RDB 格式。</li>
-</ul>
-<p>AOF优点：</p>
-<ul>
-<li>可以更好地保护数据不丢失；</li>
-<li>appen-only 模式写入性能比较高；</li>
-<li>适合做灾难性的误删除紧急恢复。</li>
-</ul>
-<p>AOF缺点：</p>
-<ul>
-<li>对于同一份文件，AOF 文件要比 RDB 快照大；</li>
-<li>AOF 开启后，会对写的 QPS 有所影响，相对于 RDB 来说 写 QPS 要下降；</li>
-<li>数据库恢复比较慢， 不合适做冷备。</li>
-</ul>
-<h1 id="讲解一下Redis的线程模型？"><a href="#讲解一下Redis的线程模型？" class="headerlink" title="讲解一下Redis的线程模型？"></a>讲解一下Redis的线程模型？</h1><p>redis 内部使用文件事件处理器 file event handler，这个文件事件处理器是单线程的，所以 redis 才叫做单线程的模型。它采用 IO 多路复用机制同时监听多个 socket，根据 socket 上的事件来选择对应的事件处理器进行处理。</p>
-<p>如果面试官继续追问为啥 redis 单线程模型也能效率这么高？</p>
-<ul>
-<li>纯内存操作</li>
-<li>核心是基于非阻塞的 IO 多路复用机制</li>
-<li>单线程反而避免了多线程的频繁上下文切换问题</li>
-</ul>
-<h1 id="Redis的内存淘汰机制"><a href="#Redis的内存淘汰机制" class="headerlink" title="Redis的内存淘汰机制"></a>Redis的内存淘汰机制</h1><p>Redis内存淘汰策略是指当缓存内存不足时，通过淘汰旧数据处理新加入数据选择的策略。</p>
-<p><strong>如何配置最大内存？</strong></p>
-<p><strong>（1）通过配置文件配置</strong></p>
-<p>修改redis.conf配置文件</p>
-<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">maxmemory 1024mb //设置Redis最大占用内存大小为1024M<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>注意：maxmemory默认配置为0，在64位操作系统下redis最大内存为操作系统剩余内存，在32位操作系统下redis最大内存为3GB。<br><strong>（2）通过动态命令配置</strong></p>
-<p>Redis支持运行时通过命令动态修改内存大小：</p>
-<pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">127.0.0.1:6379> config set maxmemory 200mb //设置Redis最大占用内存大小为200M
-127.0.0.1:6379> config get maxmemory //获取设置的Redis能使用的最大内存大小
-1) "maxmemory"
-2) "209715200"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p><strong>淘汰策略的分类</strong></p>
-<p>Redis最大占用内存用完之后，如果继续添加数据，如何处理这种情况呢？实际上Redis官方已经定义了八种策略来处理这种情况：</p>
-<p><strong>noeviction</strong></p>
-<p>默认策略，对于写请求直接返回错误，不进行淘汰。</p>
-<p><strong>allkeys-lru</strong></p>
-<p>lru(less recently used), 最近最少使用。从所有的key中使用近似LRU算法进行淘汰。</p>
-<p><strong>volatile-lru</strong>lru(less recently used), 最近最少使用。从设置了过期时间的key中使用近似LRU算法进行淘汰。</p>
-<p><strong>allkeys-random</strong></p>
-<p>从所有的key中随机淘汰。</p>
-<p><strong>volatile-random</strong></p>
-<p>从设置了过期时间的key中随机淘汰。</p>
-<p><strong>volatile-ttl</strong></p>
-<p>ttl(time to live)，在设置了过期时间的key中根据key的过期时间进行淘汰，越早过期的越优先被淘汰。</p>
-<p><strong>allkeys-lfu</strong></p>
-<p>lfu(Least Frequently Used)，最少使用频率。从所有的key中使用近似LFU算法进行淘汰。从Redis4.0开始支持。</p>
-<p><strong>volatile-lfu</strong></p>
-<p>lfu(Least Frequently Used)，最少使用频率。从设置了过期时间的key中使用近似LFU算法进行淘汰。从Redis4.0开始支持。</p>
-<p>注意：当使用volatile-lru、volatile-random、volatile-ttl这三种策略时，如果没有设置过期的key可以被淘汰，则和noeviction一样返回错误。</p>
-<p><strong>LRU算法</strong></p>
-<p>LRU(Least Recently Used)，即最近最少使用，是一种缓存置换算法。在使用内存作为缓存的时候，缓存的大小一般是固定的。当缓存被占满，这个时候继续往缓存里面添加数据，就需要淘汰一部分老的数据，释放内存空间用来存储新的数据。这个时候就可以使用LRU算法了。其核心思想是：如果一个数据在最近一段时间没有被用到，那么将来被使用到的可能性也很小，所以就可以被淘汰掉。</p>
-<p><strong>LRU在Redis中的实现</strong></p>
-<p>Redis使用的是近似LRU算法，它跟常规的LRU算法还不太一样。近似LRU算法通过随机采样法淘汰数据，每次随机出5个（默认）key，从里面淘汰掉最近最少使用的key。</p>
-<p>可以通过maxmemory-samples参数修改采样数量， 如：maxmemory-samples 10</p>
-<p>maxmenory-samples配置的越大，淘汰的结果越接近于严格的LRU算法，但因此耗费的CPU也很高。</p>
-<p>Redis为了实现近似LRU算法，给每个key增加了一个额外增加了一个24bit的字段，用来存储该key最后一次被访问的时间。</p>
-<p><strong>Redis3.0对近似LRU的优化</strong></p>
-<p>Redis3.0对近似LRU算法进行了一些优化。新算法会维护一个候选池（大小为16），池中的数据根据访问时间进行排序，第一次随机选取的key都会放入池中，随后每次随机选取的key只有在访问时间小于池中最小的时间才会放入池中，直到候选池被放满。当放满后，如果有新的key需要放入，则将池中最后访问时间最大（最近被访问）的移除。</p>
-<p>当需要淘汰的时候，则直接从池中选取最近访问时间最小（最久没被访问）的key淘汰掉就行。</p>
-<p><strong>LFU算法</strong></p>
-<p>LFU(Least Frequently Used)，是Redis4.0新加的一种淘汰策略，它的核心思想是根据key的最近被访问的频率进行淘汰，很少被访问的优先被淘汰，被访问的多的则被留下来。</p>
-<p>LFU算法能更好的表示一个key被访问的热度。假如你使用的是LRU算法，一个key很久没有被访问到，只刚刚是偶尔被访问了一次，那么它就被认为是热点数据，不会被淘汰，而有些key将来是很有可能被访问到的则被淘汰了。如果使用LFU算法则不会出现这种情况，因为使用一次并不会使一个key成为热点数据。</p>
-<h1 id="Redis有事务机制吗？"><a href="#Redis有事务机制吗？" class="headerlink" title="Redis有事务机制吗？"></a>Redis有事务机制吗？</h1><ul>
-<li>有事务机制。Redis事务生命周期：<br>开启事务：使用MULTI开启一个事务</li>
-<li>命令入队列：每次操作的命令都会加入到一个队列中，但命令此时不会真正被执行</li>
-<li>提交事务：使用EXEC命令提交事务，开始顺序执行队列中的命令</li>
-</ul>
-<h1 id="Redis事务到底是不是原子性的？"><a href="#Redis事务到底是不是原子性的？" class="headerlink" title="Redis事务到底是不是原子性的？"></a>Redis事务到底是不是原子性的？</h1><p>先看关系型数据库ACID 中关于原子性的定义：<strong>原子性：</strong>一个事务(transaction)中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被恢复(Rollback)到事务开始前的状态，就像这个事务从来没有执行过一样。</p>
-<p>官方文档对事务的定义：</p>
-<ul>
-<li><strong>事务是一个单独的隔离操作</strong>：事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。</li>
-<li><strong>事务是一个原子操作</strong>：事务中的命令要么全部被执行，要么全部都不执行。EXEC 命令负责触发并执行事务中的所有命令：如果客户端在使用 MULTI 开启了一个事务之后，却因为断线而没有成功执行 EXEC ，那么事务中的所有命令都不会被执行。另一方面，如果客户端成功在开启事务之后执行 EXEC ，那么事务中的所有命令都会被执行。</li>
-</ul>
-<p>官方认为Redis事务是一个原子操作，这是站在执行与否的角度考虑的。但是从ACID原子性定义来看，<strong>严格意义上讲Redis事务是非原子型的</strong>，因为在命令顺序执行过程中，一旦发生命令执行错误Redis是不会停止执行然后回滚数据。</p>
-<h1 id="Redis为什么不支持回滚（roll-back）？"><a href="#Redis为什么不支持回滚（roll-back）？" class="headerlink" title="Redis为什么不支持回滚（roll back）？"></a>Redis为什么不支持回滚（roll back）？</h1><blockquote>
-<p>在事务运行期间虽然Redis命令可能会执行失败，但是Redis依然会执行事务内剩余的命令而不会执行回滚操作。如果你熟悉mysql关系型数据库事务，你会对此非常疑惑，Redis官方的理由如下：<br>只有当被调用的Redis命令有语法错误时，这条命令才会执行失败（在将这个命令放入事务队列期间，Redis能够发现此类问题），或者对某个键执行不符合其数据类型的操作：实际上，这就意味着只有程序错误才会导致Redis命令执行失败，这种错误很有可能在程序开发期间发现，一般很少在生产环境发现。<br>支持事务回滚能力会导致设计复杂，这与Redis的初衷相违背，Redis的设计目标是功能简化及确保更快的运行速度。</p>
-</blockquote>
-<p>对于官方的这种理由有一个普遍的反对观点：程序有bug怎么办？但其实回归不能解决程序的bug，比如某位粗心的程序员计划更新键A，实际上最后更新了键B，回滚机制是没法解决这种人为错误的。正因为这种人为的错误不太可能进入生产系统，所以官方在设计Redis时选用更加简单和快速的方法，没有实现回滚的机制。</p>
-<h1 id="Redis事务相关的命令有哪几个？"><a href="#Redis事务相关的命令有哪几个？" class="headerlink" title="Redis事务相关的命令有哪几个？"></a>Redis事务相关的命令有哪几个？</h1><p><strong>（1）WATCH</strong>可以为Redis事务提供 check-and-set （CAS）行为。被WATCH的键会被监视，并会发觉这些键是否被改动过了。 如果有至少一个被监视的键在 EXEC 执行之前被修改了， 那么整个事务都会被取消， EXEC 返回nil-reply来表示事务已经失败。</p>
-<p><strong>（2）MULTI</strong></p>
-<p>用于开启一个事务，它总是返回OK。MULTI执行之后,客户端可以继续向服务器发送任意多条命令， 这些命令不会立即被执行，而是被放到一个队列中，当 EXEC命令被调用时， 所有队列中的命令才会被执行。</p>
-<p><strong>（3）UNWATCH</strong></p>
-<p>取消 WATCH 命令对所有 key 的监视，一般用于DISCARD和EXEC命令之前。如果在执行 WATCH 命令之后， EXEC 命令或 DISCARD 命令先被执行了的话，那么就不需要再执行 UNWATCH 了。因为 EXEC 命令会执行事务，因此 WATCH 命令的效果已经产生了；而 DISCARD 命令在取消事务的同时也会取消所有对 key 的监视，因此这两个命令执行之后，就没有必要执行 UNWATCH 了。</p>
-<p><strong>（4）DISCARD</strong></p>
-<p>当执行 DISCARD 命令时， 事务会被放弃， 事务队列会被清空，并且客户端会从事务状态中退出。</p>
-<p><strong>（5）EXEC</strong></p>
-<p>负责触发并执行事务中的所有命令：</p>
-<p>如果客户端成功开启事务后执行EXEC，那么事务中的所有命令都会被执行。</p>
-<p>如果客户端在使用MULTI开启了事务后，却因为断线而没有成功执行EXEC,那么事务中的所有命令都不会被执行。需要特别注意的是：即使事务中有某条&#x2F;某些命令执行失败了，事务队列中的其他命令仍然会继续执行，Redis不会停止执行事务中的命令，而不会像我们通常使用的关系型数据库一样进行回滚。</p>
-<h1 id="什么是Redis主从复制？"><a href="#什么是Redis主从复制？" class="headerlink" title="什么是Redis主从复制？"></a>什么是Redis主从复制？</h1><p>主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master)，后者称为从节点(slave)；数据的复制是单向的，只能由主节点到从节点。</p>
-<p><strong>主从复制的作用</strong></p>
-<ul>
-<li>数据冗余：主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。</li>
-<li>故障恢复：当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复；实际上是一种服务的冗余。</li>
-<li>负载均衡：在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务，分担服务器负载；尤其是在写少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。</li>
-<li>高可用基石：主从复制还是哨兵和集群能够实施的基础，因此说主从复制是Redis高可用的基础。</li>
-</ul>
-<p><strong>主从复制实现原理</strong></p>
-<p>主从复制过程主要可以分为3个阶段：连接建立阶段、数据同步阶段、命令传播阶段。</p>
-<p><strong>连接建立阶段</strong></p>
-<p>该阶段的主要作用是在主从节点之间建立连接，为数据同步做好准备。</p>
-<p><strong>步骤1：保存主节点信息</strong></p>
-<p>slaveof命令是异步的，在从节点上执行slaveof命令，从节点立即向客户端返回ok，从节点服务器内部维护了两个字段，即masterhost和masterport字段，用于存储主节点的ip和port信息。</p>
-<p><strong>步骤2：建立socket连接</strong></p>
-<p>从节点每秒1次调用复制定时函数replicationCron()，如果发现了有主节点可以连接，便会根据主节点的ip和port，创建socket连接。</p>
-<p>从节点为该socket建立一个专门处理复制工作的文件事件处理器，负责后续的复制工作，如接收RDB文件、接收命令传播等。</p>
-<p>主节点接收到从节点的socket连接后（即accept之后），为该socket创建相应的客户端状态，并将从节点看做是连接到主节点的一个客户端，后面的步骤会以从节点向主节点发送命令请求的形式来进行。</p>
-<p><strong>步骤3：发送ping命令</strong></p>
-<p>从节点成为主节点的客户端之后，发送ping命令进行首次请求，目的是：检查socket连接是否可用，以及主节点当前是否能够处理请求。</p>
-<p>从节点发送ping命令后，可能出现3种情况：</p>
-<p>（1）返回pong：说明socket连接正常，且主节点当前可以处理请求，复制过程继续。</p>
-<p>（2）超时：一定时间后从节点仍未收到主节点的回复，说明socket连接不可用，则从节点断开socket连接，并重连。</p>
-<p>（3）返回pong以外的结果：如果主节点返回其他结果，如正在处理超时运行的脚本，说明主节点当前无法处理命令，则从节点断开socket连接，并重连。</p>
-<p><strong>步骤4：身份验证</strong></p>
-<p>如果从节点中设置了masterauth选项，则从节点需要向主节点进行身份验证；没有设置该选项，则不需要验证。从节点进行身份验证是通过向主节点发送auth命令进行的，auth命令的参数即为配置文件中的masterauth的值。</p>
-<p>如果主节点设置密码的状态，与从节点masterauth的状态一致（一致是指都存在，且密码相同，或者都不存在），则身份验证通过，复制过程继续；如果不一致，则从节点断开socket连接，并重连。</p>
-<p><strong>步骤5：发送从节点端口信息</strong></p>
-<p>身份验证之后，从节点会向主节点发送其监听的端口号（前述例子中为6380），主节点将该信息保存到该从节点对应的客户端的slave_listening_port字段中；该端口信息除了在主节点中执行info Replication时显示以外，没有其他作用。</p>
-<p><strong>数据同步阶段</strong></p>
-<p>主从节点之间的连接建立以后，便可以开始进行数据同步，该阶段可以理解为从节点数据的初始化。具体执行的方式是：从节点向主节点发送psync命令（Redis2.8以前是sync命令），开始同步。</p>
-<p>数据同步阶段是主从复制最核心的阶段，根据主从节点当前状态的不同，可以分为全量复制和部分复制，后面再讲解这两种复制方式以及psync命令的执行过程，这里不再详述。</p>
-<p><strong>命令传播阶段</strong></p>
-<p>数据同步阶段完成后，主从节点进入命令传播阶段；在这个阶段主节点将自己执行的写命令发送给从节点，从节点接收命令并执行，从而保证主从节点数据的一致性。</p>
-<p>需要注意的是，命令传播是异步的过程，即主节点发送写命令后并不会等待从节点的回复；因此实际上主从节点之间很难保持实时的一致性，延迟在所难免。数据不一致的程度，与主从节点之间的网络状况、主节点写命令的执行频率、以及主节点中的repl-disable-tcp-nodelay配置等有关。</p>
-<h1 id="Sentinel（哨兵模式）的原理你能讲一下吗？"><a href="#Sentinel（哨兵模式）的原理你能讲一下吗？" class="headerlink" title="Sentinel（哨兵模式）的原理你能讲一下吗？"></a>Sentinel（哨兵模式）的原理你能讲一下吗？</h1><p>Redis 的主从复制模式下，一旦主节点由于故障不能提供服务，需要手动将从节点晋升为主节点，同时还要通知客户端更新主节点地址，这种故障处理方式从一定程度上是无法接受的。</p>
-<p>Redis 2.8 以后提供了 Redis Sentinel 哨兵机制来解决这个问题。</p>
-<p>Redis Sentinel 是 Redis 高可用的实现方案。Sentinel 是一个管理多个 Redis 实例的工具，它可以实现对 Redis 的监控、通知、自动故障转移。</p>
-<p>Redis Sentinel架构图如下：</p>
-<div align="center">  <img src="https://cdn.jsdelivr.net/gh/SmileLionCoder/assets@main/202010/20201018221921.png" width="500"> </div><br>
-
-<p><strong>哨兵模式的原理</strong></p>
-<p>哨兵模式的主要作用在于它能够自动完成故障发现和故障转移，并通知客户端，从而实现高可用。哨兵模式通常由一组 Sentinel 节点和一组（或多组）主从复制节点组成。</p>
-<p><strong>心跳机制</strong></p>
-<p>（1）Sentinel与Redis Node</p>
-<p>Redis Sentinel 是一个特殊的 Redis 节点。在哨兵模式创建时，需要通过配置指定 Sentinel 与 Redis Master Node 之间的关系，然后 Sentinel 会从主节点上获取所有从节点的信息，之后 Sentinel 会定时向主节点和从节点发送 info 命令获取其拓扑结构和状态信息。</p>
-<p>（2）Sentinel与Sentinel</p>
-<p>基于 Redis 的订阅发布功能， 每个 Sentinel 节点会向主节点的 __sentinel__：hello 频道上发送该 Sentinel 节点对于主节点的判断以及当前 Sentinel 节点的信息 ，同时每个 Sentinel 节点也会订阅该频道， 来获取其他 Sentinel 节点的信息以及它们对主节点的判断。</p>
-<p>通过以上两步所有的 Sentinel 节点以及它们与所有的 Redis 节点之间都已经彼此感知到，之后每个 Sentinel 节点会向主节点、从节点、以及其余 Sentinel 节点定时发送 ping 命令作为心跳检测， 来确认这些节点是否可达。</p>
-<p><strong>故障转移</strong></p>
-<p>每个 Sentinel 都会定时进行心跳检查，当发现主节点出现心跳检测超时的情况时，此时认为该主节点已经不可用，这种判定称为<strong>主观下线</strong>。</p>
-<p>之后该 Sentinel 节点会通过 sentinel ismaster-down-by-addr 命令向其他 Sentinel 节点询问对主节点的判断， 当 quorum（法定人数） 个 Sentinel 节点都认为该节点故障时，则执行<strong>客观下线</strong>，即认为该节点已经不可用。这也同时解释了为什么必须需要一组 Sentinel 节点，因为单个 Sentinel 节点很容易对故障状态做出误判。</p>
-<blockquote>
-<p>这里 quorum 的值是我们在哨兵模式搭建时指定的，后文会有说明，通常为 Sentinel节点总数&#x2F;2+1，即半数以上节点做出主观下线判断就可以执行客观下线。</p>
-</blockquote>
-<p>因为故障转移的工作只需要一个 Sentinel 节点来完成，所以 Sentinel 节点之间会再做一次选举工作， 基于 Raft 算法选出一个 Sentinel 领导者来进行故障转移的工作。</p>
-<p>被选举出的 Sentinel 领导者进行故障转移的具体步骤如下：</p>
-<p>（1）在从节点列表中选出一个节点作为新的主节点</p>
-<ul>
-<li>过滤不健康或者不满足要求的节点；</li>
-<li>选择 slave-priority（优先级）最高的从节点， 如果存在则返回， 不存在则继续；</li>
-<li>选择复制偏移量最大的从节点 ， 如果存在则返回， 不存在则继续；</li>
-<li>选择 runid 最小的从节点。</li>
-</ul>
-<p>（2）Sentinel 领导者节点会对选出来的从节点执行 slaveof no one 命令让其成为主节点。</p>
-<p>（3）Sentinel 领导者节点会向剩余的从节点发送命令，让他们从新的主节点上复制数据。</p>
-<p>（4）Sentinel 领导者会将原来的主节点更新为从节点， 并对其进行监控， 当其恢复后命令它去复制新的主节点。</p>
-<h1 id="Cluster（集群）的原理你能讲一下吗？"><a href="#Cluster（集群）的原理你能讲一下吗？" class="headerlink" title="Cluster（集群）的原理你能讲一下吗？"></a>Cluster（集群）的原理你能讲一下吗？</h1><p>引入Cluster模式的原因：<br>不管是主从模式还是哨兵模式都只能由一个master在写数据，在海量数据高并发场景，一个节点写数据容易出现瓶颈，引入Cluster模式可以实现多个节点同时写数据。</p>
-<p>Redis-Cluster采用无中心结构，每个节点都保存数据，节点之间互相连接从而知道整个集群状态。</p>
-<div align="center">  <img src="https://cdn.jsdelivr.net/gh/SmileLionCoder/assets@main/202010/20201018222025.png" width="500"> </div><br>
-
-<p>如图所示Cluster模式其实就是多个主从复制的结构组合起来的，每一个主从复制结构可以看成一个节点，那么上面的Cluster集群中就有三个节点。</p>
-<h1 id="Memcache与Redis的区别都有哪些？"><a href="#Memcache与Redis的区别都有哪些？" class="headerlink" title="Memcache与Redis的区别都有哪些？"></a>Memcache与Redis的区别都有哪些？</h1><p><strong>存储方式</strong>Memecache把数据全部存在内存之中，断电后会挂掉，数据不能超过内存大小。</p>
-<p>Redis有部份存在硬盘上，这样能保证数据的持久性。</p>
-<p><strong>数据支持类型</strong></p>
-<p>Memcache对数据类型支持相对简单。</p>
-<p>Redis有丰富的数据类型。</p>
-<p><strong>使用底层模型不同</strong></p>
-<p>它们之间底层实现方式 以及与客户端之间通信的应用协议不一样。</p>
-<p>Redis直接自己构建了VM 机制 ，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求。</p>
-<h1 id="假如Redis里面有1亿个key，其中有10w个key是以某个固定的已知的前缀开头的，如果将它们全部找出来？"><a href="#假如Redis里面有1亿个key，其中有10w个key是以某个固定的已知的前缀开头的，如果将它们全部找出来？" class="headerlink" title="假如Redis里面有1亿个key，其中有10w个key是以某个固定的已知的前缀开头的，如果将它们全部找出来？"></a>假如Redis里面有1亿个key，其中有10w个key是以某个固定的已知的前缀开头的，如果将它们全部找出来？</h1><pre class="line-numbers language-plain" data-language="plain"><code class="language-plain">使用keys指令可以扫出指定模式的key列表：
-keys pre*<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>这个时候面试官会追问该命令对线上业务有什么影响，直接看下一个问题。</p>
-<h1 id="如果这个redis正在给线上的业务提供服务，那使用keys指令会有什么问题？"><a href="#如果这个redis正在给线上的业务提供服务，那使用keys指令会有什么问题？" class="headerlink" title="如果这个redis正在给线上的业务提供服务，那使用keys指令会有什么问题？"></a>如果这个redis正在给线上的业务提供服务，那使用keys指令会有什么问题？</h1><p>redis 的单线程的。keys 指令会导致线 程阻塞一段时间，线上服务会停顿，直到指令执行完毕，服务才能恢复。这个时 候可以使用 scan 指令，scan 指令可以无阻塞的提取出指定模式的 key 列表，但是会有一定的重复概率，在客户端做一次去重就可以了，但是整体所花费的时间 会比直接用 keys 指令长。</p>
-<h1 id="如果有大量的key需要设置同一时间过期，一般需要注意什么？"><a href="#如果有大量的key需要设置同一时间过期，一般需要注意什么？" class="headerlink" title="如果有大量的key需要设置同一时间过期，一般需要注意什么？"></a>如果有大量的key需要设置同一时间过期，一般需要注意什么？</h1><p>如果大量的key过期时间设置的过于集中，到过期的那个时间点，Redis可能会出现短暂的卡顿现象(因为redis是单线程的)。严重的话可能会导致服务器雪崩，所以我们一般在过期时间上加一个随机值，让过期时间尽量分散。</p>
-<h1 id="Redis常用的客户端有哪些？"><a href="#Redis常用的客户端有哪些？" class="headerlink" title="Redis常用的客户端有哪些？"></a>Redis常用的客户端有哪些？</h1><p>Jedis：是老牌的Redis的Java实现客户端，提供了比较全面的Redis命令的支持。</p>
-<p>Redisson：实现了分布式和可扩展的Java数据结构。</p>
-<p>Lettuce：高级Redis客户端，用于线程安全同步，异步和响应使用，支持集群，Sentinel，管道和编码器。</p>
-<p><strong>优点：</strong></p>
-<p>Jedis：比较全面的提供了Redis的操作特性。</p>
-<p>Redisson：促使使用者对Redis的关注分离，提供很多分布式相关操作服务，例如，分布式锁，分布式集合，可通过Redis支持延迟队列。</p>
-<p>Lettuce：基于Netty框架的事件驱动的通信层，其方法调用是异步的。Lettuce的API是线程安全的，所以可以操   作单个Lettuce连接来完成各种操作。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -3029,7 +2198,7 @@ keys pre*<span aria-hidden="true" class="line-numbers-rows"><span></span><span><
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
