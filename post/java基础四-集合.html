@@ -28,8 +28,8 @@
 <meta property="og:description" content="什么是集合java中集合也叫容器，由两大派类接口而来，一类是Conllection接口，存放的是单类型的元素，一类是Map，存放的是键值对。Collection接口主要有三大子接口分别为List、Set、Queue（线性表、链表、栈、队列都在这些接口中）   List、Set、Queue、Map的区别 List 存储的元素是有序可以重复的。 Set 存储的元素是无序不可以重复。 Queue 存储的">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://bjpotter.github.io/images/集合.drawio.svg">
-<meta property="article:published_time" content="2024-04-23T06:40:45.896Z">
-<meta property="article:modified_time" content="2024-04-23T10:01:15.026Z">
+<meta property="article:published_time" content="2024-04-24T00:50:54.685Z">
+<meta property="article:modified_time" content="2024-04-24T05:20:23.698Z">
 <meta property="article:author" content="potter">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
@@ -197,7 +197,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-04-23 14:40:45 / 修改时间：18:01:15" itemprop="dateCreated datePublished" datetime="2024-04-23T14:40:45+08:00">2024-04-23</time>
+              <time title="创建时间：2024-04-24 08:50:54 / 修改时间：13:20:23" itemprop="dateCreated datePublished" datetime="2024-04-24T08:50:54+08:00">2024-04-24</time>
             </span>
 
           
@@ -351,6 +351,129 @@
 <p><strong>区别：</strong></p>
 <p>数据结构：HashSet是底层是哈希表，基于hashmap实现的，LinkedHashSet底层是链表和哈希表，满足FIFO，TreeSet底层是红黑树，元素是有序的。</p>
 <p>应用场景：HashSet应用不保证插入和取出元素顺序的场景，LinkedHashSet应用于FIFO场景，TreeSet应用于排序场景</p>
+<h1 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h1><h2 id="Queue和Deque的区别"><a href="#Queue和Deque的区别" class="headerlink" title="Queue和Deque的区别"></a>Queue和Deque的区别</h2><p>Queue是单端队列，只能从一端插入元素，另一端删除元素。Queue扩展了collection的接口分为两类方法，一类是操作失败后抛出异常，另一种是返回特殊值</p>
+<table>
+<thead>
+<tr>
+<th><code>Queue</code> 接口</th>
+<th>抛出异常</th>
+<th>返回特殊值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>插入队尾</td>
+<td>add(E e)</td>
+<td>offer(E e)</td>
+</tr>
+<tr>
+<td>删除队首</td>
+<td>remove()</td>
+<td>poll()</td>
+</tr>
+<tr>
+<td>查询队首元素</td>
+<td>element()</td>
+<td>peek()</td>
+</tr>
+</tbody></table>
+<p>Deque是双端队列，可以在队尾和队首进行插入元素和删除元素。Deque扩展了Queue的接口，增加了队尾和队首的进行删除和插入的方法，根据失败后处理方式的不同分为两类。</p>
+<table>
+<thead>
+<tr>
+<th><code>Deque</code> 接口</th>
+<th>抛出异常</th>
+<th>返回特殊值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>插入队首</td>
+<td>addFirst(E e)</td>
+<td>offerFirst(E e)</td>
+</tr>
+<tr>
+<td>插入队尾</td>
+<td>addLast(E e)</td>
+<td>offerLast(E e)</td>
+</tr>
+<tr>
+<td>删除队首</td>
+<td>removeFirst()</td>
+<td>pollFirst()</td>
+</tr>
+<tr>
+<td>删除队尾</td>
+<td>removeLast()</td>
+<td>pollLast()</td>
+</tr>
+<tr>
+<td>查询队首元素</td>
+<td>getFirst()</td>
+<td>peekFirst()</td>
+</tr>
+<tr>
+<td>查询队尾元素</td>
+<td>getLast()</td>
+<td>peekLast()</td>
+</tr>
+</tbody></table>
+<h2 id="ArrayDeque与LinkedList的区别"><a href="#ArrayDeque与LinkedList的区别" class="headerlink" title="ArrayDeque与LinkedList的区别"></a>ArrayDeque与LinkedList的区别</h2><p>相同点：ArrayDeque和LinkedList都实现了Deque接口，两个都有队列的功能。</p>
+<p>区别：</p>
+<ul>
+<li>ArrayDeque是基于可变长数组和双指针实现的，而LinkedList是基于链表实现的</li>
+<li>ArrayDeque不能存储Null数据，LinkedList可以存储</li>
+<li>ArrayDeque当容量满了以后涉及扩容会复制整个数组，丢弃旧数组，涉及了内存复制性能较低，当数据量大的时候LinkedList处理效率比较低，整体而言优先使用ArrayDeque实现队列</li>
+</ul>
+<h2 id="为什么有Stack还要用Deque实现栈"><a href="#为什么有Stack还要用Deque实现栈" class="headerlink" title="为什么有Stack还要用Deque实现栈"></a>为什么有Stack还要用Deque实现栈</h2><p>Stack继承了vector属于线程安全的，当处理大量数据的时候效率比较低。</p>
+<h2 id="什么是优先级队列"><a href="#什么是优先级队列" class="headerlink" title="什么是优先级队列"></a>什么是优先级队列</h2><p>优先级队列（Priority Queue）跟普通的队列有相似的行为，都是遵循队列的基本原则—先进先出（FIFO）, 但它有一个额外的特性：每个元素都有各自的“优先级”。</p>
+<p>在优先级队列中，元素被赋予优先级。当访问元素时，具有最高优先级的元素最先被访问。优先级队列有两个常见的应用场景：</p>
+<ol>
+<li><p>数据压缩：优先级队列常常被用于数据压缩，特别是霍夫曼编码。</p>
+</li>
+<li><p>Dijkstra算法：优先级队列也是实现Dijkstra算法的关键工具。</p>
+</li>
+</ol>
+<p>优先级队列是通过二叉堆实现的，它提供了O(log n)的添加和删除时间复杂度，以及O(1)的查询最大 &#x2F; 最小元素时间复杂度。</p>
+<p><strong>特点：</strong></p>
+<p><code>PriorityQueue</code> 利用了二叉堆的数据结构来实现的，底层使用可变长的数组来存储数据</p>
+<p><code>PriorityQueue</code> 通过堆元素的上浮和下沉，实现了在 O(logn) 的时间复杂度内插入元素和删除堆顶元素。</p>
+<p><code>PriorityQueue</code> 是非线程安全的，且不支持存储 <code>NULL</code> 和 <code>non-comparable</code> 的对象。</p>
+<p><code>PriorityQueue</code> 默认是小顶堆，但可以接收一个 <code>Comparator</code> 作为构造参数，从而来自定义元素优先级的先后。</p>
+<h2 id="什么是阻塞队列"><a href="#什么是阻塞队列" class="headerlink" title="什么是阻塞队列"></a>什么是阻塞队列</h2><p>阻塞队列（Blocking Queue）是一种特殊的队列，当队列为空时，消费者尝试从队列里取出元素的操作会被阻塞，直到队列中有可用元素；同样，当队列已满时，生产者尝试向队列添加元素的操作也会被阻塞，直到队列有可用空间。</p>
+<h3 id="阻塞队列的实现类"><a href="#阻塞队列的实现类" class="headerlink" title="阻塞队列的实现类"></a>阻塞队列的实现类</h3><ol>
+<li><p>ArrayBlockingQueue：是一个由数组支持的有界阻塞队列，队列的容量在初始化时设定。</p>
+</li>
+<li><p>LinkedBlockingQueue：是一个由链表支持的可选定长（即可以选择是否定长）阻塞队列。</p>
+</li>
+<li><p>PriorityBlockingQueue：是一个不限大小的并发阻塞队列。队列中的元素可按自然顺序进行排序，也可以通过Comparator接口进行排序。</p>
+</li>
+<li><p>DelayQueue：是一个在定时未到时，不能从中获取元素的无界阻塞队列，其内部实现是一个PriorityQueue。元素由其时间戳的长短决定队列中的排序，队头对象的定时时间最长。</p>
+</li>
+<li><p>SynchronousQueue：不存储元素的阻塞队列，每一个put操作必须等待一个take操作，反之亦然。</p>
+</li>
+<li><p>LinkedTransferQueue：是一种由链表结构组成的无界阻塞TransferQueue队列，相当于其他队列的综合体。TransferQueue是一种阻塞队列，其中的生产者的等待可能是为了将元素转移&#x2F;传递到消费者。</p>
+</li>
+<li><p>LinkedBlockingDeque：是一个由链表结构组成的双向阻塞队列。在最初提供的阻塞队列中，LinkedBlockingDeque是唯一一个支持前后两端插入和移除元素的队列。</p>
+</li>
+</ol>
+<h3 id="ArrayBlockingQueue和LinkedBlockingDeque的区别"><a href="#ArrayBlockingQueue和LinkedBlockingDeque的区别" class="headerlink" title="ArrayBlockingQueue和LinkedBlockingDeque的区别"></a>ArrayBlockingQueue和LinkedBlockingDeque的区别</h3><ol>
+<li><p>数据结构：ArrayBlockingQueue基于数组实现的。LinkedBlockingDeque基于链表实现的。</p>
+</li>
+<li><p>性能：LinkedBlockingDeque基于链表结构，插入和移除元素效率比较高。</p>
+</li>
+<li><p>双端访问：LinkedBlockingDeque支持从两端插入和移除元素。而ArrayBlockingQueue只能在队尾插入，在对头移除。</p>
+</li>
+<li><p>灵活性：LinkedBlockingDeque支持双端插入和移除，且可以选择是否定长，更具灵活性。</p>
+</li>
+</ol>
+<h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><h2 id="HashMap和HashTable的区别"><a href="#HashMap和HashTable的区别" class="headerlink" title="HashMap和HashTable的区别"></a>HashMap和HashTable的区别</h2><p>线程安全：HashMap非线程安全，HashTable内部方法用了synchronized修饰是线程安全的</p>
+<p>效率问题：HashMap不是线程安全的，效率比较高，考虑线程安全的请看，一般用concurrenthashmap</p>
+<p>NULL值和NULL键问题：hashmap允许一个null键多个null值，hashtable不允许null键和null值。</p>
+<p>初始容量和扩容问题：hashtable初始容量是11，扩容是2n+1,hashmap初始容量是16，扩容是2n</p>
+<p>底层数据结构：hashmap是数组+链表组成的，当链表长度大于8且数组长度大于64会转换为红黑树，hashtable也是数组和链表组成的，但是不会有生成红黑树的机制</p>
+<p>遍历方式：hashmap可以通过iterator和foreach遍历，hashtable只能通过iterator遍历。</p>
+<h2 id="HashMap和HashSet的关系"><a href="#HashMap和HashSet的关系" class="headerlink" title="HashMap和HashSet的关系"></a>HashMap和HashSet的关系</h2><p>HashSet基于HashMap实现的，hashmap存储的key-value pair,而hashset只存储对象</p>
+<h2 id="HashMap和TreeMap的关系"><a href="#HashMap和TreeMap的关系" class="headerlink" title="HashMap和TreeMap的关系"></a>HashMap和TreeMap的关系</h2><p>HashMap和TreeMao都实现了AbstractMap,但是TreeMap实现了NavigableMap和SortedMap两个接口，NavigableMap接口可以实现对集合内的元素搜索的能力，SortedMap接口实现了对集合的键进行排序的能力。</p>
+<h2 id="HashSet如何检查重复"><a href="#HashSet如何检查重复" class="headerlink" title="HashSet如何检查重复"></a>HashSet如何检查重复</h2><p>hashset添加一个对象的时候，首先计算这个对象的hashcode,找到数组下标的位置，如果这个位置是空的直接插入，如果不是空的就会使用equals()方法判断，两个hashcode相等的对象是否真的相同，如果相同的话就不会让它加入进去。</p>
 
     </div>
 
@@ -431,7 +554,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9B%86%E5%90%88"><span class="nav-number">1.</span> <span class="nav-text">什么是集合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#List%E3%80%81Set%E3%80%81Queue%E3%80%81Map%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.</span> <span class="nav-text">List、Set、Queue、Map的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#List"><span class="nav-number">3.</span> <span class="nav-text">List</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E5%92%8CArray%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.1.</span> <span class="nav-text">ArrayList和Array的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E5%92%8CArray%E8%BD%AC%E6%8D%A2"><span class="nav-number">3.2.</span> <span class="nav-text">ArrayList和Array转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E5%92%8CVector%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.3.</span> <span class="nav-text">ArrayList和Vector的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vector%E5%92%8CStack%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.4.</span> <span class="nav-text">Vector和Stack的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E7%9A%84%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%A0%E9%99%A4%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-number">3.5.</span> <span class="nav-text">ArrayList的插入和删除的时间复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedList%E7%9A%84%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%A0%E9%99%A4%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-number">3.6.</span> <span class="nav-text">LinkedList的插入和删除的时间复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedList%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B2%A1%E6%9C%89%E5%AE%9E%E7%8E%B0RandomAccess%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.7.</span> <span class="nav-text">LinkedList为什么没有实现RandomAccess接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E5%92%8CLinkedList%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.8.</span> <span class="nav-text">ArrayList和LinkedList的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Set"><span class="nav-number">4.</span> <span class="nav-text">Set</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Comparable-%E5%92%8C-Comparator-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">4.1.</span> <span class="nav-text">Comparable 和 Comparator 的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Ecomparator%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.1.1.</span> <span class="nav-text">基于comparator实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Ecomparbale%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.1.2.</span> <span class="nav-text">基于comparbale实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3SET%E9%9B%86%E5%90%88%E6%97%A0%E5%BA%8F%E6%80%A7%E5%92%8C%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E6%80%A7"><span class="nav-number">4.2.</span> <span class="nav-text">如何理解SET集合无序性和不可重复性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashSet%E3%80%81LinkedHashSet%E3%80%81TreeSet%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">4.3.</span> <span class="nav-text">HashSet、LinkedHashSet、TreeSet的区别</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9B%86%E5%90%88"><span class="nav-number">1.</span> <span class="nav-text">什么是集合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#List%E3%80%81Set%E3%80%81Queue%E3%80%81Map%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.</span> <span class="nav-text">List、Set、Queue、Map的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#List"><span class="nav-number">3.</span> <span class="nav-text">List</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E5%92%8CArray%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.1.</span> <span class="nav-text">ArrayList和Array的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E5%92%8CArray%E8%BD%AC%E6%8D%A2"><span class="nav-number">3.2.</span> <span class="nav-text">ArrayList和Array转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E5%92%8CVector%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.3.</span> <span class="nav-text">ArrayList和Vector的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vector%E5%92%8CStack%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.4.</span> <span class="nav-text">Vector和Stack的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E7%9A%84%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%A0%E9%99%A4%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-number">3.5.</span> <span class="nav-text">ArrayList的插入和删除的时间复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedList%E7%9A%84%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%A0%E9%99%A4%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-number">3.6.</span> <span class="nav-text">LinkedList的插入和删除的时间复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedList%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B2%A1%E6%9C%89%E5%AE%9E%E7%8E%B0RandomAccess%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.7.</span> <span class="nav-text">LinkedList为什么没有实现RandomAccess接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E5%92%8CLinkedList%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.8.</span> <span class="nav-text">ArrayList和LinkedList的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Set"><span class="nav-number">4.</span> <span class="nav-text">Set</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Comparable-%E5%92%8C-Comparator-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">4.1.</span> <span class="nav-text">Comparable 和 Comparator 的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Ecomparator%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.1.1.</span> <span class="nav-text">基于comparator实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Ecomparbale%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.1.2.</span> <span class="nav-text">基于comparbale实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3SET%E9%9B%86%E5%90%88%E6%97%A0%E5%BA%8F%E6%80%A7%E5%92%8C%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E6%80%A7"><span class="nav-number">4.2.</span> <span class="nav-text">如何理解SET集合无序性和不可重复性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashSet%E3%80%81LinkedHashSet%E3%80%81TreeSet%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">4.3.</span> <span class="nav-text">HashSet、LinkedHashSet、TreeSet的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Queue"><span class="nav-number">5.</span> <span class="nav-text">Queue</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Queue%E5%92%8CDeque%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">5.1.</span> <span class="nav-text">Queue和Deque的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayDeque%E4%B8%8ELinkedList%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">5.2.</span> <span class="nav-text">ArrayDeque与LinkedList的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89Stack%E8%BF%98%E8%A6%81%E7%94%A8Deque%E5%AE%9E%E7%8E%B0%E6%A0%88"><span class="nav-number">5.3.</span> <span class="nav-text">为什么有Stack还要用Deque实现栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97"><span class="nav-number">5.4.</span> <span class="nav-text">什么是优先级队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97"><span class="nav-number">5.5.</span> <span class="nav-text">什么是阻塞队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="nav-number">5.5.1.</span> <span class="nav-text">阻塞队列的实现类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayBlockingQueue%E5%92%8CLinkedBlockingDeque%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">5.5.2.</span> <span class="nav-text">ArrayBlockingQueue和LinkedBlockingDeque的区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Map"><span class="nav-number">6.</span> <span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap%E5%92%8CHashTable%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">6.1.</span> <span class="nav-text">HashMap和HashTable的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap%E5%92%8CHashSet%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">6.2.</span> <span class="nav-text">HashMap和HashSet的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap%E5%92%8CTreeMap%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">6.3.</span> <span class="nav-text">HashMap和TreeMap的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashSet%E5%A6%82%E4%BD%95%E6%A3%80%E6%9F%A5%E9%87%8D%E5%A4%8D"><span class="nav-number">6.4.</span> <span class="nav-text">HashSet如何检查重复</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
