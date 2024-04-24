@@ -20,13 +20,15 @@
     var CONFIG = {"hostname":"bjpotter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta property="og:type" content="article">
+  <meta name="description" content="什么是IO IO指的是input和output，在java中分为输入流和输出流，根据处理数据不同的单位分为字节流和字符流。 字符流和字节流的区别 字节流以字节（8位）为单位进行数据处理，如图片、视频，字符流是以字符进行为单位进行数据处理，如文本。  处理单位：字节流以字节为单位，字符流以字符为单位。 用途：字节流可以处理所有类型的数据，字符流只能处理字符类型的数据。 处理中文字符：字节流可能会出现">
+<meta property="og:type" content="article">
 <meta property="og:title" content="java基础-io">
 <meta property="og:url" content="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%BA%94-IO.html">
 <meta property="og:site_name" content="Potter&#39;s 个人博客">
+<meta property="og:description" content="什么是IO IO指的是input和output，在java中分为输入流和输出流，根据处理数据不同的单位分为字节流和字符流。 字符流和字节流的区别 字节流以字节（8位）为单位进行数据处理，如图片、视频，字符流是以字符进行为单位进行数据处理，如文本。  处理单位：字节流以字节为单位，字符流以字符为单位。 用途：字节流可以处理所有类型的数据，字符流只能处理字符类型的数据。 处理中文字符：字节流可能会出现">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-04-22T05:14:36.157Z">
-<meta property="article:modified_time" content="2024-04-22T05:16:01.086Z">
+<meta property="article:modified_time" content="2024-04-24T09:59:26.518Z">
 <meta property="article:author" content="potter">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
@@ -191,10 +193,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-04-22 13:14:36 / 修改时间：13:16:01" itemprop="dateCreated datePublished" datetime="2024-04-22T13:14:36+08:00">2024-04-22</time>
+              <time title="创建时间：2024-04-22 13:14:36" itemprop="dateCreated datePublished" datetime="2024-04-22T13:14:36+08:00">2024-04-22</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-24 17:59:26" itemprop="dateModified" datetime="2024-04-24T17:59:26+08:00">2024-04-24</time>
+              </span>
 
           
 
@@ -207,7 +215,34 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <p>什么是IO</p>
+<p>IO指的是input和output，在java中分为输入流和输出流，根据处理数据不同的单位分为字节流和字符流。</p>
+<p>字符流和字节流的区别</p>
+<p>字节流以字节（8位）为单位进行数据处理，如图片、视频，字符流是以字符进行为单位进行数据处理，如文本。</p>
+<ul>
+<li>处理单位：字节流以字节为单位，字符流以字符为单位。</li>
+<li>用途：字节流可以处理所有类型的数据，字符流只能处理字符类型的数据。</li>
+<li>处理中文字符：字节流可能会出现乱码的情况，字符流按字符处理，不会出现乱码</li>
+</ul>
+<p>字节流</p>
+<p>InputStream</p>
+<p><code>InputStream</code>用于从源头（通常是文件）读取数据（字节信息）到内存中，<code>java.io.InputStream</code>抽象类是所有字节输入流的父类。</p>
+<p><code>read()</code>：返回输入流中下一个字节的数据。返回的值介于 0 到 255 之间。如果未读取任何字节，则代码返回 <code>-1</code> ，表示文件结束。</p>
+<p><code>read(byte b[ ])</code> : 从输入流中读取一些字节存储到数组 <code>b</code> 中。如果数组 <code>b</code> 的长度为零，则不读取。如果没有可用字节读取，返回 <code>-1</code>。如果有可用字节读取，则最多读取的字节数最多等于 <code>b.length</code> ， 返回读取的字节数。这个方法等价于 <code>read(b, 0, b.length)</code>。</p>
+<p><code>read(byte b[], int off, int len)</code>：在<code>read(byte b[ ])</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字节数）。</p>
+<p><code>skip(long n)</code>：忽略输入流中的 n 个字节 ,返回实际忽略的字节数。</p>
+<p><code>available()</code>：返回输入流中可以读取的字节数。</p>
+<p><code>close()</code>：关闭输入流释放相关的系统资源。</p>
+<p>OutputStream</p>
+<p><code>write(int b)</code>：将特定字节写入输出流。</p>
+<p><code>write(byte b[ ])</code> : 将数组<code>b</code> 写入到输出流，等价于 <code>write(b, 0, b.length)</code> 。</p>
+<p><code>write(byte[] b, int off, int len)</code> : 在<code>write(byte b[ ])</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字节数）。</p>
+<p><code>flush()</code>：刷新此输出流并强制写出所有缓冲的输出字节。</p>
+<p><code>close()</code>：关闭输出流释放相关的系统资源。</p>
+<p>字符流</p>
+<p>Reader</p>
+<p>Writer</p>
+
     </div>
 
     

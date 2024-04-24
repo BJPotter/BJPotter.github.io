@@ -190,7 +190,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-04-24 08:50:54 / 修改时间：13:20:23" itemprop="dateCreated datePublished" datetime="2024-04-24T08:50:54+08:00">2024-04-24</time>
+              <time title="创建时间：2024-04-24 08:50:54 / 修改时间：15:11:49" itemprop="dateCreated datePublished" datetime="2024-04-24T08:50:54+08:00">2024-04-24</time>
             </span>
 
           
@@ -467,6 +467,62 @@
 <h2 id="HashMap和HashSet的关系"><a href="#HashMap和HashSet的关系" class="headerlink" title="HashMap和HashSet的关系"></a>HashMap和HashSet的关系</h2><p>HashSet基于HashMap实现的，hashmap存储的key-value pair,而hashset只存储对象</p>
 <h2 id="HashMap和TreeMap的关系"><a href="#HashMap和TreeMap的关系" class="headerlink" title="HashMap和TreeMap的关系"></a>HashMap和TreeMap的关系</h2><p>HashMap和TreeMao都实现了AbstractMap,但是TreeMap实现了NavigableMap和SortedMap两个接口，NavigableMap接口可以实现对集合内的元素搜索的能力，SortedMap接口实现了对集合的键进行排序的能力。</p>
 <h2 id="HashSet如何检查重复"><a href="#HashSet如何检查重复" class="headerlink" title="HashSet如何检查重复"></a>HashSet如何检查重复</h2><p>hashset添加一个对象的时候，首先计算这个对象的hashcode,找到数组下标的位置，如果这个位置是空的直接插入，如果不是空的就会使用equals()方法判断，两个hashcode相等的对象是否真的相同，如果相同的话就不会让它加入进去。</p>
+<h2 id="HashMap的底层实现"><a href="#HashMap的底层实现" class="headerlink" title="HashMap的底层实现"></a>HashMap的底层实现</h2><p>hashmap解决冲突用的链地址法，jdk 1.8之前用数组和链表的数据结构，1.8以后优化成了数组+链表+红黑树，当数组长度大于64，链表长度大于8链表部分会转换为红黑树。</p>
+<p><strong>红黑树：叫自平衡二叉搜索树，根节点都是黑色的，其余的节点可以是红色也可以是黑色的，插入、搜索、删除操作时间复杂度都是在O(log n)</strong></p>
+<h2 id="HashMap长度为什么是2的幂次方"><a href="#HashMap长度为什么是2的幂次方" class="headerlink" title="HashMap长度为什么是2的幂次方"></a>HashMap长度为什么是2的幂次方</h2><p><code>hash(key) % array.length</code></p>
+<ol>
+<li><p>逻辑与计算索引快：当确定键值对应的桶的位置时，需要对哈希编码进行一次模运算，即hash(key) % array.length。当数组长度为2的幂时，这个运算可以用更快的位操作来完成，即hash(key) &amp; (array.length - 1)，位操作的速度一般要快于除法和求余数运算。</p>
+</li>
+<li><p>散列更均匀：数组长度为2的幂次模运算后的散列的更加均匀</p>
+</li>
+</ol>
+<h2 id="HashMap的遍历方式"><a href="#HashMap的遍历方式" class="headerlink" title="HashMap的遍历方式"></a>HashMap的遍历方式</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HashMapIterator</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span><span class="token class-name">String</span><span class="token punctuation">></span></span> map <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">,</span> <span class="token string">"Java"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"2"</span><span class="token punctuation">,</span> <span class="token string">"JDK"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"3"</span><span class="token punctuation">,</span> <span class="token string">"Spring Framework"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"4"</span><span class="token punctuation">,</span> <span class="token string">"MyBatis framework"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"5"</span><span class="token punctuation">,</span> <span class="token string">"Redis"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"迭代器"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Iterator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Map<span class="token punctuation">.</span>Entry</span><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span><span class="token punctuation">></span></span> iterator <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">entrySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">iterator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>iterator<span class="token punctuation">.</span><span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token class-name">Map<span class="token punctuation">.</span>Entry</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span></span> entry <span class="token operator">=</span> iterator<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>entry<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>entry<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token class-name">Iterator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> iterator1 <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">keySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">iterator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>iterator1<span class="token punctuation">.</span><span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token class-name">String</span> string <span class="token operator">=</span> iterator1<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>string<span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>map<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>string<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"foreach"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Set</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Map<span class="token punctuation">.</span>Entry</span><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span><span class="token punctuation">></span></span> entries <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">entrySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Map<span class="token punctuation">.</span>Entry</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span></span> entry <span class="token operator">:</span> entries<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>entry<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>entry<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token class-name">Set</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> strings <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">keySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">String</span> string <span class="token operator">:</span> strings<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>string<span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>map<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>string<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"lambda"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span>value<span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>key<span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">entrySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>stringStringEntry<span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>stringStringEntry<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>stringStringEntry<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="什么是concurrenthashmap"><a href="#什么是concurrenthashmap" class="headerlink" title="什么是concurrenthashmap"></a>什么是concurrenthashmap</h2><p>jdk1.8之前concurrenthashmap由segment数组和hashentry数组和链表组成，将数据分为一段一段的就是segment，是对每个segment进行加锁保证线程安全，由于segment初始化之后就固定容量，所以concurrenthashmap最多支持16个并发线程。</p>
+<p>jdk1.8中concurrenthashmap由Node数组和链表和红黑树组成，采用Node+cas+synchronized保证线程安全，锁粒度更细，<code>synchronized</code> 只锁定当前链表或红黑二叉树的首节点。</p>
+<p><strong>1.CAS是一种无锁算法，它通过比较当前值和预期值，如果相同则进行更新，不同则重新操作的方式，减小了对整个数据的锁定概率。这属于乐观锁的一种，尝试不通过加锁的方式达到线程安全，但在高并发情况下，可能导致大量的失败重试。</strong></p>
+<p><strong>2.ConcurrentHashMap不能由NUll值NULL键。</strong></p>
+<h1 id="集合注意事项"><a href="#集合注意事项" class="headerlink" title="集合注意事项"></a>集合注意事项</h1><h2 id="Collections工具类"><a href="#Collections工具类" class="headerlink" title="Collections工具类"></a>Collections工具类</h2><p>collections工具类常用的方法有三大类，排序、查找、线程安全方法（不推荐使用）</p>
+<h2 id="集合判空"><a href="#集合判空" class="headerlink" title="集合判空"></a>集合判空</h2><p>判断集合元素是否为空，使用isempty()</p>
+<h2 id="集合转Map"><a href="#集合转Map" class="headerlink" title="集合转Map"></a>集合转Map</h2><p><strong>在使用 <code>java.util.stream.Collectors</code> 类的 <code>toMap()</code> 方法转为 <code>Map</code> 集合时，一定要注意当 value 为 null 时会抛 NPE 异常。</strong></p>
+<h2 id="集合遍历"><a href="#集合遍历" class="headerlink" title="集合遍历"></a>集合遍历</h2><p><strong>不要在 foreach 循环里进行元素的 <code>remove/add</code> 操作。remove 元素请使用 <code>Iterator</code> 方式，如果并发操作，需要对 <code>Iterator</code> 对象加锁。</strong></p>
+<h2 id="集合去重"><a href="#集合去重" class="headerlink" title="集合去重"></a>集合去重</h2><p><strong>可以利用 <code>Set</code> 元素唯一的特性，可以快速对一个集合进行去重操作，避免使用 <code>List</code> 的 <code>contains()</code> 进行遍历去重或者判断包含操作。</strong></p>
 
       
     </div>
@@ -625,10 +681,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-04-22 13:14:36 / 修改时间：13:16:01" itemprop="dateCreated datePublished" datetime="2024-04-22T13:14:36+08:00">2024-04-22</time>
+              <time title="创建时间：2024-04-22 13:14:36" itemprop="dateCreated datePublished" datetime="2024-04-22T13:14:36+08:00">2024-04-22</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-24 17:59:26" itemprop="dateModified" datetime="2024-04-24T17:59:26+08:00">2024-04-24</time>
+              </span>
 
           
 
@@ -641,7 +703,34 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <p>什么是IO</p>
+<p>IO指的是input和output，在java中分为输入流和输出流，根据处理数据不同的单位分为字节流和字符流。</p>
+<p>字符流和字节流的区别</p>
+<p>字节流以字节（8位）为单位进行数据处理，如图片、视频，字符流是以字符进行为单位进行数据处理，如文本。</p>
+<ul>
+<li>处理单位：字节流以字节为单位，字符流以字符为单位。</li>
+<li>用途：字节流可以处理所有类型的数据，字符流只能处理字符类型的数据。</li>
+<li>处理中文字符：字节流可能会出现乱码的情况，字符流按字符处理，不会出现乱码</li>
+</ul>
+<p>字节流</p>
+<p>InputStream</p>
+<p><code>InputStream</code>用于从源头（通常是文件）读取数据（字节信息）到内存中，<code>java.io.InputStream</code>抽象类是所有字节输入流的父类。</p>
+<p><code>read()</code>：返回输入流中下一个字节的数据。返回的值介于 0 到 255 之间。如果未读取任何字节，则代码返回 <code>-1</code> ，表示文件结束。</p>
+<p><code>read(byte b[ ])</code> : 从输入流中读取一些字节存储到数组 <code>b</code> 中。如果数组 <code>b</code> 的长度为零，则不读取。如果没有可用字节读取，返回 <code>-1</code>。如果有可用字节读取，则最多读取的字节数最多等于 <code>b.length</code> ， 返回读取的字节数。这个方法等价于 <code>read(b, 0, b.length)</code>。</p>
+<p><code>read(byte b[], int off, int len)</code>：在<code>read(byte b[ ])</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字节数）。</p>
+<p><code>skip(long n)</code>：忽略输入流中的 n 个字节 ,返回实际忽略的字节数。</p>
+<p><code>available()</code>：返回输入流中可以读取的字节数。</p>
+<p><code>close()</code>：关闭输入流释放相关的系统资源。</p>
+<p>OutputStream</p>
+<p><code>write(int b)</code>：将特定字节写入输出流。</p>
+<p><code>write(byte b[ ])</code> : 将数组<code>b</code> 写入到输出流，等价于 <code>write(b, 0, b.length)</code> 。</p>
+<p><code>write(byte[] b, int off, int len)</code> : 在<code>write(byte b[ ])</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字节数）。</p>
+<p><code>flush()</code>：刷新此输出流并强制写出所有缓冲的输出字节。</p>
+<p><code>close()</code>：关闭输出流释放相关的系统资源。</p>
+<p>字符流</p>
+<p>Reader</p>
+<p>Writer</p>
+
       
     </div>
 
@@ -1635,7 +1724,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1649,7 +1738,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98.html" class="post-title-link" itemprop="url">缓存问题</a>
+            <a href="/post/%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6.html" class="post-title-link" itemprop="url">java类的加载机制</a>
         </h2>
 
         <div class="post-meta">
@@ -1673,10 +1762,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>本篇博客主要介绍了缓存在系统设计中可能会遇到的一些问题及其解决方案</p>
+          <p>从类的生命周期开始学习类的加载机制</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/post/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98.html">
+              <a class="btn" href="/post/%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6.html">
                 阅读全文 &raquo;
               </a>
             </div>
