@@ -165,7 +165,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Software%20cracking.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/cs.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -179,7 +179,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/Software%20cracking.html" class="post-title-link" itemprop="url">typro hacking</a>
+            <a href="/post/cs.html" class="post-title-link" itemprop="url">UUID</a>
         </h2>
 
         <div class="post-meta">
@@ -203,22 +203,58 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Typro破解"><a href="#Typro破解" class="headerlink" title="Typro破解"></a>Typro破解</h1><blockquote>
-<p>亲测几个版本都有效，主要破解方式为修改注册表，不要给typro检测注册表修改的权限就可以了</p>
+          <h1 id="唯一ID由来"><a href="#唯一ID由来" class="headerlink" title="唯一ID由来"></a>唯一ID由来</h1><blockquote>
+<p>分布式系统中，需要对大量的数据和消息进行唯一标识，如金融行业产品系统中，数据日益增长，对数据进行分库分表后，需要用唯一ID来标识一条数据，数据库的自增ID已经不能满足，此时就需要一个全局唯一ID标识。</p>
 </blockquote>
-<p>1.通过win+r,输入regedit打开注册表</p>
-<img src="https://telegraph-image-2ni.pages.dev/file/6ac2175e435ab73248b76.png" style="zoom:50%;">
-
-<p>2.根据图上的路径，找到Typro</p>
-<img src="https://telegraph-image-2ni.pages.dev/file/68fce7738c28d8017a590.png" style="zoom:33%;">
-
-<p>3.在注册表编辑器中，双击修改IDate的值,将其改为一个未来日期。比如2099-01-01。这样就可以试用Typora到2099-01-01。</p>
-<img src="https://telegraph-image-2ni.pages.dev/file/c8c93f58d4cabd60e3eed.png" style="zoom:50%;">
-
-<p>4.修改管理员的访问权限，typro就不会检测到修改过注册表了</p>
-<img src="https://telegraph-image-2ni.pages.dev/file/2c9493624aaf44e0908c4.png" style="zoom:33%;">
-
-<p>5.执行完第四步后，点击应用和确认，直接就可以打开typro了</p>
+<h2 id="唯一ID特点"><a href="#唯一ID特点" class="headerlink" title="唯一ID特点"></a>唯一ID特点</h2><blockquote>
+<ol>
+<li>全局唯一：全局唯一，不会出现重复项。</li>
+<li>趋势递增：B+树的索引下进行递增，保证写入性能</li>
+<li>单调递增：下一个id肯定大于上一个id</li>
+<li>信息安全：ID无规则、不规则</li>
+</ol>
+</blockquote>
+<h2 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h2><ul>
+<li>数据库自增ID</li>
+</ul>
+<blockquote>
+<p>数据库中一般给主键设置自增。</p>
+<p>优点：简单，由数据库自己操作完成，id是单调自增</p>
+<p>缺点：主从切换的时候不一致，容易导致重复发号</p>
+</blockquote>
+<ul>
+<li>UUID</li>
+</ul>
+<blockquote>
+<p>由32个16进制数字组成，形式为8-4-4-4-12的32个字符。</p>
+<p>优点：性能高，本地生成，无网络消耗。</p>
+<p>缺点：存储占用空间大，基于MAC地址生成的UUID存在信息安全问题。</p>
+</blockquote>
+<ul>
+<li>Redis唯一ID</li>
+</ul>
+<blockquote>
+<p>Redis是单线程的，可以依据redis的原子操作incr和incrby实现。</p>
+<p>优点：数字ID天然排序，对分页和排序的结果有帮助。</p>
+</blockquote>
+<ul>
+<li>zookeeper唯一ID</li>
+</ul>
+<blockquote>
+<p>zookeeper通过其znode数据版本生成序列号，可以生成32位和64位数据版本号，客户端可以使用这个版本号作为唯一序列号</p>
+</blockquote>
+<ul>
+<li>snowflake算法</li>
+</ul>
+<blockquote>
+<p>由64个二进制数字组成一般分为1-41-10-12,snowflake方案的QPS约为409.6w&#x2F;s</p>
+<p>第一部分：表示正数</p>
+<p>第二部分：41表示毫秒时间</p>
+<p>第三部分：工作机器ID，5位表示数据中心，5位表示机器id</p>
+<p>第四部分：12位的序列号，每毫秒可生成4096个id</p>
+<p>优点：毫秒在高位，自增序列号在低位，整体是递增趋势</p>
+<p>缺点：依赖时间，如果时间回拨，会导致发号重复或者不可用状态</p>
+</blockquote>
 
       
     </div>
@@ -1947,103 +1983,6 @@ QUEUED
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html" class="post-title-link" itemprop="url">Java内存模型</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><ol>
-<li><p>处理器的内存模型</p>
-<p>CPU的发展在摩尔定律的指导下以18个月的速度翻一倍的速度在发展，内存和硬盘的发展远远落后于CPU，为了解决这个问题CPU厂商设计的了高速缓存解决I&#x2F;O速度和CPU运行速度不匹配问题。</p>
-</li>
-<li><p>高速缓存</p>
-</li>
-</ol>
-<p>​    高速缓存位于CPU和内存之间，当程序进行运算的时候，会将数据从内存中复制一份到高速缓存中，当cpu运算的时候直接从高速缓存里面拿数据，运算完后将数据向高速缓存写入，再将高速缓存刷新到内存中。</p>
-<ol start="3">
-<li><p>缓存的一致性协议</p>
-<p>缓存一致性问题：多核CPU中，每个CPU拥有属于自己的高速缓存，但是内存只有一块，无法保证多个CPU处理相关数据后，更新回主内存的数据以谁为准呢？</p>
-<p>解决方案：</p>
-</li>
-</ol>
-<p>​	1）通过在总线上加锁</p>
-<p>​	CPU和内存的通信是通过总线进行的，在总线上加锁，阻塞其他CPU对内存的访问，保证缓存不一致问题，但是阻塞其他CPU访问内存，导致效率低下。</p>
-<p>​	2）通过缓存一致性协议</p>
-<p>​	MESI协议保证内存中的共享变量的副本是一致的，当cpu写入数据的时候，发现操作变量为共享变量（在其他cpu中也存在该共享变量），会发送信号，通知其他的cpu将这个变量设置为无效状态，当其他cpu读取这个数据时候，发现这个变量是无效的，他会从内存中重新读取。</p>
-<ol start="4">
-<li>CPU乱序执行优化</li>
-</ol>
-<p>​	为了让处理器内部的运算单元能够被充分利用，处理器会对输入的代码进行乱序执行（out-of-order execution）优化处理器会在计算之后，将乱序执行的结构重组，保证结果和顺序执行是一致的，但是不保证程序中各个语句执行顺序和输入顺序一致。（JAVA虚拟机的即时编译器也有类似的指令重排序优化）</p>
-<ol start="5">
-<li><p>处理器内存模型的几种类型</p>
-<p>顺序一致性内存模型：</p>
-<ul>
-<li>一个线程中的所有操作必须按照程序的顺序执行</li>
-<li>所有线程都只能看到一个单一的操作执行顺序，在顺序执行的一致性内存模型，每个操作都必须原子执行且立即对所有线程可见。</li>
-</ul>
-</li>
-</ol>
-<h1 id="JAVA内存模型"><a href="#JAVA内存模型" class="headerlink" title="JAVA内存模型"></a>JAVA内存模型</h1><p>​	不同架构的物理机器可以拥有不一样的内存模型，java的宗旨是一次编译，到处运行，为了实现该目标，java虚拟机规范定义了java内存模型（JAVA Memory Model,JMM）</p>
-<ol>
-<li>主内存</li>
-</ol>
-<p>​	java的内存模型规定了所有变量（实例字段、静态字段、构成数组对象的元素）都存储在主内存中。</p>
-<ol start="2">
-<li>工作内存</li>
-</ol>
-<p>​	每条线程还有自己的工作内存（类比高速缓存区）工作内存中保存了被该线程使用的变量的主内存副本拷贝，线程对变量的所有操作都是在工作内存中完成的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2342,6 +2281,103 @@ QUEUED
 <p>3.任务一旦运行完成不能被重启，除非运行过程中使用了runAndReset方法</p>
 </blockquote>
 <p>3.2.2 FutureTask类图结构</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html" class="post-title-link" itemprop="url">Java内存模型</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><ol>
+<li><p>处理器的内存模型</p>
+<p>CPU的发展在摩尔定律的指导下以18个月的速度翻一倍的速度在发展，内存和硬盘的发展远远落后于CPU，为了解决这个问题CPU厂商设计的了高速缓存解决I&#x2F;O速度和CPU运行速度不匹配问题。</p>
+</li>
+<li><p>高速缓存</p>
+</li>
+</ol>
+<p>​    高速缓存位于CPU和内存之间，当程序进行运算的时候，会将数据从内存中复制一份到高速缓存中，当cpu运算的时候直接从高速缓存里面拿数据，运算完后将数据向高速缓存写入，再将高速缓存刷新到内存中。</p>
+<ol start="3">
+<li><p>缓存的一致性协议</p>
+<p>缓存一致性问题：多核CPU中，每个CPU拥有属于自己的高速缓存，但是内存只有一块，无法保证多个CPU处理相关数据后，更新回主内存的数据以谁为准呢？</p>
+<p>解决方案：</p>
+</li>
+</ol>
+<p>​	1）通过在总线上加锁</p>
+<p>​	CPU和内存的通信是通过总线进行的，在总线上加锁，阻塞其他CPU对内存的访问，保证缓存不一致问题，但是阻塞其他CPU访问内存，导致效率低下。</p>
+<p>​	2）通过缓存一致性协议</p>
+<p>​	MESI协议保证内存中的共享变量的副本是一致的，当cpu写入数据的时候，发现操作变量为共享变量（在其他cpu中也存在该共享变量），会发送信号，通知其他的cpu将这个变量设置为无效状态，当其他cpu读取这个数据时候，发现这个变量是无效的，他会从内存中重新读取。</p>
+<ol start="4">
+<li>CPU乱序执行优化</li>
+</ol>
+<p>​	为了让处理器内部的运算单元能够被充分利用，处理器会对输入的代码进行乱序执行（out-of-order execution）优化处理器会在计算之后，将乱序执行的结构重组，保证结果和顺序执行是一致的，但是不保证程序中各个语句执行顺序和输入顺序一致。（JAVA虚拟机的即时编译器也有类似的指令重排序优化）</p>
+<ol start="5">
+<li><p>处理器内存模型的几种类型</p>
+<p>顺序一致性内存模型：</p>
+<ul>
+<li>一个线程中的所有操作必须按照程序的顺序执行</li>
+<li>所有线程都只能看到一个单一的操作执行顺序，在顺序执行的一致性内存模型，每个操作都必须原子执行且立即对所有线程可见。</li>
+</ul>
+</li>
+</ol>
+<h1 id="JAVA内存模型"><a href="#JAVA内存模型" class="headerlink" title="JAVA内存模型"></a>JAVA内存模型</h1><p>​	不同架构的物理机器可以拥有不一样的内存模型，java的宗旨是一次编译，到处运行，为了实现该目标，java虚拟机规范定义了java内存模型（JAVA Memory Model,JMM）</p>
+<ol>
+<li>主内存</li>
+</ol>
+<p>​	java的内存模型规定了所有变量（实例字段、静态字段、构成数组对象的元素）都存储在主内存中。</p>
+<ol start="2">
+<li>工作内存</li>
+</ol>
+<p>​	每条线程还有自己的工作内存（类比高速缓存区）工作内存中保存了被该线程使用的变量的主内存副本拷贝，线程对变量的所有操作都是在工作内存中完成的。</p>
 
       
     </div>
