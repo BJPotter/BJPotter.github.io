@@ -165,6 +165,181 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/API%E7%BD%91%E5%85%B3.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/API%E7%BD%91%E5%85%B3.html" class="post-title-link" itemprop="url">API网关</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-15 15:58:09" itemprop="dateCreated datePublished" datetime="2024-04-15T15:58:09+08:00">2024-04-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是API网关"><a href="#什么是API网关" class="headerlink" title="什么是API网关"></a>什么是API网关</h1><blockquote>
+<p>API 网关是一个管理、处理和路由API调用到后端服务的系统。作为微服务架构中的关键组件，API网关为客户端（如移动设备、Web应用程序、第三方服务等）提供了一个统一的入口点，并将请求路由到适当的微服务上。此外，它还可以提供额外的跨服务功能，包括请求聚合、协议转换、请求和响应转换等。</p>
+</blockquote>
+<h2 id="API的功能"><a href="#API的功能" class="headerlink" title="API的功能"></a>API的功能</h2><h3 id="请求路由"><a href="#请求路由" class="headerlink" title="请求路由"></a>请求路由</h3><p>API网关将接收到的请求转发到正确的服务。例如，它可以基于URL路径或请求参数将请求路由到特定的微服务。</p>
+<h3 id="API聚合"><a href="#API聚合" class="headerlink" title="API聚合"></a>API聚合</h3><p>API网关可以将多个API请求聚合为一个请求，减少客户端需要做的调用次数，以便提升性能和用户体验。</p>
+<h3 id="身份验证和授权"><a href="#身份验证和授权" class="headerlink" title="身份验证和授权"></a>身份验证和授权</h3><p>它可以在请求到达后端服务之前进行用户身份验证和授权检查，提供安全层，确保只有验证过的用户可以访问敏感信息。</p>
+<h3 id="限流和服务降级"><a href="#限流和服务降级" class="headerlink" title="限流和服务降级"></a>限流和服务降级</h3><p>网关可以限制对后端服务的请求频率，帮助防范DDoS攻击，并在系统负载过高时实施服务降级策略。</p>
+<h3 id="跨应用程序消息传递"><a href="#跨应用程序消息传递" class="headerlink" title="跨应用程序消息传递"></a>跨应用程序消息传递</h3><p>API网关支持不同类型的跨应用程序通讯协议，如HTTP, WebSocket等。</p>
+<h3 id="监控和日志记录"><a href="#监控和日志记录" class="headerlink" title="监控和日志记录"></a>监控和日志记录</h3><p>为了诊断和调试问题，API网关可以对通过它的流量进行监控，并记录日志。</p>
+<h3 id="响应转换"><a href="#响应转换" class="headerlink" title="响应转换"></a>响应转换</h3><p>它可以修改微服务的响应，以符合客户端的需要，例如把JSON转换为XML。</p>
+<h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><p>API网关可以在多个实例之间分配流量，和负载均衡器的工作相似，以提高性能和可靠性。</p>
+<h2 id="API网关的原理"><a href="#API网关的原理" class="headerlink" title="API网关的原理"></a>API网关的原理</h2><ol>
+<li><p>接收请求：API网关的第一步是接收从客户端发来的API请求。</p>
+</li>
+<li><p>预处理和验证：在路由请求之前，API网关需要进行一些预处理工作，比如用户认证（确定请求是否来自一个有效的用户）、鉴权（确定用户是否有权访问请求的资源）、请求校验（确定请求是否合法，是否包含全部必要的参数）等。另外，它也可能需要进行一些消息转换或协议转换的工作。</p>
+</li>
+<li><p>路由请求：API网关将经过校验之后的有效请求路由到正确的后端服务或微服务，比如根据URL或者请求的参数来决定将请求路由到哪一个服务。</p>
+</li>
+<li><p>请求聚合：对于需要多个微服务共同配合来完成的请求，API网关可以将这些请求聚合，而后一次性返回给客户端。这样可以减少客户端需要发出的请求数，从而提升性能和用户体验。</p>
+</li>
+<li><p>响应返回：当后端服务处理完请求后，会将响应返回给API网关，网关之后再将这些响应返回给客户端。在这个过程中，API网关可能还会进行一些后处理，比如进行数据格式转换，或者添加一些特殊的HTTP头等。</p>
+</li>
+<li><p>日志和监控：在整个过程中，API网关会持续记录日志，同时进行性能监控和错误跟踪。这些信息对于系统的维护和故障排查产生重大价值。</p>
+</li>
+</ol>
+<h2 id="API网关的优点"><a href="#API网关的优点" class="headerlink" title="API网关的优点"></a>API网关的优点</h2><ol>
+<li><strong>抽象化：</strong>API 网关为外部消费者访问一组微服务提供了一个统一的入口点，对底层实施细节进行抽象化，同时允许微服务独立演进。</li>
+<li><strong>安全性：</strong>API 网关可以处理身份验证、授权和速率限制等安全任务，从而提高底层微服务的安全性。</li>
+<li><strong>性能：</strong>API 网关可以缓存响应并执行请求&#x2F;响应转换，提高系统的整体性能。</li>
+<li><strong>开发人员体验：</strong>API 网关提供分析、归档和测试工具，使开发人员可以更容易建立和维护基于微服务的应用程序。</li>
+<li><strong>消费者体验：</strong>API 网关可以让消费者更容易发现和使用微服务提供的 API，改善整体易用性和用户体验。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/DDIA%E7%AC%94%E8%AE%B0.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/DDIA%E7%AC%94%E8%AE%B0.html" class="post-title-link" itemprop="url">设计数据密集型应用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-15 15:58:09" itemprop="dateCreated datePublished" datetime="2024-04-15T15:58:09+08:00">2024-04-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="数据系统的基石"><a href="#数据系统的基石" class="headerlink" title="数据系统的基石"></a>数据系统的基石</h1><h2 id="什么是数据密集型和计算密集型"><a href="#什么是数据密集型和计算密集型" class="headerlink" title="什么是数据密集型和计算密集型"></a>什么是数据密集型和计算密集型</h2><h3 id="数据密集型-Data-intensive"><a href="#数据密集型-Data-intensive" class="headerlink" title="数据密集型(Data-intensive)"></a>数据密集型(Data-intensive)</h3><p>数据密集型系统或应用通常涉及大量的数据输入、输出、处理和存储。典型的特点包括：</p>
+<ul>
+<li>需要处理的数据量非常大。</li>
+<li>强调数据的获取、存储、管理和分析。</li>
+<li>常常需要使用数据库、数据仓库、大数据技术如Hadoop或Spark。</li>
+<li>任务可能涉及网络传输、磁盘I&#x2F;O和数据缓存等。</li>
+<li>性能瓶颈可能出现在I&#x2F;O和网络带宽，而不是计算能力。</li>
+</ul>
+<p>数据密集型系统的例子包括社交网络服务、在线购物平台、大规模在线事务处理（OLTP）系统、搜索引擎和推荐系统等。</p>
+<h3 id="计算密集型-Compute-intensive"><a href="#计算密集型-Compute-intensive" class="headerlink" title="计算密集型(Compute-intensive)"></a>计算密集型(Compute-intensive)</h3><p>计算密集型任务或系统则是指需要消耗大量CPU资源进行计算的应用。它们的特点包括：</p>
+<ul>
+<li>需要大量的计算操作。</li>
+<li>花费的时间主要在进行数学计算，处理逻辑或进行数据转换等CPU密集型任务上。</li>
+<li>性能瓶颈往往在CPU计算能力上。</li>
+<li>任务通常需要高效的算法和优化以利用计算资源。</li>
+</ul>
+<p>计算密集型任务的例子包括科学计算、图像和视频编码、3D渲染、密码学分析、大规模模拟和数据挖掘等。</p>
+<blockquote>
+<p>数据密集型和计算密集型的最主要的区别在于它们对资源的需求差异，<strong>数据密集型的瓶颈是I&#x2F;O和网络带宽，而计算密集型的瓶颈是CPU的计算能力。</strong></p>
+</blockquote>
+<h2 id="可靠性，可扩展性，可维护性"><a href="#可靠性，可扩展性，可维护性" class="headerlink" title="可靠性，可扩展性，可维护性"></a>可靠性，可扩展性，可维护性</h2><h3 id="可靠性"><a href="#可靠性" class="headerlink" title="可靠性"></a>可靠性</h3><blockquote>
+<p>系统在<strong>困境（adversity）</strong>（硬件故障、软件故障、人为错误）中仍可正常工作（正确完成功能，并能达到期望的性能水准）</p>
+</blockquote>
+<h3 id="可扩展性"><a href="#可扩展性" class="headerlink" title="可扩展性"></a>可扩展性</h3><blockquote>
+<p>有合理的办法应对系统的增长（数据量、流量、复杂性）</p>
+</blockquote>
+<h3 id="可维护性"><a href="#可维护性" class="headerlink" title="可维护性"></a>可维护性</h3><blockquote>
+<p>系统在不同的生命周期，都能高效地在系统上工作（使系统保持现有行为，并适应新的应用场景）</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -358,7 +533,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/docker.html" class="post-title-link" itemprop="url">docker安装</a>
+            <a href="/post/docker.html" class="post-title-link" itemprop="url">docker</a>
         </h2>
 
         <div class="post-meta">
@@ -370,6 +545,13 @@
 
               <time title="创建时间：2024-03-20 09:03:13" itemprop="dateCreated datePublished" datetime="2024-03-20T09:03:13+08:00">2024-03-20</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-05-16 16:01:19" itemprop="dateModified" datetime="2024-05-16T16:01:19+08:00">2024-05-16</time>
+              </span>
 
           
 
@@ -382,15 +564,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h2><blockquote>
-<ol>
-<li>系统版本：</li>
-</ol>
-<p>  要安装 Docker Engine，您需要 CentOS 7、CentOS 8（流）或 CentOS 9（流）的维护版本。</p>
-<ol start="2">
-<li>卸载旧版本：</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> yum remove <span class="token function">docker</span> <span class="token punctuation">\</span>
+          <h1 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h1><h2 id="系统版本要求"><a href="#系统版本要求" class="headerlink" title="系统版本要求"></a>系统版本要求</h2><p>要安装 Docker Engine，您需要 CentOS 7、CentOS 8（流）或 CentOS 9（流）的维护版本。</p>
+<h2 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h2><h3 id="卸载旧版本"><a href="#卸载旧版本" class="headerlink" title="卸载旧版本"></a>卸载旧版本</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yum remove <span class="token function">docker</span> <span class="token punctuation">\</span>
                  docker-client <span class="token punctuation">\</span>
                  docker-client-latest <span class="token punctuation">\</span>
                  docker-common <span class="token punctuation">\</span>
@@ -399,28 +574,58 @@
                  docker-logrotate <span class="token punctuation">\</span>
                  docker-engine<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<ol start="3">
-<li>设置存储库</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>yum <span class="token function">install</span> -y yum-utils
-<span class="token operator">></span>yum-config-manager <span class="token punctuation">\</span>
+<h3 id="设置存储库"><a href="#设置存储库" class="headerlink" title="设置存储库"></a>设置存储库</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yum <span class="token function">install</span> -y yum-utils
+yum-config-manager <span class="token punctuation">\</span>
    --add-repo <span class="token punctuation">\</span>
    https://download.docker.com/linux/centos/docker-ce.repo<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<ol start="4">
-<li>安装最新版doker</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>yum <span class="token function">install</span> docker-ce docker-ce-cli containerd.io docker-compose-plugin -y<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="安装最新版"><a href="#安装最新版" class="headerlink" title="安装最新版"></a>安装最新版</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yum <span class="token function">install</span> docker-ce docker-ce-cli containerd.io docker-compose-plugin -y<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<ol start="5">
-<li>启动docker</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>systemctl start <span class="token function">docker</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="启动docker"><a href="#启动docker" class="headerlink" title="启动docker"></a>启动docker</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl start <span class="token function">docker</span>
+<span class="token comment"># 设置开机自启</span>
+systemctl <span class="token builtin class-name">enable</span> <span class="token function">docker</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<ol start="6">
-<li>设置开机自启</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>systemctl <span class="token builtin class-name">enable</span> <span class="token function">docker</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></blockquote>
+
+
+<h1 id="docker日志清理"><a href="#docker日志清理" class="headerlink" title="docker日志清理"></a>docker日志清理</h1><h2 id="使用-Docker-日志选项进行日志轮转"><a href="#使用-Docker-日志选项进行日志轮转" class="headerlink" title="使用 Docker 日志选项进行日志轮转"></a>使用 Docker 日志选项进行日志轮转</h2><p>Docker 提供了内置的日志轮转功能，可以在容器启动时配置。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> run -d <span class="token punctuation">\</span>
+  --log-opt max-size<span class="token operator">=</span>10m <span class="token punctuation">\</span>
+  --log-opt max-file<span class="token operator">=</span><span class="token number">3</span> <span class="token punctuation">\</span>
+  your_image<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>上述命令配置 Docker 使其每个日志文件的最大大小为 10MB，并保留最多 3 个日志文件。</p>
+<h2 id="手动清理-Docker-日志"><a href="#手动清理-Docker-日志" class="headerlink" title="手动清理 Docker 日志"></a>手动清理 Docker 日志</h2><p>手动清理 Docker 日志涉及删除 Docker 容器的日志文件。可以通过 <code>cron</code> 作业来定期执行此操作。</p>
+<h3 id="创建清理脚本"><a href="#创建清理脚本" class="headerlink" title="创建清理脚本"></a>创建清理脚本</h3><p>首先，创建一个脚本来清理日志。例如，创建一个名为 <code>docker_log_cleanup.sh</code> 的脚本：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token comment"># 停止并移除所有未使用的容器、网络、镜像和缓存</span>
+<span class="token comment"># docker system prune -af</span>
+<span class="token comment"># 清理所有容器的日志文件</span>
+<span class="token function">find</span> /var/lib/docker/containers/ -type f -name <span class="token string">"*.log"</span> -exec truncate -s <span class="token number">0</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span> <span class="token punctuation">\</span><span class="token punctuation">;</span>
+<span class="token comment"># 确保脚本有执行权限：</span>
+<span class="token function">chmod</span> +x docker_log_cleanup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="设置-cron-作业"><a href="#设置-cron-作业" class="headerlink" title="设置 cron 作业"></a>设置 <code>cron</code> 作业</h3><p>使用 <code>cron</code> 作业定期运行清理脚本。编辑 <code>crontab</code> 文件：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">crontab</span> -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>添加如下条目，例如每周日凌晨 3 点执行清理任务：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">0</span> <span class="token number">3</span> * * <span class="token number">0</span> /path/to/docker_log_cleanup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>保存并退出 <code>crontab</code> 编辑器。</p>
+<h2 id="使用-Docker-自带的定时清理功能"><a href="#使用-Docker-自带的定时清理功能" class="headerlink" title="使用 Docker 自带的定时清理功能"></a>使用 Docker 自带的定时清理功能</h2><p>Docker 提供了 <code>docker system prune</code> 命令，可以删除所有未使用的数据（包括停止的容器、未使用的网络、悬挂的镜像和构建缓存）。可以结合 <code>cron</code> 来定期运行此命令。</p>
+<h3 id="创建定期清理脚本"><a href="#创建定期清理脚本" class="headerlink" title="创建定期清理脚本"></a>创建定期清理脚本</h3><p>创建一个名为 <code>docker_system_prune.sh</code> 的脚本：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token comment"># 运行 Docker system prune 命令</span>
+<span class="token function">docker</span> system prune -af
+<span class="token comment"># 确保脚本有执行权限</span>
+<span class="token function">chmod</span> +x docker_system_prune.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="设置-cron-作业-1"><a href="#设置-cron-作业-1" class="headerlink" title="设置 cron 作业"></a>设置 <code>cron</code> 作业</h3><p>编辑 <code>crontab</code> 文件：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">crontab</span> -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>添加如下条目，例如每天凌晨 2 点执行清理任务：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">0</span> <span class="token number">2</span> * * * /path/to/docker_system_prune.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>保存并退出 <code>crontab</code> 编辑器。</p>
 
       
     </div>
@@ -529,6 +734,78 @@ Enter new password:
 Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h1 id="基础教程"><a href="#基础教程" class="headerlink" title="基础教程"></a>基础教程</h1><h2 id="Querying-Data"><a href="#Querying-Data" class="headerlink" title="Querying Data"></a>Querying Data</h2><h2 id="Filtering-Data"><a href="#Filtering-Data" class="headerlink" title="Filtering Data"></a>Filtering Data</h2><h2 id="Joining-Multiple-Tables"><a href="#Joining-Multiple-Tables" class="headerlink" title="Joining Multiple Tables"></a>Joining Multiple Tables</h2><h2 id="Grouping-Data"><a href="#Grouping-Data" class="headerlink" title="Grouping Data"></a>Grouping Data</h2><h2 id="Set-Operations"><a href="#Set-Operations" class="headerlink" title="Set Operations"></a>Set Operations</h2><h2 id="Grouping-sets-Cube-and-Rollup"><a href="#Grouping-sets-Cube-and-Rollup" class="headerlink" title="Grouping sets, Cube, and Rollup"></a>Grouping sets, Cube, and Rollup</h2><h2 id="Subquery"><a href="#Subquery" class="headerlink" title="Subquery"></a>Subquery</h2><h2 id="Common-Table-Expressions"><a href="#Common-Table-Expressions" class="headerlink" title="Common Table Expressions"></a>Common Table Expressions</h2><h2 id="Modifying-Data"><a href="#Modifying-Data" class="headerlink" title="Modifying Data"></a>Modifying Data</h2><h2 id="Transactions"><a href="#Transactions" class="headerlink" title="Transactions"></a>Transactions</h2><h2 id="Import-amp-Export-Data"><a href="#Import-amp-Export-Data" class="headerlink" title="Import &amp; Export Data"></a>Import &amp; Export Data</h2><h2 id="Managing-Tables"><a href="#Managing-Tables" class="headerlink" title="Managing Tables"></a>Managing Tables</h2><h2 id="Understanding-PostgreSQL-Constraints"><a href="#Understanding-PostgreSQL-Constraints" class="headerlink" title="Understanding PostgreSQL Constraints"></a>Understanding PostgreSQL Constraints</h2><h2 id="PostgreSQL-Data-Types-in-Depth"><a href="#PostgreSQL-Data-Types-in-Depth" class="headerlink" title="PostgreSQL Data Types in Depth"></a>PostgreSQL Data Types in Depth</h2><h2 id="Conditional-Expressions-amp-Operators"><a href="#Conditional-Expressions-amp-Operators" class="headerlink" title="Conditional Expressions &amp; Operators"></a>Conditional Expressions &amp; Operators</h2><h2 id="PostgreSQL-Utilities"><a href="#PostgreSQL-Utilities" class="headerlink" title="PostgreSQL Utilities"></a>PostgreSQL Utilities</h2><h2 id="PostgreSQL-Recipes"><a href="#PostgreSQL-Recipes" class="headerlink" title="PostgreSQL Recipes"></a>PostgreSQL Recipes</h2><h1 id="高级教程"><a href="#高级教程" class="headerlink" title="高级教程"></a>高级教程</h1><h2 id="PL-x2F-pgSQL"><a href="#PL-x2F-pgSQL" class="headerlink" title="PL&#x2F;pgSQL"></a>PL&#x2F;pgSQL</h2><h2 id="Triggers"><a href="#Triggers" class="headerlink" title="Triggers"></a>Triggers</h2><h2 id="Views"><a href="#Views" class="headerlink" title="Views"></a>Views</h2><h2 id="Indexes"><a href="#Indexes" class="headerlink" title="Indexes"></a>Indexes</h2><h2 id="Administration"><a href="#Administration" class="headerlink" title="Administration"></a>Administration</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Git.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Git.html" class="post-title-link" itemprop="url">git</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-24 00:00:00" itemprop="dateCreated datePublished" datetime="2024-01-24T00:00:00+08:00">2024-01-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-07 09:03:38" itemprop="dateModified" datetime="2024-04-07T09:03:38+08:00">2024-04-07</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>学习如何使用Git</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/Git.html">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1903,78 +2180,6 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Git.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Git.html" class="post-title-link" itemprop="url">git</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-01-24 00:00:00" itemprop="dateCreated datePublished" datetime="2024-01-24T00:00:00+08:00">2024-01-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-07 09:03:38" itemprop="dateModified" datetime="2024-04-07T09:03:38+08:00">2024-04-07</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>学习如何使用Git</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/Git.html">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/SQL%20Tutorial.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2115,150 +2320,6 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1.html" class="post-title-link" itemprop="url">负载均衡</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-02-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-02-03T00:00:00+08:00">2022-02-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-16 09:01:59" itemprop="dateModified" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>学习什么是负载均衡以及8种负载均衡算法</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1.html">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%8D%95%E4%BD%93%E7%9A%84%E5%8C%BA%E5%88%AB.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%8D%95%E4%BD%93%E7%9A%84%E5%8C%BA%E5%88%AB.html" class="post-title-link" itemprop="url">Difference between Microservices vs Monolithic Applications</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-05 00:00:00" itemprop="dateCreated datePublished" datetime="2020-01-05T00:00:00+08:00">2020-01-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-16 09:01:59" itemprop="dateModified" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Microservices vs Monolithic Applications Understanding the Core Differences</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%8D%95%E4%BD%93%E7%9A%84%E5%8C%BA%E5%88%AB.html">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2328,14 +2389,14 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-count">54</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
