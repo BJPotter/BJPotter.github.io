@@ -165,6 +165,1318 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E5%BA%8F%E5%88%97%E5%8C%96.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/%E5%BA%8F%E5%88%97%E5%8C%96.html" class="post-title-link" itemprop="url">序列化</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-15 20:15:05" itemprop="dateModified" datetime="2024-04-15T20:15:05+08:00">2024-04-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是序列化和反序列化"><a href="#什么是序列化和反序列化" class="headerlink" title="什么是序列化和反序列化"></a>什么是序列化和反序列化</h1><blockquote>
+<p>将对象转化成字节流，可以将其保存在文件系统、数据库或其他持久性存储介质中，以实现数据的持久化存储。</p>
+<p>简单说：</p>
+<ul>
+<li><strong>序列化</strong>：把对象转换成二进制字节流的过程</li>
+<li><strong>反序列化</strong>：将在序列化过程中所生成的二进制字节流转换成对象的过程</li>
+</ul>
+</blockquote>
+<img src="https://telegraph-image-2ni.pages.dev/file/1fff0f9d66252dbcbf26e.png" style="zoom:33%;">
+
+
+
+<h1 id="为什么要用序列化呢，序列化的好处"><a href="#为什么要用序列化呢，序列化的好处" class="headerlink" title="为什么要用序列化呢，序列化的好处"></a>为什么要用序列化呢，序列化的好处</h1><ol>
+<li><strong>持久化数据</strong>：序列化允许将对象转换为字节流或其他格式，从而可以将其保存在文件系统、数据库或其他持久性存储介质中。通过序列化，数据可以在不同的应用程序执行之间进行持久化，并且在程序重新启动后仍然可用。</li>
+<li><strong>数据交换</strong>：序列化使得数据可以在网络上传输或在进程之间进行通信。通过将对象序列化为字节流或其他格式，可以轻松地在不同的系统或平台之间交换数据。</li>
+<li><strong>跨平台兼容性</strong>：序列化可以帮助解决不同操作系统、编程语言或硬件架构之间的兼容性问题。通过序列化，数据可以以通用格式存储，从而使得不同系统之间的数据交换更加简单。</li>
+<li><strong>对象传递</strong>：在分布式系统中，序列化可以使得对象可以在网络上传输并在远程系统上重建。这对于远程过程调用（RPC）和分布式系统通信非常有用。</li>
+<li><strong>数据备份和恢复</strong>：通过序列化，可以将应用程序的状态保存为数据流，并在需要时进行恢复。这对于实现备份和恢复功能非常有用，以及在应用程序发生崩溃或异常情况下保存数据状态。</li>
+</ol>
+<h1 id="序列化协议在哪层"><a href="#序列化协议在哪层" class="headerlink" title="序列化协议在哪层"></a>序列化协议在哪层</h1><p>osi的7层模型中表示层主要做数据处理包括编解码、加解密、压缩和解压缩，包括对用户数据进行转换成二进制流，正好对应序列化协议。</p>
+<h1 id="序列化协议有哪些"><a href="#序列化协议有哪些" class="headerlink" title="序列化协议有哪些"></a>序列化协议有哪些</h1><ul>
+<li>JDK 自带的序列化，要实现 <code>java.io.Serializable</code>接口</li>
+<li>Kryo：运行速度快，生成的二进制流体积小，Hive和Storm中用</li>
+<li>Protobuf: 谷歌出的，支持多种语言，跨平台的，但是操作复杂。</li>
+<li>Hessian: 跨语言，高效的二进制序列化</li>
+</ul>
+<h1 id="如何实现序列化呢"><a href="#如何实现序列化呢" class="headerlink" title="如何实现序列化呢"></a>如何实现序列化呢</h1><blockquote>
+<p>例如：JDK 自带的序列化，只需实现 <code>java.io.Serializable</code>接口即可</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token keyword">implements</span> <span class="token class-name">Serializable</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">long</span> serialVersionUID <span class="token operator">=</span> <span class="token number">1807122061950651809L</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> username<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> password<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>serialVersionUID 有什么作用？</strong></p>
+<p>序列化号 <code>serialVersionUID</code> 属于版本控制的作用。反序列化时，会检查 <code>serialVersionUID</code> 是否和当前类的 <code>serialVersionUID</code> 一致。如果 <code>serialVersionUID</code> 不一致则会抛出 <code>InvalidClassException</code> 异常。强烈推荐每个序列化类都手动指定其 <code>serialVersionUID</code>，如果不手动指定，那么编译器会动态生成默认的 <code>serialVersionUID</code>。</p>
+<p><strong>如果有些字段不想进行序列化怎么办？</strong></p>
+<p>对于不想进行序列化的变量，可以使用 <code>transient</code> 关键字修饰。</p>
+<p><code>transient</code> 关键字的作用是：阻止实例中那些用此关键字修饰的的变量序列化；当对象被反序列化时，被 <code>transient</code> 修饰的变量值不会被持久化和恢复。</p>
+<p>关于 <code>transient</code> 还有几点注意：</p>
+<ul>
+<li><code>transient</code> 只能修饰变量，不能修饰类和方法。</li>
+<li><code>transient</code> 修饰的变量，在反序列化后变量值将会被置成类型的默认值。例如，如果是修饰 <code>int</code> 类型，那么反序列后结果就是 <code>0</code>。</li>
+<li><code>static</code> 变量因为不属于任何对象(Object)，所以无论有没有 <code>transient</code> 关键字修饰，均不会被序列化。</li>
+</ul>
+<p><strong>JDK自带序列化的问题</strong></p>
+<p>1.<strong>不支持跨语言</strong> : 只支持java语言开发的程序调用</p>
+<p>2.<strong>性能差</strong>：序列化之后的字节数组体积较大，导致传输成本加大。</p>
+<p>3.<strong>存在安全问题</strong>：序列化和反序列化本身并不存在问题。但当输入的反序列化的数据可被用户控制，那么攻击者即可通过构造恶意输入，让反序列化产生非预期的对象，在此过程中执行构造的任意代码。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/springboot.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/springboot.html" class="post-title-link" itemprop="url">springBoot</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-15 20:09:36" itemprop="dateModified" datetime="2024-04-15T20:09:36+08:00">2024-04-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h1><h2 id="入门介绍"><a href="#入门介绍" class="headerlink" title="入门介绍"></a>入门介绍</h2><p>Spring Boot帮助你创建可以运行的独立的、基于Spring的生产级应用程序。 我们对Spring平台和第三方库采取了有主见的观点，这样你就能以最少的麻烦开始工作。 大多数Spring Boot应用程序只需要很少的Spring配置。</p>
+<p>你可以使用Spring Boot来创建Java应用程序，可以通过使用 <code>java -jar</code> 或更传统的war部署来启动。</p>
+<p>我们的主要目标是。</p>
+<ul>
+<li>为所有的Spring开发提供一个根本性的更快、更广泛的入门体验。</li>
+<li>开箱即用，但随着需求开始偏离默认值，请迅速摆脱困境。</li>
+<li>提供一系列大类项目常见的非功能特性（如嵌入式服务器、安全、度量、健康检查和外部化配置）。</li>
+<li>绝对没有代码生成（当不以原生镜像为目标时），也不要求XML配置。</li>
+</ul>
+<h2 id="安装要求"><a href="#安装要求" class="headerlink" title="安装要求"></a>安装要求</h2><ul>
+<li>jdk</li>
+<li>maven</li>
+</ul>
+<p><strong>pom.xml配置情况</strong></p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>project</span> <span class="token attr-name">xmlns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://maven.apache.org/POM/4.0.0<span class="token punctuation">"</span></span>
+         <span class="token attr-name"><span class="token namespace">xmlns:</span>xsi</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.w3.org/2001/XMLSchema-instance<span class="token punctuation">"</span></span>
+         <span class="token attr-name"><span class="token namespace">xsi:</span>schemaLocation</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>modelVersion</span><span class="token punctuation">></span></span>4.0.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>modelVersion</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.example<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>person_use<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.0-SNAPSHOT<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>parent</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-parent<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.6.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>parent</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>properties</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>maven.compiler.source</span><span class="token punctuation">></span></span>8<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>maven.compiler.source</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>maven.compiler.target</span><span class="token punctuation">></span></span>8<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>maven.compiler.target</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>properties</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-web<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependencies</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>build</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugins</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugins</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>build</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>project</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>MainApplication.java</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">RestController</span>
+<span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MainApplication</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">home</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"hello,world"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">MainApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p> @RestController 和 @RequestMapping 注解</p>
+<ul>
+<li><code>@RestController =@Controller +@ResponseBody</code>将返回的结果字符串直接响应给客户端</li>
+<li><code>@RequestMapping</code>提供了routing路由信息</li>
+</ul>
+<p>@SpringBootApplication 注解</p>
+<p><code>@SpringBootApplication</code>&#x3D;<code>@SpringBootConfiguration</code>+<code>@EnableAutoConfiguration</code>+<code>@ComponentScan</code></p>
+<p><code>@EnableAutoConfiguration</code>告诉Spring Boot根据你添加的jar依赖项 “猜测” 你想如何配置Spring</p>
+<h2 id="main-方法"><a href="#main-方法" class="headerlink" title="main 方法"></a>main 方法</h2><p>main方法通过调用 <code>run</code> 方法，把应用委托给Spring Boot的 <code>SpringApplication</code> 类。 <code>SpringApplication</code> 引导我们的应用程序启动Spring，而Spring又会启动自动配置的Tomcat网络服务器。 我们需要将 <code>启动类得类名.class</code> 作为参数传递给 <code>run</code> 方法，以告诉 <code>SpringApplication</code> 哪个是主要的Spring组件。 <code>args</code> 数组也被传入，这是命令行参数。</p>
+<p>创建一个可执行 Jar</p>
+<p>打包为一个独立可执行jar包，它完全可以运行在生产环境中。 可执行的jar文件（有时被称为 “fat jar”）是包含你的编译类以及你的代码运行所需的所有jar依赖项的压缩包。springboot采取了直接嵌套jar,为了创建一个可执行的jar，我们需要在 <code>pom.xml</code> 中添加 <code>spring-boot-maven-plugin</code> 插件。在 <code>pom.xml</code> 的 <code>dependencies</code> 节点下面插入以下几行。</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>build</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugins</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugins</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>build</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="使用Spring-Boot进行开发"><a href="#使用Spring-Boot进行开发" class="headerlink" title="使用Spring Boot进行开发"></a>使用Spring Boot进行开发</h1><h2 id="构建系统"><a href="#构建系统" class="headerlink" title="构建系统"></a>构建系统</h2><p>Spring Boot的每个版本都提供了一个它所支持的依赖的列表。 在实践中，你不需要在构建配置中为这些依赖声明版本，因为Spring Boot会帮你管理这些。 当你升级Spring Boot本身时，这些依赖也会一同升级。</p>
+<h2 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h2><blockquote>
+<p>在Maven中使用Spring Boot</p>
+</blockquote>
+<p>官方starter</p>
+<p>Starter是一系列开箱即用的依赖，你可以在你的应用程序中导入它们。 通过你Starter，可以获得所有你需要的Spring和相关技术的一站式服务，免去了需要到处大量复制粘贴依赖的烦恼。 例如，如果你想开始使用Spring和JPA进行数据库访问，那么可以直接在你的项目中导入 <code>spring-boot-starter-data-jpa</code> 依赖。</p>
+<p>Starter含了很多你需要的依赖，以使项目快速启动和运行，并拥有一套一致的、受支持的可管理的过渡性依赖。</p>
+<blockquote>
+<p><strong>关于Starter的命名</strong></p>
+<p>所有<strong>官方的</strong>Starter都遵循一个类似的命名模式；<code>spring-boot-starter-*</code>，其中 <code>*</code> 是一个特定类型的应用程序。 这种命名结构是为了在你需要寻找Starter时提供帮助。 许多IDE中集成的Maven可以让你按名称搜索依赖。 例如，如果安装了相应的Eclipse或Spring Tools插件，你可以在POM编辑器中按下 <code>ctrl-space</code> ，然后输入 “spring-boot-starter” 来获取完整的列表。</p>
+<p>第三方启动器不应该以 <code>spring-boot</code> 开头，因为它是留给Spring Boot官方组件的。 相反，第三方启动器通常以项目的名称开始。 例如，一个名为 <code>thirdpartyproject</code> 的第三方启动器项目通常被命名为 <code>thirdpartyproject-spring-boot-starter</code>。</p>
+</blockquote>
+<h2 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h2><p>Spring Boot对代码的布局，没有特别的要求。 但是，有一些最佳实践。</p>
+<p>避免使用default包</p>
+<p>当一个类不包括 <code>package</code> 的声明时，它被认为是在 “default package” 中。 通常应避免使 “default package”。 对于使用了 <code>@ComponentScan</code>, <code>@ConfigurationPropertiesScan</code>, <code>@EntityScan</code> 或者 <code>@SpringBootApplication</code> 注解的Spring Boot应用程序来说，它可能会造成一个问题：项目中的所有jar里面的所有class都会被读取（扫描）。</p>
+<blockquote>
+<p>遵循Java推荐的包的命名惯例，使用域名反转作为包名（例如， <code>com.example.project</code>）。</p>
+</blockquote>
+<h2 id="启动类的位置"><a href="#启动类的位置" class="headerlink" title="启动类的位置"></a>启动类的位置</h2><p>启动类放在一个根package中，高于其他的类，<a target="_blank" rel="noopener" href="https://springdoc.cn/spring-boot/using.html#using.using-the-springbootapplication-annotation"><code>@SpringBootApplication</code></a> 注解一般都是注解在启动类上的。它默认会扫描当前类下的所有子包。例如，如果你正在编写一个JPA应用程序，你的 <code>@Entity</code> 类只有定义在启动类的子包下才能被扫描加载到。这样的好处也显而易见，<code>@SpringBootApplication</code> 默认只会扫描加载你项目工程中的组件。</p>
+<p><strong>项目布局</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">com
+ +- example
+     +- myapplication
+         +- MyApplication.java
+         |
+         +- customer
+         |   +- Customer.java
+         |   +- CustomerController.java
+         |   +- CustomerService.java
+         |   +- CustomerRepository.java
+         |
+         +- order
+             +- Order.java
+             +- OrderController.java
+             +- OrderService.java
+             +- OrderRepository.java<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Configuration-类"><a href="#Configuration-类" class="headerlink" title="Configuration 类"></a>Configuration 类</h2><p>Spring Boot倾向于通过Java代码来进行配置的定义。 虽然也可以使用XML来配置 <code>SpringApplication</code> ，但还是建议你通过 <code>@Configuration</code> 类来进行配置。 通常，可以把启动类是作为主要的 <code>@Configuration</code> 类。</p>
+<p>导入额外的 Configuration 类</p>
+<p>不需要把所有的 <code>@Configuration</code> 放在一个类中。 <code>@Import</code> 注解可以用来导入额外的配置类。 另外，你可以使用 <code>@ComponentScan</code> 来自动扫描加载所有Spring组件，包括 <code>@Configuration</code> 类。</p>
+<p>导入 XML Configuration</p>
+<p>需要使用基于XML的配置，我们建议你仍然从 <code>@Configuration</code> 类开始，然后通过 <code>@ImportResource</code> 注解来加载XML配置文件。</p>
+<h2 id="自动装配（配置）"><a href="#自动装配（配置）" class="headerlink" title="自动装配（配置）"></a>自动装配（配置）</h2><p>Spring Boot的自动装配机制会试图根据你所添加的依赖来自动配置你的Spring应用程序。 例如，如果你添加了 <code>HSQLDB</code> 依赖，而且你没有手动配置任何DataSource Bean，那么Spring Boot就会自动配置内存数据库。</p>
+<p>你需要将 <code>@EnableAutoConfiguration</code> 或 <code>@SpringBootApplication</code> 注解添加到你的 <code>@Configuration</code> 类中，从而开启自动配置功能。</p>
+<p>逐步取代自动配置</p>
+<p>自动配置是非侵入性的。自定义你自己的配置来取代自动配置的特定部分。 例如，如果你添加了你自己的 <code>DataSource</code> bean，默认的嵌入式数据库支持就会“退步”从而让你的自定义配置生效。</p>
+<p>如果想知道在应用中使用了哪些自动配置，你可以在启动命令后添加 <code>--debug</code> 参数。 这个参数会为核心的logger开启debug级别的日志，会在控制台输出自动装配项目以及触发自动装配的条件。</p>
+<p>禁用指定的自动装配类</p>
+<p>如果你想禁用掉项目中某些自动装配类，你可以在 <code>@SpringBootApplication</code> 注解的 <code>exclude</code> 属性中指定，如下例所示。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span><span class="token punctuation">(</span>exclude <span class="token operator">=</span> <span class="token punctuation">&#123;</span> <span class="token class-name">DataSourceAutoConfiguration</span><span class="token punctuation">.</span><span class="token keyword">class</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="Spring-Bean-和-依赖注入"><a href="#Spring-Bean-和-依赖注入" class="headerlink" title="Spring Bean 和 依赖注入"></a>Spring Bean 和 依赖注入</h2><p>推荐使用构造函数注入，并使用 <code>@ComponentScan</code> 注解来扫描Bean。可以在启动类添加 <code>@ComponentScan</code> 注解，也不需要定义它任何参数， 你的所有应用组件（<code>@Component</code>、<code>@Service</code>、<code>@Repository</code>、<code>@Controller</code> 和其他）都会自动注册为Spring Bean。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyAccountService</span> <span class="token keyword">implements</span> <span class="token class-name">AccountService</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">MyAccountService</span><span class="token punctuation">(</span><span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>riskAssessor <span class="token operator">=</span> riskAssessor<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">//如果一个Bean有多个构造函数，你需要用 @Autowired 注解来告诉Spring该用哪个构造函数进行注入。</span>
+<span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyAccountService</span> <span class="token keyword">implements</span> <span class="token class-name">AccountService</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">PrintStream</span> out<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">public</span> <span class="token class-name">MyAccountService</span><span class="token punctuation">(</span><span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>riskAssessor <span class="token operator">=</span> riskAssessor<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>out <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">MyAccountService</span><span class="token punctuation">(</span><span class="token class-name">RiskAssessor</span> riskAssessor<span class="token punctuation">,</span> <span class="token class-name">PrintStream</span> out<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>riskAssessor <span class="token operator">=</span> riskAssessor<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>out <span class="token operator">=</span> out<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="使用-SpringBootApplication-注解"><a href="#使用-SpringBootApplication-注解" class="headerlink" title="使用@SpringBootApplication 注解"></a>使用@SpringBootApplication 注解</h2><p>应用程序能够使用自动配置、组件扫描，并且能够在他们的 “application class “上定义额外的配置。 一个 <code>@SpringBootApplication</code> 注解就可以用来启用这三个功能，如下。</p>
+<ul>
+<li><code>@EnableAutoConfiguration</code>：启用Spring Boot的自动配置机制。</li>
+<li><code>@ComponentScan</code>：对应用程序所在的包启用 <code>@Component</code> 扫描</li>
+<li><code>@SpringBootConfiguration</code>：允许在Context中注册额外的Bean或导入额外的配置类</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// Same as @SpringBootConfiguration @EnableAutoConfiguration @ComponentScan</span>
+<span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">MyApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>运行你的应用</p>
+<p>如果你使用Spring Boot的Maven或Gradle插件来创建可执行jar，你可以使用 <code>java -jar</code> 来运行你的打包后应用程序，如下例所示。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ java -jar target/myapplication-0.0.1-SNAPSHOT.jar
+//打包后的jar程序，也支持通过命令行参数开启远程调试服务，如下。
+$ java -Xdebug -Xrunjdwp:server<span class="token operator">=</span>y,transport<span class="token operator">=</span>dt_socket,address<span class="token operator">=</span><span class="token number">8000</span>,suspend<span class="token operator">=</span>n <span class="token punctuation">\</span>
+       -jar target/myapplication-0.0.1-SNAPSHOT.jar
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="开发者工具（Developer-Tools）"><a href="#开发者工具（Developer-Tools）" class="headerlink" title="开发者工具（Developer Tools）"></a>开发者工具（Developer Tools）</h2><p>Spring Boot 提供了一套额外的工具，可以让你更加愉快的开发应用。 <code>spring-boot-devtools</code> 模块可以包含在任何项目中，以在开发期间提供一些有用的特性。 要使用devtools，请添加以下依赖到项目中。</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-devtools<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>optional</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>optional</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependencies</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>要启用devtools，无论用于启动应用程序的类加载器是什么，请设置启动参数 <code>-Dspring.devtools.restart.enabled=true</code> 。 在生产环境中不能这样做，因为运行devtools会有安全风险。 要禁用devtools，请删除该依赖或者设置启动参数 <code>-Dspring.devtools.restart.enabled=false</code>。</p>
+<p>在 Maven 中，<code>&lt;optional&gt;true&lt;/optional&gt;</code> 的作用是将依赖项标记为可选的。当一个依赖项被标记为可选时，它不会被自动包含在项目的依赖关系中。</p>
+<p>当其他项目引用你的项目时，这些可选的依赖项将不会被传递性地引入。只有当其他开发者明确地将这些可选依赖项添加到他们的项目中，这些依赖项才会被包含。</p>
+</blockquote>
+<h1 id="核心特性"><a href="#核心特性" class="headerlink" title="核心特性"></a>核心特性</h1><h2 id="SpringApplication"><a href="#SpringApplication" class="headerlink" title="SpringApplication"></a>SpringApplication</h2><p>通过 <code>SpringApplication</code> 类，你可以从 <code>main()</code> 方法中启动Spring应用程序。 在许多情况下，你可以直接调动 <code>SpringApplication.run</code> 静态方法，如以下例子所示。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">MyApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>默认情况下，会显示 <code>INFO</code> 级别的日志信息，包括一些相关的启动细节，比如启动应用程序的用户。 如果你需要 <code>INFO</code> 以外级别的日志，你可以设置它，如日志级别中所述。 应用程序的版本是使用main方法所在类的包的实现版本来确定的。 启动信息的记录可以通过设置 <code>spring.main.log-startup-info</code> 为 <code>false</code> 来关闭。 这也将关闭应用程序的激活的profiles的日志记录。</p>
+<h2 id="启用失败"><a href="#启用失败" class="headerlink" title="启用失败"></a>启用失败</h2><p>如果你的应用程序启动失败，注册的 <code>FailureAnalyzers</code> 会尝试提供一个专门的错误信息提示和具体的解决办法。 例如，如果你在端口 <code>8080</code> 上启动一个网络应用，而该端口已经被使用，你应该看到类似于下面的信息。</p>
+<pre class="line-numbers language-none"><code class="language-none">***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Embedded servlet container failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that is listening on port 8080 or configure this application to listen on another port.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如果 failure analyzer 不能够处理异常，你仍然可以显示完整的条件报告以更好地了解出错的原因。例如，如果你通过使用 <code>java -jar</code> 来运行你的应用程序，你可以按以下方式启用 <code>debug</code> 属性。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ java -jar myproject-0.0.1-SNAPSHOT.jar --debug<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="懒初始化（Lazy-Initialization）"><a href="#懒初始化（Lazy-Initialization）" class="headerlink" title="懒初始化（Lazy Initialization）"></a>懒初始化（Lazy Initialization）</h2><p><code>SpringApplication</code> 允许应用程序被懒初始化。 当启用懒初始化时，Bean在需要时被创建，而不是在应用程序启动时。 因此，懒初始化可以减少应用程序的启动时间。 在一个Web应用程序中，启用懒初始化后将导致许多与Web相关的Bean在收到HTTP请求之后才会进行初始化。</p>
+<p>懒初始化的一个缺点是它会延迟发现应用程序的问题。 如果一个配置错误的Bean被懒初始化了，那么在启动过程中就不会再出现故障，问题只有在Bean被初始化时才会显现出来。 还必须注意确保JVM有足够的内存来容纳应用程序的所有Bean，而不仅仅是那些在启动期间被初始化的Bean。 由于这些原因，默认情况下不启用懒初始化，建议在启用懒初始化之前，对JVM的堆大小进行微调。</p>
+<p>可以使用 <code>SpringApplicationBuilder</code> 的 <code>lazyInitialization</code> 方法或 <code>SpringApplication</code> 的 <code>setLazyInitialization</code> 方法以编程方式启用懒初始化。 另外，也可以使用 <code>spring.main.lazy-initialization</code> 属性来启用，如下例所示。</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">spring</span><span class="token punctuation">:</span>
+  <span class="token key atrule">main</span><span class="token punctuation">:</span>
+    <span class="token key atrule">lazy-initialization</span><span class="token punctuation">:</span> <span class="token boolean important">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>如果你想禁用某些Bean的懒初始化，同时对应用程序的其他部分使用懒初始化，你可以使用 <code>@Lazy(false)</code> 注解将其<code>Lazy</code> 属性显式地设置为 false。</p>
+</blockquote>
+<h2 id="自定义-Banner"><a href="#自定义-Banner" class="headerlink" title="自定义 Banner"></a>自定义 Banner</h2><p>启动时打印的Banner可以通过在 classpath 中添加 <code>banner.txt</code> 文件或通过将 <code>spring.banner.location</code> 属性设置为该文件的位置来自定义。 如果该文件的编码不是UTF-8，你可以通过 <code>spring.banner.charset</code> 属性设置其字符编码。</p>
+<h2 id="自定义-SpringApplication"><a href="#自定义-SpringApplication" class="headerlink" title="自定义 SpringApplication"></a>自定义 SpringApplication</h2><p>如果 <code>SpringApplication</code> 的默认值不符合你的需求，你可以创建一个实例并对其进行自定义。 例如，要关闭Banner，你可以这样写。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">SpringApplication</span> application <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SpringApplication</span><span class="token punctuation">(</span><span class="token class-name">MyApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        application<span class="token punctuation">.</span><span class="token function">setBannerMode</span><span class="token punctuation">(</span><span class="token class-name">Banner<span class="token punctuation">.</span>Mode</span><span class="token punctuation">.</span>OFF<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        application<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>传递给 <code>SpringApplication</code> 的构造参数是 Spring Bean 的配置源。 在大多数情况下，这些是对 <code>@Configuration</code> 类的引用，但它们也可能是对 <code>@Component</code> 类的直接引用。</p>
+<h2 id="Builder-API"><a href="#Builder-API" class="headerlink" title="Builder API"></a>Builder API</h2><p><code>SpringApplicationBuilder</code> 允许你链式调用多个方法，包括调用 <code>parent</code> 和 <code>child</code> 方法，创建一个层次结构，如下例所示。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">new</span> <span class="token class-name">SpringApplicationBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">sources</span><span class="token punctuation">(</span><span class="token class-name">Parent</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">child</span><span class="token punctuation">(</span><span class="token class-name">Application</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">bannerMode</span><span class="token punctuation">(</span><span class="token class-name">Banner<span class="token punctuation">.</span>Mode</span><span class="token punctuation">.</span>OFF<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Application-可用性"><a href="#Application-可用性" class="headerlink" title="Application 可用性"></a>Application 可用性</h2><p>在平台上部署时，应用程序可以使用 Kubernetes Probes等基础设施向平台提供有关其可用性的信息。Spring Boot对常用的 “liveness” 和 “readiness” 可用性状态提供了开箱即用的支持。如果你使用Spring Boot的 “actuator” ，那么这些状态将作为健康端点组（health endpoint groups）暴露出来。</p>
+<h2 id="Liveness-State"><a href="#Liveness-State" class="headerlink" title="Liveness State"></a>Liveness State</h2><p>一个应用程序的 “Liveness” 状态告诉我们它的内部状态是否允许它正常工作，或者在当前失败的情况下自行恢复。 一个broken状态的 “Liveness” 状态意味着应用程序处于一个无法恢复的状态，基础设施应该重新启动应用程序。Spring Boot应用程序的内部状态大多由Spring <code>ApplicationContext</code> 表示。如果 application context 已成功启动，Spring Boot就认为应用程序处于有效状态。一旦context被刷新，应用程序就被认为是活的</p>
+<h2 id="Readiness-State"><a href="#Readiness-State" class="headerlink" title="Readiness State"></a>Readiness State</h2><p>应用程序的 “Readiness” 状态告诉平台，该应用程序是否准备好处理流量。 failing状态的 “Readiness” 告诉平台，它暂时不应该将流量发送到该应用程序。 这通常发生在启动期间，当 <code>CommandLineRunner</code> 和 <code>ApplicationRunner</code> 组件还在被处理的时候，或者是应用程序觉得目前负载已经到了极限，不能再处理额外的请求的时候。</p>
+<p>一旦 <code>ApplicationRunner</code> 和 <code>CommandLineRunner</code> 被调用完成，就认为应用程序已经准备好了</p>
+<h2 id="管理应用程序的可用性状态"><a href="#管理应用程序的可用性状态" class="headerlink" title="管理应用程序的可用性状态"></a>管理应用程序的可用性状态</h2><h2 id="Application-事件和监听器"><a href="#Application-事件和监听器" class="headerlink" title="Application 事件和监听器"></a>Application 事件和监听器</h2><p>有些事件实际上是在 <code>ApplicationContext</code> 被创建之前触发的，所以你不能以 <code>@Bean</code> 的形式注册一个监听器。 你可以通过 <code>SpringApplication.addListeners(…)</code> 方法或 <code>SpringApplicationBuilder.listeners(…)</code> 方法注册它们。</p>
+<p>如果你想让这些监听器自动注册，不管应用程序是如何创建的，你可以在你的项目中添加一个 <code>META-INF/spring.factories</code> 文件，并通过 <code>org.springframework.context.ApplicationListener</code> 属性来配置你的监听器，如以下例子所示。</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">org.springframework.context.ApplicationListener=com.example.project.MyListener<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>当应用程序运行时，Application event按以下顺序发布。</p>
+<ol>
+<li>一个 <code>ApplicationStartingEvent</code> 在运行开始时被发布，但在任何处理之前，除了注册监听器和初始化器之外。</li>
+<li>当在上下文中使用的 <code>Environment</code> 已知，但在创建上下文之前，将发布 <code>ApplicationEnvironmentPreparedEvent</code>。</li>
+<li>当 <code>ApplicationContext</code> 已准备好并且 <code>ApplicationContextInitializers</code> 被调用，但在任何Bean定义被加载之前，<code>ApplicationContextInitializedEvent</code> 被发布。</li>
+<li>一个 <code>ApplicationPreparedEvent</code> 将在刷新开始前但在Bean定义加载后被发布。</li>
+<li>在上下文被刷新之后，但在任何应用程序和命令行运行程序被调用之前，将发布一个 <code>ApplicationStartedEvent</code>。</li>
+<li>紧接着发布 <code>LivenessState.CORRECT</code> 状态的 <code>AvailabilityChangeEvent</code>，表明应用程序被认为是存活的。</li>
+<li>在任何<a target="_blank" rel="noopener" href="https://springdoc.cn/spring-boot/features.html#features.spring-application.command-line-runner">ApplicationRunner 和 CommandLineRunner</a>被调用后，将发布一个 <code>ApplicationReadyEvent</code>。</li>
+<li>紧接着发布 <code>ReadinessState.ACCEPTING_TRAFFIC</code> 状态的 <code>AvailabilityChangeEvent</code>，表明应用程序已经准备好为请求提供服务。</li>
+<li>如果启动时出现异常，将发布一个 <code>ApplicationFailedEvent</code>。</li>
+</ol>
+<p>Application event 是通过使用Spring框架的事件发布机制来发布的。 该机制的一部分确保了发布给子context中的listener的事件也会发布给任何祖先context的listener。 因此，如果你的应用程序使用了多层级的 <code>SpringApplication</code>，一个监听器可能会收到同一类型应用程序事件的多个实例（重复收到事件通知）。</p>
+<p>为了让你的listener能够区分事件是由哪个context（子、父）发送的，可以注入其application context，然后将注入的context与事件的context进行比较。 context可以通过实现 <code>ApplicationContextAware</code> 来注入，如果监听器是一个Bean，则可以通过使用 <code>@Autowired</code> 来注入。</p>
+<h2 id="WEB-环境（Environment）"><a href="#WEB-环境（Environment）" class="headerlink" title="WEB 环境（Environment）"></a>WEB 环境（Environment）</h2><p><code>SpringApplication</code> 会试图帮你创建正确类型的 <code>ApplicationContext</code>。 确定为 <code>WebApplicationType</code> 的算法如下。</p>
+<ul>
+<li>如果Spring MVC存在，就会使用 <code>AnnotationConfigServletWebServerApplicationContext</code>。</li>
+<li>如果Spring MVC不存在而Spring WebFlux存在，则使用 <code>AnnotationConfigReactiveWebServerApplicationContext</code>。</li>
+<li>否则，将使用 <code>AnnotationConfigApplicationContext</code>。</li>
+</ul>
+<p>这意味着，如果你在同一个应用程序中使用Spring MVC和新的 <code>WebClient</code>（来自于Spring WebFlux），Spring MVC将被默认使用。 你可以通过调用 <code>setWebApplicationType(WebApplicationType)</code> 来轻松覆盖。</p>
+<p>也可以通过调用 <code>setApplicationContextFactory(…)</code> 来完全控制使用的 <code>ApplicationContext</code> 类型。</p>
+<h2 id="访问应用参数"><a href="#访问应用参数" class="headerlink" title="访问应用参数"></a>访问应用参数</h2><p>如果你需要访问传递给 <code>SpringApplication.run(..)</code> 的命令行参数，你可以注入一个 <code>org.springframework.boot.ApplicationArguments</code> bean。 通过 <code>ApplicationArguments</code> 接口，你可以访问原始的 <code>String[]</code> 参数以及经过解析的 <code>option</code> 和 <code>non-option</code> 参数。如以下例子所示。</p>
+<h2 id="使用-ApplicationRunner-或-CommandLineRunner"><a href="#使用-ApplicationRunner-或-CommandLineRunner" class="headerlink" title="使用 ApplicationRunner 或 CommandLineRunner"></a>使用 ApplicationRunner 或 CommandLineRunner</h2><p>如果你需要在 <code>SpringApplication</code> 启动后运行一些特定的代码，你可以实现 <code>ApplicationRunner</code> 或 <code>CommandLineRunner</code> 接口。 这两个接口以相同的方式工作，并提供一个单一的 <code>run</code> 方法，该方法在 <code>SpringApplication.run(…)</code> 执行完毕之前被调用。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyCommandLineRunner</span> <span class="token keyword">implements</span> <span class="token class-name">CommandLineRunner</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// Do something...</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如果定义了多个 <code>CommandLineRunner</code> 或 <code>ApplicationRunner</code> Bean，并且需要它们按照特定的顺序先后执行。那么可以实现 <code>org.springframework.core.Ordered</code> 接口或使用 <code>org.springframework.core.annotation.Order</code> 注解来指定顺序。</p>
+<h2 id="程序退出"><a href="#程序退出" class="headerlink" title="程序退出"></a>程序退出</h2><p>每个 <code>SpringApplication</code> 都向JVM注册了一个shutdown hook，以确保 <code>ApplicationContext</code> 在退出时优雅地关闭。 所有标准的Spring生命周期回调（如 <code>DisposableBean</code> 接口或 <code>@PreDestroy</code> 注解）都可以使用。</p>
+<p>此外，如果Bean希望在调用 <code>SpringApplication.exit()</code> 时返回特定的退出代码，可以实现 <code>org.springframework.boot.ExitCodeGenerator</code> 接口。 然后，这个退出代码可以被传递给 <code>System.exit()</code> ，将其作为状态代码返回，如下面的例子所示。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Bean</span>
+<span class="token keyword">public</span> <span class="token class-name">ExitCodeGenerator</span> <span class="token function">exitCodeGenerator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+       <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token number">42</span><span class="token punctuation">;</span>
+   <span class="token punctuation">&#125;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">exit</span><span class="token punctuation">(</span><span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">exit</span><span class="token punctuation">(</span><span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">MainApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span>args<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>另外，<code>ExitCodeGenerator</code> 接口可以由异常（Exception）实现。 当遇到这种异常时，Spring Boot会返回由实现的 <code>getExitCode()</code> 方法提供的退出代码。</p>
+<p>如果有多个 <code>ExitCodeGenerator</code> ，则使用第一个生成的非零退出代码。 要控制生成器（Generator）的调用顺序，你可以实现 <code>org.springframework.core.Ordered</code> 接口或使用 <code>org.springframework.core.annotation.Order</code> 注解。</p>
+<h2 id="管理功能"><a href="#管理功能" class="headerlink" title="管理功能"></a>管理功能</h2><p>通过指定 <code>spring.application.admin.enabled</code> 属性，可以启用应用程序的管理相关功能。 这在 <code>MBeanServer</code> 平台上暴露了 <a target="_blank" rel="noopener" href="https://github.com/spring-projects/spring-boot/tree/main/spring-boot-project/spring-boot/src/main/java/org/springframework/boot/admin/SpringApplicationAdminMXBean.java"><code>SpringApplicationAdminMXBean</code></a>。 你可以使用这个功能来远程管理你的Spring Boot应用程序。 这个功能对任何服务包装器的实现也很有用。</p>
+<h2 id="应用程序启动追踪"><a href="#应用程序启动追踪" class="headerlink" title="应用程序启动追踪"></a>应用程序启动追踪</h2><p>在应用程序启动期间，<code>SpringApplication</code> 和 <code>ApplicationContext</code> 执行许多与应用程序生命周期相关的任务。 beans的生命周期，甚至是处理应用事件。 通过 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/6.1.0-M1/javadoc-api/org/springframework/core/metrics/ApplicationStartup.html"><code>ApplicationStartup</code></a>, ，Spring框架 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/6.1.0-M1/reference/html/core.html#context-functionality-startup">允许你用 <code>StartupStep</code> 对象来跟踪应用程序的启动顺序</a>。 这些数据可以为分析目的而收集，或者只是为了更好地了解应用程序的启动过程。</p>
+<p>你可以在设置 <code>SpringApplication</code> 实例时选择一个 <code>ApplicationStartup</code> 实现。 例如，要使用 <code>BufferingApplicationStartup</code>，你可以这么写。</p>
+<h2 id="外部化的配置"><a href="#外部化的配置" class="headerlink" title="外部化的配置"></a>外部化的配置</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/webhook.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/webhook.html" class="post-title-link" itemprop="url">webhook</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-15 20:09:52" itemprop="dateModified" datetime="2024-04-15T20:09:52+08:00">2024-04-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Webhook基础"><a href="#Webhook基础" class="headerlink" title="Webhook基础"></a><strong>Webhook基础</strong></h1><blockquote>
+<p>Webhook是一种通过HTTP协议将实时数据传输到指定URL的机制。与传统API不同，它不需要客户端主动轮询服务器以获取更新，而是由服务器主动向客户端推送数据。这种设计使得Webhook非常适合用于实时通知、事件驱动的应用和集成不同系统之间的数据。</p>
+</blockquote>
+<h2 id="WebHook与传统API的区别"><a href="#WebHook与传统API的区别" class="headerlink" title="WebHook与传统API的区别"></a><strong>WebHook与传统API的区别</strong></h2><ul>
+<li><strong>触发方式</strong>：传统API是由客户端主动发起请求来获取数据或执行操作，而Webhook是由服务端主动向客户端推送数据。</li>
+<li><strong>实时性</strong>：Webhook可以实现实时通知，当事件发生时立即推送数据给客户端，而传统API则需要客户端定期轮询或手动发起请求来获取数据，可能存在一定的延迟。</li>
+<li><strong>节省资源</strong>：使用Webhook可以减少无效请求和服务器负载，因为只有在事件发生时才会触发数据传输，而传统API可能会频繁发送不必要的请求。</li>
+<li><strong>适用场景</strong>：Webhook适用于需要实时数据更新和事件驱动的场景，例如实时通知、即时聊天等，而传统API更适用于按需获取数据或执行操作的场景。</li>
+</ul>
+<img src="https://telegraph-image-2ni.pages.dev/file/4f4a8d0b71e6f3f828444.png" style="zoom:50%;">
+
+<h2 id="Webhook的工作原理"><a href="#Webhook的工作原理" class="headerlink" title="Webhook的工作原理"></a>Webhook的工作原理</h2><ol>
+<li><strong>注册Webhook</strong>：在目标服务上，客户端需要注册一个Webhook，通常是通过提供一个URL来告知目标服务在发生特定事件时向该URL发送数据。</li>
+<li><strong>事件触发</strong>：当目标服务上发生了注册的事件，比如数据更新、状态更改等，服务会触发Webhook，即向注册的URL发送HTTP请求。</li>
+<li><strong>HTTP请求</strong>：服务向注册的URL发送HTTP请求，通常是一个POST请求。这个请求会包含一些元数据，比如事件类型、发生时间等，以及相关的数据，比如更新的数据内容。这些数据通常以JSON格式或其他常见的数据格式进行传输。</li>
+<li><strong>客户端接收请求</strong>：客户端（Webhook的接收端）接收到这个HTTP请求后，需要解析其中的数据。这可以通过读取请求体中的内容来完成。客户端应该验证请求的来源和完整性，以确保安全性。</li>
+<li><strong>处理数据</strong>：一旦客户端解析了请求中的数据，它可以根据需要进行进一步的处理。这可能涉及将数据存储到数据库中、更新应用程序的状态、发送通知给用户等等。</li>
+<li><strong>响应</strong>：处理完数据后，客户端需要向目标服务发送一个响应，通常是一个HTTP状态码。这个响应可以告知目标服务数据是否已经成功接收和处理。通常情况下，目标服务不会对这个响应做出太多的处理，但一些服务可能会根据响应来判断是否继续尝试发送数据。</li>
+<li><strong>错误处理</strong>：在整个过程中，客户端需要注意处理可能出现的错误，比如网络连接问题、数据格式错误等。一些常见的错误处理方式包括记录错误日志、发送警报通知等。</li>
+</ol>
+<h1 id="Java实现WebHook"><a href="#Java实现WebHook" class="headerlink" title="Java实现WebHook"></a><strong>Java实现WebHook</strong></h1><h2 id="WebHookClient"><a href="#WebHookClient" class="headerlink" title="WebHookClient"></a>WebHookClient</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpExchange</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpHandler</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpServer</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">InputStream</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">OutputStream</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">InetSocketAddress</span></span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * Author: Zhi Liu
+ * Date: 2024/2/7 14:09
+ * Contact: liuzhi0531@gmail.com
+ * Desc: webhook客户端测试类
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WebhookClient</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">int</span> port <span class="token operator">=</span> <span class="token number">8000</span><span class="token punctuation">;</span> <span class="token comment">// 定义服务器端口号</span>
+        <span class="token class-name">HttpServer</span> server <span class="token operator">=</span> <span class="token class-name">HttpServer</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InetSocketAddress</span><span class="token punctuation">(</span>port<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 创建HTTP服务器实例</span>
+        server<span class="token punctuation">.</span><span class="token function">createContext</span><span class="token punctuation">(</span><span class="token string">"/webhook"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">WebhookHandler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 设置请求处理程序</span>
+        server<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 启动服务器</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Webhook 服务器已启动，监听端口 "</span> <span class="token operator">+</span> port<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">WebhookHandler</span> <span class="token keyword">implements</span> <span class="token class-name">HttpHandler</span> <span class="token punctuation">&#123;</span>
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handle</span><span class="token punctuation">(</span><span class="token class-name">HttpExchange</span> exchange<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"POST"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>exchange<span class="token punctuation">.</span><span class="token function">getRequestMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">InputStream</span> requestBody <span class="token operator">=</span> exchange<span class="token punctuation">.</span><span class="token function">getRequestBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 获取请求体</span>
+                <span class="token comment">// 读取请求体中的数据</span>
+                <span class="token class-name">StringBuilder</span> requestData <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">int</span> byteRead<span class="token punctuation">;</span>
+                <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>byteRead <span class="token operator">=</span> requestBody<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    requestData<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span> byteRead<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"收到Webhook请求：\n"</span> <span class="token operator">+</span> requestData<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token comment">// 响应webhook服务端</span>
+                <span class="token class-name">String</span> response <span class="token operator">=</span> <span class="token string">"Webhook 请求已收到"</span><span class="token punctuation">;</span>
+                exchange<span class="token punctuation">.</span><span class="token function">sendResponseHeaders</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">,</span> response<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name">OutputStream</span> responseBody <span class="token operator">=</span> exchange<span class="token punctuation">.</span><span class="token function">getResponseBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                responseBody<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                responseBody<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">// 如果不是POST请求，返回405 Method Not Allowed</span>
+                exchange<span class="token punctuation">.</span><span class="token function">sendResponseHeaders</span><span class="token punctuation">(</span><span class="token number">405</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="WebHookServer"><a href="#WebHookServer" class="headerlink" title="WebHookServer"></a>WebHookServer</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">BufferedReader</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">InputStreamReader</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">OutputStream</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">HttpURLConnection</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">URL</span></span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * Author: Zhi Liu
+ * Date: 2024/2/7 14:15
+ * Contact: liuzhi0531@gmail.com
+ * Desc:
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WebhookServer</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> url <span class="token operator">=</span> <span class="token string">"http://localhost:8000/webhook"</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> postData <span class="token operator">=</span> <span class="token string">"&#123;hello,world&#125;"</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token function">sendPostRequest</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> postData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">sendPostRequest</span><span class="token punctuation">(</span><span class="token class-name">String</span> url<span class="token punctuation">,</span> <span class="token class-name">String</span> postData<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">URL</span> urlObj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">URL</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">HttpURLConnection</span> connection <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">HttpURLConnection</span><span class="token punctuation">)</span> urlObj<span class="token punctuation">.</span><span class="token function">openConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 设置请求方法为POST</span>
+        connection<span class="token punctuation">.</span><span class="token function">setRequestMethod</span><span class="token punctuation">(</span><span class="token string">"POST"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 设置请求头部信息</span>
+        connection<span class="token punctuation">.</span><span class="token function">setRequestProperty</span><span class="token punctuation">(</span><span class="token string">"Content-Type"</span><span class="token punctuation">,</span> <span class="token string">"application/json"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 允许向服务器输出内容</span>
+        connection<span class="token punctuation">.</span><span class="token function">setDoOutput</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 写入请求数据</span>
+        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">OutputStream</span> outputStream <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">getOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> postDataBytes <span class="token operator">=</span> postData<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            outputStream<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>postDataBytes<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            outputStream<span class="token punctuation">.</span><span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token comment">// 获取客户端的响应状态码</span>
+        <span class="token keyword">int</span> responseCode <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">getResponseCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Response Code: "</span> <span class="token operator">+</span> responseCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 读取响应内容</span>
+        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">BufferedReader</span> reader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span>connection<span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">StringBuilder</span> response <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">String</span> line<span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>line <span class="token operator">=</span> reader<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                response<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Response Content: "</span> <span class="token operator">+</span> response<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token comment">// 关闭连接</span>
+        connection<span class="token punctuation">.</span><span class="token function">disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<ol>
+<li><p><strong>阅读相关文档</strong>：</p>
+<ul>
+<li>查阅Webhook服务提供商的文档，了解如何创建和管理Webhook。</li>
+<li>阅读关于HTTP请求和响应的文档，以便了解如何处理Webhook请求和发送响应。</li>
+</ul>
+</li>
+<li><p><strong>编写代码</strong>：</p>
+<ul>
+<li>编写一个简单的Webhook接收端，用于接收来自外部服务的HTTP请求。</li>
+<li>编写处理Webhook请求的代码，例如解析请求、处理数据、执行逻辑等。</li>
+</ul>
+</li>
+<li><p><strong>测试和调试</strong>：</p>
+<ul>
+<li>使用工具（例如Postman）测试Webhook端点，确保它能够正确处理来自外部服务的请求。</li>
+<li>调试代码，解决可能出现的问题和错误。</li>
+</ul>
+</li>
+<li><p><strong>进阶学习</strong>：</p>
+<ul>
+<li>学习如何实现安全性和可靠性，例如使用HTTPS、认证、重试机制等。</li>
+<li>探索如何处理各种类型的Webhook事件，例如GitHub的push事件、Stripe的支付通知等。</li>
+</ul>
+</li>
+<li><p><strong>实践项目</strong>：</p>
+<ul>
+<li>开发一个实际的项目，其中包括使用Webhook与其他服务进行集成。</li>
+<li>参与开源项目，贡献Webhook相关的代码或解决问题。</li>
+</ul>
+</li>
+<li><p><strong>不断更新知识</strong>：</p>
+<ul>
+<li>持续关注Webhook领域的新发展和最佳实践。</li>
+<li>参加相关的线上或线下培训课程，与其他开发者交流经验。</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Flume.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Flume.html" class="post-title-link" itemprop="url">Flume</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-15 20:03:42" itemprop="dateModified" datetime="2024-04-15T20:03:42+08:00">2024-04-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="系统要求"><a href="#系统要求" class="headerlink" title="系统要求"></a>系统要求</h1><blockquote>
+<p>Apache Flume 是一个分布式、高可靠、高可用的用来收集、聚合、转移不同来源的大量日志数据到中央数据仓库的工具</p>
+</blockquote>
+<ol>
+<li>Jre - Java 1.8或更高版本</li>
+<li>内存 - 足够的内存 用来配置Sources、Channels和Sinks</li>
+<li>硬盘空间 - 足够的硬盘用来配置Channels 和 Sinks</li>
+<li>目录权限 - Agent用来读写目录的权限</li>
+</ol>
+<h1 id="数据流模型"><a href="#数据流模型" class="headerlink" title="数据流模型"></a>数据流模型</h1><p><strong>Event是Flume定义的一个数据流传输的最小单元</strong>。Agent就是一个Flume的实例，本质是一个JVM进程，该JVM进程控制Event数据流从外部日志生产者那里传输到目的地（或者是下一个Agent）。</p>
+<h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><p><img src="https://flume.liyifeng.org/_images/UserGuide_image00.png"></p>
+<p>Agent就是Flume的一个部署实例，一个完整的Agent中包含了必须的三个组件Source、Channel和Sink。</p>
+<ul>
+<li><p>Source 数据的来源和方式</p>
+</li>
+<li><p>Channel 数据的缓冲池</p>
+</li>
+<li><p>Sink 数据输出的方式和目的地</p>
+</li>
+<li><p>Event 被flume收集的数据</p>
+</li>
+</ul>
+<blockquote>
+<p>当Source接收Event（Web Server）时，它将其存储到一个或多个channel。该channel是一个被动存储器（或者说叫存储池），可以存储Event直到它被Sink消耗。</p>
+<p>Agent中的source和sink与channel存取Event是异步的。</p>
+</blockquote>
+<p>可靠性</p>
+<blockquote>
+<p>Event会在每个Agent的Channel上进行缓存，随后Event将会传递到流中的下一个Agent或目的地（比如HDFS）。只有成功地发送到下一个Agent或目的地后Event才会从Channel中删除。这一步保证了Event数据流在Flume Agent中传输时端到端的可靠性。</p>
+<p>channel作用：1.保证数据的可靠传输的 2.数据流入和流出的异步执行</p>
+<p>Flume使用事务来保证Event的 <strong>可靠传输</strong>。Source和Sink对Channel提供的每个Event数据分别封装一个事务用于存储和恢复，这样就保证了数据流的集合在点对点之间的可靠传输。在多层架构的情况下，来自前一层的sink和来自下一层的Source 都会有事务在运行以确保数据安全地传输到下一层的Channel中。</p>
+</blockquote>
+<p>可恢复性</p>
+<blockquote>
+<p>Event数据会缓存在Channel中用来在失败的时候恢复出来。Flume支持保存在本地文件系统中的『文件channel』，也支持保存在内存中的『内存Channel』，『内存Channel』显然速度会更快，缺点是万一Agent挂掉『内存Channel』中缓存的数据也就丢失了。</p>
+</blockquote>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><blockquote>
+<p>下载地址：<a target="_blank" rel="noopener" href="https://www.apache.org/dyn/closer.lua/flume/1.11.0/apache-flume-1.11.0-bin.tar.gz">https://www.apache.org/dyn/closer.lua/flume/1.11.0/apache-flume-1.11.0-bin.tar.gz</a></p>
+</blockquote>
+<pre class="line-numbers language-config" data-language="config"><code class="language-config"># example.conf: 一个单节点的 Flume 实例配置
+
+# 配置Agent a1各个组件的名称
+a1.sources &#x3D; r1    #Agent a1 的source有一个，叫做r1
+a1.sinks &#x3D; k1      #Agent a1 的sink也有一个，叫做k1
+a1.channels &#x3D; c1   #Agent a1 的channel有一个，叫做c1
+
+# 配置Agent a1的source r1的属性
+a1.sources.r1.type &#x3D; netcat       #使用的是NetCat TCP Source，这里配的是别名，Flume内置的一些组件都是有别名的，没有别名填全限定类名
+a1.sources.r1.bind &#x3D; localhost    #NetCat TCP Source监听的hostname，这个是本机
+a1.sources.r1.port &#x3D; 44444        #监听的端口
+
+# 配置Agent a1的sink k1的属性
+a1.sinks.k1.type &#x3D; logger         # sink使用的是Logger Sink，这个配的也是别名
+
+# 配置Agent a1的channel c1的属性，channel是用来缓冲Event数据的
+a1.channels.c1.type &#x3D; memory                #channel的类型是内存channel，顾名思义这个channel是使用内存来缓冲数据
+a1.channels.c1.capacity &#x3D; 1000              #内存channel的容量大小是1000，注意这个容量不是越大越好，配置越大一旦Flume挂掉丢失的event也就越多
+a1.channels.c1.transactionCapacity &#x3D; 100    #source和sink从内存channel每次事务传输的event数量
+
+# 把source和sink绑定到channel上
+a1.sources.r1.channels &#x3D; c1       #与source r1绑定的channel有一个，叫做c1
+a1.sinks.k1.channel &#x3D; c1          #与sink k1绑定的channel有一个，叫做c1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="数据获取方式"><a href="#数据获取方式" class="headerlink" title="数据获取方式"></a>数据获取方式</h1><blockquote>
+<p>Flume支持多种从外部获取数据的方式。</p>
+</blockquote>
+<p>1.RPC</p>
+<p>2.执行命令</p>
+<p>3.网络流(Avro、Thrift、Syslog、Netcat）</p>
+<p>4.Spooling Directory Source（将监视这个目录中产生的新文件，并在新文件出现时从新文件中解析数据出来）</p>
+<h2 id="Spooling-Directory-Source"><a href="#Spooling-Directory-Source" class="headerlink" title="Spooling Directory Source"></a>Spooling Directory Source</h2><p>这个Source允许你把要收集的文件放入磁盘上的某个指定目录。它会将监视这个目录中产生的新文件，并在新文件出现时从新文件中解析数据出来。数据解析逻辑是可配置的。 在新文件被完全读入Channel之后默认会重命名该文件以示完成（也可以配置成读完后立即删除、也可以配置trackerDir来跟踪已经收集过的文件）。</p>
+<p>Spooling Directory Source是可靠的，即使Flume重新启动或被kill，也不会丢失数据。同时作为这种可靠性的代价，指定目录中的被收集的文件必须是不可变的、唯一命名的。Flume会自动检测避免这种情况发生，如果发现问题，则会抛出异常：</p>
+<ol>
+<li>如果文件在写入完成后又被再次写入新内容，Flume将向其日志文件（这是指Flume自己logs目录下的日志文件）打印错误并停止处理。</li>
+<li>如果在以后重新使用以前的文件名，Flume将向其日志文件打印错误并停止处理。</li>
+</ol>
+<p>为了避免上述问题，生成新文件的时候文件名加上时间戳是个不错的办法。</p>
+<p>尽管有这个Source的可靠性保证，但是仍然存在这样的情况，某些下游故障发生时会出现重复Event的情况。这与其他Flume组件提供的保证是一致的。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性名</th>
+<th align="left">默认值</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>channels</strong></td>
+<td align="left">–</td>
+<td align="left">与Source绑定的channel，多个用空格分开</td>
+</tr>
+<tr>
+<td align="left"><strong>type</strong></td>
+<td align="left">–</td>
+<td align="left">组件类型，这个是： <code>spooldir</code>.</td>
+</tr>
+<tr>
+<td align="left"><strong>spoolDir</strong></td>
+<td align="left">–</td>
+<td align="left">Flume Source监控的文件夹目录，该目录下的文件会被Flume收集</td>
+</tr>
+<tr>
+<td align="left">fileSuffix</td>
+<td align="left">.COMPLETED</td>
+<td align="left">被Flume收集完成的文件被重命名的后缀。1.txt被Flume收集完成后会重命名为1.txt.COMPLETED</td>
+</tr>
+<tr>
+<td align="left">deletePolicy</td>
+<td align="left">never</td>
+<td align="left">是否删除已完成收集的文件，可选值: <code>never</code> 或 <code>immediate</code></td>
+</tr>
+<tr>
+<td align="left">fileHeader</td>
+<td align="left">false</td>
+<td align="left">是否添加文件的绝对路径名（绝对路径+文件名）到header中。</td>
+</tr>
+<tr>
+<td align="left">fileHeaderKey</td>
+<td align="left">file</td>
+<td align="left">添加绝对路径名到header里面所使用的key（配合上面的fileHeader一起使用）</td>
+</tr>
+<tr>
+<td align="left">basenameHeader</td>
+<td align="left">false</td>
+<td align="left">是否添加文件名（只是文件名，不包括路径）到header 中</td>
+</tr>
+<tr>
+<td align="left">basenameHeaderKey</td>
+<td align="left">basename</td>
+<td align="left">添加文件名到header里面所使用的key（配合上面的basenameHeader一起使用）</td>
+</tr>
+<tr>
+<td align="left">includePattern</td>
+<td align="left">^.*$</td>
+<td align="left">指定会被收集的文件名正则表达式，它跟下面的ignorePattern不冲突，可以一起使用。如果一个文件名同时被这两个正则匹配到，则会被忽略，换句话说ignorePattern的优先级更高</td>
+</tr>
+<tr>
+<td align="left">ignorePattern</td>
+<td align="left">^$</td>
+<td align="left">指定要忽略的文件名称正则表达式。它可以跟 <em>includePattern</em> 一起使用，如果一个文件被 <em>ignorePattern</em> 和 <em>includePattern</em> 两个正则都匹配到，这个文件会被忽略。</td>
+</tr>
+<tr>
+<td align="left">trackerDir</td>
+<td align="left">.flumespool</td>
+<td align="left">用于存储与文件处理相关的元数据的目录。如果配置的是相对目录地址，它会在spoolDir中开始创建</td>
+</tr>
+<tr>
+<td align="left">trackingPolicy</td>
+<td align="left">rename</td>
+<td align="left">这个参数定义了如何跟踪记录文件的读取进度，可选值有：<code>rename</code> 、 <code>tracker_dir</code> ，这个参数只有在 <em>deletePolicy</em> 设置为 <code>never</code> 的时候才生效。 当设置为 <code>rename</code> ，文件处理完成后，将根据 <em>fileSuffix</em> 参数的配置将其重命名。 当设置为 <code>tracker_dir</code> ，文件处理完成后不会被重命名或其他任何改动，会在 <em>trackerDir</em> 配置的目录中创建一个新的空文件，而这个空文件的文件名就是原文件 + <em>fileSuffix</em> 参数配置的后缀</td>
+</tr>
+<tr>
+<td align="left">consumeOrder</td>
+<td align="left">oldest</td>
+<td align="left">设定收集目录内文件的顺序。默认是“先来先走”（也就是最早生成的文件最先被收集），可选值有： <code>oldest</code> 、 <code>youngest</code> 和 <code>random</code> 。当使用oldest和youngest这两种选项的时候，Flume会扫描整个文件夹进行对比排序，当文件夹里面有大量的文件的时候可能会运行缓慢。 当使用random时候，如果一直在产生新的文件，有一部分老文件可能会很久才会被收集</td>
+</tr>
+<tr>
+<td align="left">pollDelay</td>
+<td align="left">500</td>
+<td align="left">Flume监视目录内新文件产生的时间间隔，单位：毫秒</td>
+</tr>
+<tr>
+<td align="left">recursiveDirectorySearch</td>
+<td align="left">false</td>
+<td align="left">是否收集子目录下的日志文件</td>
+</tr>
+<tr>
+<td align="left">maxBackoff</td>
+<td align="left">4000</td>
+<td align="left">等待写入channel的最长退避时间，如果channel已满实例启动时会自动设定一个很低的值，当遇到ChannelException异常时会自动以指数级增加这个超时时间，直到达到设定的这个最大值为止。</td>
+</tr>
+<tr>
+<td align="left">batchSize</td>
+<td align="left">100</td>
+<td align="left">每次批量传输到channel时的size大小</td>
+</tr>
+<tr>
+<td align="left">inputCharset</td>
+<td align="left">UTF-8</td>
+<td align="left">解析器读取文件时使用的编码（解析器会把所有文件当做文本读取）</td>
+</tr>
+<tr>
+<td align="left">decodeErrorPolicy</td>
+<td align="left"><code>FAIL</code></td>
+<td align="left">当从文件读取时遇到不可解析的字符时如何处理。 <code>FAIL</code> ：抛出异常，解析文件失败； <code>REPLACE</code> ：替换掉这些无法解析的字符，通常是用U+FFFD； <code>IGNORE</code> ：忽略无法解析的字符。</td>
+</tr>
+<tr>
+<td align="left">deserializer</td>
+<td align="left"><code>LINE</code></td>
+<td align="left">指定一个把文件中的数据行解析成Event的解析器。默认是把每一行当做一个Event进行解析，所有解析器必须实现EventDeserializer.Builder接口</td>
+</tr>
+<tr>
+<td align="left">deserializer.*</td>
+<td align="left"></td>
+<td align="left">解析器的相关属性，根据解析器不同而不同</td>
+</tr>
+<tr>
+<td align="left">bufferMaxLines</td>
+<td align="left">–</td>
+<td align="left">（已废弃）</td>
+</tr>
+<tr>
+<td align="left">bufferMaxLineLength</td>
+<td align="left">5000</td>
+<td align="left">（已废弃）每行的最大长度。改用 <em>deserializer.maxLineLength</em> 代替</td>
+</tr>
+<tr>
+<td align="left">selector.type</td>
+<td align="left">replicating</td>
+<td align="left">可选值：<code>replicating</code> 或 <code>multiplexing</code> ，分别表示： 复制、多路复用</td>
+</tr>
+<tr>
+<td align="left">selector.*</td>
+<td align="left"></td>
+<td align="left">channel选择器的相关属性，具体属性根据设定的 <em>selector.type</em> 值不同而不同</td>
+</tr>
+<tr>
+<td align="left">interceptors</td>
+<td align="left">–</td>
+<td align="left">该source所使用的拦截器，多个用空格分开</td>
+</tr>
+<tr>
+<td align="left">interceptors.*</td>
+<td align="left"></td>
+<td align="left">拦截器相关的属性配置</td>
+</tr>
+</tbody></table>
+<p>配置范例：</p>
+<pre class="line-numbers language-none"><code class="language-none">a1.channels &#x3D; ch-1
+a1.sources &#x3D; src-1
+
+a1.sources.src-1.type &#x3D; spooldir
+a1.sources.src-1.channels &#x3D; ch-1
+a1.sources.src-1.spoolDir &#x3D; &#x2F;var&#x2F;log&#x2F;apache&#x2F;flumeSpool
+a1.sources.src-1.fileHeader &#x3D; true<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Kafka-Sink"><a href="#Kafka-Sink" class="headerlink" title="Kafka Sink"></a>Kafka Sink</h2><p>这个 Sink 可以把数据发送到 <a target="_blank" rel="noopener" href="http://kafka.apache.org/">Kafka</a> topic上。目的就是将 Flume 与 Kafka 集成，以便基于拉的处理系统可以处理来自各种 Flume Source 的数据。</p>
+<p>目前支持Kafka 0.10.1.0以上版本，最高已经在Kafka 2.0.1版本上完成了测试，这已经是Flume 1.9发行时候的最高的Kafka版本了。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">默认值</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>type</strong></td>
+<td align="left">–</td>
+<td align="left">组件类型，这个是： <code>org.apache.flume.sink.kafka.KafkaSink</code></td>
+</tr>
+<tr>
+<td align="left"><strong>kafka.bootstrap.servers</strong></td>
+<td align="left">–</td>
+<td align="left">Kafka Sink 使用的 Kafka 集群的实例列表，可以是实例的部分列表。但是更建议至少两个用于高可用（HA）支持。格式为 hostname:port，多个用逗号分隔</td>
+</tr>
+<tr>
+<td align="left">kafka.topic</td>
+<td align="left">default-flume-topic</td>
+<td align="left">用于发布消息的 Kafka topic 名称 。如果这个参数配置了值，消息就会被发布到这个 topic 上。如果Event header中包含叫做“topic”的属性， Event 就会被发布到 header 中指定的 topic 上，而不会发布到 <em>kafka.topic</em> 指定的 topic 上。支持任意的 header 属性动态替换， 比如%{lyf}就会被 Event header 中叫做“lyf”的属性值替换（如果使用了这种动态替换，建议将 Kafka 的 <em>auto.create.topics.enable</em> 属性设置为 <code>true</code> ）。</td>
+</tr>
+<tr>
+<td align="left">flumeBatchSize</td>
+<td align="left">100</td>
+<td align="left">一批中要处理的消息数。设置较大的值可以提高吞吐量，但是会增加延迟。</td>
+</tr>
+<tr>
+<td align="left">kafka.producer.acks</td>
+<td align="left">1</td>
+<td align="left">在考虑成功写入之前，要有多少个副本必须确认消息。可选值， <code>0</code> ：（从不等待确认）； <code>1</code> ：只等待leader确认； <code>-1</code> ：等待所有副本确认。 设置为-1可以避免某些情况 leader 实例失败的情况下丢失数据。</td>
+</tr>
+<tr>
+<td align="left">useFlumeEventFormat</td>
+<td align="left">false</td>
+<td align="left">默认情况下，会直接将 Event body 的字节数组作为消息内容直接发送到 Kafka topic 。如果设置为true，会以 Flume Avro 二进制格式进行读取。 与 Kafka Source 上的同名参数或者 Kafka channel 的 <em>parseAsFlumeEvent</em> 参数相关联，这样以对象的形式处理能使生成端发送过来的 Event header 信息得以保留。</td>
+</tr>
+<tr>
+<td align="left">defaultPartitionId</td>
+<td align="left">–</td>
+<td align="left">指定所有 Event 将要发送到的 Kafka 分区ID，除非被 <em>partitionIdHeader</em> 参数的配置覆盖。 默认情况下，如果没有设置此参数，Event 会被 Kafka 生产者的分发程序分发，包括 key（如果指定了的话），或者被 <em>kafka.partitioner.class</em> 指定的分发程序来分发</td>
+</tr>
+<tr>
+<td align="left">partitionIdHeader</td>
+<td align="left">–</td>
+<td align="left">设置后，Sink将使用 Event header 中使用此属性的值命名的字段的值，并将消息发送到 topic 的指定分区。 如果该值表示无效分区，则将抛出 EventDeliveryException。 如果存在标头值，则此设置将覆盖 <em>defaultPartitionId</em> 。假如这个参数设置为“lyf”，这个 Sink 就会读取 Event header 中的 lyf 属性的值，用该值作为分区ID</td>
+</tr>
+<tr>
+<td align="left">allowTopicOverride</td>
+<td align="left">true</td>
+<td align="left">如果设置为 <code>true</code>，会读取 Event header 中的名为 <em>topicHeader</em> 的的属性值，用它作为目标 topic。</td>
+</tr>
+<tr>
+<td align="left">topicHeader</td>
+<td align="left">topic</td>
+<td align="left">与上面的 <em>allowTopicOverride</em> 一起使用，<em>allowTopicOverride</em> 会用当前参数配置的名字从 Event header 获取该属性的值，来作为目标 topic 名称</td>
+</tr>
+<tr>
+<td align="left">kafka.producer.security.protocol</td>
+<td align="left">PLAINTEXT</td>
+<td align="left">设置使用哪种安全协议写入 Kafka。可选值：<code>SASL_PLAINTEXT</code> 、 <code>SASL_SSL</code> 和 <code>SSL</code>， 有关安全设置的其他信息，请参见下文。</td>
+</tr>
+<tr>
+<td align="left"><em>more producer security props</em></td>
+<td align="left"></td>
+<td align="left">如果使用了 <code>SASL_PLAINTEXT</code> 、 <code>SASL_SSL</code> 或 <code>SSL</code> 等安全协议，参考 <a target="_blank" rel="noopener" href="http://kafka.apache.org/documentation.html#security">Kafka security</a> 来为生产者增加安全相关的参数配置</td>
+</tr>
+<tr>
+<td align="left">Other Kafka Producer Properties</td>
+<td align="left">–</td>
+<td align="left">其他一些 Kafka 生产者配置参数。任何 Kafka 支持的生产者参数都可以使用。唯一的要求是使用“kafka.producer.”这个前缀来配置参数，比如：<em>kafka.producer.linger.ms</em></td>
+</tr>
+</tbody></table>
+<p>注解</p>
+<p>Kafka Sink使用 Event header 中的 topic 和其他关键属性将 Event 发送到 Kafka。 如果 header 中存在 topic，则会将Event发送到该特定 topic，从而覆盖为Sink配置的 topic。 如果 header 中存在指定分区相关的参数，则Kafka将使用相关参数发送到指定分区。 header中特定参数相同的 Event 将被发送到同一分区。 如果为空，则将 Event 会被发送到随机分区。 Kafka Sink 还提供了key.deserializer（org.apache.kafka.common.serialization.StringSerializer） 和value.deserializer（org.apache.kafka.common.serialization.ByteArraySerializer）的默认值，不建议修改这些参数。</p>
+<p>弃用的一些参数：</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">默认值</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">brokerList</td>
+<td align="left">–</td>
+<td align="left">改用 kafka.bootstrap.servers</td>
+</tr>
+<tr>
+<td align="left">topic</td>
+<td align="left">default-flume-topic</td>
+<td align="left">改用 kafka.topic</td>
+</tr>
+<tr>
+<td align="left">batchSize</td>
+<td align="left">100</td>
+<td align="left">改用 kafka.flumeBatchSize</td>
+</tr>
+<tr>
+<td align="left">requiredAcks</td>
+<td align="left">1</td>
+<td align="left">改用 kafka.producer.acks</td>
+</tr>
+</tbody></table>
+<p>下面给出 Kafka Sink 的配置示例。Kafka 生产者的属性都是以 kafka.producer 为前缀。Kafka 生产者的属性不限于下面示例的几个。此外，可以在此处包含您的自定义属性，并通过作为方法参数传入的Flume Context对象在预处理器中访问它们。</p>
+<pre class="line-numbers language-none"><code class="language-none">a1.sinks.k1.channel &#x3D; c1
+a1.sinks.k1.type &#x3D; org.apache.flume.sink.kafka.KafkaSink
+a1.sinks.k1.kafka.topic &#x3D; mytopic
+a1.sinks.k1.kafka.bootstrap.servers &#x3D; localhost:9092
+a1.sinks.k1.kafka.flumeBatchSize &#x3D; 20
+a1.sinks.k1.kafka.producer.acks &#x3D; 1
+a1.sinks.k1.kafka.producer.linger.ms &#x3D; 1
+a1.sinks.k1.kafka.producer.compression.type &#x3D; snappy<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Flume-Channels"><a href="#Flume-Channels" class="headerlink" title="Flume Channels"></a>Flume Channels</h2><p>channel 是在 Agent 上暂存 Event 的缓冲池。 Event由source添加，由sink消费后删除。</p>
+<h2 id="Memory-Channel"><a href="#Memory-Channel" class="headerlink" title="Memory Channel"></a>Memory Channel</h2><p>内存 channel 是把 Event 队列存储到内存上，队列的最大数量就是 <em>capacity</em> 的设定值。它非常适合对吞吐量有较高要求的场景，但也是有代价的，当发生故障的时候会丢失当时内存中的所有 Event。 必需的参数已用 <strong>粗体</strong> 标明。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">默认值</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>type</strong></td>
+<td align="left">–</td>
+<td align="left">组件类型，这个是： <code>memory</code></td>
+</tr>
+<tr>
+<td align="left">capacity</td>
+<td align="left">100</td>
+<td align="left">内存中存储 Event 的最大数</td>
+</tr>
+<tr>
+<td align="left">transactionCapacity</td>
+<td align="left">100</td>
+<td align="left">source 或者 sink 每个事务中存取 Event 的操作数量（不能比 <em>capacity</em> 大）</td>
+</tr>
+<tr>
+<td align="left">keep-alive</td>
+<td align="left">3</td>
+<td align="left">添加或删除一个 Event 的超时时间（秒）</td>
+</tr>
+<tr>
+<td align="left">byteCapacityBufferPercentage</td>
+<td align="left">20</td>
+<td align="left">指定 Event header 所占空间大小与 channel 中所有 Event 的总大小之间的百分比</td>
+</tr>
+<tr>
+<td align="left">byteCapacity</td>
+<td align="left"></td>
+<td align="left">Channel 中最大允许存储所有 Event 的总字节数（bytes）。默认情况下会使用JVM可用内存的80%作为最大可用内存（就是JVM启动参数里面配置的-Xmx的值）。 计算总字节时只计算 Event 的主体，这也是提供 <em>byteCapacityBufferPercentage</em> 配置参数的原因。注意，当你在一个 Agent 里面有多个内存 channel 的时候， 而且碰巧这些 channel 存储相同的物理 Event（例如：这些 channel 通过复制机制（ <a target="_blank" rel="noopener" href="https://flume.liyifeng.org/#id43">复制选择器</a> ）接收同一个 source 中的 Event）， 这时候这些 Event 占用的空间是累加的，并不会只计算一次。如果这个值设置为0（不限制），就会达到200G左右的内部硬件限制。</td>
+</tr>
+</tbody></table>
+<p>提示</p>
+<p>举2个例子来帮助理解最后两个参数吧：</p>
+<p>两个例子都有共同的前提，假设JVM最大的可用内存是100M（或者说JVM启动时指定了-Xmx&#x3D;100m）。</p>
+<p>例子1： <em>byteCapacityBufferPercentage</em> 设置为20， <em>byteCapacity</em> 设置为52428800（就是50M），此时内存中所有 Event body 的总大小就被限制为50M *（1-20%）&#x3D;40M，内存channel可用内存是50M。</p>
+<p>例子2： <em>byteCapacityBufferPercentage</em> 设置为10， <em>byteCapacity</em> 不设置，此时内存中所有 Event body 的总大小就被限制为100M * 80% *（1-10%）&#x3D;72M，内存channel可用内存是80M。</p>
+<p>配置范例：</p>
+<pre class="line-numbers language-none"><code class="language-none">a1.channels &#x3D; c1
+a1.channels.c1.type &#x3D; memory
+a1.channels.c1.capacity &#x3D; 10000
+a1.channels.c1.transactionCapacity &#x3D; 10000
+a1.channels.c1.byteCapacityBufferPercentage &#x3D; 20
+a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/cs.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/cs.html" class="post-title-link" itemprop="url">UUID</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-15 20:17:08" itemprop="dateModified" datetime="2024-04-15T20:17:08+08:00">2024-04-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="唯一ID由来"><a href="#唯一ID由来" class="headerlink" title="唯一ID由来"></a>唯一ID由来</h1><blockquote>
+<p>分布式系统中，需要对大量的数据和消息进行唯一标识，如金融行业产品系统中，数据日益增长，对数据进行分库分表后，需要用唯一ID来标识一条数据，数据库的自增ID已经不能满足，此时就需要一个全局唯一ID标识。</p>
+</blockquote>
+<h2 id="唯一ID特点"><a href="#唯一ID特点" class="headerlink" title="唯一ID特点"></a>唯一ID特点</h2><blockquote>
+<ol>
+<li>全局唯一：全局唯一，不会出现重复项。</li>
+<li>趋势递增：B+树的索引下进行递增，保证写入性能</li>
+<li>单调递增：下一个id肯定大于上一个id</li>
+<li>信息安全：ID无规则、不规则</li>
+</ol>
+</blockquote>
+<h2 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h2><ul>
+<li>数据库自增ID</li>
+</ul>
+<blockquote>
+<p>数据库中一般给主键设置自增。</p>
+<p>优点：简单，由数据库自己操作完成，id是单调自增</p>
+<p>缺点：主从切换的时候不一致，容易导致重复发号</p>
+</blockquote>
+<ul>
+<li>UUID</li>
+</ul>
+<blockquote>
+<p>由32个16进制数字组成，形式为8-4-4-4-12的32个字符。</p>
+<p>优点：性能高，本地生成，无网络消耗。</p>
+<p>缺点：存储占用空间大，基于MAC地址生成的UUID存在信息安全问题。</p>
+</blockquote>
+<ul>
+<li>Redis唯一ID</li>
+</ul>
+<blockquote>
+<p>Redis是单线程的，可以依据redis的原子操作incr和incrby实现。</p>
+<p>优点：数字ID天然排序，对分页和排序的结果有帮助。</p>
+</blockquote>
+<ul>
+<li>zookeeper唯一ID</li>
+</ul>
+<blockquote>
+<p>zookeeper通过其znode数据版本生成序列号，可以生成32位和64位数据版本号，客户端可以使用这个版本号作为唯一序列号</p>
+</blockquote>
+<ul>
+<li>snowflake算法</li>
+</ul>
+<blockquote>
+<p>由64个二进制数字组成一般分为1-41-10-12,snowflake方案的QPS约为409.6w&#x2F;s</p>
+<p>第一部分：表示正数</p>
+<p>第二部分：41表示毫秒时间</p>
+<p>第三部分：工作机器ID，5位表示数据中心，5位表示机器id</p>
+<p>第四部分：12位的序列号，每毫秒可生成4096个id</p>
+<p>优点：毫秒在高位，自增序列号在低位，整体是递增趋势</p>
+<p>缺点：依赖时间，如果时间回拨，会导致发号重复或者不可用状态</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/docker.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -179,7 +1491,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/docker.html" class="post-title-link" itemprop="url">docker安装</a>
+            <a href="/post/docker.html" class="post-title-link" itemprop="url">docker</a>
         </h2>
 
         <div class="post-meta">
@@ -191,6 +1503,13 @@
 
               <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-05-17 22:17:42" itemprop="dateModified" datetime="2024-05-17T22:17:42+08:00">2024-05-17</time>
+              </span>
 
           
 
@@ -203,15 +1522,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h2><blockquote>
-<ol>
-<li>系统版本：</li>
-</ol>
-<p>  要安装 Docker Engine，您需要 CentOS 7、CentOS 8（流）或 CentOS 9（流）的维护版本。</p>
-<ol start="2">
-<li>卸载旧版本：</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> yum remove <span class="token function">docker</span> <span class="token punctuation">\</span>
+          <h1 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h1><h2 id="系统版本要求"><a href="#系统版本要求" class="headerlink" title="系统版本要求"></a>系统版本要求</h2><p>要安装 Docker Engine，您需要 CentOS 7、CentOS 8（流）或 CentOS 9（流）的维护版本。</p>
+<h2 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h2><h3 id="卸载旧版本"><a href="#卸载旧版本" class="headerlink" title="卸载旧版本"></a>卸载旧版本</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yum remove <span class="token function">docker</span> <span class="token punctuation">\</span>
                  docker-client <span class="token punctuation">\</span>
                  docker-client-latest <span class="token punctuation">\</span>
                  docker-common <span class="token punctuation">\</span>
@@ -220,28 +1532,58 @@
                  docker-logrotate <span class="token punctuation">\</span>
                  docker-engine<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<ol start="3">
-<li>设置存储库</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>yum <span class="token function">install</span> -y yum-utils
-<span class="token operator">></span>yum-config-manager <span class="token punctuation">\</span>
+<h3 id="设置存储库"><a href="#设置存储库" class="headerlink" title="设置存储库"></a>设置存储库</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yum <span class="token function">install</span> -y yum-utils
+yum-config-manager <span class="token punctuation">\</span>
    --add-repo <span class="token punctuation">\</span>
    https://download.docker.com/linux/centos/docker-ce.repo<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<ol start="4">
-<li>安装最新版doker</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>yum <span class="token function">install</span> docker-ce docker-ce-cli containerd.io docker-compose-plugin -y<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="安装最新版"><a href="#安装最新版" class="headerlink" title="安装最新版"></a>安装最新版</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yum <span class="token function">install</span> docker-ce docker-ce-cli containerd.io docker-compose-plugin -y<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<ol start="5">
-<li>启动docker</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>systemctl start <span class="token function">docker</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="启动docker"><a href="#启动docker" class="headerlink" title="启动docker"></a>启动docker</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl start <span class="token function">docker</span>
+<span class="token comment"># 设置开机自启</span>
+systemctl <span class="token builtin class-name">enable</span> <span class="token function">docker</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<ol start="6">
-<li>设置开机自启</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span>systemctl <span class="token builtin class-name">enable</span> <span class="token function">docker</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></blockquote>
+
+
+<h1 id="docker日志清理"><a href="#docker日志清理" class="headerlink" title="docker日志清理"></a>docker日志清理</h1><h2 id="使用-Docker-日志选项进行日志轮转"><a href="#使用-Docker-日志选项进行日志轮转" class="headerlink" title="使用 Docker 日志选项进行日志轮转"></a>使用 Docker 日志选项进行日志轮转</h2><p>Docker 提供了内置的日志轮转功能，可以在容器启动时配置。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> run -d <span class="token punctuation">\</span>
+  --log-opt max-size<span class="token operator">=</span>10m <span class="token punctuation">\</span>
+  --log-opt max-file<span class="token operator">=</span><span class="token number">3</span> <span class="token punctuation">\</span>
+  your_image<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>上述命令配置 Docker 使其每个日志文件的最大大小为 10MB，并保留最多 3 个日志文件。</p>
+<h2 id="手动清理-Docker-日志"><a href="#手动清理-Docker-日志" class="headerlink" title="手动清理 Docker 日志"></a>手动清理 Docker 日志</h2><p>手动清理 Docker 日志涉及删除 Docker 容器的日志文件。可以通过 <code>cron</code> 作业来定期执行此操作。</p>
+<h3 id="创建清理脚本"><a href="#创建清理脚本" class="headerlink" title="创建清理脚本"></a>创建清理脚本</h3><p>首先，创建一个脚本来清理日志。例如，创建一个名为 <code>docker_log_cleanup.sh</code> 的脚本：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token comment"># 停止并移除所有未使用的容器、网络、镜像和缓存</span>
+<span class="token comment"># docker system prune -af</span>
+<span class="token comment"># 清理所有容器的日志文件</span>
+<span class="token function">find</span> /var/lib/docker/containers/ -type f -name <span class="token string">"*.log"</span> -exec truncate -s <span class="token number">0</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span> <span class="token punctuation">\</span><span class="token punctuation">;</span>
+<span class="token comment"># 确保脚本有执行权限：</span>
+<span class="token function">chmod</span> +x docker_log_cleanup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="设置-cron-作业"><a href="#设置-cron-作业" class="headerlink" title="设置 cron 作业"></a>设置 <code>cron</code> 作业</h3><p>使用 <code>cron</code> 作业定期运行清理脚本。编辑 <code>crontab</code> 文件：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">crontab</span> -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>添加如下条目，例如每周日凌晨 3 点执行清理任务：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">0</span> <span class="token number">3</span> * * <span class="token number">0</span> /path/to/docker_log_cleanup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>保存并退出 <code>crontab</code> 编辑器。</p>
+<h2 id="使用-Docker-自带的定时清理功能"><a href="#使用-Docker-自带的定时清理功能" class="headerlink" title="使用 Docker 自带的定时清理功能"></a>使用 Docker 自带的定时清理功能</h2><p>Docker 提供了 <code>docker system prune</code> 命令，可以删除所有未使用的数据（包括停止的容器、未使用的网络、悬挂的镜像和构建缓存）。可以结合 <code>cron</code> 来定期运行此命令。</p>
+<h3 id="创建定期清理脚本"><a href="#创建定期清理脚本" class="headerlink" title="创建定期清理脚本"></a>创建定期清理脚本</h3><p>创建一个名为 <code>docker_system_prune.sh</code> 的脚本：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token comment"># 运行 Docker system prune 命令</span>
+<span class="token function">docker</span> system prune -af
+<span class="token comment"># 确保脚本有执行权限</span>
+<span class="token function">chmod</span> +x docker_system_prune.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="设置-cron-作业-1"><a href="#设置-cron-作业-1" class="headerlink" title="设置 cron 作业"></a>设置 <code>cron</code> 作业</h3><p>编辑 <code>crontab</code> 文件：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">crontab</span> -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>添加如下条目，例如每天凌晨 2 点执行清理任务：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">0</span> <span class="token number">2</span> * * * /path/to/docker_system_prune.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>保存并退出 <code>crontab</code> 编辑器。</p>
 
       
     </div>
@@ -275,7 +1617,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/Software%20cracking.html" class="post-title-link" itemprop="url">typro hacking</a>
+            <a href="/post/Software%20cracking.html" class="post-title-link" itemprop="url">软件破解</a>
         </h2>
 
         <div class="post-meta">
@@ -292,7 +1634,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:22:58" itemprop="dateModified" datetime="2024-04-15T20:22:58+08:00">2024-04-15</time>
+                <time title="修改时间：2024-05-17 22:17:42" itemprop="dateModified" datetime="2024-05-17T22:17:42+08:00">2024-05-17</time>
               </span>
 
           
@@ -367,6 +1709,13 @@
 
               <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-05-17 22:17:42" itemprop="dateModified" datetime="2024-05-17T22:17:42+08:00">2024-05-17</time>
+              </span>
 
           
 
@@ -385,10 +1734,9 @@
 <li>bzip、bzip2、tar、readline、readline-devel、zlib-devel</li>
 <li>Perl</li>
 </ul>
-<h2 id="下载源代码"><a href="#下载源代码" class="headerlink" title="下载源代码"></a>下载源代码</h2><pre class="line-numbers language-uri" data-language="uri"><code class="language-uri"><span class="token path">https</span> ://www.postgresql.org/download/
-<span class="token fragment"><span class="token fragment-delimiter">#</span></span> 下载名为postgresql-10.21.tar.gz  解压
+<h2 id="下载源代码"><a href="#下载源代码" class="headerlink" title="下载源代码"></a>下载源代码</h2><pre class="line-numbers language-uri" data-language="uri"><code class="language-uri"><span class="token path">https</span> ://www.postgresql.org/download/ <span class="token fragment"><span class="token fragment-delimiter">#</span></span> 下载名为postgresql-10.21.tar.gz  解压
 <span class="token path">gunzip</span> postgresql-10.21.tar.gz
-<span class="token path">tar</span> xf postgresql-10.21.tar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token path">tar</span> xf postgresql-10.21.tar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./configure --prefix<span class="token operator">=</span>/usr/local/postgresql<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
@@ -913,654 +2261,10 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/GithubAction.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/GithubAction.html" class="post-title-link" itemprop="url">Github</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:18:32" itemprop="dateModified" datetime="2024-04-15T20:18:32+08:00">2024-04-15</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="git的通信协议"><a href="#git的通信协议" class="headerlink" title="git的通信协议"></a>git的通信协议</h1><h2 id="ssh协议"><a href="#ssh协议" class="headerlink" title="ssh协议"></a>ssh协议</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone git@github.com:BJPotter/BJPotter.github.io.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="https协议"><a href="#https协议" class="headerlink" title="https协议"></a>https协议</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/BJPotter/BJPotter.github.io.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-
-
-<h2 id="gitHub-Cli协议"><a href="#gitHub-Cli协议" class="headerlink" title="gitHub Cli协议"></a>gitHub Cli协议</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gh repo clone BJPotter/BJPotter.github.io<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-
-
-<h1 id="gitHub配置SSH-Key"><a href="#gitHub配置SSH-Key" class="headerlink" title="gitHub配置SSH Key"></a>gitHub配置SSH Key</h1><h2 id="设置git的用户名和邮箱"><a href="#设置git的用户名和邮箱" class="headerlink" title="设置git的用户名和邮箱"></a>设置git的用户名和邮箱</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在Git客户端执行</span>
-<span class="token function">git</span> config --global user.name <span class="token string">"这里输入你在GitHub的账户名"</span>
-<span class="token function">git</span> config --global user.email <span class="token string">"这里输入你在GitHub的注册邮箱名"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="生成SSH-Key"><a href="#生成SSH-Key" class="headerlink" title="生成SSH Key"></a>生成<strong>SSH Key</strong></h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> ~/.ssh
-ssh-keygen -t rsa -C <span class="token string">"这里输入你在 GitHub 的注册邮箱"</span>
-<span class="token function">cat</span> id_rsa.pub<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="gitHub配置公钥"><a href="#gitHub配置公钥" class="headerlink" title="gitHub配置公钥"></a>gitHub配置公钥</h2><blockquote>
-<p>在github中点击头像，依次点击Settings &gt; SSH and GPG Keys &gt; New SSH Key</p>
-<p>把客户端的公钥复制到里面，并给title起一个名字保存即可</p>
-</blockquote>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ssh</span> -T git@github.com
-<span class="token comment"># 返回 You've successfully authenticated则成功 </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h1 id="https免密配置"><a href="#https免密配置" class="headerlink" title="https免密配置"></a>https免密配置</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 输入一次账号密码后第二次就会记住账号密码。</span>
-<span class="token function">git</span> config --global credential.helper store<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-
-
-<h1 id="Actions"><a href="#Actions" class="headerlink" title="Actions"></a>Actions</h1><h2 id="什么是Actions"><a href="#什么是Actions" class="headerlink" title="什么是Actions"></a>什么是Actions</h2><blockquote>
-<p>github action是一种持续集成和持续交付的（CI&#x2F;CD）平台，可用于自动执行生成、测试和部署管道。在github创建的仓库中，Actions是可以自定义的一些列的操作，如：提交代码后触发自动化编译打包和部署到远程服务器上，官方所说的定义是：在仓库中自动化、自定义操作执行软件开发工作流程，目前有很多现成的Actions可以直接拿来使用，也可以进行自定义创建到自己工作流程中。</p>
-</blockquote>
-<h2 id="Actions可以做什么"><a href="#Actions可以做什么" class="headerlink" title="Actions可以做什么"></a>Actions可以做什么</h2><blockquote>
-<p>Actions通常用来两个方面</p>
-<ol>
-<li>自动化ci&#x2F;cd,触发事件后自动化编译打包部署。</li>
-<li>自动添加标签，当有人提issues的时候可以自动化的添加标签</li>
-</ol>
-</blockquote>
-<h2 id="Actions组件"><a href="#Actions组件" class="headerlink" title="Actions组件"></a>Actions组件</h2><blockquote>
-<p>可以把Github Actions 工作流程配置为在存储库发生事件触发。</p>
-<p>example: 拉取请求或者推送请求的时候触发工作流程[工作流程理解为jobs]</p>
-<p>一个工作流程包含一个作业或者多个作业，这些作业可以按照顺序执行，也可以并发执行，每个作业都会在自己虚拟机中进行，或者在容器中进行，这个运行的进程可以理解为运行了一个runner,每个作业可能会有多个步骤，这个步骤运行自定义的脚本或者运行操作。</p>
-</blockquote>
-<img src="/images/action.png" style="zoom:50%;">
-
-<h3 id="Workflows（工作流）"><a href="#Workflows（工作流）" class="headerlink" title="Workflows（工作流）"></a><strong>Workflows（工作流）</strong></h3><blockquote>
-<p>工作流是一个可配置的自动化的程序。创建一个工作流，你需要定义一个 YAML 文件，当你的仓库触发某个事件的时候，工作流就会运行，当然也可以手动触发，或者定义一个时间表。</p>
-</blockquote>
-<h3 id="事件（Events）"><a href="#事件（Events）" class="headerlink" title="事件（Events）"></a><strong>事件（Events）</strong></h3><blockquote>
-<p>事件是指仓库触发运行工作流的具体的行为，比如创建一个 pull request，新建一个 issue、或者推送一个 commit。你也可以使用时间表触发一个工作流，或者通过请求一个 REST API，再或者手动触发。</p>
-</blockquote>
-<h3 id="任务（Jobs）"><a href="#任务（Jobs）" class="headerlink" title="任务（Jobs）"></a><strong>任务（Jobs）</strong></h3><blockquote>
-<p>任务是在同一个运行器上执行的一组步骤（steps）。一个步骤（steps）要么是一个shell 脚本（script）要么是一个动作（action）。步骤会顺序执行，并彼此独立。因为每一个步骤都在同一个运行器上被执行，所以你可以从一个步骤（step）传递数据到另一个步骤（step）。</p>
-</blockquote>
-<h3 id="动作（Actions）"><a href="#动作（Actions）" class="headerlink" title="动作（Actions）"></a><strong>动作（Actions）</strong></h3><blockquote>
-<p>动作是 GitHub Actions 平台的一个自定义的应用，它会执行一个复杂但是需要频繁重复的作业。使用动作可以减少重复代码。比如一个 action 可以实现从 GitHub 拉取你的 git 仓库，为你的构建环境创建合适的工具链等。</p>
-</blockquote>
-<h3 id="运行器（Runners）"><a href="#运行器（Runners）" class="headerlink" title="运行器（Runners）"></a><strong>运行器（Runners）</strong></h3><blockquote>
-<p>一个运行器是一个可以运行工作流的服务。每一个运行器一次只运行一个单独的任务。GitHub 提供 Ubuntu Linux，Microsoft Windows 和 macOS 运行器，每一个工作流都运行在一个独立新建的虚拟机中。</p>
-</blockquote>
-<h2 id="工作流参数"><a href="#工作流参数" class="headerlink" title="工作流参数"></a><strong>工作流参数</strong></h2><p>工作流程是一个可配置的自动化过程，它将运行一个或多个作业。 工作流程由签入到存储库的 YAML 文件定义，并在存储库中的事件触发时运行，也可以手动触发，或按定义的时间表触发。文件位于仓库的根目录下的<code>.github/workflows</code></p>
-<h3 id="触发工作流程"><a href="#触发工作流程" class="headerlink" title="触发工作流程"></a>触发工作流程</h3><ol>
-<li><p>工作流程存储库发生事件</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># 单个事件触发</span>
-<span class="token key atrule">on</span><span class="token punctuation">:</span> push
-<span class="token comment"># 多个事件触发</span>
-<span class="token key atrule">on</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>push<span class="token punctuation">,</span> fork<span class="token punctuation">]</span>
-<span class="token comment"># 限定master分支发生push事件触发</span>
-<span class="token key atrule">on</span><span class="token punctuation">:</span>
-  <span class="token key atrule">push</span><span class="token punctuation">:</span>
-    <span class="token key atrule">branches</span><span class="token punctuation">:</span>    
-      <span class="token punctuation">-</span> master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>预定时间</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># 示例在每天 5:30 和 17:30 UTC 触发工作流程</span>
-<span class="token key atrule">on</span><span class="token punctuation">:</span>
-  <span class="token key atrule">schedule</span><span class="token punctuation">:</span>
-    <span class="token punctuation">-</span> <span class="token key atrule">cron</span><span class="token punctuation">:</span>  <span class="token string">'30 5,17 * * *'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
-</ol>
-<h3 id="使用作业"><a href="#使用作业" class="headerlink" title="使用作业"></a>使用作业</h3><ol>
-<li>创建jobs</li>
-</ol>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># workflow主体是jobs字段，表示要执行的一项或者多项任务jobs.&lt;job_id>.name job_id：名称自定义 name：任务的说明</span>
-<span class="token key atrule">jobs</span><span class="token punctuation">:</span>
-  <span class="token comment">#作业id</span>
-  <span class="token key atrule">my_first_job</span><span class="token punctuation">:</span>
-  	<span class="token comment">#作业名称</span>
-    <span class="token key atrule">name</span><span class="token punctuation">:</span> My first job
-  <span class="token key atrule">my_second_job</span><span class="token punctuation">:</span>
-    <span class="token key atrule">name</span><span class="token punctuation">:</span> My second job
-<span class="token comment"># jobs.&lt;job_id>.needs needs字段指定当前任务的依赖关系，即运行顺序，这个 workflow 的运行顺序依次为：job1、job2、job3</span>
-<span class="token key atrule">jobs</span><span class="token punctuation">:</span>
-  <span class="token key atrule">job1</span><span class="token punctuation">:</span>
-  <span class="token key atrule">job2</span><span class="token punctuation">:</span>
-    <span class="token key atrule">needs</span><span class="token punctuation">:</span> job1
-  <span class="token key atrule">job3</span><span class="token punctuation">:</span>
-    <span class="token key atrule">needs</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>job1<span class="token punctuation">,</span> job2<span class="token punctuation">]</span>    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="2">
-<li>选择运行器</li>
-</ol>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># jobs.&lt;job_id>.runs-on runs-on字段指定运行所需要的虚拟机环境。它是必填字段，目前可以使用的虚拟机如下</span>
-<span class="token key atrule">runs-on</span><span class="token punctuation">:</span> ubuntu<span class="token punctuation">-</span>latest<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<img src="/images/runner.png" style="zoom:50%;">
-
-<blockquote>
-<p>以上是常见的运行器，就是用哪个虚拟机</p>
-</blockquote>
-<ol start="3">
-<li>运行步骤</li>
-</ol>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"># jobs.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>job_id</span><span class="token punctuation">></span></span>.steps
-# steps字段指定每个 Job 的运行步骤，可以包含一个或多个步骤。每个步骤都可以指定以下三个字段。
-# 步骤名称。
-jobs.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>job_id</span><span class="token punctuation">></span></span>.steps.name
-# 该步骤运行的命令或者 action
-jobs.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>job_id</span><span class="token punctuation">></span></span>.steps.run
-# 该步骤所需的环境变量
-jobs.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>job_id</span><span class="token punctuation">></span></span>.steps.env<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="maven打jar包示例"><a href="#maven打jar包示例" class="headerlink" title="maven打jar包示例"></a>maven打jar包示例</h3><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"># .github/workflows/maven.yml 
-name: Java CI with Maven
-on:
-  push:
-    branches: [ "master" ]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 8
-      uses: actions/setup-java@v3
-      with:
-        java-version: '8'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-      run: mvn -B clean package
-    # Optional: Uploads the JAR file as an artifact
-    - name: Upload JAR
-      uses: actions/upload-artifact@v2
-      with:
-        name: DataHub
-        path: target/*.jar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html" class="post-title-link" itemprop="url">Java内存模型</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:19:19" itemprop="dateModified" datetime="2024-04-15T20:19:19+08:00">2024-04-15</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><ol>
-<li><p>处理器的内存模型</p>
-<p>CPU的发展在摩尔定律的指导下以18个月的速度翻一倍的速度在发展，内存和硬盘的发展远远落后于CPU，为了解决这个问题CPU厂商设计的了高速缓存解决I&#x2F;O速度和CPU运行速度不匹配问题。</p>
-</li>
-<li><p>高速缓存</p>
-</li>
-</ol>
-<p>​    高速缓存位于CPU和内存之间，当程序进行运算的时候，会将数据从内存中复制一份到高速缓存中，当cpu运算的时候直接从高速缓存里面拿数据，运算完后将数据向高速缓存写入，再将高速缓存刷新到内存中。</p>
-<ol start="3">
-<li><p>缓存的一致性协议</p>
-<p>缓存一致性问题：多核CPU中，每个CPU拥有属于自己的高速缓存，但是内存只有一块，无法保证多个CPU处理相关数据后，更新回主内存的数据以谁为准呢？</p>
-<p>解决方案：</p>
-</li>
-</ol>
-<p>​	1）通过在总线上加锁</p>
-<p>​	CPU和内存的通信是通过总线进行的，在总线上加锁，阻塞其他CPU对内存的访问，保证缓存不一致问题，但是阻塞其他CPU访问内存，导致效率低下。</p>
-<p>​	2）通过缓存一致性协议</p>
-<p>​	MESI协议保证内存中的共享变量的副本是一致的，当cpu写入数据的时候，发现操作变量为共享变量（在其他cpu中也存在该共享变量），会发送信号，通知其他的cpu将这个变量设置为无效状态，当其他cpu读取这个数据时候，发现这个变量是无效的，他会从内存中重新读取。</p>
-<ol start="4">
-<li>CPU乱序执行优化</li>
-</ol>
-<p>​	为了让处理器内部的运算单元能够被充分利用，处理器会对输入的代码进行乱序执行（out-of-order execution）优化处理器会在计算之后，将乱序执行的结构重组，保证结果和顺序执行是一致的，但是不保证程序中各个语句执行顺序和输入顺序一致。（JAVA虚拟机的即时编译器也有类似的指令重排序优化）</p>
-<ol start="5">
-<li><p>处理器内存模型的几种类型</p>
-<p>顺序一致性内存模型：</p>
-<ul>
-<li>一个线程中的所有操作必须按照程序的顺序执行</li>
-<li>所有线程都只能看到一个单一的操作执行顺序，在顺序执行的一致性内存模型，每个操作都必须原子执行且立即对所有线程可见。</li>
-</ul>
-</li>
-</ol>
-<h1 id="JAVA内存模型"><a href="#JAVA内存模型" class="headerlink" title="JAVA内存模型"></a>JAVA内存模型</h1><p>​	不同架构的物理机器可以拥有不一样的内存模型，java的宗旨是一次编译，到处运行，为了实现该目标，java虚拟机规范定义了java内存模型（JAVA Memory Model,JMM）</p>
-<ol>
-<li>主内存</li>
-</ol>
-<p>​	java的内存模型规定了所有变量（实例字段、静态字段、构成数组对象的元素）都存储在主内存中。</p>
-<ol start="2">
-<li>工作内存</li>
-</ol>
-<p>​	每条线程还有自己的工作内存（类比高速缓存区）工作内存中保存了被该线程使用的变量的主内存副本拷贝，线程对变量的所有操作都是在工作内存中完成的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/FTP%E5%92%8CSFTP.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/FTP%E5%92%8CSFTP.html" class="post-title-link" itemprop="url">SFTP实践</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:17:27" itemprop="dateModified" datetime="2024-04-15T20:17:27+08:00">2024-04-15</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="SFTP"><a href="#SFTP" class="headerlink" title="SFTP"></a>SFTP</h1><h2 id="SFTP介绍"><a href="#SFTP介绍" class="headerlink" title="SFTP介绍"></a>SFTP介绍</h2><p> sftp是Secure File Transfer Protocol的缩写，安全文件传送协议。可以为传输文件提供一种安全的网络的加密方法。SFTP 为 SSH的其中一部分，是一种传输档案至 Blogger 伺服器的安全方式。其实在SSH软件包中，已经包含了一个叫作SFTP(Secure File Transfer Protocol)的安全文件信息传输子系统，SFTP本身没有单独的守护进程，它必须使用sshd守护进程（端口号默认是22）来完成相应的连接和答复操作，所以从某种意义上来说，SFTP并不像一个服务器程序，而更像是一个客户端程序。SFTP同样是使用加密传输认证信息和传输的数据，所以，使用SFTP是非常安全的。但是，由于这种传输方式使用了加密&#x2F;解密技术，所以传输效率比普通的FTP要低得多。</p>
-<h2 id="SFTP安装"><a href="#SFTP安装" class="headerlink" title="SFTP安装"></a>SFTP安装</h2><h3 id="检查openssh版本"><a href="#检查openssh版本" class="headerlink" title="检查openssh版本"></a>检查openssh版本</h3><blockquote>
-<p>使用系统自带的internal-sftp搭建sftp，因为需要用到chroot，所以openssh 版本不能低于4.8p1</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># ssh -V</span>
-OpenSSH_7.4p1, OpenSSL <span class="token number">1.0</span>.2k-fips  <span class="token number">26</span> Jan <span class="token number">2017</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h3 id="创建用户组"><a href="#创建用户组" class="headerlink" title="创建用户组"></a>创建用户组</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># groupadd sftp</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="添加用户到sftp用户组"><a href="#添加用户到sftp用户组" class="headerlink" title="添加用户到sftp用户组"></a>添加用户到sftp用户组</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># useradd -g sftp -s /sbin/nologin tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="修改sftp用户的密码"><a href="#修改sftp用户的密码" class="headerlink" title="修改sftp用户的密码"></a>修改sftp用户的密码</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># passwd tom</span>
-更改用户 tom 的密码 。
-新的 密码：
-无效的密码： 密码少于 <span class="token number">8</span> 个字符
-重新输入新的 密码：
-passwd：所有的身份验证令牌已经成功更新。
-密码设置为: <span class="token function">cat</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="创建SFTP目录"><a href="#创建SFTP目录" class="headerlink" title="创建SFTP目录"></a>创建SFTP目录</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/</span>
-<span class="token comment"># 创建该用户能用的目录</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="修改sshd-config的配置文件"><a href="#修改sshd-config的配置文件" class="headerlink" title="修改sshd_config的配置文件"></a>修改sshd_config的配置文件</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># vim /etc/ssh/sshd_config</span>
-<span class="token comment">#Subsystem      sftp    /usr/libexec/openssh/sftp-server 需要注释掉</span>
-<span class="token comment"># 添加以下配置</span>
-Subsystem <span class="token function">sftp</span> internal-sftp
-Match Group <span class="token function">sftp</span>
-ChrootDirectory /sftp/%u
-ForceCommand internal-sftp
-AllowTcpForwarding no
-X11Forwarding no<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="设定Chroot权限"><a href="#设定Chroot权限" class="headerlink" title="设定Chroot权限"></a>设定Chroot权限</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown root:sftp /sftp</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown root:sftp /sftp/tom</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp/tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="设置用户对应的权限"><a href="#设置用户对应的权限" class="headerlink" title="设置用户对应的权限"></a>设置用户对应的权限</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/tom/files</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown tom /sftp/tom/files</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp/tom/files</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="重启sshd"><a href="#重启sshd" class="headerlink" title="重启sshd"></a>重启sshd</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># systemctl restart sshd</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="连接测试"><a href="#连接测试" class="headerlink" title="连接测试"></a>连接测试</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># sftp tom@127.0.0.1</span>
-tom@127.0.0.1's password:
-Connected to <span class="token number">127.0</span>.0.1.
-sftp<span class="token operator">></span>
-sftp<span class="token operator">></span> <span class="token builtin class-name">exit</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Geoserver.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Geoserver.html" class="post-title-link" itemprop="url">安装GeoServer</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:17:52" itemprop="dateModified" datetime="2024-04-15T20:17:52+08:00">2024-04-15</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="离线安装GeoServer"><a href="#离线安装GeoServer" class="headerlink" title="离线安装GeoServer"></a>离线安装GeoServer</h2><blockquote>
-<p>前提：安装好java,配置好JAVA_HOME</p>
-</blockquote>
-<p>1.准备源码包</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">https://jaist.dl.sourceforge.net/project/geoserver/GeoServer/2.15.1/geoserver-2.15.1-bin.zip<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>2.解压</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">unzip</span> geoserver-2.15.1-bin.zip <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>3.修改端口</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> geoserver-2.15.1
-<span class="token function">vi</span> start.ini 
-jetty.port<span class="token operator">=</span><span class="token number">8181</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>4.启动程序</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> bin
-./startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>5.后台启动</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">nohup</span> /root/geoserver-2.15.1/bin/startup.sh <span class="token operator">&amp;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="geoserver跨域配置"><a href="#geoserver跨域配置" class="headerlink" title="geoserver跨域配置"></a>geoserver跨域配置</h2><p>1.查看对应的版本</p>
-<blockquote>
-<p>启动程序后，默认用户名&#x2F;密码登陆进去，F12抓取一下Response Header,Server里面有版本号</p>
-</blockquote>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">Cache-Control: no-cache, no-store
-Content-Length: 0
-Date: Mon, 23 May 2022 07:56:02 GMT
-Expires: Thu, 01 Jan 1970 00:00:00 GMT
-Location: http://180.76.187.95:8181/geoserver/web/?0
-Pragma: no-cache
-Server: Jetty(9.4.12.v20180830)
-Set-Cookie: JSESSIONID=node012k3zcl8cf6121wuziii0dzvt75.node0;Path=/geoserver
-X-Frame-Options: SAMEORIGIN<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>2.下载jar包</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token comment">&lt;!-- https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-server --></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.eclipse.jetty<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>jetty-server<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>9.4.12.v20180830<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>3.上传jar包</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">上传路径 /root/geoserver-2.15.1/webapps/geoserver/WEB-INF/lib<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>4.修改配置</p>
-<pre class="line-numbers language-web.xml" data-language="web.xml"><code class="language-web.xml">vim &#x2F;root&#x2F;geoserver-2.15.1&#x2F;webapps&#x2F;geoserver&#x2F;WEB-INF&#x2F;web.xml<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-name</span><span class="token punctuation">></span></span>CORS<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-name</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-class</span><span class="token punctuation">></span></span>com.thetransactioncompany.cors.CORSFilter<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-class</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.allowOrigin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>*<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.supportedMethods<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>GET,POST,HEAD,PUT,DELETE<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.supportedHeaders<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>Accept,Origin,X-Requested-With,Content-Type,Last-Modified<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.exposedHeaders<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>Set-Cookie<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>init-param</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-name</span><span class="token punctuation">></span></span>cors.supportsCredentials<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-name</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>param-value</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>param-value</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>init-param</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-mapping</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter-name</span><span class="token punctuation">></span></span>CORS<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-name</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url-pattern</span><span class="token punctuation">></span></span>/*<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>url-pattern</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter-mapping</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Build%20tools.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Build%20tools.html" class="post-title-link" itemprop="url">Build Tools</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:15:36" itemprop="dateModified" datetime="2024-04-15T20:15:36+08:00">2024-04-15</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h1><h1 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h1><h1 id="Ant"><a href="#Ant" class="headerlink" title="Ant"></a>Ant</h1>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1626,14 +2330,14 @@ X-Frame-Options: SAMEORIGIN<span aria-hidden="true" class="line-numbers-rows"><s
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
