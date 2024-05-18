@@ -165,6 +165,213 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82.html" class="post-title-link" itemprop="url">数仓分层</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-15 20:14:48" itemprop="dateModified" datetime="2024-04-15T20:14:48+08:00">2024-04-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="数仓分层"><a href="#数仓分层" class="headerlink" title="数仓分层"></a>数仓分层</h1><h2 id="数仓概念"><a href="#数仓概念" class="headerlink" title="数仓概念"></a>数仓概念</h2><h3 id="什么是数据仓库"><a href="#什么是数据仓库" class="headerlink" title="什么是数据仓库"></a>什么是数据仓库</h3><blockquote>
+<p>数据仓库，英文名称为<code>Data Warehouse</code>，可简写为<code>DW</code>或<code>DWH</code>,是为企业所有级别的决策制定过程，提供所有类型数据支持的战略集合。<strong>它出于分析性报告和决策支持目的而创建</strong>。</p>
+</blockquote>
+<h3 id="数据仓库作用"><a href="#数据仓库作用" class="headerlink" title="数据仓库作用"></a>数据仓库作用</h3><blockquote>
+<p>构建面向分析的集成化数据环境，提供指导业务流程改进、监视时间、成本、质量以及控制。数据仓库本身并不 “生产” 任何数据，同时自身也不需要 “消费” 任何的数据，数据来源于外部，并且开放给外部应用，这也是为什么叫 “仓库” ，而不叫 “工厂” 的原因。</p>
+</blockquote>
+<h3 id="数据仓库的特点"><a href="#数据仓库的特点" class="headerlink" title="数据仓库的特点"></a>数据仓库的特点</h3><h4 id="面向主题"><a href="#面向主题" class="headerlink" title="面向主题"></a>面向主题</h4><blockquote>
+<p>操作型数据库的数据组织面向事务处理任务，各个业务系统之间各自分离，而数据仓库中的数据是按照一定的主题域进行组织。主题是一个抽象的概念，是指用户使用数据仓库进行决策时所关心的重点方面，一个主题通常包含多个操作型信息系统。</p>
+</blockquote>
+<h4 id="集成"><a href="#集成" class="headerlink" title="集成"></a>集成</h4><blockquote>
+<p>面向事务处理的操作型数据库通常与某些特定的应用相关，数据库之间相互独立，并且往往是异构的。而数据仓库中的数据是在对原有分散的数据库数据抽取、清理的基础上经过系统加工、汇总和整理得到的，必须消除元数据中的不一致性，以保证数据仓库内的信息关于整个企业的一致的全局信息。</p>
+</blockquote>
+<h4 id="不可更新"><a href="#不可更新" class="headerlink" title="不可更新"></a>不可更新</h4><blockquote>
+<p>操作型数据库中的数据通常实时更新，数据根据需要及时发生变化。数据仓库的数据主要供企业决策分析之用，所涉及的数据操作主要是数据查询，一旦某个数据进入数据很残酷以后，一般情况下将被长期保留，也就是数据仓库中一般有大量的查询操作，但修改和删除操作很少，通常只需要定期的加载、刷新。</p>
+</blockquote>
+<h4 id="时变性"><a href="#时变性" class="headerlink" title="时变性"></a>时变性</h4><blockquote>
+<p>操作型数据库主要关心当前某一个时间段内的数据，而数据仓库中的数据通常包含历史信息，系统记录了企业从过去某一个时点（如开始应用数据仓库的时点）到目前的各个阶段的信息，通过这些信息，可以对企业的发展历程和未来趋势做出定量分析和预测。</p>
+</blockquote>
+<h4 id="数据仓库中的数据"><a href="#数据仓库中的数据" class="headerlink" title="数据仓库中的数据"></a>数据仓库中的数据</h4><blockquote>
+<p>包括元数据，粒度数据、当前详细数据，历史数据、档案数据。</p>
+</blockquote>
+<p>1.4.1 元数据</p>
+<blockquote>
+<p>最重要的部分，关于数据的数据。也成为数据仓库的结构，是所有数据集成体现。仓库开发者使用元素来管理和控制仓库的建立和维护。</p>
+</blockquote>
+<p>1.4.2 粒度数据</p>
+<blockquote>
+<p>定义为呼叫仓库所保存的信息的概要程度。不同粒度表示为不同级别的汇总数据。汇总数据是信息仓库的特点，所有的企业数据分类（按部门、地区、功能等）需要的信息都不同，同时有效的信息仓库是未不同风格提供的，轻量级汇总数据是企业自行的主要依据，它来自根据企业组成部分的轻量级汇总数据或来自当前详细数据。这一层的数据容量比其他任何一个都少，代表一个折衷的积累，用来支撑广泛的各式的需要和兴趣。通过高度汇总，执行者能够使用“钻取”到达逐步增加的详细层。</p>
+</blockquote>
+<p>1.4.3 当前详细数据</p>
+<blockquote>
+<p>是信息仓库的核心，存放大量数据。数据来自业务操作数据库，通过主题来组织，不是代表特定应用，而是代表整个企业。在仓库中数据粒度最低，当数据精确化时，其中的每一个数据实体都是一个块照、一个时刻，表示一个瞬间。一旦需要经常支持企业需求，数据随即进行更新。</p>
+</blockquote>
+<p>1.4.4 历史数据</p>
+<blockquote>
+<p>以前的有意义数据（一般两年以上），给企业带来延续的利益和价值。包含巨大的数据量，可以用来预测和趋势分析。包括：旧数据（原始或汇总形式）、描述旧数据特征的元数据。</p>
+</blockquote>
+<h4 id="1-5-数据仓库的基本架构"><a href="#1-5-数据仓库的基本架构" class="headerlink" title="1.5 数据仓库的基本架构"></a>1.5 数据仓库的基本架构</h4><blockquote>
+<p>数据仓库的目的是构建面向分析的继承化数据环境，为企业提供决策支持（Decision Support）。其实数据仓库本身并不“生产”然后数据，同时自身也不需要“消费”任何数据，数据来源于外部，并且开放给外部应用，这也是为什么叫“仓库”，而不叫“工厂”的原因。因此数据仓库的基本架构主要包含的数据流入流出的过程，可以分为三层</p>
+<p>–原始层（元数据）</p>
+<p>–仓库层（数据仓库）</p>
+<p>–应用层（数据应用）</p>
+</blockquote>
+<img src="https://pic4.zhimg.com/80/v2-91d6a6ca901449e1e3dc96851f408453_1440w.webp" alt="img" style="zoom: 50%;">
+
+<img src="/post/Users\Administrator\AppData\Local\Temp\WeChat Files\1bcb8ac1f3fd27d4452992905efd093.jpg" alt="1bcb8ac1f3fd27d4452992905efd093" style="zoom: 50%;">
+
+
+
+
+
+<h4 id="1-6-数据库和数据仓库的区别"><a href="#1-6-数据库和数据仓库的区别" class="headerlink" title="1.6 数据库和数据仓库的区别"></a>1.6 数据库和数据仓库的区别</h4><img src="https://pic1.zhimg.com/80/v2-ce707b3e18e8fa5bb6adc377acedcf78_1440w.webp" alt="img" style="zoom:50%;">
+
+<p>数据仓库是在传统数据库的基础之上发展起来的，但它并不是对传统数据库的彻底抛弃，而是旨在弥补传统数据库在数据分析能力方面的不足，以提供良好的大规模数据分析能力为己任，力图为决策提供有效的技术支持。和传统数据库相比，数据仓库在总体特征、面向用户、存储内容等方面，都有着重大的差异（如下表）。</p>
+<img src="https://pic2.zhimg.com/80/v2-a0874931c5b236e904ff335547bf88ad_1440w.webp" alt="img" style="zoom: 33%;">
+
+<h3 id="原始数据层"><a href="#原始数据层" class="headerlink" title="原始数据层"></a>原始数据层</h3><blockquote>
+<p>ODS(Operational Data Store)</p>
+<ol>
+<li>保持数据原貌，不做任何修改</li>
+<li>压缩采用 LZO，压缩比是 100g 数据压缩完 10g 左右。</li>
+<li>创建分区表</li>
+</ol>
+</blockquote>
+<h3 id="明细数据层"><a href="#明细数据层" class="headerlink" title="明细数据层"></a>明细数据层</h3><blockquote>
+<p>DWD</p>
+<p>1.数据清洗<br>（1）空值去除<br>（2）过滤核心字段无意义的数据，比如订单表中订单 id 为 null，支付表中支付 id 为空<br>（3）将用户行为宽表和业务表进行数据一致性处理</p>
+<p>2.清洗的手段<br>Sql、mr、rdd、kettle、Python等等</p>
+<p>3.清洗掉多少数据算合理<br>1 万条数据清洗掉 1 条。</p>
+<p>4.脱敏<br>对手机号、身份证号等敏感数据脱敏</p>
+<p>5.维度退化<br>对业务数据传过来的表进行维度退化和降维。（商品一级二级三级、省市县、年月日）</p>
+<p>6.LZO压缩</p>
+<p>7.列式存储 parquet</p>
+</blockquote>
+<h3 id="服务数据层"><a href="#服务数据层" class="headerlink" title="服务数据层"></a>服务数据层</h3><blockquote>
+<p>DWS</p>
+<ol>
+<li><p>DWS 层有 3-5 张宽表（处理 100-200 个指标 70%以上的需求）</p>
+<p>  具体宽表名称：用户行为宽表，用户购买商品明细行为宽表，商品宽表，购物车宽表，物流宽表、登录注册、售后等。</p>
+</li>
+<li><p>哪个宽表最宽？大概有多少个字段？<br>最宽的是用户行为宽表。大概有 60-100 个字段</p>
+</li>
+<li><p>具体用户行为宽表字段名称<br>评论、打赏、收藏、关注–商品、关注–人、点赞、分享、好价爆料、文章发布、活跃、签到、补签卡、幸运屋、礼品、金币、电商点击、gmv</p>
+</li>
+</ol>
+</blockquote>
+<h3 id="主题数据层"><a href="#主题数据层" class="headerlink" title="主题数据层"></a>主题数据层</h3><blockquote>
+<p>DWT</p>
+<p>分析过的指标<br>日活、月活、周活、留存、留存率、新增（日、周、年）、转化率、流失、回流、七天内连续 3 天登录（点赞、收藏、评价、购买、加购、下单、活动）、连续 3 周（月）登录、GMV、复购率、复购率排行、点赞、评论、收藏、领优惠价人数、使用优惠价、沉默、值不值得买、退款人数、退款率 topn 热门商品</p>
+<p>留转 G 复活指标<br>（1）活跃<br>日活：100 万 ；月活：是日活的 2-3 倍 300 万<br>总注册的用户多少？1000 万-3000 万之间<br>（2）GMV<br>GMV：每天 10 万订单 （50 – 100 元） 500 万-1000 万<br>10%-20% 100 万-200 万<br>（3）复购率<br>某日常商品复购；（手纸、面膜、牙膏）10%-20%<br>电脑、显示器、手表 1%<br>（4）转化率<br>商品详情 &#x3D;》 加购物车 &#x3D;》下单 &#x3D;》 支付<br>5%-10% 60-70% 90%-95%<br>（5）留存率<br>1&#x2F;2&#x2F;3、周留存、月留存<br>搞活动： 10-20%</p>
+</blockquote>
+<h3 id="应用数据层"><a href="#应用数据层" class="headerlink" title="应用数据层"></a>应用数据层</h3><blockquote>
+<ol>
+<li><p>如何分析用户活跃？<br> 在启动日志中统计不同设备 id 出现次数。</p>
+</li>
+<li><p>如何分析用户新增?<br> 用活跃用户表 left join 用户新增表，用户新增表中 mid 为空的即为用户新增。</p>
+</li>
+<li><p>如何分析用户 1 天留存？<br> 留存用户&#x3D;前一天新增 join 今天活跃<br> 用户留存率&#x3D;留存用户&#x2F;前一天新增</p>
+</li>
+<li><p>如何分析沉默用户？<br> (登录时间为 7 天前,且只出现过一次)<br> 按照设备 id 对日活表分组，登录次数为 1，且是在一周前登录。</p>
+</li>
+<li><p>如何分析本周回流用户？<br> 本周活跃 left join 本周新增 left join 上周活跃，且本周新增 id 和上周活跃 id 都为 null。</p>
+</li>
+<li><p>如何分析流失用户？<br> (登录时间为 7 天前)<br> 按照设备 id 对日活表分组，且七天内没有登录过。</p>
+</li>
+<li><p>如何分析最近连续 3 周活跃用户数？<br> 按照设备 id 对周活进行分组，统计次数大于 3 次。</p>
+</li>
+<li><p>如何分析最近七天内连续三天活跃用户数？<br> 1）查询出最近 7 天的活跃用户，并对用户活跃日期进行排名<br> 2）计算用户活跃日期及排名之间的差值<br> 3）对同用户及差值分组，统计差值个数<br> 4）将差值相同个数大于等于 3 的数据取出，然后去重，即为连续 3 天及以上活跃的用户<br> 7天连续收藏、点赞、购买、加购、付款、浏览、商品点击、退货、1 个月连续 7 天、连续两周</p>
+</li>
+</ol>
+</blockquote>
+<h1 id="数仓建模"><a href="#数仓建模" class="headerlink" title="数仓建模"></a>数仓建模</h1><h2 id="常用建模工具"><a href="#常用建模工具" class="headerlink" title="常用建模工具"></a>常用建模工具</h2><blockquote>
+<p>PowerDesigner&#x2F;SQLYog&#x2F;EZDML</p>
+</blockquote>
+<h2 id="ODS层"><a href="#ODS层" class="headerlink" title="ODS层"></a>ODS层</h2><blockquote>
+<ol>
+<li>保持数据原貌不做任何修改，起到备份数据的作用。</li>
+<li>数据采用压缩，减少磁盘存储空间（例如：原始数据 100G，可以压缩到 10G 左右）</li>
+<li>创建分区表，防止后续的全表扫描</li>
+</ol>
+</blockquote>
+<h2 id="DWD层"><a href="#DWD层" class="headerlink" title="DWD层"></a>DWD层</h2><blockquote>
+<p>DWD 层需构建维度模型，一般采用星型模型，呈现的状态一般为星座模型。维度建模一般按照以下四个步骤：</p>
+<p>选择业务过程→声明粒度→确认维度→确认事实</p>
+<p>（1）选择业务过程</p>
+<p>在业务系统中，如果业务表过多，挑选我们感兴趣的业务线，比如下单业务，支付业务，退款业务，物流业务，一条业务线对应一张事实表。如果小公司业务表比较少，建议选择所有业务线。</p>
+<p>（2）声明粒度</p>
+<p>数据粒度指数据仓库的数据中保存数据的细化程度或综合程度的级别。<br>声明粒度意味着精确定义事实表中的一行数据表示什么，应该尽可能选择最小粒度，以此来应各种各样的需求。<br>典型的粒度声明如下：</p>
+<p>订单当中的每个商品项作为下单事实表中的一行，粒度为每次<br>每周的订单次数作为一行，粒度为每周。<br>每月的订单次数作为一行，粒度为每月。<br>注意：如果在 DWD 层粒度就是每周或者每月，那么后续就没有办法统计细粒度的指标了。所有建议采用最小粒度。<br>（3）确定维度</p>
+<p>维度的主要作用是描述业务是事实，主要表示的是“谁，何处，何时”等信息。例如：<br>时间维度、用户维度、地区维度等常见维度。</p>
+<p>（4）确定事实</p>
+<p>此处的“事实”一词，指的是业务中的度量值，例如订单金额、下单次数等。<br>在 DWD 层，以业务过程为建模驱动，基于每个具体业务过程的特点，构建最细粒度的明细层事实表。事实表可做适当的宽表化处理。</p>
+<p>根据维度建模中的星型模型思想，将维度进行退化。例如：地区表和省份表退化为地区维度表，商品表、品类表、spu 表、商品三级分类、商品二级分类、商品一级分类表退化为商品维度表，活动信息表和活动规则表退化为活动维度表。至此，数仓的维度建模已经完毕，DWS、DWT 和 ADS 和维度建模已经没有关系了。DWS 和 DWT 都是建宽表，宽表都是按照主题去建。主题相当于观察问题的角度，对应着维度表。</p>
+</blockquote>
+<h2 id="DWS层"><a href="#DWS层" class="headerlink" title="DWS层"></a>DWS层</h2><blockquote>
+<p>DWS 层统计各个主题对象的当天行为，服务于 DWT 层的主题宽表。DWS层的宽表字段，是站在不同维度的视角去看事实表，重点关注事实表的度量值，通过与之关联的事实表，获得不同的事实表的度量值。</p>
+</blockquote>
+<h2 id="DWT层"><a href="#DWT层" class="headerlink" title="DWT层"></a>DWT层</h2><blockquote>
+<p>以分析的主题对象为建模驱动，基于上层的应用和产品的指标需求，构建主题对象的全量宽表。<br>DWT 层主题宽表都记录什么字段？<br>每个维度关联的不同事实表度量值以及首次、末次时间、累积至今的度量值、累积某个时间段的度量值。</p>
+</blockquote>
+<h2 id="ADS层"><a href="#ADS层" class="headerlink" title="ADS层"></a>ADS层</h2><blockquote>
+<p>分别对设备主题、会员主题、商品主题和营销主题进行指标分析，其中营销主题是用户主题和商品主题的跨主题分析案例</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E5%BA%8F%E5%88%97%E5%8C%96.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -260,6 +467,242 @@
 <p>1.<strong>不支持跨语言</strong> : 只支持java语言开发的程序调用</p>
 <p>2.<strong>性能差</strong>：序列化之后的字节数组体积较大，导致传输成本加大。</p>
 <p>3.<strong>存在安全问题</strong>：序列化和反序列化本身并不存在问题。但当输入的反序列化的数据可被用户控制，那么攻击者即可通过构造恶意输入，让反序列化产生非预期的对象，在此过程中执行构造的任意代码。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/webhook.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/webhook.html" class="post-title-link" itemprop="url">webhook</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-15 20:09:52" itemprop="dateModified" datetime="2024-04-15T20:09:52+08:00">2024-04-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Webhook基础"><a href="#Webhook基础" class="headerlink" title="Webhook基础"></a><strong>Webhook基础</strong></h1><blockquote>
+<p>Webhook是一种通过HTTP协议将实时数据传输到指定URL的机制。与传统API不同，它不需要客户端主动轮询服务器以获取更新，而是由服务器主动向客户端推送数据。这种设计使得Webhook非常适合用于实时通知、事件驱动的应用和集成不同系统之间的数据。</p>
+</blockquote>
+<h2 id="WebHook与传统API的区别"><a href="#WebHook与传统API的区别" class="headerlink" title="WebHook与传统API的区别"></a><strong>WebHook与传统API的区别</strong></h2><ul>
+<li><strong>触发方式</strong>：传统API是由客户端主动发起请求来获取数据或执行操作，而Webhook是由服务端主动向客户端推送数据。</li>
+<li><strong>实时性</strong>：Webhook可以实现实时通知，当事件发生时立即推送数据给客户端，而传统API则需要客户端定期轮询或手动发起请求来获取数据，可能存在一定的延迟。</li>
+<li><strong>节省资源</strong>：使用Webhook可以减少无效请求和服务器负载，因为只有在事件发生时才会触发数据传输，而传统API可能会频繁发送不必要的请求。</li>
+<li><strong>适用场景</strong>：Webhook适用于需要实时数据更新和事件驱动的场景，例如实时通知、即时聊天等，而传统API更适用于按需获取数据或执行操作的场景。</li>
+</ul>
+<img src="https://telegraph-image-2ni.pages.dev/file/4f4a8d0b71e6f3f828444.png" style="zoom:50%;">
+
+<h2 id="Webhook的工作原理"><a href="#Webhook的工作原理" class="headerlink" title="Webhook的工作原理"></a>Webhook的工作原理</h2><ol>
+<li><strong>注册Webhook</strong>：在目标服务上，客户端需要注册一个Webhook，通常是通过提供一个URL来告知目标服务在发生特定事件时向该URL发送数据。</li>
+<li><strong>事件触发</strong>：当目标服务上发生了注册的事件，比如数据更新、状态更改等，服务会触发Webhook，即向注册的URL发送HTTP请求。</li>
+<li><strong>HTTP请求</strong>：服务向注册的URL发送HTTP请求，通常是一个POST请求。这个请求会包含一些元数据，比如事件类型、发生时间等，以及相关的数据，比如更新的数据内容。这些数据通常以JSON格式或其他常见的数据格式进行传输。</li>
+<li><strong>客户端接收请求</strong>：客户端（Webhook的接收端）接收到这个HTTP请求后，需要解析其中的数据。这可以通过读取请求体中的内容来完成。客户端应该验证请求的来源和完整性，以确保安全性。</li>
+<li><strong>处理数据</strong>：一旦客户端解析了请求中的数据，它可以根据需要进行进一步的处理。这可能涉及将数据存储到数据库中、更新应用程序的状态、发送通知给用户等等。</li>
+<li><strong>响应</strong>：处理完数据后，客户端需要向目标服务发送一个响应，通常是一个HTTP状态码。这个响应可以告知目标服务数据是否已经成功接收和处理。通常情况下，目标服务不会对这个响应做出太多的处理，但一些服务可能会根据响应来判断是否继续尝试发送数据。</li>
+<li><strong>错误处理</strong>：在整个过程中，客户端需要注意处理可能出现的错误，比如网络连接问题、数据格式错误等。一些常见的错误处理方式包括记录错误日志、发送警报通知等。</li>
+</ol>
+<h1 id="Java实现WebHook"><a href="#Java实现WebHook" class="headerlink" title="Java实现WebHook"></a><strong>Java实现WebHook</strong></h1><h2 id="WebHookClient"><a href="#WebHookClient" class="headerlink" title="WebHookClient"></a>WebHookClient</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpExchange</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpHandler</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpServer</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">InputStream</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">OutputStream</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">InetSocketAddress</span></span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * Author: Zhi Liu
+ * Date: 2024/2/7 14:09
+ * Contact: liuzhi0531@gmail.com
+ * Desc: webhook客户端测试类
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WebhookClient</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">int</span> port <span class="token operator">=</span> <span class="token number">8000</span><span class="token punctuation">;</span> <span class="token comment">// 定义服务器端口号</span>
+        <span class="token class-name">HttpServer</span> server <span class="token operator">=</span> <span class="token class-name">HttpServer</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InetSocketAddress</span><span class="token punctuation">(</span>port<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 创建HTTP服务器实例</span>
+        server<span class="token punctuation">.</span><span class="token function">createContext</span><span class="token punctuation">(</span><span class="token string">"/webhook"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">WebhookHandler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 设置请求处理程序</span>
+        server<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 启动服务器</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Webhook 服务器已启动，监听端口 "</span> <span class="token operator">+</span> port<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">WebhookHandler</span> <span class="token keyword">implements</span> <span class="token class-name">HttpHandler</span> <span class="token punctuation">&#123;</span>
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handle</span><span class="token punctuation">(</span><span class="token class-name">HttpExchange</span> exchange<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"POST"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>exchange<span class="token punctuation">.</span><span class="token function">getRequestMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">InputStream</span> requestBody <span class="token operator">=</span> exchange<span class="token punctuation">.</span><span class="token function">getRequestBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 获取请求体</span>
+                <span class="token comment">// 读取请求体中的数据</span>
+                <span class="token class-name">StringBuilder</span> requestData <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">int</span> byteRead<span class="token punctuation">;</span>
+                <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>byteRead <span class="token operator">=</span> requestBody<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    requestData<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span> byteRead<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"收到Webhook请求：\n"</span> <span class="token operator">+</span> requestData<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token comment">// 响应webhook服务端</span>
+                <span class="token class-name">String</span> response <span class="token operator">=</span> <span class="token string">"Webhook 请求已收到"</span><span class="token punctuation">;</span>
+                exchange<span class="token punctuation">.</span><span class="token function">sendResponseHeaders</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">,</span> response<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name">OutputStream</span> responseBody <span class="token operator">=</span> exchange<span class="token punctuation">.</span><span class="token function">getResponseBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                responseBody<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                responseBody<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">// 如果不是POST请求，返回405 Method Not Allowed</span>
+                exchange<span class="token punctuation">.</span><span class="token function">sendResponseHeaders</span><span class="token punctuation">(</span><span class="token number">405</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="WebHookServer"><a href="#WebHookServer" class="headerlink" title="WebHookServer"></a>WebHookServer</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">BufferedReader</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">InputStreamReader</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">OutputStream</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">HttpURLConnection</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">URL</span></span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * Author: Zhi Liu
+ * Date: 2024/2/7 14:15
+ * Contact: liuzhi0531@gmail.com
+ * Desc:
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WebhookServer</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> url <span class="token operator">=</span> <span class="token string">"http://localhost:8000/webhook"</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> postData <span class="token operator">=</span> <span class="token string">"&#123;hello,world&#125;"</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token function">sendPostRequest</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> postData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">sendPostRequest</span><span class="token punctuation">(</span><span class="token class-name">String</span> url<span class="token punctuation">,</span> <span class="token class-name">String</span> postData<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">URL</span> urlObj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">URL</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">HttpURLConnection</span> connection <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">HttpURLConnection</span><span class="token punctuation">)</span> urlObj<span class="token punctuation">.</span><span class="token function">openConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 设置请求方法为POST</span>
+        connection<span class="token punctuation">.</span><span class="token function">setRequestMethod</span><span class="token punctuation">(</span><span class="token string">"POST"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 设置请求头部信息</span>
+        connection<span class="token punctuation">.</span><span class="token function">setRequestProperty</span><span class="token punctuation">(</span><span class="token string">"Content-Type"</span><span class="token punctuation">,</span> <span class="token string">"application/json"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 允许向服务器输出内容</span>
+        connection<span class="token punctuation">.</span><span class="token function">setDoOutput</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 写入请求数据</span>
+        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">OutputStream</span> outputStream <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">getOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> postDataBytes <span class="token operator">=</span> postData<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            outputStream<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>postDataBytes<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            outputStream<span class="token punctuation">.</span><span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token comment">// 获取客户端的响应状态码</span>
+        <span class="token keyword">int</span> responseCode <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">getResponseCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Response Code: "</span> <span class="token operator">+</span> responseCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 读取响应内容</span>
+        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">BufferedReader</span> reader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span>connection<span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">StringBuilder</span> response <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">String</span> line<span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>line <span class="token operator">=</span> reader<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                response<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Response Content: "</span> <span class="token operator">+</span> response<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token comment">// 关闭连接</span>
+        connection<span class="token punctuation">.</span><span class="token function">disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<ol>
+<li><p><strong>阅读相关文档</strong>：</p>
+<ul>
+<li>查阅Webhook服务提供商的文档，了解如何创建和管理Webhook。</li>
+<li>阅读关于HTTP请求和响应的文档，以便了解如何处理Webhook请求和发送响应。</li>
+</ul>
+</li>
+<li><p><strong>编写代码</strong>：</p>
+<ul>
+<li>编写一个简单的Webhook接收端，用于接收来自外部服务的HTTP请求。</li>
+<li>编写处理Webhook请求的代码，例如解析请求、处理数据、执行逻辑等。</li>
+</ul>
+</li>
+<li><p><strong>测试和调试</strong>：</p>
+<ul>
+<li>使用工具（例如Postman）测试Webhook端点，确保它能够正确处理来自外部服务的请求。</li>
+<li>调试代码，解决可能出现的问题和错误。</li>
+</ul>
+</li>
+<li><p><strong>进阶学习</strong>：</p>
+<ul>
+<li>学习如何实现安全性和可靠性，例如使用HTTPS、认证、重试机制等。</li>
+<li>探索如何处理各种类型的Webhook事件，例如GitHub的push事件、Stripe的支付通知等。</li>
+</ul>
+</li>
+<li><p><strong>实践项目</strong>：</p>
+<ul>
+<li>开发一个实际的项目，其中包括使用Webhook与其他服务进行集成。</li>
+<li>参与开源项目，贡献Webhook相关的代码或解决问题。</li>
+</ul>
+</li>
+<li><p><strong>不断更新知识</strong>：</p>
+<ul>
+<li>持续关注Webhook领域的新发展和最佳实践。</li>
+<li>参加相关的线上或线下培训课程，与其他开发者交流经验。</li>
+</ul>
+</li>
+</ol>
 
       
     </div>
@@ -637,242 +1080,6 @@ Identify and stop the process that is listening on port 8080 or configure this a
 <h2 id="应用程序启动追踪"><a href="#应用程序启动追踪" class="headerlink" title="应用程序启动追踪"></a>应用程序启动追踪</h2><p>在应用程序启动期间，<code>SpringApplication</code> 和 <code>ApplicationContext</code> 执行许多与应用程序生命周期相关的任务。 beans的生命周期，甚至是处理应用事件。 通过 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/6.1.0-M1/javadoc-api/org/springframework/core/metrics/ApplicationStartup.html"><code>ApplicationStartup</code></a>, ，Spring框架 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/6.1.0-M1/reference/html/core.html#context-functionality-startup">允许你用 <code>StartupStep</code> 对象来跟踪应用程序的启动顺序</a>。 这些数据可以为分析目的而收集，或者只是为了更好地了解应用程序的启动过程。</p>
 <p>你可以在设置 <code>SpringApplication</code> 实例时选择一个 <code>ApplicationStartup</code> 实现。 例如，要使用 <code>BufferingApplicationStartup</code>，你可以这么写。</p>
 <h2 id="外部化的配置"><a href="#外部化的配置" class="headerlink" title="外部化的配置"></a>外部化的配置</h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/webhook.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/webhook.html" class="post-title-link" itemprop="url">webhook</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:09:52" itemprop="dateModified" datetime="2024-04-15T20:09:52+08:00">2024-04-15</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Webhook基础"><a href="#Webhook基础" class="headerlink" title="Webhook基础"></a><strong>Webhook基础</strong></h1><blockquote>
-<p>Webhook是一种通过HTTP协议将实时数据传输到指定URL的机制。与传统API不同，它不需要客户端主动轮询服务器以获取更新，而是由服务器主动向客户端推送数据。这种设计使得Webhook非常适合用于实时通知、事件驱动的应用和集成不同系统之间的数据。</p>
-</blockquote>
-<h2 id="WebHook与传统API的区别"><a href="#WebHook与传统API的区别" class="headerlink" title="WebHook与传统API的区别"></a><strong>WebHook与传统API的区别</strong></h2><ul>
-<li><strong>触发方式</strong>：传统API是由客户端主动发起请求来获取数据或执行操作，而Webhook是由服务端主动向客户端推送数据。</li>
-<li><strong>实时性</strong>：Webhook可以实现实时通知，当事件发生时立即推送数据给客户端，而传统API则需要客户端定期轮询或手动发起请求来获取数据，可能存在一定的延迟。</li>
-<li><strong>节省资源</strong>：使用Webhook可以减少无效请求和服务器负载，因为只有在事件发生时才会触发数据传输，而传统API可能会频繁发送不必要的请求。</li>
-<li><strong>适用场景</strong>：Webhook适用于需要实时数据更新和事件驱动的场景，例如实时通知、即时聊天等，而传统API更适用于按需获取数据或执行操作的场景。</li>
-</ul>
-<img src="https://telegraph-image-2ni.pages.dev/file/4f4a8d0b71e6f3f828444.png" style="zoom:50%;">
-
-<h2 id="Webhook的工作原理"><a href="#Webhook的工作原理" class="headerlink" title="Webhook的工作原理"></a>Webhook的工作原理</h2><ol>
-<li><strong>注册Webhook</strong>：在目标服务上，客户端需要注册一个Webhook，通常是通过提供一个URL来告知目标服务在发生特定事件时向该URL发送数据。</li>
-<li><strong>事件触发</strong>：当目标服务上发生了注册的事件，比如数据更新、状态更改等，服务会触发Webhook，即向注册的URL发送HTTP请求。</li>
-<li><strong>HTTP请求</strong>：服务向注册的URL发送HTTP请求，通常是一个POST请求。这个请求会包含一些元数据，比如事件类型、发生时间等，以及相关的数据，比如更新的数据内容。这些数据通常以JSON格式或其他常见的数据格式进行传输。</li>
-<li><strong>客户端接收请求</strong>：客户端（Webhook的接收端）接收到这个HTTP请求后，需要解析其中的数据。这可以通过读取请求体中的内容来完成。客户端应该验证请求的来源和完整性，以确保安全性。</li>
-<li><strong>处理数据</strong>：一旦客户端解析了请求中的数据，它可以根据需要进行进一步的处理。这可能涉及将数据存储到数据库中、更新应用程序的状态、发送通知给用户等等。</li>
-<li><strong>响应</strong>：处理完数据后，客户端需要向目标服务发送一个响应，通常是一个HTTP状态码。这个响应可以告知目标服务数据是否已经成功接收和处理。通常情况下，目标服务不会对这个响应做出太多的处理，但一些服务可能会根据响应来判断是否继续尝试发送数据。</li>
-<li><strong>错误处理</strong>：在整个过程中，客户端需要注意处理可能出现的错误，比如网络连接问题、数据格式错误等。一些常见的错误处理方式包括记录错误日志、发送警报通知等。</li>
-</ol>
-<h1 id="Java实现WebHook"><a href="#Java实现WebHook" class="headerlink" title="Java实现WebHook"></a><strong>Java实现WebHook</strong></h1><h2 id="WebHookClient"><a href="#WebHookClient" class="headerlink" title="WebHookClient"></a>WebHookClient</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpExchange</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpHandler</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpServer</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">InputStream</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">OutputStream</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">InetSocketAddress</span></span><span class="token punctuation">;</span>
-
-<span class="token comment">/**
- * Author: Zhi Liu
- * Date: 2024/2/7 14:09
- * Contact: liuzhi0531@gmail.com
- * Desc: webhook客户端测试类
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WebhookClient</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">int</span> port <span class="token operator">=</span> <span class="token number">8000</span><span class="token punctuation">;</span> <span class="token comment">// 定义服务器端口号</span>
-        <span class="token class-name">HttpServer</span> server <span class="token operator">=</span> <span class="token class-name">HttpServer</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InetSocketAddress</span><span class="token punctuation">(</span>port<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 创建HTTP服务器实例</span>
-        server<span class="token punctuation">.</span><span class="token function">createContext</span><span class="token punctuation">(</span><span class="token string">"/webhook"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">WebhookHandler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 设置请求处理程序</span>
-        server<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 启动服务器</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Webhook 服务器已启动，监听端口 "</span> <span class="token operator">+</span> port<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">WebhookHandler</span> <span class="token keyword">implements</span> <span class="token class-name">HttpHandler</span> <span class="token punctuation">&#123;</span>
-        <span class="token annotation punctuation">@Override</span>
-        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handle</span><span class="token punctuation">(</span><span class="token class-name">HttpExchange</span> exchange<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"POST"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>exchange<span class="token punctuation">.</span><span class="token function">getRequestMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                <span class="token class-name">InputStream</span> requestBody <span class="token operator">=</span> exchange<span class="token punctuation">.</span><span class="token function">getRequestBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 获取请求体</span>
-                <span class="token comment">// 读取请求体中的数据</span>
-                <span class="token class-name">StringBuilder</span> requestData <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token keyword">int</span> byteRead<span class="token punctuation">;</span>
-                <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>byteRead <span class="token operator">=</span> requestBody<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                    requestData<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span> byteRead<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token punctuation">&#125;</span>
-                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"收到Webhook请求：\n"</span> <span class="token operator">+</span> requestData<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-                <span class="token comment">// 响应webhook服务端</span>
-                <span class="token class-name">String</span> response <span class="token operator">=</span> <span class="token string">"Webhook 请求已收到"</span><span class="token punctuation">;</span>
-                exchange<span class="token punctuation">.</span><span class="token function">sendResponseHeaders</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">,</span> response<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token class-name">OutputStream</span> responseBody <span class="token operator">=</span> exchange<span class="token punctuation">.</span><span class="token function">getResponseBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                responseBody<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                responseBody<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-                <span class="token comment">// 如果不是POST请求，返回405 Method Not Allowed</span>
-                exchange<span class="token punctuation">.</span><span class="token function">sendResponseHeaders</span><span class="token punctuation">(</span><span class="token number">405</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="WebHookServer"><a href="#WebHookServer" class="headerlink" title="WebHookServer"></a>WebHookServer</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">BufferedReader</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">InputStreamReader</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">OutputStream</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">HttpURLConnection</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">URL</span></span><span class="token punctuation">;</span>
-
-<span class="token comment">/**
- * Author: Zhi Liu
- * Date: 2024/2/7 14:15
- * Contact: liuzhi0531@gmail.com
- * Desc:
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WebhookServer</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">String</span> url <span class="token operator">=</span> <span class="token string">"http://localhost:8000/webhook"</span><span class="token punctuation">;</span>
-        <span class="token class-name">String</span> postData <span class="token operator">=</span> <span class="token string">"&#123;hello,world&#125;"</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-            <span class="token function">sendPostRequest</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> postData<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">sendPostRequest</span><span class="token punctuation">(</span><span class="token class-name">String</span> url<span class="token punctuation">,</span> <span class="token class-name">String</span> postData<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">URL</span> urlObj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">URL</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">HttpURLConnection</span> connection <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">HttpURLConnection</span><span class="token punctuation">)</span> urlObj<span class="token punctuation">.</span><span class="token function">openConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 设置请求方法为POST</span>
-        connection<span class="token punctuation">.</span><span class="token function">setRequestMethod</span><span class="token punctuation">(</span><span class="token string">"POST"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 设置请求头部信息</span>
-        connection<span class="token punctuation">.</span><span class="token function">setRequestProperty</span><span class="token punctuation">(</span><span class="token string">"Content-Type"</span><span class="token punctuation">,</span> <span class="token string">"application/json"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 允许向服务器输出内容</span>
-        connection<span class="token punctuation">.</span><span class="token function">setDoOutput</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 写入请求数据</span>
-        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">OutputStream</span> outputStream <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">getOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> postDataBytes <span class="token operator">=</span> postData<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            outputStream<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>postDataBytes<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            outputStream<span class="token punctuation">.</span><span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-
-        <span class="token comment">// 获取客户端的响应状态码</span>
-        <span class="token keyword">int</span> responseCode <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">getResponseCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Response Code: "</span> <span class="token operator">+</span> responseCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 读取响应内容</span>
-        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">BufferedReader</span> reader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span>connection<span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token class-name">StringBuilder</span> response <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token class-name">String</span> line<span class="token punctuation">;</span>
-            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>line <span class="token operator">=</span> reader<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                response<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Response Content: "</span> <span class="token operator">+</span> response<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token comment">// 关闭连接</span>
-        connection<span class="token punctuation">.</span><span class="token function">disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<ol>
-<li><p><strong>阅读相关文档</strong>：</p>
-<ul>
-<li>查阅Webhook服务提供商的文档，了解如何创建和管理Webhook。</li>
-<li>阅读关于HTTP请求和响应的文档，以便了解如何处理Webhook请求和发送响应。</li>
-</ul>
-</li>
-<li><p><strong>编写代码</strong>：</p>
-<ul>
-<li>编写一个简单的Webhook接收端，用于接收来自外部服务的HTTP请求。</li>
-<li>编写处理Webhook请求的代码，例如解析请求、处理数据、执行逻辑等。</li>
-</ul>
-</li>
-<li><p><strong>测试和调试</strong>：</p>
-<ul>
-<li>使用工具（例如Postman）测试Webhook端点，确保它能够正确处理来自外部服务的请求。</li>
-<li>调试代码，解决可能出现的问题和错误。</li>
-</ul>
-</li>
-<li><p><strong>进阶学习</strong>：</p>
-<ul>
-<li>学习如何实现安全性和可靠性，例如使用HTTPS、认证、重试机制等。</li>
-<li>探索如何处理各种类型的Webhook事件，例如GitHub的push事件、Stripe的支付通知等。</li>
-</ul>
-</li>
-<li><p><strong>实践项目</strong>：</p>
-<ul>
-<li>开发一个实际的项目，其中包括使用Webhook与其他服务进行集成。</li>
-<li>参与开源项目，贡献Webhook相关的代码或解决问题。</li>
-</ul>
-</li>
-<li><p><strong>不断更新知识</strong>：</p>
-<ul>
-<li>持续关注Webhook领域的新发展和最佳实践。</li>
-<li>参加相关的线上或线下培训课程，与其他开发者交流经验。</li>
-</ul>
-</li>
-</ol>
-
       
     </div>
 
@@ -1634,7 +1841,7 @@ systemctl <span class="token builtin class-name">enable</span> <span class="toke
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-05-17 22:17:42" itemprop="dateModified" datetime="2024-05-17T22:17:42+08:00">2024-05-17</time>
+                <time title="修改时间：2024-05-18 20:43:22" itemprop="dateModified" datetime="2024-05-18T20:43:22+08:00">2024-05-18</time>
               </span>
 
           
@@ -1664,6 +1871,27 @@ systemctl <span class="token builtin class-name">enable</span> <span class="toke
 <img src="https://telegraph-image-2ni.pages.dev/file/2c9493624aaf44e0908c4.png" style="zoom:33%;">
 
 <p>5.执行完第四步后，点击应用和确认，直接就可以打开typro了</p>
+<h1 id="Navicat破解"><a href="#Navicat破解" class="headerlink" title="Navicat破解"></a>Navicat破解</h1><blockquote>
+<p>无限试用bat脚本</p>
+</blockquote>
+<pre class="line-numbers language-bat" data-language="bat"><code class="language-bat">@echo off
+
+echo Delete HKEY_CURRENT_USER\Software\PremiumSoft\NavicatPremium\Registration[version and language]
+for &#x2F;f %%i in (&#39;&quot;REG QUERY &quot;HKEY_CURRENT_USER\Software\PremiumSoft\NavicatPremium&quot; &#x2F;s | findstr &#x2F;L Registration&quot;&#39;) do (
+    reg delete %%i &#x2F;va &#x2F;f
+)
+echo.
+
+echo Delete Info folder under HKEY_CURRENT_USER\Software\Classes\CLSID
+for &#x2F;f %%i in (&#39;&quot;REG QUERY &quot;HKEY_CURRENT_USER\Software\Classes\CLSID&quot; &#x2F;s | findstr &#x2F;E Info&quot;&#39;) do (
+    reg delete %%i &#x2F;va &#x2F;f
+)
+echo.
+
+echo Finish
+
+pause<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
       
     </div>
@@ -1937,330 +2165,6 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Java%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B.html" class="post-title-link" itemprop="url">java异步编程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:20:51" itemprop="dateModified" datetime="2024-04-15T20:20:51+08:00">2024-04-15</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="认识异步编程"><a href="#认识异步编程" class="headerlink" title="认识异步编程"></a>认识异步编程</h1><h2 id="异步编程概念与作用"><a href="#异步编程概念与作用" class="headerlink" title="异步编程概念与作用"></a>异步编程概念与作用</h2><p>同步编程：每个线程同时只能发送一个请求，并同步等待返还，为提高性能，引入多个线程来实现并行处理。</p>
-<p>异步编程：是一种程序并行运行的手段，可以让程序中的一个工作单元与主程序线程分开独立运行，并在工作单元结束后，通知主程序线程它的运行结果或失败原因。</p>
-<p>作用：</p>
-<ol>
-<li>提高程序的性能和响应能力。</li>
-<li>提高线程的利用率。</li>
-</ol>
-<h2 id="异步编程场景"><a href="#异步编程场景" class="headerlink" title="异步编程场景"></a>异步编程场景</h2><ol>
-<li>日志的异步打印</li>
-<li>Spring框架中@Async注解</li>
-<li>异步RPC调用（Netty、Dubbo）</li>
-<li>Servlet、Webflux</li>
-</ol>
-<h1 id="显式使用线程和线程池实现异步编程"><a href="#显式使用线程和线程池实现异步编程" class="headerlink" title="显式使用线程和线程池实现异步编程"></a>显式使用线程和线程池实现异步编程</h1><h2 id="显式使用线程实现异步编程"><a href="#显式使用线程实现异步编程" class="headerlink" title="显式使用线程实现异步编程"></a>显式使用线程实现异步编程</h2><blockquote>
-<p>实现异步编程方式：</p>
-<ol>
-<li>实现Runnable接口的run方法，传递Runnable接口的实现类作为创建Thread的参数，启动线程</li>
-<li>实现Thread类，重新run方法</li>
-</ol>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//实现1</span>
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
-            <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span class="token string">"threadA"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        thread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        thread<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"执行时间为："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token comment">//实现2</span>
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token string">"ThreadA"</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-            <span class="token annotation punctuation">@Override</span>
-            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-        thread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        thread<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"执行时间："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<blockquote>
-<p><strong>注意：</strong></p>
-<ol>
-<li><p><code>thread.join()</code>方法会阻塞其他线程</p>
-</li>
-<li><p>java中线程有Deamon和非Deamon之分，默认我们创建的都是非Deamon线程，如果要创建Deamon要进行SetDeamon(true),当jvm中不存在非Deamon线程则会推出虚拟机。</p>
-</li>
-<li><p>守护线程不一定完成执行取决于用户线程，设置守护线程要在start前设置，java普通运行的是两个线程，一个是主线程，一个是GC线程，GC线程是守护线程。</p>
-</li>
-</ol>
-</blockquote>
-<p>缺点：</p>
-<ol>
-<li>线程的创建与销毁时有开销的–》线程池</li>
-<li>没有限制线程的个数，使用不当会导致系统进程用尽–》线程池</li>
-<li>异步任务执行完后没有返回值–》Future</li>
-</ol>
-<h2 id="显式使用线程池实现异步编程"><a href="#显式使用线程池实现异步编程" class="headerlink" title="显式使用线程池实现异步编程"></a>显式使用线程池实现异步编程</h2><h3 id="如何显式使用线程池实现异步编程"><a href="#如何显式使用线程池实现异步编程" class="headerlink" title="如何显式使用线程池实现异步编程"></a>如何显式使用线程池实现异步编程</h3><blockquote>
-<p>使用线程池实现线程复用，当需要执行异步任务的时候，直接把任务投递到线程池进行异步进行</p>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">   <span class="token comment">/**
-    * 创建线程池
-    * @return
-    */</span>
-   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token class-name">ExecutorService</span> <span class="token function">threadPoolExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-       <span class="token keyword">int</span> availableProcessors <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">availableProcessors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token keyword">return</span>  <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span>availableProcessors<span class="token punctuation">,</span>
-               availableProcessors<span class="token operator">*</span><span class="token number">2</span><span class="token punctuation">,</span>
-               <span class="token number">1</span><span class="token punctuation">,</span>
-               <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MINUTES<span class="token punctuation">,</span>
-               <span class="token keyword">new</span> <span class="token class-name">LinkedBlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-               <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor<span class="token punctuation">.</span>CallerRunsPolicy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-   <span class="token punctuation">&#125;</span>
-
-   <span class="token comment">/**
-    * 提交异步任务到线程池执行
-    * @param args
-    * @throws InterruptedException
-    */</span>
-   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
-       <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">ThreadPoolExample</span><span class="token punctuation">.</span><span class="token function">threadPoolExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
-           <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"耗时："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-   <span class="token punctuation">&#125;</span>
-<span class="token comment">/**
-* 有返回值的异步执行，但是get方法会阻塞其他线程
-*/</span>
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
-       <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> submit <span class="token operator">=</span> <span class="token class-name">ThreadPoolExample</span><span class="token punctuation">.</span><span class="token function">threadPoolExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">submit</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>submit<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"耗时："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-   <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="线程池ThreadpoolExecutor原理剖析"><a href="#线程池ThreadpoolExecutor原理剖析" class="headerlink" title="线程池ThreadpoolExecutor原理剖析"></a>线程池ThreadpoolExecutor原理剖析</h3><ol>
-<li>概述</li>
-</ol>
-<blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token operator">></span><span class="token comment">// 高三位标记线程池的状态，低29位表示线程的个数</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">AtomicInteger</span> ctl <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AtomicInteger</span><span class="token punctuation">(</span><span class="token function">ctlOf</span><span class="token punctuation">(</span>RUNNING<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 线程个数的掩码数</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> COUNT_BITS <span class="token operator">=</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span>SIZE <span class="token operator">-</span> <span class="token number">3</span><span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 线程的最大个数</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> CAPACITY   <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
-
-<span class="token operator">></span><span class="token comment">// runState is stored in the high-order bits</span>
-<span class="token operator">></span><span class="token comment">// 接受新任务并处理阻塞队列里面的任务</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> RUNNING    <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 拒绝新任务但是处理阻塞队列里的任务</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> SHUTDOWN   <span class="token operator">=</span>  <span class="token number">0</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 拒绝新任务，抛弃阻塞队列里的任务，同时中断正在处理的任务</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> STOP       <span class="token operator">=</span>  <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 所有任务都执行完了，包括阻塞队列里面的任务，当前线程池活动线程数为0，将调用terminated方法</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> TIDYING    <span class="token operator">=</span>  <span class="token number">2</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 终止状态</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> TERMINATED <span class="token operator">=</span>  <span class="token number">3</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 返回运行状态</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">runStateOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> c<span class="token punctuation">)</span>     <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> c <span class="token operator">&amp;</span> <span class="token operator">~</span>CAPACITY<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
-<span class="token operator">></span><span class="token comment">// 返回线程个数</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">workerCountOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> c<span class="token punctuation">)</span>  <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> c <span class="token operator">&amp;</span> CAPACITY<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
-<span class="token operator">></span><span class="token comment">// 计算ctl新值</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">ctlOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> rs<span class="token punctuation">,</span> <span class="token keyword">int</span> wc<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> rs <span class="token operator">|</span> wc<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</blockquote>
-<p>线程池的参数配置</p>
-<p>corePoolSize: 线程池核心线程个数</p>
-<p>workQueue: 用于保存等待执行的任务阻塞队列（有界队列、无界队列、同步队列、优先级队列）</p>
-<p>maximunPoolSize: 线程池的最大线程数量</p>
-<p>threadFactory: 创建线程的工厂类</p>
-<p>defaultHandler: 饱和策略（当队列达到maximunPoolSize后采取的策略）</p>
-<p>keepAliveTime: 存活时间，当前线程数量&gt;核心线程数量，且处于空闲状态，闲置连接能存活的最大时间</p>
-<ol start="2">
-<li>提交任务到线程池原理解析</li>
-</ol>
-<blockquote>
-<p>ThreadPoolExecutor提交任务到线程池中的方法</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>任务类型</th>
-<th>返回值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>void execute(Runnable command)</td>
-<td>Runnable类型的任务</td>
-<td>void</td>
-</tr>
-<tr>
-<td><T> Future<T> submit(Callable<T> task);</T></T></T></td>
-<td>Runnable类型的任务</td>
-<td>执行结果</td>
-</tr>
-<tr>
-<td><T> Future<T> submit(Runnable task, T result);</T></T></td>
-<td>Runnable类型的任务以及result内容</td>
-<td>result</td>
-</tr>
-</tbody></table>
-<ol start="3">
-<li>线程池中任务执行原理</li>
-</ol>
-<blockquote>
-<p>当用户提交任务到线程池后，在线程池没有执行拒绝策略的情况下，用户线程会马上返回，而提交的任务要么切换到worker线程执行，要么放入阻塞队列里面由worker线程来执行。</p>
-</blockquote>
-<ol start="4">
-<li>线程池的关闭</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>作用</th>
-<th>返回值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>shutdown()</td>
-<td>设置为shutdown状态，线程池不会接收新的任务，但是队列里面的任务还是要执行的</td>
-<td>void</td>
-</tr>
-<tr>
-<td>shutdownNow()</td>
-<td>设置为stop状态，线程池不会接收新的任务，并且会丢弃工作队列里面的任务</td>
-<td>被丢弃的任务列表</td>
-</tr>
-</tbody></table>
-<ol start="5">
-<li>线程池的拒绝策略</li>
-</ol>
-<blockquote>
-<p>拒绝策略执行的触发条件：线程池中线程的个数达到maxpoolsize,对于新投递的任务进行拒绝策略的执行。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>拒绝策略</th>
-<th>策略内容</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>CallerRunsPolicy()</td>
-<td>使用调用线程执行新提交的任务</td>
-</tr>
-<tr>
-<td>AbortPolicy()</td>
-<td>抛弃新增任务，抛出RejectedExecutionException</td>
-</tr>
-<tr>
-<td>DiscardOldestPolicy（）</td>
-<td>抛弃队列里面最老的任务，并把新任务添加到队列里面</td>
-</tr>
-<tr>
-<td>DiscardPolicy()</td>
-<td>抛弃新增任务</td>
-</tr>
-</tbody></table>
-<h1 id="基于JDK中的Future实现异步编程"><a href="#基于JDK中的Future实现异步编程" class="headerlink" title="基于JDK中的Future实现异步编程"></a>基于JDK中的Future实现异步编程</h1><p>3.1 jdk中的future</p>
-<blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token operator">></span><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">V</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
-<span class="token comment">//取消任务，如果任务正在执行，mayInterruptIfRunning设置为true打断，否则不中断</span>
-   <span class="token keyword">boolean</span> <span class="token function">cancel</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> mayInterruptIfRunning<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-   <span class="token comment">//如何任务在执行前被取消返回true,否则返回false</span>
-   <span class="token keyword">boolean</span> <span class="token function">isCancelled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-   <span class="token comment">//判断任务是否已经完成</span>
-   <span class="token keyword">boolean</span> <span class="token function">isDone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-   <span class="token comment">// 等待异步任务执行完，返回结果</span>
-   
-   <span class="token class-name">V</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">,</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">;</span>
-
-   <span class="token comment">//到达超时时间后，返回，不会一直阻塞调用线程</span>
-   
-   <span class="token class-name">V</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span> unit<span class="token punctuation">)</span>
-       <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">,</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">,</span> <span class="token class-name">TimeoutException</span><span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</blockquote>
-<p>3.2.1 FutureTask概述</p>
-<blockquote>
-<p>1.FutureTask只有当任务结束才能获取返回值。</p>
-<p>2.返回值只能通过get方法获取，调用get会阻塞</p>
-<p>3.任务一旦运行完成不能被重启，除非运行过程中使用了runAndReset方法</p>
-</blockquote>
-<p>3.2.2 FutureTask类图结构</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2330,7 +2234,7 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
