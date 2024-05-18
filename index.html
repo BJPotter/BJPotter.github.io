@@ -165,6 +165,256 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/SpringBoot%E7%90%86%E8%AE%BA.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/SpringBoot%E7%90%86%E8%AE%BA.html" class="post-title-link" itemprop="url">SpringBoot理论</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-05-18 21:16:18 / 修改时间：21:20:05" itemprop="dateCreated datePublished" datetime="2024-05-18T21:16:18+08:00">2024-05-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Spring-Boot简介"><a href="#Spring-Boot简介" class="headerlink" title="Spring Boot简介"></a>Spring Boot简介</h1><h2 id="什么是Spring-Boot？"><a href="#什么是Spring-Boot？" class="headerlink" title="什么是Spring Boot？"></a>什么是Spring Boot？</h2><p>Spring Boot是由Pivotal团队提供的一个基于Spring框架的开源项目，旨在简化Spring应用的开发。它通过约定优于配置的方式，减少了开发人员需要编写的配置代码，提供了一套快速创建独立运行、生产级Spring应用的解决方案。</p>
+<h2 id="Spring-Boot的主要特性有哪些？"><a href="#Spring-Boot的主要特性有哪些？" class="headerlink" title="Spring Boot的主要特性有哪些？"></a>Spring Boot的主要特性有哪些？</h2><ul>
+<li><strong>自动配置</strong>：根据项目中的依赖自动配置Spring应用。</li>
+<li><strong>独立运行</strong>：可以打包成可执行的JAR或WAR文件，直接运行。</li>
+<li><strong>内嵌服务器</strong>：默认提供内嵌的Tomcat、Jetty和Undertow服务器。</li>
+<li><strong>简化的Maven配置</strong>：通过提供的“starter”依赖，简化Maven配置。</li>
+<li><strong>生产级监控和管理</strong>：内置健康检查、监控和管理功能。</li>
+<li><strong>无代码生成</strong>：没有代码生成，不需要配置文件生成，直接使用Java代码配置。</li>
+</ul>
+<h2 id="Spring-Boot与Spring的区别？"><a href="#Spring-Boot与Spring的区别？" class="headerlink" title="Spring Boot与Spring的区别？"></a>Spring Boot与Spring的区别？</h2><p>Spring Boot是对Spring框架的一种增强，旨在简化Spring应用的配置和部署。Spring Boot通过自动配置和内嵌服务器，使得Spring应用的开发更快捷、更简单。而Spring是一个全面的框架，提供了各种各样的组件和配置选项。</p>
+<h1 id="Spring-Boot的核心概念"><a href="#Spring-Boot的核心概念" class="headerlink" title="Spring Boot的核心概念"></a>Spring Boot的核心概念</h1><h2 id="什么是Spring-Boot-Starter？"><a href="#什么是Spring-Boot-Starter？" class="headerlink" title="什么是Spring Boot Starter？"></a>什么是Spring Boot Starter？</h2><p>Spring Boot Starter是一种方便的依赖包集合，提供了一组常用的依赖和自动配置。开发者只需添加相应的Starter依赖，即可快速引入所需的功能。例如，<code>spring-boot-starter-web</code>包含了开发Web应用所需的所有依赖。</p>
+<h2 id="什么是Spring-Boot的自动配置？"><a href="#什么是Spring-Boot的自动配置？" class="headerlink" title="什么是Spring Boot的自动配置？"></a>什么是Spring Boot的自动配置？</h2><p>Spring Boot的自动配置是一种机制，根据项目的依赖和配置，自动配置Spring应用上下文中的bean。通过<code>@EnableAutoConfiguration</code>或<code>@SpringBootApplication</code>注解启用，Spring Boot会根据项目中的类路径和bean定义，自动配置所需的bean。</p>
+<h2 id="什么是Spring-Boot的约定优于配置？"><a href="#什么是Spring-Boot的约定优于配置？" class="headerlink" title="什么是Spring Boot的约定优于配置？"></a>什么是Spring Boot的约定优于配置？</h2><p>Spring Boot采用约定优于配置的原则，提供合理的默认配置，减少开发人员的配置负担。如果默认配置不满足需求，开发人员可以通过配置文件或代码进行自定义配置。</p>
+<h3 id="Spring-Boot的主要注解有哪些？"><a href="#Spring-Boot的主要注解有哪些？" class="headerlink" title="Spring Boot的主要注解有哪些？"></a>Spring Boot的主要注解有哪些？</h3><ul>
+<li><strong>@SpringBootApplication</strong>：用于标注主类，集成了<code>@Configuration</code>、<code>@EnableAutoConfiguration</code>和<code>@ComponentScan</code>。</li>
+<li><strong>@Configuration</strong>：用于定义配置类，等同于XML配置文件。</li>
+<li><strong>@EnableAutoConfiguration</strong>：启用自动配置。</li>
+<li><strong>@ComponentScan</strong>：自动扫描并注册组件。</li>
+<li><strong>@RestController</strong>：用于创建RESTful Web服务的控制器。</li>
+<li><strong>@RequestMapping</strong>：用于映射HTTP请求到处理方法。</li>
+</ul>
+<h1 id="Spring-Boot的配置"><a href="#Spring-Boot的配置" class="headerlink" title="Spring Boot的配置"></a>Spring Boot的配置</h1><h2 id="Spring-Boot的配置文件有哪些？"><a href="#Spring-Boot的配置文件有哪些？" class="headerlink" title="Spring Boot的配置文件有哪些？"></a>Spring Boot的配置文件有哪些？</h2><p>Spring Boot主要使用<code>application.properties</code>或<code>application.yml</code>来配置应用。配置文件位于<code>src/main/resources</code>目录下。</p>
+<h2 id="如何在Spring-Boot中读取配置文件？"><a href="#如何在Spring-Boot中读取配置文件？" class="headerlink" title="如何在Spring Boot中读取配置文件？"></a>如何在Spring Boot中读取配置文件？</h2><p>可以通过<code>@Value</code>注解或<code>@ConfigurationProperties</code>注解读取配置文件中的值。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Value</span><span class="token punctuation">(</span><span class="token string">"$&#123;my.property&#125;"</span><span class="token punctuation">)</span>
+<span class="token keyword">private</span> <span class="token class-name">String</span> myProperty<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>或者使用<code>@ConfigurationProperties</code>：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@ConfigurationProperties</span><span class="token punctuation">(</span>prefix <span class="token operator">=</span> <span class="token string">"my"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyProperties</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> property<span class="token punctuation">;</span>
+    <span class="token comment">// getters and setters</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="如何配置多环境支持？"><a href="#如何配置多环境支持？" class="headerlink" title="如何配置多环境支持？"></a>如何配置多环境支持？</h2><p>通过在<code>application.properties</code>文件中配置不同环境的配置文件，例如：</p>
+<ul>
+<li><code>application-dev.properties</code>：开发环境配置。</li>
+<li><code>application-prod.properties</code>：生产环境配置。<br>然后在启动时通过<code>--spring.profiles.active=dev</code>或<code>application.yml</code>中的<code>spring.profiles.active=dev</code>指定激活的配置文件。</li>
+</ul>
+<h1 id="Spring-Boot的高级特性"><a href="#Spring-Boot的高级特性" class="headerlink" title="Spring Boot的高级特性"></a>Spring Boot的高级特性</h1><h2 id="什么是Spring-Boot-Actuator？"><a href="#什么是Spring-Boot-Actuator？" class="headerlink" title="什么是Spring Boot Actuator？"></a>什么是Spring Boot Actuator？</h2><p>Spring Boot Actuator提供了一组用于监控和管理Spring Boot应用的端点，包括健康检查、审计、度量和环境信息等。可以通过<code>/actuator</code>访问这些端点，并通过配置文件进行自定义和安全设置。</p>
+<h2 id="什么是Spring-Boot-DevTools？"><a href="#什么是Spring-Boot-DevTools？" class="headerlink" title="什么是Spring Boot DevTools？"></a>什么是Spring Boot DevTools？</h2><p>Spring Boot DevTools是一个开发工具包，旨在提高开发效率。它提供了自动重启、实时加载属性文件、调试等功能。当类路径上的文件发生变化时，DevTools会自动重新启动应用。</p>
+<h2 id="如何实现Spring-Boot的安全管理？"><a href="#如何实现Spring-Boot的安全管理？" class="headerlink" title="如何实现Spring Boot的安全管理？"></a>如何实现Spring Boot的安全管理？</h2><p>Spring Boot可以集成Spring Security实现安全管理。只需添加<code>spring-boot-starter-security</code>依赖，并通过配置类或配置文件进行安全配置。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@EnableWebSecurity</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SecurityConfig</span> <span class="token keyword">extends</span> <span class="token class-name">WebSecurityConfigurerAdapter</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">configure</span><span class="token punctuation">(</span><span class="token class-name">HttpSecurity</span> http<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        http
+            <span class="token punctuation">.</span><span class="token function">authorizeRequests</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">antMatchers</span><span class="token punctuation">(</span><span class="token string">"/public/**"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">permitAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">anyRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">authenticated</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">and</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">formLogin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="什么是Spring-Boot的异步处理？"><a href="#什么是Spring-Boot的异步处理？" class="headerlink" title="什么是Spring Boot的异步处理？"></a>什么是Spring Boot的异步处理？</h2><p>Spring Boot支持通过<code>@EnableAsync</code>注解和<code>@Async</code>注解实现异步方法调用。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@EnableAsync</span>
+<span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Application</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyService</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Async</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">asyncMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 异步执行的代码</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="什么是Spring-Boot的事件机制？"><a href="#什么是Spring-Boot的事件机制？" class="headerlink" title="什么是Spring Boot的事件机制？"></a>什么是Spring Boot的事件机制？</h2><p>Spring Boot提供了基于Spring事件的机制，允许在应用中发布和监听事件。可以通过<code>ApplicationEvent</code>类和<code>ApplicationListener</code>接口实现。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyEvent</span> <span class="token keyword">extends</span> <span class="token class-name">ApplicationEvent</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token class-name">MyEvent</span><span class="token punctuation">(</span><span class="token class-name">Object</span> source<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span>source<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyEventListener</span> <span class="token keyword">implements</span> <span class="token class-name">ApplicationListener</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">MyEvent</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onApplicationEvent</span><span class="token punctuation">(</span><span class="token class-name">MyEvent</span> event<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 处理事件</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token annotation punctuation">@Autowired</span>
+<span class="token keyword">private</span> <span class="token class-name">ApplicationEventPublisher</span> eventPublisher<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">publishEvent</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    eventPublisher<span class="token punctuation">.</span><span class="token function">publishEvent</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">MyEvent</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="Spring-Boot的数据访问"><a href="#Spring-Boot的数据访问" class="headerlink" title="Spring Boot的数据访问"></a>Spring Boot的数据访问</h1><h2 id="Spring-Boot如何集成JPA？"><a href="#Spring-Boot如何集成JPA？" class="headerlink" title="Spring Boot如何集成JPA？"></a>Spring Boot如何集成JPA？</h2><p>Spring Boot通过<code>spring-boot-starter-data-jpa</code>集成JPA。只需添加依赖并配置数据源，Spring Boot会自动配置EntityManagerFactory和事务管理。可以通过<code>@Entity</code>注解定义实体类，通过<code>JpaRepository</code>接口定义数据访问层。</p>
+<h2 id="如何在Spring-Boot中使用MyBatis？"><a href="#如何在Spring-Boot中使用MyBatis？" class="headerlink" title="如何在Spring Boot中使用MyBatis？"></a>如何在Spring Boot中使用MyBatis？</h2><p>Spring Boot可以通过<code>spring-boot-starter-data-mybatis</code>集成MyBatis。配置数据源并编写Mapper接口和XML映射文件，然后通过<code>@MapperScan</code>注解自动扫描Mapper接口。</p>
+<h2 id="什么是Spring-Data-REST？"><a href="#什么是Spring-Data-REST？" class="headerlink" title="什么是Spring Data REST？"></a>什么是Spring Data REST？</h2><p>Spring Data REST是Spring提供的一个项目，旨在通过简单配置将Spring Data仓库暴露为RESTful服务。可以通过<code>@RepositoryRestResource</code>注解自动生成RESTful API。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RepositoryRestResource</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">UserRepository</span> <span class="token keyword">extends</span> <span class="token class-name">JpaRepository</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">User</span><span class="token punctuation">,</span> <span class="token class-name">Long</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 自动生成的RESTful API</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="什么是Spring-Boot的事务管理？"><a href="#什么是Spring-Boot的事务管理？" class="headerlink" title="什么是Spring Boot的事务管理？"></a>什么是Spring Boot的事务管理？</h2><p>Spring Boot通过<code>@EnableTransactionManagement</code>注解启用事务管理，并通过<code>@Transactional</code>注解管理事务边界。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@EnableTransactionManagement</span>
+<span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Application</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyService</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Transactional</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">transactionalMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 事务性操作</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="Spring-Boot的测试"><a href="#Spring-Boot的测试" class="headerlink" title="Spring Boot的测试"></a>Spring Boot的测试</h1><h2 id="如何使用Spring-Boot进行单元测试？"><a href="#如何使用Spring-Boot进行单元测试？" class="headerlink" title="如何使用Spring Boot进行单元测试？"></a>如何使用Spring Boot进行单元测试？</h2><p>Spring Boot提供了<code>spring-boot-starter-test</code>，集成了JUnit、Spring Test、AssertJ和Mockito等常用测试框架。可以通过<code>@SpringBootTest</code>注解进行集成测试。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RunWith</span><span class="token punctuation">(</span><span class="token class-name">SpringRunner</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@SpringBootTest</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyServiceTests</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">MyService</span> myService<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testServiceMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">assertNotNull</span><span class="token punctuation">(</span>myService<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="如何进行Mock测试？"><a href="#如何进行Mock测试？" class="headerlink" title="如何进行Mock测试？"></a>如何进行Mock测试？</h2><p>可以通过<code>@MockBean</code>注解创建Mock对象，并注入到Spring应用上下文中。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RunWith</span><span class="token punctuation">(</span><span class="token class-name">SpringRunner</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@SpringBootTest</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyControllerTests</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@MockBean</span>
+    <span class="token keyword">private</span> <span class="token class-name">MyService</span> myService<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">MockMvc</span> mockMvc<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testControllerMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">given</span><span class="token punctuation">(</span>myService<span class="token punctuation">.</span><span class="token function">someMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">willReturn</span><span class="token punctuation">(</span><span class="token string">"result"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mockMvc<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/someEndpoint"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isOk</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">content</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token string">"result"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="如何进行数据层的测试？"><a href="#如何进行数据层的测试？" class="headerlink" title="如何进行数据层的测试？"></a>如何进行数据层的测试？</h2><p>可以通过<code>@DataJpaTest</code>注解进行JPA相关的测试，自动配置嵌入式数据库和Spring Data JPA。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RunWith</span><span class="token punctuation">(</span><span class="token class-name">SpringRunner</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@DataJpaTest</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserRepositoryTests</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">TestEntityManager</span> entityManager<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">UserRepository</span> userRepository<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testFindByUsername</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">User</span> user <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        user<span class="token punctuation">.</span><span class="token function">setUsername</span><span class="token punctuation">(</span><span class="token string">"testuser"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        entityManager<span class="token punctuation">.</span><span class="token function">persist</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">User</span> foundUser <span class="token operator">=</span> userRepository<span class="token punctuation">.</span><span class="token function">findByUsername</span><span class="token punctuation">(</span><span class="token string">"testuser"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token function">getUsername</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> foundUser<span class="token punctuation">.</span><span class="token function">getUsername</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="Spring-Boot的部署"><a href="#Spring-Boot的部署" class="headerlink" title="Spring Boot的部署"></a>Spring Boot的部署</h1><h2 id="如何打包Spring-Boot应用？"><a href="#如何打包Spring-Boot应用？" class="headerlink" title="如何打包Spring Boot应用？"></a>如何打包Spring Boot应用？</h2><p>Spring Boot</p>
+<p>可以打包成可执行的JAR或WAR文件。通过Maven或Gradle插件，可以将应用打包并包含所有依赖。例如，使用Maven：</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>build</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugins</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugins</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>build</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后执行<code>mvn package</code>命令生成JAR文件。</p>
+<h2 id="如何在外部服务器上部署Spring-Boot应用？"><a href="#如何在外部服务器上部署Spring-Boot应用？" class="headerlink" title="如何在外部服务器上部署Spring Boot应用？"></a>如何在外部服务器上部署Spring Boot应用？</h2><p>可以将打包生成的WAR文件部署到外部服务器（如Tomcat）。在<code>pom.xml</code>中将打包方式改为<code>war</code>，并继承<code>SpringBootServletInitializer</code>：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Application</span> <span class="token keyword">extends</span> <span class="token class-name">SpringBootServletInitializer</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token class-name">SpringApplicationBuilder</span> <span class="token function">configure</span><span class="token punctuation">(</span><span class="token class-name">SpringApplicationBuilder</span> builder<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> builder<span class="token punctuation">.</span><span class="token function">sources</span><span class="token punctuation">(</span><span class="token class-name">Application</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Spring-Boot如何支持Docker？"><a href="#Spring-Boot如何支持Docker？" class="headerlink" title="Spring Boot如何支持Docker？"></a>Spring Boot如何支持Docker？</h2><p>可以通过Dockerfile创建Docker镜像并运行Spring Boot应用。示例如下：</p>
+<pre class="line-numbers language-docker" data-language="docker"><code class="language-docker"><span class="token instruction"><span class="token keyword">FROM</span> openjdk:11-jre</span>
+<span class="token instruction"><span class="token keyword">COPY</span> target/myapp.jar /app.jar</span>
+<span class="token instruction"><span class="token keyword">ENTRYPOINT</span> [<span class="token string">"java"</span>, <span class="token string">"-jar"</span>, <span class="token string">"/app.jar"</span>]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>然后使用Docker命令生成镜像并运行容器：</p>
+<pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">docker build -t myapp .
+docker run -p 8080:8080 myapp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Mybatis%E7%90%86%E8%AE%BA.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -190,7 +440,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-05-18 20:44:12 / 修改时间：21:13:04" itemprop="dateCreated datePublished" datetime="2024-05-18T20:44:12+08:00">2024-05-18</time>
+              <time title="创建时间：2024-05-18 20:44:12 / 修改时间：21:16:09" itemprop="dateCreated datePublished" datetime="2024-05-18T20:44:12+08:00">2024-05-18</time>
             </span>
 
           
@@ -363,7 +613,7 @@
 <ul>
 <li><code>&lt;if&gt;</code>：条件判断。</li>
 <li><code>&lt;choose&gt;、&lt;when&gt;、&lt;otherwise&gt;</code>：条件选择。</li>
-<li><code>&lt;trim&gt;、&lt;where&gt;、&lt;set&gt;</code>**：处理SQL片段。</li>
+<li><code>&lt;trim&gt;、&lt;where&gt;、&lt;set&gt;</code>：处理SQL片段。</li>
 <li><code>&lt;foreach&gt;</code>：循环处理。</li>
 <li><code>&lt;bind&gt;</code>：绑定参数。</li>
 </ul>
@@ -2808,205 +3058,6 @@ Creating a new user...<span aria-hidden="true" class="line-numbers-rows"><span><
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%BA%94-IO.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%BA%94-IO.html" class="post-title-link" itemprop="url">java基础-io</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-22 21:58:55" itemprop="dateCreated datePublished" datetime="2024-04-22T21:58:55+08:00">2024-04-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-05-17 22:17:42" itemprop="dateModified" datetime="2024-05-17T22:17:42+08:00">2024-05-17</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="什么是IO"><a href="#什么是IO" class="headerlink" title="什么是IO"></a>什么是IO</h1><h2 id="冯诺依曼结构"><a href="#冯诺依曼结构" class="headerlink" title="冯诺依曼结构"></a>冯诺依曼结构</h2><p>根据冯.诺依曼结构，计算机结构分为 5 大部分：运算器、控制器、存储器、输入设备、输出设备。</p>
-<img src="https://telegraph-image-2ni.pages.dev/file/b412f6130798df7f5dcf8.jpg" style="zoom: 33%;">
-
-<p>我们的IO主要指的是输入设备和输出设备，输入设备（比如键盘）和输出设备（比如显示器）都属于外部设备。</p>
-<h2 id="IO的具体流程"><a href="#IO的具体流程" class="headerlink" title="IO的具体流程"></a>IO的具体流程</h2><p>一个进程的地址空间划分为用户空间和内核空间，内核空间负责系统级别的资源操作（文件管理、进程通信、内存管理等等）。如果要进行IO。必须依赖内核空间，用户空间（应用程序空间）没有权限进行IO操作，如果想要进行IO操作，只能发起系统调用请求操作系统，由操作系统调用内核完成具体的IO操作，（<strong>应用程序实际上只发起了IO操作的调用，具体IO的执行是由操作系统的内核来完成的。</strong>）</p>
-<h2 id="IO步骤总结"><a href="#IO步骤总结" class="headerlink" title="IO步骤总结"></a>IO步骤总结</h2><ol>
-<li>内核等待 I&#x2F;O 设备准备好数据</li>
-<li>内核将数据从内核空间拷贝到用户空间。</li>
-</ol>
-<h3 id="磁盘IO的数据流向"><a href="#磁盘IO的数据流向" class="headerlink" title="磁盘IO的数据流向"></a>磁盘IO的数据流向</h3><p>在读操作时，数据从磁盘设备流向内核空间，然后再流向用户空间；在写操作时，数据从用户空间流向内核空间，然后再流向磁盘设备。</p>
-<h3 id="网络IO数据流向"><a href="#网络IO数据流向" class="headerlink" title="网络IO数据流向"></a>网络IO数据流向</h3><p>在接收数据时，数据从网络设备流向内核空间，再流向用户空间（应用程序的内存空间）；在发送数据时，数据从应用程序的内存流向内核空间，最后流向网络设备。</p>
-<h1 id="Java中3种常见-IO-模型"><a href="#Java中3种常见-IO-模型" class="headerlink" title="Java中3种常见 IO 模型"></a>Java中3种常见 IO 模型</h1><h2 id="BIO"><a href="#BIO" class="headerlink" title="BIO"></a>BIO</h2><p>同步阻塞IO，应用程序发起 read 调用后，会一直阻塞，直到内核把数据拷贝到用户空间。</p>
-<h2 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h2><p>同步非阻塞IO中，应用程序发起read调用后，如果内核中没有就绪的数据，内核会立即返回一个错误，应用程序继续执行其他操作，这是非阻塞的；如果内核中数据已经就绪，当应用程序需要再次发起read调用来读取数据时是阻塞的。（<strong>阻不阻塞取决于内核数据是否准备就绪，不阻塞可以执行其他操作，阻塞的话只能等待</strong>）</p>
-<p><strong>缺点：</strong>不断轮询询问内核空间是否准备就绪，浪费CPU性能</p>
-<h2 id="AIO"><a href="#AIO" class="headerlink" title="AIO"></a>AIO</h2><p>应用程序发起read调用后，内核会立即返回，不需要阻塞等待数据的准备和拷贝，内核在后台会继续处理这些IO，并在IO完成后通过事件或者回调机制通知应用程序。</p>
-<p><strong>回调函数（Callback）</strong>：在发起异步I&#x2F;O请求时，一般会传递一个回调函数给操作系统。一旦I&#x2F;O操作完成，操作系统就会调用这个回调函数，以此来通知应用程序。这个回调函数通常会包含操作的结果，比如操作是否成功，读取或写入的数据量等信息。</p>
-<p><strong>事件通知（Event Notification）</strong>：操作系统提供一种机制，允许应用程序询问或者等待一个或多个I&#x2F;O操作的完成通知。例如Linux的epoll，BSD的kqueue，Java的NIO(Non-blocking I&#x2F;O)库等。应用程序可以在一次查询中得知多个I&#x2F;O操作是否完成，这在处理大量并发连接时，可以提高效率。</p>
-<h1 id="BIO-1"><a href="#BIO-1" class="headerlink" title="BIO"></a>BIO</h1><blockquote>
-<p>BIO是同步阻塞IO，当一个线程进行IO操作的时候，它会阻塞到线程执行完毕。以流的方式处理数据，基于字符流和字节流操作的</p>
-</blockquote>
-<h2 id="字符流和字节流的区别"><a href="#字符流和字节流的区别" class="headerlink" title="字符流和字节流的区别"></a>字符流和字节流的区别</h2><img src="/images/IO.drawio.svg" style="zoom:70%;">
-
-<p>在java中IO指的是input和output，在java中分为输入流和输出流，根据处理数据不同的单位分为字节流和字符流。字节流以字节（8位）为单位进行数据处理，如图片、视频，字符流是以字符进行为单位进行数据处理，如文本。</p>
-<ul>
-<li>处理单位：字节流以字节为单位，字符流以字符为单位。</li>
-<li>用途：字节流可以处理所有类型的数据，字符流只能处理字符类型的数据。</li>
-<li>处理中文字符：字节流可能会出现乱码的情况，字符流按字符处理，不会出现乱码</li>
-</ul>
-<h2 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a>字节流</h2><h3 id="InputStream"><a href="#InputStream" class="headerlink" title="InputStream"></a>InputStream</h3><p><code>InputStream</code>用于从源头（通常是文件）读取数据（字节信息）到内存中，<code>java.io.InputStream</code>抽象类是所有字节输入流的父类。</p>
-<p><code>read()</code>：返回输入流中下一个字节的数据。返回的值介于 0 到 255 之间。如果未读取任何字节，则代码返回 <code>-1</code> ，表示文件结束。</p>
-<p><code>read(byte b[ ])</code> : 从输入流中读取一些字节存储到数组 <code>b</code> 中。如果数组 <code>b</code> 的长度为零，则不读取。如果没有可用字节读取，返回 <code>-1</code>。如果有可用字节读取，则最多读取的字节数最多等于 <code>b.length</code> ， 返回读取的字节数。这个方法等价于 <code>read(b, 0, b.length)</code>。</p>
-<p><code>read(byte b[], int off, int len)</code>：在<code>read(byte b[ ])</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字节数）。</p>
-<p><code>skip(long n)</code>：忽略输入流中的 n 个字节 ,返回实际忽略的字节数。</p>
-<p><code>available()</code>：返回输入流中可以读取的字节数。</p>
-<p><code>close()</code>：关闭输入流释放相关的系统资源。</p>
-<h3 id="OutputStream"><a href="#OutputStream" class="headerlink" title="OutputStream"></a>OutputStream</h3><p><code>write(int b)</code>：将特定字节写入输出流。</p>
-<p><code>write(byte b[ ])</code> : 将数组<code>b</code> 写入到输出流，等价于 <code>write(b, 0, b.length)</code> 。</p>
-<p><code>write(byte[] b, int off, int len)</code> : 在<code>write(byte b[ ])</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字节数）。</p>
-<p><code>flush()</code>：刷新此输出流并强制写出所有缓冲的输出字节。</p>
-<p><code>close()</code>：关闭输出流释放相关的系统资源。</p>
-<h2 id="字符流"><a href="#字符流" class="headerlink" title="字符流"></a>字符流</h2><p>字节流对字符的处理（特别是中文）会出现乱码，字符流默认采用unicode编码，避免这个情况。</p>
-<p><strong>字符流的优点：</strong></p>
-<p>1.可以处理中文字符</p>
-<p>2.支持unicode编码，也可以根据构造函数自定义编码集</p>
-<p>3.可以实现读一行，写一行</p>
-<h3 id="Reader"><a href="#Reader" class="headerlink" title="Reader"></a>Reader</h3><p><code>read()</code> : 从输入流读取一个字符。</p>
-<p><code>read(char[] cbuf)</code> : 从输入流中读取一些字符，并将它们存储到字符数组 <code>cbuf</code>中，等价于 <code>read(cbuf, 0, cbuf.length)</code> 。</p>
-<p><code>read(char[] cbuf, int off, int len)</code>：在<code>read(char[] cbuf)</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字符数）。</p>
-<p><code>skip(long n)</code>：忽略输入流中的 n 个字符 ,返回实际忽略的字符数。</p>
-<p><code>close()</code> : 关闭输入流并释放相关的系统资源。</p>
-<h3 id="Writer"><a href="#Writer" class="headerlink" title="Writer"></a>Writer</h3><p><code>write(int c)</code> : 写入单个字符。</p>
-<p><code>write(char[] cbuf)</code>：写入字符数组 <code>cbuf</code>，等价于<code>write(cbuf, 0, cbuf.length)</code>。</p>
-<p><code>write(char[] cbuf, int off, int len)</code>：在<code>write(char[] cbuf)</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字符数）。</p>
-<p><code>write(String str)</code>：写入字符串，等价于 <code>write(str, 0, str.length())</code> 。</p>
-<p><code>write(String str, int off, int len)</code>：在<code>write(String str)</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字符数）。</p>
-<p><code>append(CharSequence csq)</code>：将指定的字符序列附加到指定的 <code>Writer</code> 对象并返回该 <code>Writer</code> 对象。</p>
-<p><code>append(char c)</code>：将指定的字符附加到指定的 <code>Writer</code> 对象并返回该 <code>Writer</code> 对象。</p>
-<p><code>flush()</code>：刷新此输出流并强制写出所有缓冲的输出字符。</p>
-<p><code>close()</code>:关闭输出流释放相关的系统资源。</p>
-<h2 id="缓冲流"><a href="#缓冲流" class="headerlink" title="缓冲流"></a>缓冲流</h2><p>IO 操作是很消耗性能的，缓冲流将数据加载至缓冲区，一次性读取&#x2F;写入多个字节，从而避免频繁的 IO 操作，提高流的传输效率。</p>
-<h3 id="字节缓冲流"><a href="#字节缓冲流" class="headerlink" title="字节缓冲流"></a>字节缓冲流</h3><p><code>BufferedInputStream</code> 从源头（通常是文件）读取数据（字节信息）到内存的过程中不会一个字节一个字节的读取，而是会先将读取到的字节存放在缓存区，并从内部缓冲区中单独读取字节。这样大幅减少了 IO 次数，提高了读取效率。</p>
-<p><code>BufferedOutputStream</code> 将数据（字节信息）写入到目的地（通常是文件）的过程中不会一个字节一个字节的写入，而是会先将要写入的字节存放在缓存区，并从内部缓冲区中单独写入字节。这样大幅减少了 IO 次数，提高了读取效率</p>
-<h3 id="字符缓冲流"><a href="#字符缓冲流" class="headerlink" title="字符缓冲流"></a>字符缓冲流</h3><p><code>BufferedReader</code> （字符缓冲输入流）和 <code>BufferedWriter</code>（字符缓冲输出流）类似于 <code>BufferedInputStream</code>（字节缓冲输入流）和<code>BufferedOutputStream</code>（字节缓冲输入流），内部都维护了一个字节数组作为缓冲区。不过，前者主要是用来操作字符信息。</p>
-<h2 id="转换流"><a href="#转换流" class="headerlink" title="转换流"></a>转换流</h2><p>转换流主要是InputStreamReader和OutputStreamWriter,InputStreamReader 用于将字节输入流转换为字符输入流，其中 OutputStreamWriter 用于将字节输出流转换为字符输出流。使用转换流可以在一定程度上避免乱码，还可以指定输入输出所使用的字符集。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">InputStreamReader</span> isr <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"example.txt"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> "UTF<span class="token operator">-</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name">OutputStreamWriter</span> osw <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">OutputStreamWriter</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span><span class="token string">"example.txt"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h1 id="NIO-1"><a href="#NIO-1" class="headerlink" title="NIO"></a>NIO</h1><blockquote>
-<p>NIO是同步非阻塞IO，它是非阻塞、面向缓冲、基于通道的IO,可以通过少量的线程处理多个连接，相关的类在java.nio包下，主要有三大核心channel（通道）、buffer（缓存）、selector（选择器）</p>
-</blockquote>
-<h2 id="NIO和BIO的区别"><a href="#NIO和BIO的区别" class="headerlink" title="NIO和BIO的区别"></a>NIO和BIO的区别</h2><ul>
-<li>数据单位：BIO以流的方式处理数据，NIO是以块的方式处理数据</li>
-<li>是否阻塞：BIO是阻塞的，NIO是非阻塞的</li>
-<li>操作方式：BIO是以字符流或者字节流处理数据，NIO是基于通道和缓冲进行数据处理</li>
-</ul>
-<h2 id="NIO核心组件"><a href="#NIO核心组件" class="headerlink" title="NIO核心组件"></a>NIO核心组件</h2><p>NIO的核心组件是Channel、Buffer、Selector,如下图所示</p>
-<img src="/images/NIO.png" style="zoom:43%;">
-
-<h3 id="数据流向"><a href="#数据流向" class="headerlink" title="数据流向"></a>数据流向</h3><blockquote>
-<p>缓冲区是数据的临时存储区，通道是连接数据源和缓冲区的桥梁，负责数据的实际传输。</p>
-<p>读操作时，数据从数据源流向缓冲区。</p>
-<p>写操作时，数据从缓冲区流向目标位置。</p>
-</blockquote>
-<p><img src="/images/NIO.drawio.svg"></p>
-<h3 id="缓冲区"><a href="#缓冲区" class="headerlink" title="缓冲区"></a>缓冲区</h3><p>所有数据的读写都是通过缓冲区进行的，缓冲区实质上是一块可以写数据和读取数据的内存，这块内存被包装成 NIO Buffer 对象，并提供一组方法，用来方便地操作这块内存。</p>
-<ul>
-<li><p>容量(Capacity)：缓冲区能够容纳的数据元素的最大数量。这一容量在缓冲区创建时被设定并且不能改变。</p>
-</li>
-<li><p>位置(Position)：下一个要被读或写的元素的索引。位置会自动由相应的 get 或 put 方法更新。</p>
-</li>
-<li><p>限制(Limit)：缓冲区中第一个不应该读取或写入的元素的索引。或者说，你可操作的数据大小（limit - position）。</p>
-</li>
-<li><p>标记(Mark)：一个备忘位置。可以通过 Buffer.mark() 在此位置设置标记，之后可以通过 Buffer.reset() 方法恢复到这个位置。</p>
-</li>
-</ul>
-<p><strong>操作步骤：</strong></p>
-<ol>
-<li><p>写数据到Buffer：调用 Buffer.put() 之类的方法写数据。写完后，position 显示最新写入数据的位置。</p>
-</li>
-<li><p>调用flip()方法：切换Buffer到读模式。读写模式切换是通过 Buffer.flip() 方法完成的，它将 limit 设置为当前 position 的值，position 设置为 0 ，准备读取数据。</p>
-</li>
-<li><p>从Buffer中读数据：调用 Buffer.get() 读取数据。</p>
-</li>
-<li><p>调用clear()方法或compact()方法：读完后，调用 Buffer.clear() 或 Buffer.compact() 切换到写模式，准备再次写入。清空缓冲区并不会删除其中的数据，只是所有的状态值(position、limit、mark)都被设定为初始状态。所以看起来它是空的。</p>
-</li>
-</ol>
-<h3 id="通道"><a href="#通道" class="headerlink" title="通道"></a>通道</h3><p>通道代表了与能够执行 I&#x2F;O 操作的实体（例如，文件、套接字）的连接。简单来说，任何时候你想读写数据（不论是来自文件、网络还是其他地方）</p>
-<ul>
-<li><p>双向性：Java NIO的通道可以同时进行读和写操作，而Java IO流通常都是单向的（InputStream或OutputStream）。</p>
-</li>
-<li><p>非阻塞性：Java NIO的通道可以被配置为非阻塞模式，因此我们可以在异步模式中使用它们。例如，一个线程可以请求写数据到一个通道，但是该线程继续做别的事情，当数据写入成功后，线程将收到通知。</p>
-</li>
-<li><p>可直接访问缓冲区：数据可以直接从缓冲区写入到通道，或者从通道读取到缓冲区。它们之间的连接足够紧密，以至于Java编译器会为其生成优化的代码。</p>
-</li>
-<li><p>通道实现：Java NIO中最重要的通道实现是 FileChannel（用于文件读写），SocketChannel和ServerSocketChannel（用于TCP网络读写）和DatagramChannel（用于UDP网络读写）。</p>
-</li>
-</ul>
-<h3 id="选择器"><a href="#选择器" class="headerlink" title="选择器"></a>选择器</h3><p>选择器（Selector）是一个特殊的组件，允许一个单一的线程管理多个通道。也就是说，如果你的应用程序有成千上万的开放连接，每个连接都有它的通道，那么你可以用一个单独的线程，使用一个选择器来管理这些通道，而不是为每一个通道都创建一个线程。这就是NIO实现高并发的一种方式，由于创建和切换线程都是相对高昂的操作，所以使用选择器能极大提升效率。</p>
-<ul>
-<li><p>多路复用：选择器允许一个单独的线程管理多个通道，或者说“选择”出已经准备好进行I&#x2F;O操作的通道。这就是NIO中经常提到的“多路复用”。</p>
-</li>
-<li><p>非阻塞式的I&#x2F;O操作：通过将一或多个通道注册到选择器上，你可以询问选择器是否有准备好的通道，或者更精确的，是否有满足我们关心的事件的通道。</p>
-</li>
-<li><p>选择键（SelectionKey）：当你将通道注册到选择器上时，选择器会返回一个SelectionKey对象，这个对象包含了一些你对之后能发生在注册的通道上面的操作的信息。这是通过对Interest集合进行设置来完成的，最常用的就是SelectionKey.OPREAD（读取操作准备好）和SelectionKey.OPWRITE（写入操作准备好）</p>
-</li>
-<li><p>通道的注册和查询：通常会将通道注册(register)到选择器，然后通过调用选择器的 select()方法，查询准备好的通道。这个方法会阻塞，直到至少有一个通道准备好了你感兴趣的事件。你还可以使用 select(long timeout)方法或 selectNow()方法，前者会在指定时间内等待，后者则不会阻塞。</p>
-</li>
-</ul>
-<h1 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h1><h2 id="什么是零拷贝"><a href="#什么是零拷贝" class="headerlink" title="什么是零拷贝"></a>什么是零拷贝</h2><p>传统的数据传输需要数据在用户空间（User Space）和内核空间（Kernel Space）之间进行多次复制操作，这不仅会占用大量CPU，还会增大系统的内存压力。零拷贝减少了两次CPU将数据从内核空间到用户空间的拷贝。</p>
-<h2 id="零拷贝的实现方式"><a href="#零拷贝的实现方式" class="headerlink" title="零拷贝的实现方式"></a>零拷贝的实现方式</h2><ol>
-<li><p>内存映射文件（MappedByteBuffer）：这是一种将文件或文件的一部分映射到内存中的方式。当映射完成后，你可以直接对映射内存进行操作，任何对内存的修改都会反映到文件上，反之亦然。这种方式避免了Java堆和文件之间的数据拷贝，意味着可以直接对文件进行操作，而不需要在Java堆上创建一个中间缓冲区。</p>
-</li>
-<li><p>文件通道的传输（transferTo&#x2F;transferFrom）：这是另一种零拷贝技术，允许我们将一个通道的数据直接传输到另一个通道。传输数据时，数据并没有经过用户空间，而是直接通过内核空间，从而避免了多余的数据复制过程。</p>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -3076,7 +3127,7 @@ Creating a new user...<span aria-hidden="true" class="line-numbers-rows"><span><
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
