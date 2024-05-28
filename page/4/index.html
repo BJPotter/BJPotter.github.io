@@ -165,7 +165,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Redis.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -179,7 +179,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html" class="post-title-link" itemprop="url">Java内存模型</a>
+            <a href="/post/Redis.html" class="post-title-link" itemprop="url">redis-学习</a>
         </h2>
 
         <div class="post-meta">
@@ -203,46 +203,87 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><ol>
-<li><p>处理器的内存模型</p>
-<p>CPU的发展在摩尔定律的指导下以18个月的速度翻一倍的速度在发展，内存和硬盘的发展远远落后于CPU，为了解决这个问题CPU厂商设计的了高速缓存解决I&#x2F;O速度和CPU运行速度不匹配问题。</p>
-</li>
-<li><p>高速缓存</p>
-</li>
-</ol>
-<p>​    高速缓存位于CPU和内存之间，当程序进行运算的时候，会将数据从内存中复制一份到高速缓存中，当cpu运算的时候直接从高速缓存里面拿数据，运算完后将数据向高速缓存写入，再将高速缓存刷新到内存中。</p>
-<ol start="3">
-<li><p>缓存的一致性协议</p>
-<p>缓存一致性问题：多核CPU中，每个CPU拥有属于自己的高速缓存，但是内存只有一块，无法保证多个CPU处理相关数据后，更新回主内存的数据以谁为准呢？</p>
-<p>解决方案：</p>
-</li>
-</ol>
-<p>​	1）通过在总线上加锁</p>
-<p>​	CPU和内存的通信是通过总线进行的，在总线上加锁，阻塞其他CPU对内存的访问，保证缓存不一致问题，但是阻塞其他CPU访问内存，导致效率低下。</p>
-<p>​	2）通过缓存一致性协议</p>
-<p>​	MESI协议保证内存中的共享变量的副本是一致的，当cpu写入数据的时候，发现操作变量为共享变量（在其他cpu中也存在该共享变量），会发送信号，通知其他的cpu将这个变量设置为无效状态，当其他cpu读取这个数据时候，发现这个变量是无效的，他会从内存中重新读取。</p>
-<ol start="4">
-<li>CPU乱序执行优化</li>
-</ol>
-<p>​	为了让处理器内部的运算单元能够被充分利用，处理器会对输入的代码进行乱序执行（out-of-order execution）优化处理器会在计算之后，将乱序执行的结构重组，保证结果和顺序执行是一致的，但是不保证程序中各个语句执行顺序和输入顺序一致。（JAVA虚拟机的即时编译器也有类似的指令重排序优化）</p>
-<ol start="5">
-<li><p>处理器内存模型的几种类型</p>
-<p>顺序一致性内存模型：</p>
+          <h1 id="redis安装"><a href="#redis安装" class="headerlink" title="redis安装"></a>redis安装</h1><p><strong>官方snapd商店安装</strong></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> yum <span class="token function">install</span> epel-release -y
+<span class="token function">sudo</span> yum <span class="token function">install</span> snapd -y 
+<span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> --now snapd.socket 
+<span class="token function">sudo</span> <span class="token function">ln</span> -s /var/lib/snapd/snap /snap
+<span class="token function">sudo</span> snap <span class="token function">install</span> redis<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>官方源码安装[推荐]</strong></p>
+<p>1.安装阿里源</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># CentOS 7</span>
+<span class="token function">wget</span> -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>2.安装编译器</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yum <span class="token function">install</span> gcc-c++ -y<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>3.下载源码</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://download.redis.io/redis-stable.tar.gz<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>4.编译redis</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">tar</span> -xzvf redis-stable.tar.gz
+<span class="token builtin class-name">cd</span> redis-stable
+<span class="token function">make</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>5.安装生成的可执行文件</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">make</span> <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>6.启动redis</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">redis-server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="简单动态字符串"><a href="#简单动态字符串" class="headerlink" title="简单动态字符串"></a>简单动态字符串</h1><blockquote>
+<p>Redis没有使用C语言的字符串，而是自己构建了一种名为简单动态字符串SDS（simple dynamic string）的抽象类型，并把sds用作默认redis的默认字符串表示。Redis数据库里面的键值对最底层都是由SDS实现的</p>
+</blockquote>
+<h2 id="SDS定义"><a href="#SDS定义" class="headerlink" title="SDS定义"></a>SDS定义</h2><p>C语言表示</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">sdshdr</span><span class="token punctuation">&#123;</span>
+    <span class="token comment">// 记录buf 数组中已使用的字节数</span>
+    <span class="token comment">// 等于sds 所保存的长度</span>
+    <span class="token keyword">int</span> len<span class="token punctuation">;</span>
+    <span class="token comment">// 记录buf 数组中未使用的字节的数量</span>
+    <span class="token keyword">int</span>  free<span class="token punctuation">;</span>
+    <span class="token comment">//字节数组，用于保存字符串</span>
+    <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>buf字节数组和c语言的字符串保持一致，都以空字符结尾</p>
+</blockquote>
+<h2 id="SDS与C字符串的区别"><a href="#SDS与C字符串的区别" class="headerlink" title="SDS与C字符串的区别"></a>SDS与C字符串的区别</h2><blockquote>
+<p>C语言使用长度为N+1的字节数组表示长度为N的字符串，字节数组最后都是以空字符（’\0’）结尾</p>
+</blockquote>
+<p>2.1 常数复杂度获取长度</p>
 <ul>
-<li>一个线程中的所有操作必须按照程序的顺序执行</li>
-<li>所有线程都只能看到一个单一的操作执行顺序，在顺序执行的一致性内存模型，每个操作都必须原子执行且立即对所有线程可见。</li>
+<li>C字符串不记录长度，需要依次遍历，直到空字符串返回长度，时间复杂度为O(N)</li>
+<li>SDS中记录了长度的属性len,时间复杂度为O(1)</li>
 </ul>
-</li>
-</ol>
-<h1 id="JAVA内存模型"><a href="#JAVA内存模型" class="headerlink" title="JAVA内存模型"></a>JAVA内存模型</h1><p>​	不同架构的物理机器可以拥有不一样的内存模型，java的宗旨是一次编译，到处运行，为了实现该目标，java虚拟机规范定义了java内存模型（JAVA Memory Model,JMM）</p>
-<ol>
-<li>主内存</li>
-</ol>
-<p>​	java的内存模型规定了所有变量（实例字段、静态字段、构成数组对象的元素）都存储在主内存中。</p>
-<ol start="2">
-<li>工作内存</li>
-</ol>
-<p>​	每条线程还有自己的工作内存（类比高速缓存区）工作内存中保存了被该线程使用的变量的主内存副本拷贝，线程对变量的所有操作都是在工作内存中完成的。</p>
+<p>即使字符串的长度很长，使用strlen的命令的时间复杂度是O(1)</p>
+<p>2.2 杜绝缓冲区溢出</p>
+<ul>
+<li>C语言字符串拼接必须先分配空间，要不然会内存溢出</li>
+<li>SDS会自动扩容所拼接字符串大小</li>
+</ul>
+<p>2.3 减少字符串修改带来的内存分配次数</p>
+<ul>
+<li>空间预分配</li>
+<li>惰性空间释放</li>
+</ul>
+<blockquote>
+<p>空间预分配：当字符串的长度（len）小于1MB,预分配给free的空间大小和len长度一致，当字符串长度大于30Mb，预分配1Mb给free</p>
+<p>惰性空间释放：当要删除部分字符的时候，会将删除的空间保留到free里面</p>
+</blockquote>
+<p>2.4 二进制安全</p>
+<blockquote>
+<p>C字符串中不能包含’\0’,否则会被程序认为是字符串结尾，这限制了只能保存文本数据，不能保存图片、音频、视频等二进制数据。</p>
+<p>SDS的api都是二进制安全的，不会对数据进行限制、过滤等数据存进来是什么样的，他读取就是什么样的，redis用的buf数组不是用来保存字符，而是保存二进制数据。因此redis可以保存任意格式的二进制数据</p>
+</blockquote>
+<p>2.5 兼容部分c字符串函数</p>
+<blockquote>
+<p>sds保留了空字符结尾的特性，可以重用部分c语言的函数，从而避免重复代码编写。</p>
+</blockquote>
+<h1 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h1><blockquote>
+<p>链表提供了高效的节点重排能力，以及顺序性节点访问方式，并且可以通过增删节点来调整链表的长度</p>
+</blockquote>
 
       
     </div>
@@ -560,6 +601,103 @@
 <p>3.任务一旦运行完成不能被重启，除非运行过程中使用了runAndReset方法</p>
 </blockquote>
 <p>3.2.2 FutureTask类图结构</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html" class="post-title-link" itemprop="url">Java内存模型</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><ol>
+<li><p>处理器的内存模型</p>
+<p>CPU的发展在摩尔定律的指导下以18个月的速度翻一倍的速度在发展，内存和硬盘的发展远远落后于CPU，为了解决这个问题CPU厂商设计的了高速缓存解决I&#x2F;O速度和CPU运行速度不匹配问题。</p>
+</li>
+<li><p>高速缓存</p>
+</li>
+</ol>
+<p>​    高速缓存位于CPU和内存之间，当程序进行运算的时候，会将数据从内存中复制一份到高速缓存中，当cpu运算的时候直接从高速缓存里面拿数据，运算完后将数据向高速缓存写入，再将高速缓存刷新到内存中。</p>
+<ol start="3">
+<li><p>缓存的一致性协议</p>
+<p>缓存一致性问题：多核CPU中，每个CPU拥有属于自己的高速缓存，但是内存只有一块，无法保证多个CPU处理相关数据后，更新回主内存的数据以谁为准呢？</p>
+<p>解决方案：</p>
+</li>
+</ol>
+<p>​	1）通过在总线上加锁</p>
+<p>​	CPU和内存的通信是通过总线进行的，在总线上加锁，阻塞其他CPU对内存的访问，保证缓存不一致问题，但是阻塞其他CPU访问内存，导致效率低下。</p>
+<p>​	2）通过缓存一致性协议</p>
+<p>​	MESI协议保证内存中的共享变量的副本是一致的，当cpu写入数据的时候，发现操作变量为共享变量（在其他cpu中也存在该共享变量），会发送信号，通知其他的cpu将这个变量设置为无效状态，当其他cpu读取这个数据时候，发现这个变量是无效的，他会从内存中重新读取。</p>
+<ol start="4">
+<li>CPU乱序执行优化</li>
+</ol>
+<p>​	为了让处理器内部的运算单元能够被充分利用，处理器会对输入的代码进行乱序执行（out-of-order execution）优化处理器会在计算之后，将乱序执行的结构重组，保证结果和顺序执行是一致的，但是不保证程序中各个语句执行顺序和输入顺序一致。（JAVA虚拟机的即时编译器也有类似的指令重排序优化）</p>
+<ol start="5">
+<li><p>处理器内存模型的几种类型</p>
+<p>顺序一致性内存模型：</p>
+<ul>
+<li>一个线程中的所有操作必须按照程序的顺序执行</li>
+<li>所有线程都只能看到一个单一的操作执行顺序，在顺序执行的一致性内存模型，每个操作都必须原子执行且立即对所有线程可见。</li>
+</ul>
+</li>
+</ol>
+<h1 id="JAVA内存模型"><a href="#JAVA内存模型" class="headerlink" title="JAVA内存模型"></a>JAVA内存模型</h1><p>​	不同架构的物理机器可以拥有不一样的内存模型，java的宗旨是一次编译，到处运行，为了实现该目标，java虚拟机规范定义了java内存模型（JAVA Memory Model,JMM）</p>
+<ol>
+<li>主内存</li>
+</ol>
+<p>​	java的内存模型规定了所有变量（实例字段、静态字段、构成数组对象的元素）都存储在主内存中。</p>
+<ol start="2">
+<li>工作内存</li>
+</ol>
+<p>​	每条线程还有自己的工作内存（类比高速缓存区）工作内存中保存了被该线程使用的变量的主内存副本拷贝，线程对变量的所有操作都是在工作内存中完成的。</p>
 
       
     </div>
@@ -1686,89 +1824,6 @@ Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ&#x3D;<span aria-hidden="true" class
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E6%9C%89%E7%8A%B6%E6%80%81%E5%92%8C%E6%97%A0%E7%8A%B6%E6%80%81%E7%9A%84%E5%8C%BA%E5%88%AB.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E6%9C%89%E7%8A%B6%E6%80%81%E5%92%8C%E6%97%A0%E7%8A%B6%E6%80%81%E7%9A%84%E5%8C%BA%E5%88%AB.html" class="post-title-link" itemprop="url">有状态和无状态请求的区别</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-15 15:58:09" itemprop="dateCreated datePublished" datetime="2024-04-15T15:58:09+08:00">2024-04-15</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="什么是状态"><a href="#什么是状态" class="headerlink" title="什么是状态"></a>什么是状态</h1><p>“状态”是指系统用于处理请求的存储信息。随着用户与应用程序交互或系统事件发生，这些信息可能会随时间而变化。 </p>
-<h1 id="有状态请求"><a href="#有状态请求" class="headerlink" title="有状态请求"></a>有状态请求</h1><p>有状态应用会存储用户 ID、会话信息、配置和偏好设置等数据，以帮助处理特定用户的请求。有状态设计允许应用为其用户提供个性化体验，同时无需在多个请求之间共享数据。 </p>
-<blockquote>
-<p>在有状态请求中，服务器会跟踪客户端的状态。这通常是通过会话或者cookie来实现的。每次客户端发送给服务器的请求，服务器都会参考之前的信息来处理这次请求。一个典型的例子就是登录到网站后，服务器会存储你的信息（比如用户名）。当你在网站内进行其他操作时，服务器会通过识别你的状态来确保你已经登录，这样你就可以访问需要登录才能打开的页面。</p>
-</blockquote>
-<h1 id="无状态的由来"><a href="#无状态的由来" class="headerlink" title="无状态的由来"></a>无状态的由来</h1><p>随着应用程序变得越来越复杂，流量也越来越大，有状态设计的局限性也越来越明显。管理和维护会话数据会给系统带来巨大的性能开销和复杂性。这种复杂性使得系统难以水平扩展，因为跨多个实例共享状态成为一项挑战。对可扩展性和效率的迫切需求推动了无状态设计的流行。请求包含处理请求所需的所有信息，而不是状态管理机制。系统能够处理高级别的请求，同时增加系统扩展的灵活性，使其更加节省资源。 </p>
-<h1 id="无状态请求"><a href="#无状态请求" class="headerlink" title="无状态请求"></a>无状态请求</h1><blockquote>
-<p>在无状态请求中，服务器并不记录任何关于客户端的状态信息。每个请求都是独立的，服务器不会关联不同的请求。这意味着每个请求都必须包含所有必要的信息，服务器不能依赖于过去的请求或会话来获取任何信息。无状态请求可以使服务器更容易扩展，因为它们并不需要保存任何关于客户端的状态信息。</p>
-</blockquote>
-<h1 id="有状态和无状态的区别"><a href="#有状态和无状态的区别" class="headerlink" title="有状态和无状态的区别"></a>有状态和无状态的区别</h1><blockquote>
-<p>有状态请求和无状态请求主要的区别在于系统是否记住过去的信息,在实际应用中，根据使用场景的需要，既有无状态也有有状态的存在。例如，HTTP协议本身就是无状态的，但是我们可以通过在应用层面添加会话或者cookie等工具，以便让HTTP请求变成有状态的。</p>
-</blockquote>
-<h1 id="无状态应用场景"><a href="#无状态应用场景" class="headerlink" title="无状态应用场景"></a>无状态应用场景</h1><ol>
-<li><p><code>微服务和无服务器计算</code> 它们体现了无状态，使服务和功能能够独立运行，从而提高可扩展性和资源效率。</p>
-</li>
-<li><p><code>RESTful API 和 CDN</code> 通过包含所有必要信息的每个 API 调用或请求，无状态设计简化了操作并提高了内容传递速度。</p>
-</li>
-</ol>
-<h1 id="无状态的缺点"><a href="#无状态的缺点" class="headerlink" title="无状态的缺点"></a><strong>无状态的缺点</strong></h1><ol>
-<li><p>更大的请求大小——需要在每个请求中包含完整的数据，这会导致数据传输增加，从而影响性能。 </p>
-</li>
-<li><p>传输效率低下——不断发送完整数据集的效率可能低于访问有状态设计中的集中式数据。 </p>
-</li>
-<li><p>并不总是理想的——在本质上需要状态的场景中，例如复杂的用户交互，无状态设计可能会增加更多复杂性，而不是简化流程。大多数应用程序根据每个组件的需求和限制选择有状态和无状态设计之间的混合方法。</p>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1838,7 +1893,7 @@ Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ&#x3D;<span aria-hidden="true" class
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
