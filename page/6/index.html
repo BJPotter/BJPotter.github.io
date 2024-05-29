@@ -165,6 +165,120 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86.html" class="post-title-link" itemprop="url">反向代理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-15 15:58:09" itemprop="dateCreated datePublished" datetime="2024-04-15T15:58:09+08:00">2024-04-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h1><h2 id="什么是反向代理"><a href="#什么是反向代理" class="headerlink" title="什么是反向代理"></a>什么是反向代理</h2><blockquote>
+<p>反向代理是位于web服务器前面的服务器，所有的客户端请求都将请求发送到反向代理服务器，由反向代理服务器将请求发送到web服务器。</p>
+</blockquote>
+<h2 id="什么是代理服务器"><a href="#什么是代理服务器" class="headerlink" title="什么是代理服务器"></a>什么是代理服务器</h2><blockquote>
+<p>转发代理（正向代理），一般简称位代理或者代理服务器，是位于客户端和服务端之间的中间设备，当客户端发送请求到服务端的时候，代理服务器会拦截这些请求，充当客户端去跟服务端进行交互，然后再响应给实际的客户端。</p>
+</blockquote>
+<img src="/images/代理.png" style="zoom:38%;">
+
+<blockquote>
+<p>上图为一个转发代理流程(A：用户服务器，B: 代理服务器，C：目的服务器),在正常的通信中A与C经过互联网后直接通信，在转发服务中，A先将请求发送到B，B在跟C通信，B收到C的响应数据后再响应给A</p>
+</blockquote>
+<p><strong>优点：</strong></p>
+<ol>
+<li>通过代理可以穿越客户端无法直接访问的网站。</li>
+<li>隐藏自己的身份如发表评论可以隐藏自己的IP</li>
+<li>通过代理进行流量控制，如拒绝访问淘宝的流量</li>
+<li>代理服务器缓存静态网站可以提高浏览性能</li>
+</ol>
+<h2 id="反向代理有何区别"><a href="#反向代理有何区别" class="headerlink" title="反向代理有何区别"></a>反向代理有何区别</h2><blockquote>
+<p>从正向代理来看，WEB服务器不知道谁是真正的客户端，反向代理来看，客户端不知道谁是真正的WEB服务器</p>
+</blockquote>
+<img src="/images/反向代理.png" style="zoom:38%;">
+
+<blockquote>
+<p>上图正常通信的时候D会直接访问F，现在D将请求发送到E,E请请求发送到F,F响应E,再由E想用给真正的客户端。</p>
+</blockquote>
+<p><strong>优点：</strong></p>
+<ol>
+<li>负载均衡，通过反向代理实现负载均衡防止单个服务器过载。</li>
+<li>安全，经过反向代理后不会暴露真实WEB服务器的IP，只会暴露反向代理的IP，攻击者只能共计反向代理服务器。</li>
+<li>缓存提高网站的访问性能</li>
+</ol>
+<h2 id="反向代理开源软件"><a href="#反向代理开源软件" class="headerlink" title="反向代理开源软件"></a>反向代理开源软件</h2><blockquote>
+<p>Nginx、HAProxy、Apache Http Server</p>
+</blockquote>
+<p><strong>以nginx为例实现配置：</strong></p>
+<pre class="line-numbers language-nginx" data-language="nginx"><code class="language-nginx"><span class="token directive"><span class="token keyword">http</span></span> <span class="token punctuation">&#123;</span>
+    <span class="token directive"><span class="token keyword">upstream</span> backend</span> <span class="token punctuation">&#123;</span>
+        <span class="token directive"><span class="token keyword">server</span> 192.168.1.2:80</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token directive"><span class="token keyword">server</span></span> <span class="token punctuation">&#123;</span>
+        <span class="token directive"><span class="token keyword">listen</span> <span class="token number">80</span></span><span class="token punctuation">;</span>
+
+        <span class="token directive"><span class="token keyword">location</span> /</span> <span class="token punctuation">&#123;</span>
+            <span class="token directive"><span class="token keyword">proxy_pass</span> http://backend</span><span class="token punctuation">;</span>
+            <span class="token directive"><span class="token keyword">proxy_set_header</span> Host <span class="token variable">$host</span></span><span class="token punctuation">;</span>
+            <span class="token directive"><span class="token keyword">proxy_set_header</span> X-Real-IP <span class="token variable">$remote_addr</span></span><span class="token punctuation">;</span>
+            <span class="token directive"><span class="token keyword">proxy_set_header</span> X-Forwarded-For <span class="token variable">$proxy_add_x_forwarded_for</span></span><span class="token punctuation">;</span>
+            <span class="token directive"><span class="token keyword">proxy_set_header</span> X-Forwarded-Proto <span class="token variable">$scheme</span></span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>上述Nginx配置，后端服务器地址是192.168.1.2，客户端通过访问反向代理来接触到后端服务。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2181,78 +2295,6 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E9%80%92%E5%BD%92%E7%AE%97%E6%B3%95.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E9%80%92%E5%BD%92%E7%AE%97%E6%B3%95.html" class="post-title-link" itemprop="url">递归算法的7个最佳实践</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-04 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-04T00:00:00+08:00">2018-03-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-16 09:01:59" itemprop="dateModified" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>递归算法是在算法中反复使用的一种方法，其特点是一个函数直接或间接地调用了自己。递归算法能够用简洁的代码来解决复杂问题，如分治算法、搜索算法、排序算法等。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/%E9%80%92%E5%BD%92%E7%AE%97%E6%B3%95.html">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2322,7 +2364,7 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-count">62</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
