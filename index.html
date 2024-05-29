@@ -1191,7 +1191,7 @@ commit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-05-29 11:30:33" itemprop="dateModified" datetime="2024-05-29T11:30:33+08:00">2024-05-29</time>
+                <time title="修改时间：2024-05-29 11:41:40" itemprop="dateModified" datetime="2024-05-29T11:41:40+08:00">2024-05-29</time>
               </span>
 
           
@@ -1231,41 +1231,25 @@ commit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 <li><strong>易于测试</strong>：SpringMVC的各个组件可以独立测试，提高了代码的可维护性和可测试性。</li>
 </ol>
 <h1 id="核心组件"><a href="#核心组件" class="headerlink" title="核心组件"></a>核心组件</h1><h2 id="SpringMVC的核心组件有哪些？"><a href="#SpringMVC的核心组件有哪些？" class="headerlink" title="SpringMVC的核心组件有哪些？"></a>SpringMVC的核心组件有哪些？</h2><ol>
-<li><strong>DispatcherServlet</strong></li>
+<li><p><strong>DispatcherServlet</strong>：前端控制器（Front Controller），所有的 HTTP 请求都会先经过它。它负责将请求分发到合适的处理器（Controller）。</p>
+</li>
+<li><p><strong>Handler Mapping</strong>：将请求映射到相应的处理器（Controller）。它根据请求的 URL、HTTP 方法等信息来确定应该调用哪个处理器。</p>
+</li>
+<li><p><strong>Handler Adapter</strong>：将请求处理器（Controller）与 <code>DispatcherServlet</code> 连接起来。它负责将请求参数转换为控制器方法的参数，并调用相应的方法来处理请求，最终返回一个 <code>ModelAndView</code> 对象。</p>
+</li>
+<li><p><strong>Controller</strong>：处理请求的核心组件。它包含业务逻辑，并返回一个 <code>ModelAndView</code> 对象，包含模型数据和视图信息。</p>
+</li>
+<li><p><strong>ModelAndView</strong>：一个包含模型数据和视图名称的对象。控制器处理完请求后，会返回一个 <code>ModelAndView</code> 对象，<code>DispatcherServlet</code> 会根据这个对象来渲染视图。</p>
+</li>
+<li><p><strong>View Resolver</strong>：将逻辑视图名称解析为实际的视图对象（如 JSP、Thymeleaf 模板等）。它根据 <code>ModelAndView</code> 中的视图名称来确定具体的视图。</p>
+</li>
+<li><p><strong>View</strong>：最终呈现给用户的界面。Spring MVC 支持多种视图技术，如 JSP、Thymeleaf、FreeMarker 等。</p>
+</li>
+<li><p><strong>Model</strong>：用于在控制器和视图之间传递数据的对象。它通常是一个 <code>Map</code> 或 <code>Model</code> 接口的实现类。</p>
+</li>
+<li><p><strong>Interceptor</strong>：用于在请求处理的各个阶段执行额外逻辑的组件。它类似于过滤器，但更强大，可以在请求处理的前后执行操作。</p>
+</li>
 </ol>
-<p><strong>作用</strong>：前端控制器（Front Controller），所有的 HTTP 请求都会先经过它。它负责将请求分发到合适的处理器（Controller）。</p>
-<ol start="2">
-<li><strong>Handler Mapping</strong></li>
-</ol>
-<p><strong>作用</strong>：将请求映射到相应的处理器（Controller）。它根据请求的 URL、HTTP 方法等信息来确定应该调用哪个处理器。</p>
-<ol start="3">
-<li><strong>Handler Adapter</strong></li>
-</ol>
-<p><strong>作用</strong>：将请求处理器（Controller）与 <code>DispatcherServlet</code> 连接起来。它负责将请求参数转换为控制器方法的参数，并调用相应的方法来处理请求，最终返回一个 <code>ModelAndView</code> 对象。</p>
-<ol start="4">
-<li><strong>Controller</strong></li>
-</ol>
-<p><strong>作用</strong>：处理请求的核心组件。它包含业务逻辑，并返回一个 <code>ModelAndView</code> 对象，包含模型数据和视图信息。</p>
-<ol start="5">
-<li><strong>ModelAndView</strong></li>
-</ol>
-<p><strong>作用</strong>：一个包含模型数据和视图名称的对象。控制器处理完请求后，会返回一个 <code>ModelAndView</code> 对象，<code>DispatcherServlet</code> 会根据这个对象来渲染视图。</p>
-<ol start="6">
-<li><strong>View Resolver</strong></li>
-</ol>
-<p><strong>作用</strong>：将逻辑视图名称解析为实际的视图对象（如 JSP、Thymeleaf 模板等）。它根据 <code>ModelAndView</code> 中的视图名称来确定具体的视图。</p>
-<ol start="7">
-<li><strong>View</strong></li>
-</ol>
-<p><strong>作用</strong>：最终呈现给用户的界面。Spring MVC 支持多种视图技术，如 JSP、Thymeleaf、FreeMarker 等。</p>
-<ol start="8">
-<li><strong>Model</strong></li>
-</ol>
-<p><strong>作用</strong>：用于在控制器和视图之间传递数据的对象。它通常是一个 <code>Map</code> 或 <code>Model</code> 接口的实现类。</p>
-<ol start="9">
-<li><strong>Interceptor</strong></li>
-</ol>
-<p><strong>作用</strong>：用于在请求处理的各个阶段执行额外逻辑的组件。它类似于过滤器，但更强大，可以在请求处理的前后执行操作。</p>
 <h2 id="SpringMVC的工作原理"><a href="#SpringMVC的工作原理" class="headerlink" title="SpringMVC的工作原理"></a>SpringMVC的工作原理</h2><p>1.<strong>客户端请求</strong></p>
 <p>客户端发送一个 HTTP 请求到服务器，例如：</p>
 <pre class="line-numbers language-http" data-language="http"><code class="language-http"><span class="token request-line"><span class="token method property">GET</span> <span class="token request-target url"><span class="token path"><span class="token path-separator">/</span>hello</span></span> <span class="token http-version property">HTTP/1.1</span></span>
@@ -1361,13 +1345,13 @@ commit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 
 <h1 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h1><h2 id="注解原理"><a href="#注解原理" class="headerlink" title="注解原理"></a>注解原理</h2><p>注解本质是一个继承了Annotation的特殊接口，其具体实现类是Java运行时生成的动态代理类。我们通过反射获取注解时，返回的是Java运行时生成的动态代理对象。通过代理对象调用自定义注解的方法，会最终调用AnnotationInvocationHandler的invoke方法。该方法会从memberValues这个Map中索引出对应的值。而memberValues的来源是Java常量池。</p>
 <h2 id="SpringMVC常用注解"><a href="#SpringMVC常用注解" class="headerlink" title="SpringMVC常用注解"></a>SpringMVC常用注解</h2><h3 id="控制器相关注解"><a href="#控制器相关注解" class="headerlink" title="控制器相关注解"></a>控制器相关注解</h3><ul>
-<li><p>**<code>@Controller</code>**：标识一个类为SpringMVC控制器。</p>
+<li><p><code>@Controller</code>：标识一个类为SpringMVC控制器。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Controller</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyController</span> <span class="token punctuation">&#123;</span>
     <span class="token comment">// ...</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 </li>
-<li><p>**<code>@RestController</code>**：标识一个类为RESTful控制器，相当于同时使用了<code>@Controller</code>和<code>@ResponseBody</code>。</p>
+<li><p><code>@RestController</code>：标识一个类为RESTful控制器，相当于同时使用了<code>@Controller</code>和<code>@ResponseBody</code>。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyRestController</span> <span class="token punctuation">&#123;</span>
     <span class="token comment">// ...</span>
