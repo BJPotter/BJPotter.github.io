@@ -165,6 +165,721 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%B8%89-%E5%B8%B8%E7%94%A8%E7%B1%BB.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%B8%89-%E5%B8%B8%E7%94%A8%E7%B1%BB.html" class="post-title-link" itemprop="url">Java基础-常用类</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-22 21:58:55" itemprop="dateCreated datePublished" datetime="2024-04-22T21:58:55+08:00">2024-04-22</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Object类"><a href="#Object类" class="headerlink" title="Object类"></a>Object类</h1><h2 id="Object类的方法"><a href="#Object类的方法" class="headerlink" title="Object类的方法"></a>Object类的方法</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * native 方法，用于返回当前运行时对象的 Class 对象，使用了 final 关键字修饰，故不允许子类重写。
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">/**
+ * native 方法，用于返回对象的哈希码，主要使用在哈希表中，比如 JDK 中的HashMap。
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">native</span> <span class="token keyword">int</span> <span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">/**
+ * 用于比较 2 个对象的内存地址是否相等，String 类对该方法进行了重写以用于比较字符串的值是否相等。
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> obj<span class="token punctuation">)</span>
+<span class="token comment">/**
+ * native 方法，用于创建并返回当前对象的一份拷贝。
+ */</span>
+<span class="token keyword">protected</span> <span class="token keyword">native</span> <span class="token class-name">Object</span> <span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">CloneNotSupportedException</span>
+<span class="token comment">/**
+ * 返回类的名字实例的哈希码的 16 进制的字符串。建议 Object 所有的子类都重写这个方法。
+ */</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">/**
+ * native 方法，并且不能重写。唤醒一个在此对象监视器上等待的线程(监视器相当于就是锁的概念)。如果有多个线程在等待只会任意唤醒一个。
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">notify</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">/**
+ * native 方法，并且不能重写。跟 notify 一样，唯一的区别就是会唤醒在此对象监视器上等待的所有线程，而不是一个线程。
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">notifyAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">/**
+ * native方法，并且不能重写。暂停线程的执行。注意：sleep 方法没有释放锁，而 wait 方法释放了锁 ，timeout 是等待时间。
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span>
+<span class="token comment">/**
+ * 多了 nanos 参数，这个参数表示额外时间（以纳秒为单位，范围是 0-999999）。 所以超时的时间还需要加上 nanos 纳秒。。
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">,</span> <span class="token keyword">int</span> nanos<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span>
+<span class="token comment">/**
+ * 跟之前的2个wait方法一样，只不过该方法一直等待，没有超时时间这个概念
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span>
+<span class="token comment">/**
+ * 实例被垃圾回收器回收的时候触发的操作
+ */</span>
+<span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">finalize</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Throwable</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="x3D-x3D-和-equals的区别"><a href="#x3D-x3D-和-equals的区别" class="headerlink" title="&#x3D;&#x3D; 和 equals的区别"></a>&#x3D;&#x3D; 和 equals的区别</h2><ol>
+<li><code>==</code>对于基本类型和引用类型是不同的<ul>
+<li>基本数据类型：<code>==</code>比较的是值</li>
+<li>引用数据类型：<code>==</code>比较的是内存地址</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>java只有值传递，没有引用传递，基本数据类型传递的是值，引用数据类型传递的是对象的内存地址</p>
+</blockquote>
+<ol start="2">
+<li>equals是object类的一个方法，所有类都有equals方法，默认调用的是<code>==</code>进行比较两个对象是否相等。</li>
+</ol>
+<blockquote>
+<p><code>equals()</code>方法有两种用法，一种是没有重写equals方法，默认比较两个对象内存地址是否相等，一种是重写了equals方法，比较的是对象的值是否相等。</p>
+<p>如：Object类的equals()方法和String的equals()方法</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//Object类的equals()方法</span>
+<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> obj<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> obj<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token comment">//String的equals()方法</span>
+<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> anObject<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> anObject<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>anObject <span class="token keyword">instanceof</span> <span class="token class-name">String</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> anotherString <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span>anObject<span class="token punctuation">;</span>
+        <span class="token keyword">int</span> n <span class="token operator">=</span> value<span class="token punctuation">.</span>length<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">==</span> anotherString<span class="token punctuation">.</span>value<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">char</span> v1<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> value<span class="token punctuation">;</span>
+            <span class="token keyword">char</span> v2<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> anotherString<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+            <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span>n<span class="token operator">--</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>v1<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">!=</span> v2<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+                    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+                i<span class="token operator">++</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="hashcode的作用"><a href="#hashcode的作用" class="headerlink" title="hashcode的作用"></a>hashcode的作用</h2><blockquote>
+<p><code>hashcode（）</code>的作用是获取hash码（int 整数）也称散列码，这个hash码的作用是确定对象在hash表的位置,所有类都有这个函数</p>
+<p><code>public native int hashCode();</code></p>
+</blockquote>
+<h2 id="为什么要有hashcode，hashset是如何检查重复的"><a href="#为什么要有hashcode，hashset是如何检查重复的" class="headerlink" title="为什么要有hashcode，hashset是如何检查重复的"></a>为什么要有hashcode，hashset是如何检查重复的</h2><blockquote>
+<p>提高执行效率，以hashset如何检查重复说明，怎么提高效率的，当把对象加入到hashset的时候，hashset会首先根据对象的hashcode值来判断加入的位置下标，如果下标位置没值就直接插入了，有值的话再调用equals方法判断两个对象是否相等，如果相等就不会让其加入，如果不相等就会重新散列到新的位置，这样做的好处是减少了equals执行次数，提高了执行效率。</p>
+</blockquote>
+<p>总结：</p>
+<p>如果两个对象的<code>hashCode</code> 值相等，那这两个对象不一定相等（哈希碰撞）。</p>
+<p>如果两个对象的<code>hashCode</code> 值相等并且<code>equals()</code>方法也返回 <code>true</code>，我们才认为这两个对象相等。</p>
+<p>如果两个对象的<code>hashCode</code> 值不相等，我们就可以直接认为这两个对象不相等。</p>
+<h2 id="为什么重写equals必须重写hashcode"><a href="#为什么重写equals必须重写hashcode" class="headerlink" title="为什么重写equals必须重写hashcode"></a>为什么重写equals必须重写hashcode</h2><blockquote>
+<p>Java API规范要求：</p>
+<p>Object类中hashCode()方法的文档明确规定，如果两个对象通过equals()方法认为是相等的，那么它们必须产生相同的哈希码。这意味着当你自定义了对象的相等性规则（通过重写equals()方法），也应该相应地重写hashCode()方法以保持一致性。</p>
+<p>每个对象都有hashcode方法，可能会产生hash冲突，导致两个不同的对象，返回相同的hash码。</p>
+<p>如果equals（）方法判断两个对象相等，那么两个对象的hashcode肯定是相等的，如果重写equals（）方法，没有重写hashcode可能会导致，两个对象equals相等，hashcode不相同，不符合Java API规范。</p>
+</blockquote>
+<p>总结：</p>
+<ul>
+<li><code>equals</code> 方法判断两个对象是相等的，那这两个对象的 <code>hashCode</code> 值也要相等。</li>
+<li>两个对象有相同的 <code>hashCode</code> 值，他们也不一定是相等的（哈希碰撞）。</li>
+</ul>
+<h1 id="String类"><a href="#String类" class="headerlink" title="String类"></a>String类</h1><h2 id="String属于基本数据类型吗？"><a href="#String属于基本数据类型吗？" class="headerlink" title="String属于基本数据类型吗？"></a>String属于基本数据类型吗？</h2><blockquote>
+<p>String是一个字符串对象，属于引用数据类型，不属于基本数据类型</p>
+</blockquote>
+<h2 id="String常用的方法"><a href="#String常用的方法" class="headerlink" title="String常用的方法"></a>String常用的方法</h2><h3 id="获取类"><a href="#获取类" class="headerlink" title="获取类"></a>获取类</h3><p><code>int length() 获取字符串长度</code></p>
+<p><code>char charAt(int) 获取指定索引的字符</code> </p>
+<p><code>int indexOf(String) 获取指定字符串的索引</code></p>
+<p><code>int lastIndexOf(String) 获取指定字符串的最后一次的索引</code></p>
+<p><code>String substring(int) 获取从指定坐标到最后的字符串</code> </p>
+<p><code>String substring(int,int) 获取[int,int)的指定字符串</code></p>
+<p><code>String concat(String) 获取拼接后的字符串</code></p>
+<h3 id="判断类"><a href="#判断类" class="headerlink" title="判断类"></a>判断类</h3><p><code>boolean equals(String) 判断两个字符串内容是否相同 </code> </p>
+<p><code>boolean equalsIgnoreCase(String) 忽略大小写，判断两个字符串内容是否相同</code></p>
+<p><code>boolean contains(String) 判断字符串是否包含指定字符串</code></p>
+<p><code>boolean startsWith(String) 判断字符串是否以指定字符串开始</code></p>
+<p><code>boolean endsWith(String) 判断字符串是否以指定字符串结尾</code></p>
+<p><code>boolean isEmpty() 判断字符串是否为空</code></p>
+<h3 id="数组类"><a href="#数组类" class="headerlink" title="数组类"></a>数组类</h3><p><code>byte[] getBytes() 字符串转为字节数组</code></p>
+<p><code>char[] toCharArray() 字符串转为字符数组</code></p>
+<p><code>String[] split(String) 将字符串按照指定字符串切割成字符串数组</code></p>
+<h3 id="转换类"><a href="#转换类" class="headerlink" title="转换类"></a>转换类</h3><p><code>String toUpperCase() 字符串转大写</code></p>
+<p><code>String toLowerCase() 字符串转小写</code></p>
+<p><code>String replace(String,String) 字符串替换，匹配方式：非正则表达式匹配。它会按照字面意义去查找和替换目标字符串，不解析任何特殊字符作为正则表达式元字符。</code></p>
+<p><code>String replaceAll(String,String) 字符串全部替换，支持正则，匹配方式：正则表达式匹配。它可以识别并使用正则表达式的各种特殊字符和模式来匹配复杂的情况。</code></p>
+<p><code>String repalceFirst(String,String) 字符串指替换第一次</code></p>
+<p><code>String trim() 字符串将开头和结尾的空格剔除</code> </p>
+<h2 id="String、StringBuffer、StringBuilder的区别"><a href="#String、StringBuffer、StringBuilder的区别" class="headerlink" title="String、StringBuffer、StringBuilder的区别"></a>String、StringBuffer、StringBuilder的区别</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">String</span> <span class="token keyword">implements</span> <span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span>Serializable</span><span class="token punctuation">,</span> <span class="token class-name">Comparable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span><span class="token punctuation">,</span> <span class="token class-name">CharSequence</span> <span class="token punctuation">&#123;</span> <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">char</span> value<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">StringBuffer</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractStringBuilder</span> <span class="token keyword">implements</span> <span class="token class-name">Serializable</span><span class="token punctuation">,</span> <span class="token class-name">CharSequence</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">StringBuilder</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractStringBuilder</span> <span class="token keyword">implements</span> <span class="token class-name">Serializable</span><span class="token punctuation">,</span> <span class="token class-name">CharSequence</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="可变性"><a href="#可变性" class="headerlink" title="可变性"></a>可变性</h3><p>String是不可变的，StringBuffer和StringBuilder是可变，这个可变指的是否对原对象内容是否变更</p>
+<blockquote>
+<p>String类中使用final修饰的字符数组存储字符串，是不可变的，StringBuffer和StringBuilder都继承了AbstractStringBuilder，内部通过char[] value;存储，所以说它们是可变的。</p>
+<p>final关键字修饰的类不能被继承，修饰的方法不能被重写，修饰的变量是基本数据类型则值不能改变，修饰的变量是引用类型则不能再指向其他对象。</p>
+</blockquote>
+<h3 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h3><p><code>String</code> 中的对象是不可变的，也就可以理解为常量，线程安全。<code>AbstractStringBuilder</code> 是 <code>StringBuilder</code> 与 <code>StringBuffer</code> 的公共父类，定义了一些字符串的基本操作，如 <code>expandCapacity</code>、<code>append</code>、<code>insert</code>、<code>indexOf</code> 等公共方法。<code>StringBuffer</code> 对方法加了同步锁或者对调用的方法加了同步锁，所以是线程安全的。<code>StringBuilder</code> 并没有对方法进行加同步锁，所以是非线程安全的。</p>
+<h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><p>每次对 <code>String</code> 类型进行改变的时候，都会生成一个新的 <code>String</code> 对象，然后将指针指向新的 <code>String</code> 对象。<code>StringBuffer</code> 每次都会对 <code>StringBuffer</code> 对象本身进行操作，而不是生成新的对象并改变对象引用。相同情况下使用 <code>StringBuilder</code> 相比使用 <code>StringBuffer</code> 没有使用synchronized锁，性能有所提升，但多线程环境下存在安全风险。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li>操作少量的数据: 适用 <code>String</code></li>
+<li>单线程操作字符串缓冲区下操作大量数据: 适用 <code>StringBuilder</code></li>
+<li>多线程操作字符串缓冲区下操作大量数据: 适用 <code>StringBuffer</code></li>
+</ol>
+<h2 id="字符串拼接用-还是StringBuilder"><a href="#字符串拼接用-还是StringBuilder" class="headerlink" title="字符串拼接用+还是StringBuilder"></a>字符串拼接用+还是StringBuilder</h2><blockquote>
+<p>字符串的+或者+&#x3D;运算符，实质是生成一个StringBuilder对象，拼接后调用toString()方法后再生成一个字符串对象。如果频繁操作还是建议使用<code>StringBuilder</code> 对象进行字符串拼接。</p>
+</blockquote>
+<h2 id="字符串常量池"><a href="#字符串常量池" class="headerlink" title="字符串常量池"></a>字符串常量池</h2><blockquote>
+<p>在Java中，字符串常量池是一个特殊的内存区域（位于方法区），用于存储字符串字面量（也称为字符串常量）。当创建一个字符串对象时，如果它的值来源于字面量或者已经存在于字符串常量池中的字符串对象，则不会创建新的对象，而是直接引用池中的已存在对象，这样可以减少内存消耗并提升性能。</p>
+</blockquote>
+<h3 id="关于创建对象的个数，考虑以下几种场景："><a href="#关于创建对象的个数，考虑以下几种场景：" class="headerlink" title="关于创建对象的个数，考虑以下几种场景："></a>关于创建对象的个数，考虑以下几种场景：</h3><ol>
+<li>使用字面量创建字符串：String s1 &#x3D; “abc”; String s2 &#x3D; “abc”;<br>java在这种情况下，尽管有两个引用s1和s2，但在内存中只会有一个字符串对象”abc”存储在字符串常量池中。因为编译器会确保相同内容的字符串字面量只创建一次对象。</li>
+<li>使用new关键字创建字符串：String s3 &#x3D; new String(“abc”);<br>java使用new关键字创建字符串时，会在堆内存中创建一个新的字符串对象，即使”abc”已经存在于字符串常量池中也是如此。因此，这里会有两个对象，一个是常量池中的”abc”，另一个是在堆上新建的”abc”对象。</li>
+<li>使用intern()方法：String s4 &#x3D; new String(“abc”).intern();<br>java的intern()方法会尝试将当前字符串对象添加到字符串常量池中，如果常量池已有该字符串，则返回池中该字符串的引用。所以，如果上述代码运行时，常量池没有”abc”，则会将新建的”abc”对象的引用复制到常量池，并使s4指向常量池中的”abc”；如果有，则直接返回池中已有的”abc”引用，此时堆上的新对象可能会被垃圾回收。</li>
+</ol>
+<h1 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h1><blockquote>
+<p>异常是在程序执行过程中遇到的一种意外情况或错误，它会干扰正常的程序执行流程。</p>
+</blockquote>
+<h2 id="异常的类型"><a href="#异常的类型" class="headerlink" title="异常的类型"></a>异常的类型</h2><blockquote>
+<p>异常的父类是Throwable有两个⼦类Exception和Error。</p>
+<p>Error是程序⽆法处理的错误，⼀旦出现这个错误，虚拟机将被迫停⽌运⾏。</p>
+<p>Exception不会导致程序停⽌，⼜分为两个部分RunTimeException运⾏时异常和CheckedException检查异常</p>
+<p>RunTimeException常常发⽣在程序运⾏过程中，会导致程序当前线程执⾏失败。CheckedException常常发⽣在程序编译过程中，会导致程序编译不通过。</p>
+</blockquote>
+<img src="https://telegraph-image-2ni.pages.dev/file/f5fc08365d6eedc7d186d.png" alt="img" style="zoom:50%;">
+
+<h2 id="Throwable类的常用方法"><a href="#Throwable类的常用方法" class="headerlink" title="Throwable类的常用方法"></a>Throwable类的常用方法</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//返回异常发生时的简要描述</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> detailMessage<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token comment">//返回异常发生时的详细信息</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> s <span class="token operator">=</span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> message <span class="token operator">=</span> <span class="token function">getLocalizedMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span>message <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token punctuation">(</span>s <span class="token operator">+</span> <span class="token string">": "</span> <span class="token operator">+</span> message<span class="token punctuation">)</span> <span class="token operator">:</span> s<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token comment">//在控制台上打印 Throwable 对象封装的异常信息</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><blockquote>
+<p>当出现异常我们要捕获并处理异常，或者抛出异常两种方式</p>
+</blockquote>
+<p><strong>1.抛出异常</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span> <span class="token keyword">throw</span>  <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"异常了"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>2.捕获并处理</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//使用try-catch代码块捕获并处理异常</span>
+<span class="token keyword">public</span>  <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+       <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+           <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">0</span><span class="token punctuation">;</span>
+       <span class="token punctuation">&#125;</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+           <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"0不能做除数"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">//也可以使用try-catch-finally finally代码块中一般出现异常也会执行，常用来进行资源的关闭</span>
+<span class="token comment">//使用try-with-source替代try-catch-finally代码更简短，更清晰，会自动进行资源的关闭</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><blockquote>
+<p>泛型（Generics）是Java中一种参数化类型的概念，它允许在定义类、接口和方法时使用类型参数。通过泛型，可以使类、接口和方法在定义时不指定具体的数据类型，而是在实例化或调用时再指定具体的类型。</p>
+<p>使用泛型的主要目的是提高代码的灵活性、可重用性和安全性，同时减少重复代码的编写。泛型可以在编译时进行类型检查，避免在运行时出现类型转换错误，提高了代码的安全性。</p>
+</blockquote>
+<h2 id="泛型的使用方式"><a href="#泛型的使用方式" class="headerlink" title="泛型的使用方式"></a>泛型的使用方式</h2><p><strong>泛型类</strong>：使用泛型参数化的类，可以在定义时指定类型参数。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">MyClass</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 泛型类中的方法或成员变量可以使用泛型类型参数T</span>
+    <span class="token keyword">private</span> <span class="token class-name">T</span> value<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">T</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> value<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token class-name">T</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> value<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>泛型接口</strong>：使用泛型参数化的接口，可以在实现时指定类型参数。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">interface</span> <span class="token class-name">MyInterface</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">T</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token class-name">T</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>泛型方法</strong>：在方法定义中使用泛型参数，可以在调用时指定具体的类型参数。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Utils</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token class-name">T</span> <span class="token function">getLastElement</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> list<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">return</span> list<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="项目中哪些使用泛型"><a href="#项目中哪些使用泛型" class="headerlink" title="项目中哪些使用泛型"></a>项目中哪些使用泛型</h2><p>1.前后端返回的统一接口CommonResult</p>
+<p>2.自定义的excel处理类ExcelUtil动态的指定的类型导出数据</p>
+<p>3.集合类，例如，<code>ArrayList&lt;String&gt;</code>表示一个只能存储字符串类型的ArrayList。</p>
+<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><h2 id="什么是反射（Reflection）"><a href="#什么是反射（Reflection）" class="headerlink" title="什么是反射（Reflection）"></a>什么是反射（Reflection）</h2><blockquote>
+<p>允许在运行时动态地检查类、获取类的信息（如字段、方法、构造函数等），以及调用类的方法、访问或修改类的属性等。</p>
+</blockquote>
+<h2 id="反射可以做什么"><a href="#反射可以做什么" class="headerlink" title="反射可以做什么"></a>反射可以做什么</h2><ol>
+<li><strong>获取类的信息</strong>：可以获取类的名称、包名、父类、实现的接口等信息。</li>
+<li><strong>获取类的字段（Field）信息</strong>：可以获取类中定义的字段的名称、类型、修饰符等信息。</li>
+<li><strong>获取类的方法（Method）信息</strong>：可以获取类中定义的方法的名称、参数类型、返回类型、修饰符等信息。</li>
+<li><strong>获取类的构造函数信息</strong>：可以获取类中定义的构造函数的参数类型、修饰符等信息。</li>
+<li><strong>动态调用方法</strong>：可以在运行时动态地调用类的方法，传递参数并获取返回值。</li>
+<li><strong>动态创建对象</strong>：可以在运行时动态地创建类的对象，并对对象进行操作。</li>
+</ol>
+<h2 id="反射的使用场景"><a href="#反射的使用场景" class="headerlink" title="反射的使用场景"></a>反射的使用场景</h2><ol>
+<li><strong>框架和库</strong>：许多Java框架和库，如Spring框架、Hibernate ORM框架等，都广泛使用了反射。框架需要在运行时动态地加载和操作类，以实现诸如依赖注入、AOP（面向切面编程）、ORM（对象关系映射）等功能。</li>
+<li><strong>动态代理</strong>：反射可以用来创建动态代理对象，实现动态地在运行时生成代理类并拦截方法调用，用于实现诸如远程调用、事务管理等功能。</li>
+<li><strong>序列化和反序列化</strong>：Java中的序列化和反序列化机制通常使用了反射来动态地读取和写入对象的字段信息，以实现对象的序列化和反序列化。</li>
+<li><strong>单元测试</strong>：在单元测试中，反射可以用来访问私有方法、私有字段等，以便进行单元测试。</li>
+<li><strong>注解处理器</strong>：反射可以用来解析和处理注解，例如编写自定义的注解处理器，根据注解来生成代码或进行其他操作。</li>
+<li><strong>工具类</strong>：一些工具类或开发工具（如IDE）可能会使用反射来获取和操作类的信息，以实现一些功能，例如自动生成代码、代码检查、代码重构等。</li>
+<li><strong>动态加载类</strong>：反射可以用来动态加载类和资源文件，例如通过ClassLoader动态加载类、读取配置文件等。</li>
+</ol>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//下面为jdk动态代理，通过反射实现的</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DebugInvocationHandler</span> <span class="token keyword">implements</span> <span class="token class-name">InvocationHandler</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">/**
+     * 代理类中的真实对象
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Object</span> target<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">DebugInvocationHandler</span><span class="token punctuation">(</span><span class="token class-name">Object</span> target<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>target <span class="token operator">=</span> target<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">invoke</span><span class="token punctuation">(</span><span class="token class-name">Object</span> proxy<span class="token punctuation">,</span> <span class="token class-name">Method</span> method<span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InvocationTargetException</span><span class="token punctuation">,</span> <span class="token class-name">IllegalAccessException</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"before method "</span> <span class="token operator">+</span> method<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Object</span> result <span class="token operator">=</span> method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>target<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"after method "</span> <span class="token operator">+</span> method<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h1><h2 id="什么是注解"><a href="#什么是注解" class="headerlink" title="什么是注解"></a>什么是注解</h2><blockquote>
+<p><code>Annotation</code> （注解） 是 Java5 开始引入的新特性，可以看作是一种特殊的注释，主要用于修饰类、方法或者变量，提供某些信息供程序在编译或者运行时使用。</p>
+<p>注解本质是一个继承了<code>Annotation</code> 的特殊接口：</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Target</span><span class="token punctuation">(</span><span class="token class-name">ElementType</span><span class="token punctuation">.</span>METHOD<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Retention</span><span class="token punctuation">(</span><span class="token class-name">RetentionPolicy</span><span class="token punctuation">.</span>SOURCE<span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token annotation punctuation">@interface</span> <span class="token class-name">Override</span> <span class="token punctuation">&#123;</span>
+<span class="token punctuation">&#125;</span>
+相当于
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Override</span> <span class="token keyword">extends</span> <span class="token class-name">Annotation</span><span class="token punctuation">&#123;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>JDK 提供了很多内置的注解（比如 <code>@Override</code>、<code>@Deprecated</code>），同时，我们还可以自定义注解。</p>
+</blockquote>
+<h2 id="注解解析的方式"><a href="#注解解析的方式" class="headerlink" title="注解解析的方式"></a>注解解析的方式</h2><blockquote>
+<p>注解只有被解析之后才会生效，常见的解析方法有两种：</p>
+</blockquote>
+<ul>
+<li><strong>编译期直接扫描</strong>：编译器在编译 Java 代码的时候扫描对应的注解并处理，比如某个方法使用<code>@Override</code> 注解，编译器在编译的时候就会检测当前的方法是否重写了父类对应的方法。</li>
+<li><strong>运行期通过反射处理</strong>：像框架中自带的注解(比如 Spring 框架的 <code>@Value</code>、<code>@Component</code>)都是通过反射来进行处理的。</li>
+</ul>
+<h2 id="注解的使用场景"><a href="#注解的使用场景" class="headerlink" title="注解的使用场景"></a>注解的使用场景</h2><ol>
+<li><strong>代码说明和文档生成</strong>：可以使用注解来添加说明、作者、版本等信息，帮助理解和使用代码，也可以通过注解生成文档。</li>
+<li><strong>编译时检查</strong>：可以使用注解进行编译时的静态检查，例如 <code>@Override</code> 注解用于检查是否正确覆盖了父类的方法。</li>
+<li><strong>运行时处理</strong>：可以使用注解在运行时进行处理，例如依赖注入、AOP（面向切面编程）、配置解析等。</li>
+<li><strong>代码生成</strong>：可以使用注解来生成代码或配置文件，例如使用注解来配置ORM框架。</li>
+<li><strong>元数据处理</strong>：可以使用注解获取和处理类、方法、字段等的元数据信息，例如自定义注解处理器。</li>
+</ol>
+<h1 id="SPI"><a href="#SPI" class="headerlink" title="SPI"></a>SPI</h1><blockquote>
+<p>SPI 即 Service Provider Interface ，字面意思就是：“服务提供者的接口”，我的理解是：专门提供给服务提供者或者扩展框架功能的开发者去使用的一个接口。</p>
+<p>SPI 将服务接口和具体的服务实现分离开来，将服务调用方和服务实现者解耦，能够提升程序的扩展性、可维护性。修改或者替换服务实现并不需要修改调用方。</p>
+<p>很多框架都使用了 Java 的 SPI 机制，比如：Spring 框架、数据库加载驱动、日志接口、以及 Dubbo 的扩展实现等等。</p>
+</blockquote>
+<h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><blockquote>
+<p>序列化是指将对象转换为字节流的过程，以便将其存储到文件中、通过网络传输或在内存中进行传递。序列化的主要目的是将对象的状态保存下来，以便在需要时可以重新创建对象或者传输对象数据。</p>
+<p>在Java中，序列化是通过实现Serializable接口来实现的。Serializable接口是一个标记接口，没有任何方法，它只是用于指示Java虚拟机这个类可以被序列化。当一个类实现了Serializable接口后，它的对象就可以被序列化成字节流，从而可以进行持久化存储或网络传输。</p>
+</blockquote>
+<p>简单来说：</p>
+<ul>
+<li><strong>序列化</strong>：将数据结构或对象转换成二进制字节流的过程</li>
+<li><strong>反序列化</strong>：将在序列化过程中所生成的二进制字节流转换成数据结构或者对象的过程</li>
+</ul>
+<p>下面是序列化和反序列化常见应用场景：</p>
+<ul>
+<li>对象在进行网络传输（比如远程方法调用 RPC 的时候）之前需要先被序列化，接收到序列化的对象之后需要再进行反序列化；</li>
+<li>将对象存储到文件之前需要进行序列化，将对象从文件中读取出来需要进行反序列化；</li>
+<li>将对象存储到数据库（如 Redis）之前需要用到序列化，将对象从缓存数据库中读取出来需要反序列化；</li>
+<li>将对象存储到内存之前需要进行序列化，从内存中读取出来之后需要进行反序列化。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Linux.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Linux.html" class="post-title-link" itemprop="url">Linux</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-22 21:58:55" itemprop="dateCreated datePublished" datetime="2024-04-22T21:58:55+08:00">2024-04-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-05-17 22:17:42" itemprop="dateModified" datetime="2024-05-17T22:17:42+08:00">2024-05-17</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是linux"><a href="#什么是linux" class="headerlink" title="什么是linux"></a>什么是linux</h1><p>linux是一个开源的操作系统。目前主流的发行版有，Debian(ubuntu)、Fedroa(redhat、centos)、SUSE(openSUSE)、其他版本</p>
+<h1 id="linux系统启动流程"><a href="#linux系统启动流程" class="headerlink" title="linux系统启动流程"></a>linux系统启动流程</h1><p>Linux 系统的启动流程是一个多阶段的过程，从按下电源按钮开始，到最终用户可以登录并使用系统。以下是详细的 Linux 系统启动流程：</p>
+<h2 id="BIOS-x2F-UEFI-阶段"><a href="#BIOS-x2F-UEFI-阶段" class="headerlink" title="BIOS&#x2F;UEFI 阶段"></a>BIOS&#x2F;UEFI 阶段</h2><ul>
+<li>**BIOS (Basic Input&#x2F;Output System) 或 UEFI (Unified Extensible Firmware Interface)**：在开机时，系统的 BIOS 或 UEFI 固件会执行一系列硬件初始化操作。这包括自检 (POST，Power-On Self Test)，检测和初始化硬件设备（如 CPU、内存、硬盘等），并查找启动设备。</li>
+<li><strong>启动设备选择</strong>：BIOS&#x2F;UEFI 查找并加载启动设备中的引导加载程序（Bootloader）。启动顺序通常可以在 BIOS&#x2F;UEFI 设置中配置。</li>
+</ul>
+<h2 id="引导加载程序阶段"><a href="#引导加载程序阶段" class="headerlink" title="引导加载程序阶段"></a>引导加载程序阶段</h2><ul>
+<li><strong>引导加载程序（Bootloader）</strong>：常见的引导加载程序有 GRUB（GRand Unified Bootloader）。引导加载程序的主要任务是将操作系统内核从启动设备（如硬盘）加载到内存中并执行。<ul>
+<li><strong>GRUB 阶段 1</strong>：位于磁盘的主引导记录（MBR）或 GPT 的 EFI 系统分区中。其作用是找到并加载 GRUB 阶段 2。</li>
+<li><strong>GRUB 阶段 2</strong>：显示一个引导菜单，允许用户选择要启动的操作系统或内核选项。根据用户的选择，GRUB 将加载相应的内核映像和初始内存盘（initramfs&#x2F;initrd）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="内核阶段"><a href="#内核阶段" class="headerlink" title="内核阶段"></a>内核阶段</h2><ul>
+<li><strong>加载内核</strong>：引导加载程序将 Linux 内核（通常是 vmlinuz）加载到内存中，并将控制权移交给内核。</li>
+<li><strong>初始内存盘（initramfs&#x2F;initrd）</strong>：内核加载初始内存盘，它包含内核启动过程中所需的临时文件系统和驱动程序。</li>
+<li><strong>内核初始化</strong>：内核开始执行自身的初始化过程，包括：<ul>
+<li>设置硬件（如 CPU、内存、设备驱动程序）。</li>
+<li>挂载根文件系统。</li>
+<li>启动第一个用户空间进程 <code>init</code>。</li>
+</ul>
+</li>
+</ul>
+<h2 id="init-阶段"><a href="#init-阶段" class="headerlink" title="init 阶段"></a>init 阶段</h2><ul>
+<li><strong><code>init</code> 进程</strong>：传统的第一个用户空间进程是 <code>init</code>（PID 1），现代系统上通常由 <code>systemd</code> 替代。<code>init</code> 或 <code>systemd</code> 负责启动和管理系统的各个服务和进程。<ul>
+<li><strong>SysV init</strong>：基于 <code>/etc/inittab</code> 配置文件，按照运行级别（runlevels）启动系统服务和守护进程。</li>
+<li><strong>systemd</strong>：基于单元文件（unit files），按依赖关系启动服务。配置文件位于 <code>/etc/systemd/system/</code> 和 <code>/lib/systemd/system/</code>。</li>
+</ul>
+</li>
+</ul>
+<h2 id="启动用户空间服务"><a href="#启动用户空间服务" class="headerlink" title="启动用户空间服务"></a>启动用户空间服务</h2><ul>
+<li><strong>启动用户空间服务和守护进程</strong>：<code>init</code> 或 <code>systemd</code> 按照配置文件启动所有必要的系统服务和守护进程。例如，网络服务、数据库服务、Web 服务等。</li>
+</ul>
+<h2 id="启动终端或图形用户界面（GUI）"><a href="#启动终端或图形用户界面（GUI）" class="headerlink" title="启动终端或图形用户界面（GUI）"></a>启动终端或图形用户界面（GUI）</h2><ul>
+<li><strong>多用户模式</strong>：启动多个虚拟控制台（tty），用户可以通过这些控制台登录系统。</li>
+<li><strong>图形用户界面（GUI）</strong>：如果系统配置为启动图形界面，<code>init</code> 或 <code>systemd</code> 会启动显示管理器（如 <code>gdm</code>, <code>lightdm</code>, <code>sddm</code>），从而提供图形登录界面。</li>
+</ul>
+<h2 id="用户登录"><a href="#用户登录" class="headerlink" title="用户登录"></a>用户登录</h2><ul>
+<li><strong>登录提示</strong>：用户看到登录提示（TTY 终端）或图形登录界面（GUI），输入用户名和密码登录系统。</li>
+<li><strong>用户会话启动</strong>：登录成功后，启动用户会话，包括用户的 shell 或桌面环境。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><strong>BIOS&#x2F;UEFI 初始化</strong>：硬件自检和启动设备选择。</li>
+<li><strong>引导加载程序</strong>：加载和执行操作系统内核。</li>
+<li><strong>内核初始化</strong>：硬件初始化和挂载根文件系统。</li>
+<li><strong><code>init</code> 进程</strong>：启动系统服务和守护进程。</li>
+<li><strong>启动用户空间服务</strong>：启动多用户模式或图形用户界面。</li>
+<li><strong>用户登录</strong>：用户输入凭据登录系统，启动用户会话。</li>
+</ol>
+<h1 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h1><p>在 Linux 系统中，文件系统采用分层的目录结构，每个目录都有特定的用途。以下是 Linux 文件系统的主要路径及其用途的介绍：</p>
+<p>1.<code>/</code></p>
+<p>根目录是所有文件和目录的起点。所有其他目录都是根目录的子目录。</p>
+<p>2.<code>/bin</code></p>
+<p>存放系统中最基本的用户命令，例如 <code>ls</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, <code>cat</code>, <code>bash</code> 等。这些命令在单用户模式下也需要使用，因此存放在这里。</p>
+<ol start="3">
+<li><code>/sbin</code></li>
+</ol>
+<p>存放系统管理程序，只有超级用户（root）才能使用的命令，例如 <code>ifconfig</code>, <code>reboot</code>, <code>shutdown</code> 等。</p>
+<p>4.<code>/boot</code></p>
+<p>存放引导加载器（如 GRUB）和内核文件，包括内核映像和初始内存盘（initrd 或 initramfs）。</p>
+<ol start="5">
+<li><code>/dev</code></li>
+</ol>
+<p>存放设备文件，每个文件代表一个硬件设备，例如硬盘（<code>/dev/sda</code>），终端（<code>/dev/tty</code>），以及随机数生成器（<code>/dev/random</code>）。</p>
+<ol start="6">
+<li><code>/etc</code></li>
+</ol>
+<p>存放系统的全局配置文件和启动脚本。例如网络配置文件、用户账户信息文件、服务启动脚本等。常见的文件包括 <code>/etc/passwd</code>, <code>/etc/fstab</code>, <code>/etc/hosts</code> 等。</p>
+<ol start="7">
+<li><code>/home</code></li>
+</ol>
+<p>存放所有普通用户的主目录。每个用户都有一个子目录（如 <code>/home/username</code>），用于存放个人文件和配置。</p>
+<ol start="8">
+<li><code>/lib</code></li>
+</ol>
+<p>存放基本系统命令和程序所需的共享库文件和内核模块。包括 C 库（glibc）等。</p>
+<ol start="9">
+<li><code>/media</code></li>
+</ol>
+<p>挂载点目录，用于临时挂载可移动媒体设备（如 USB 闪存驱动器、CD&#x2F;DVD）。</p>
+<ol start="10">
+<li><code>/mnt</code></li>
+</ol>
+<p>挂载点目录，常用于临时挂载文件系统。管理员可以在此目录下创建子目录用于挂载额外的存储设备。</p>
+<ol start="11">
+<li><code>/opt</code></li>
+</ol>
+<p>存放可选的应用软件包。一般是第三方应用程序和插件安装在这里。</p>
+<ol start="12">
+<li><code>/proc</code></li>
+</ol>
+<p>虚拟文件系统，提供内核和进程信息。所有内容都在内存中生成，用于访问系统和进程的信息，例如 <code>/proc/cpuinfo</code>（CPU 信息）和 <code>/proc/meminfo</code>（内存信息）。</p>
+<ol start="13">
+<li><code>/root</code></li>
+</ol>
+<p>超级用户（root）的主目录。与普通用户的主目录不同，<code>/root</code> 是唯一的，并且不在 <code>/home</code> 目录下。</p>
+<ol start="14">
+<li><code>/run</code></li>
+</ol>
+<p>存放自系统启动以来的临时文件，例如进程 ID 文件（PID 文件）和套接字。这个目录是动态的，不需要重启后保存数据。</p>
+<ol start="15">
+<li><code>/srv</code></li>
+</ol>
+<p>存放一些特定服务的数据。<code>srv</code> 意为 “server”，通常用于存放网站数据或 FTP 服务器的数据。</p>
+<ol start="16">
+<li><code>/sys</code></li>
+</ol>
+<p>与 <code>/proc</code> 类似，是一个虚拟文件系统，用于显示和修改设备和内核的参数。提供系统硬件信息以及与硬件的交互界面。</p>
+<ol start="17">
+<li><code>/tmp</code></li>
+</ol>
+<p>存放临时文件。系统和应用程序在运行时可以在此目录下创建临时文件。通常这个目录会在系统重启时清空。</p>
+<ol start="18">
+<li><code>/usr</code></li>
+</ol>
+<p>包含用户级别的应用程序和文件。此目录通常包含二级目录，例如：</p>
+<ul>
+<li><code>/usr/bin</code>: 大多数用户命令，类似于 <code>/bin</code>，但包含更多应用程序。</li>
+<li><code>/usr/sbin</code>: 系统管理员的命令，类似于 <code>/sbin</code>。</li>
+<li><code>/usr/lib</code>: 库文件，类似于 <code>/lib</code>。</li>
+<li><code>/usr/local</code>: 手动安装的软件和自定义程序。子目录结构与 <code>/usr</code> 类似。</li>
+<li><code>/usr/share</code>: 存放共享的、架构无关的数据文件，如文档、帮助文件和配置文件模板。</li>
+</ul>
+<ol start="19">
+<li><code>/var</code></li>
+</ol>
+<p>存放可变数据文件，例如日志文件（<code>/var/log</code>）、临时电子邮件文件（<code>/var/mail</code>）、临时文件（<code>/var/tmp</code>）和缓存文件（<code>/var/cache</code>）。</p>
+<h1 id="定时任务"><a href="#定时任务" class="headerlink" title="定时任务"></a>定时任务</h1><p>在 Linux 系统中，定时任务通常是通过 <code>cron</code> 来设置的。<code>cron</code> 是一个基于时间的任务调度程序，使用 <code>crontab</code> 文件来定义任务调度规则。下面是如何设置定时任务以及每个符号的意义。</p>
+<h2 id="设置定时任务步骤"><a href="#设置定时任务步骤" class="headerlink" title="设置定时任务步骤"></a>设置定时任务步骤</h2><ol>
+<li><strong>编辑用户的 <code>crontab</code> 文件</strong>： 使用命令 <code>crontab -e</code> 进入编辑模式，开始编辑当前用户的 <code>crontab</code> 文件。</li>
+<li><strong>添加任务调度规则</strong>： 在 <code>crontab</code> 文件中，每一行代表一个任务，每行包含六个字段：前五个字段定义时间，第六个字段是要执行的命令。</li>
+</ol>
+<h2 id="字段符号及其意义"><a href="#字段符号及其意义" class="headerlink" title="字段符号及其意义"></a>字段符号及其意义</h2><p><code>crontab</code> 文件中的每行任务调度规则格式如下：</p>
+<pre class="line-numbers language-scss" data-language="scss"><code class="language-scss">* <span class="token operator">*</span> <span class="token operator">*</span> <span class="token operator">*</span> <span class="token operator">*</span> command
+<span class="token operator">-</span> <span class="token operator">-</span> <span class="token operator">-</span> <span class="token operator">-</span> <span class="token operator">-</span>
+| | | | |
+| | | | +----- 星期几 <span class="token punctuation">(</span>0 <span class="token operator">-</span> 7<span class="token punctuation">)</span> <span class="token punctuation">(</span>星期日为 0 或 7<span class="token punctuation">)</span>
+| | | +------- 月份 <span class="token punctuation">(</span>1 <span class="token operator">-</span> 12<span class="token punctuation">)</span>
+| | +--------- 每月的哪一天 <span class="token punctuation">(</span>1 <span class="token operator">-</span> 31<span class="token punctuation">)</span>
+| +----------- 小时 <span class="token punctuation">(</span>0 <span class="token operator">-</span> 23<span class="token punctuation">)</span>
++------------- 分钟 <span class="token punctuation">(</span>0 <span class="token operator">-</span> 59<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="各个字段的详细解释"><a href="#各个字段的详细解释" class="headerlink" title="各个字段的详细解释"></a>各个字段的详细解释</h3><ol>
+<li>**分钟 (0 - 59)**：<ul>
+<li>表示任务在每小时的哪一分钟执行。</li>
+</ul>
+</li>
+<li>**小时 (0 - 23)**：<ul>
+<li>表示任务在一天中的哪个小时执行。</li>
+</ul>
+</li>
+<li>**每月的哪一天 (1 - 31)**：<ul>
+<li>表示任务在每月的哪一天执行。</li>
+</ul>
+</li>
+<li>**月份 (1 - 12)**：<ul>
+<li>表示任务在一年中的哪个月份执行。</li>
+</ul>
+</li>
+<li>**星期几 (0 - 7)**：<ul>
+<li>表示任务在每周的哪一天执行，0 和 7 都表示星期日。</li>
+</ul>
+</li>
+</ol>
+<h3 id="特殊符号"><a href="#特殊符号" class="headerlink" title="特殊符号"></a>特殊符号</h3><ul>
+<li><code>*</code>：星号表示任意时间。例如，如果分钟字段是 <code>*</code>，表示每分钟都会执行。</li>
+<li><code>,</code>：逗号分隔符可以用来指定多个值。例如，<code>1,15</code> 在分钟字段表示第 1 分钟和第 15 分钟。</li>
+<li><code>-</code>：连字符表示一个范围。例如，<code>1-5</code> 在小时字段表示从 1 点到 5 点。</li>
+<li><code>/</code>：斜杠表示步进值。例如，<code>*/5</code> 在分钟字段表示每 5 分钟执行一次。</li>
+</ul>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><ol>
+<li><p><strong>每天下午 3:30 执行命令</strong>：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">30</span> <span class="token number">15</span> * * * /path/to/command<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p><strong>每周一到周五早上 8:00 执行命令</strong>：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">0</span> <span class="token number">8</span> * * <span class="token number">1</span>-5 /path/to/command<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p><strong>每 10 分钟执行一次命令</strong>：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">*/10 * * * * /path/to/command<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p><strong>每个月的 1 号和 15 号早上 6:00 执行命令</strong>：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">0</span> <span class="token number">6</span> <span class="token number">1,15</span> * * /path/to/command<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p><strong>每周日凌晨 2:00 执行命令</strong>：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">0</span> <span class="token number">2</span> * * <span class="token number">0</span> /path/to/command<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ol>
+<h2 id="检查和管理定时任务"><a href="#检查和管理定时任务" class="headerlink" title="检查和管理定时任务"></a>检查和管理定时任务</h2><ul>
+<li><strong>查看当前用户的定时任务</strong>：使用命令 <code>crontab -l</code>。</li>
+<li><strong>删除当前用户的所有定时任务</strong>：使用命令 <code>crontab -r</code>。</li>
+</ul>
+<h1 id="清理内存"><a href="#清理内存" class="headerlink" title="清理内存"></a>清理内存</h1><h2 id="清理内存-1"><a href="#清理内存-1" class="headerlink" title="清理内存"></a>清理内存</h2><h3 id="释放缓存、目录项和-inode"><a href="#释放缓存、目录项和-inode" class="headerlink" title="释放缓存、目录项和 inode"></a>释放缓存、目录项和 inode</h3><p>Linux 内核会使用内存缓存文件系统数据、目录项和 inode，这些缓存可以通过以下命令来释放：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 同步文件系统缓冲区</span>
+<span class="token function">sync</span>
+
+<span class="token comment"># 释放页面缓存</span>
+<span class="token builtin class-name">echo</span> <span class="token number">1</span> <span class="token operator">></span> /proc/sys/vm/drop_caches
+
+<span class="token comment"># 释放目录项和 inode</span>
+<span class="token builtin class-name">echo</span> <span class="token number">2</span> <span class="token operator">></span> /proc/sys/vm/drop_caches
+
+<span class="token comment"># 释放页面缓存、目录项和 inode</span>
+<span class="token builtin class-name">echo</span> <span class="token number">3</span> <span class="token operator">></span> /proc/sys/vm/drop_caches<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>可以将这些命令组合到一个脚本中执行，例如 <code>clear_memory.sh</code>：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token function">sync</span>
+<span class="token builtin class-name">echo</span> <span class="token number">3</span> <span class="token operator">></span> /proc/sys/vm/drop_caches<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>给脚本添加执行权限并执行：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">chmod</span> +x clear_memory.sh
+./clear_memory.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="使用-htop-或-top-监控和终止高内存使用进程"><a href="#使用-htop-或-top-监控和终止高内存使用进程" class="headerlink" title="使用 htop 或 top 监控和终止高内存使用进程"></a>使用 <code>htop</code> 或 <code>top</code> 监控和终止高内存使用进程</h3><p>可以使用 <code>htop</code> 或 <code>top</code> 来查看系统中哪些进程占用了大量内存，然后手动终止不必要的进程。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">htop</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>在 <code>htop</code> 中，按 <code>F6</code> 排序，选择 <code>MEM%</code> 来查看内存使用情况。</p>
+<h3 id="使用-swapoff-和-swapon-重置交换空间"><a href="#使用-swapoff-和-swapon-重置交换空间" class="headerlink" title="使用 swapoff 和 swapon 重置交换空间"></a>使用 <code>swapoff</code> 和 <code>swapon</code> 重置交换空间</h3><p>如果系统使用了交换空间，可以通过以下命令重置交换空间：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">swapoff -a
+<span class="token function">swapon</span> -a<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>这将释放所有交换空间并重新启用它。</p>
+<h2 id="释放磁盘空间"><a href="#释放磁盘空间" class="headerlink" title="释放磁盘空间"></a>释放磁盘空间</h2><h3 id="删除不必要的文件和目录"><a href="#删除不必要的文件和目录" class="headerlink" title="删除不必要的文件和目录"></a>删除不必要的文件和目录</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rm</span> -rf /path/to/unnecessary/file_or_directory<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="清理包缓存"><a href="#清理包缓存" class="headerlink" title="清理包缓存"></a>清理包缓存</h3><p>对于基于 Debian 的系统（如 Ubuntu），可以清理 <code>apt</code> 缓存：</p>
+<pre class="line-numbers language-none"><code class="language-none">sudo apt-get clean
+sudo apt-get autoremove<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>对于基于 Red Hat 的系统（如 CentOS），可以清理 <code>yum</code> 缓存：</p>
+<pre class="line-numbers language-none"><code class="language-none">sudo yum clean all
+sudo yum autoremove<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="使用-du-和-df-检查磁盘使用情况"><a href="#使用-du-和-df-检查磁盘使用情况" class="headerlink" title="使用 du 和 df 检查磁盘使用情况"></a>使用 <code>du</code> 和 <code>df</code> 检查磁盘使用情况</h3><p>可以使用 <code>du</code> 和 <code>df</code> 命令来检查磁盘使用情况并确定哪些文件或目录占用了大量空间：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 显示磁盘使用情况</span>
+<span class="token function">df</span> -h
+<span class="token comment"># 显示当前目录及其子目录的磁盘使用情况</span>
+<span class="token function">du</span> -h --max-depth<span class="token operator">=</span><span class="token number">1</span> /path/to/check<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="查找并删除大文件"><a href="#查找并删除大文件" class="headerlink" title="查找并删除大文件"></a>查找并删除大文件</h3><p>可以使用 <code>find</code> 命令查找大文件并决定是否删除：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 查找大于 100MB 的文件</span>
+<span class="token function">find</span> / -type f -size +100M<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="清理日志文件"><a href="#清理日志文件" class="headerlink" title="清理日志文件"></a>清理日志文件</h3><p>日志文件可能会占用大量磁盘空间，可以清理旧的日志文件或压缩日志文件：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 清空日志文件</span>
+<span class="token builtin class-name">echo</span> <span class="token string">""</span> <span class="token operator">></span> /var/log/syslog
+<span class="token builtin class-name">echo</span> <span class="token string">""</span> <span class="token operator">></span> /var/log/auth.log
+
+<span class="token comment"># 使用 logrotate 管理日志文件的轮转和压缩</span>
+<span class="token function">sudo</span> <span class="token function">logrotate</span> /etc/logrotate.conf<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="卸载不必要的包和依赖"><a href="#卸载不必要的包和依赖" class="headerlink" title="卸载不必要的包和依赖"></a>卸载不必要的包和依赖</h3><p>可以使用包管理器卸载不再需要的软件包和依赖：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 基于 Debian 系统</span>
+<span class="token function">sudo</span> <span class="token function">apt-get</span> remove --purge package_name
+<span class="token function">sudo</span> <span class="token function">apt-get</span> autoremove
+
+<span class="token comment"># 基于 Red Hat 系统</span>
+<span class="token function">sudo</span> yum remove package_name
+<span class="token function">sudo</span> yum autoremove<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Spring.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1016,143 +1731,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E6%96%B0%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E6%96%B0%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF.html" class="post-title-link" itemprop="url">新学习路线</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-05 23:25:56" itemprop="dateCreated datePublished" datetime="2024-04-05T23:25:56+08:00">2024-04-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:01:15" itemprop="dateModified" datetime="2024-04-15T20:01:15+08:00">2024-04-15</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="/images/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF%E5%9B%BE.drawio.svg"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98.html" class="post-title-link" itemprop="url">缓存问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-05 20:37:03" itemprop="dateCreated datePublished" datetime="2024-04-05T20:37:03+08:00">2024-04-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:00:50" itemprop="dateModified" datetime="2024-04-15T20:00:50+08:00">2024-04-15</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本篇博客主要介绍了缓存在系统设计中可能会遇到的一些问题及其解决方案</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98.html">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1222,7 +1800,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-count">63</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
