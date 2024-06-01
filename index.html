@@ -3269,7 +3269,7 @@ docker run -p 8080:8080 myapp<span aria-hidden="true" class="line-numbers-rows">
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E7%BC%93%E5%AD%98%E6%9B%BF%E6%8D%A2%E7%AD%96%E7%95%A5.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -3283,7 +3283,7 @@ docker run -p 8080:8080 myapp<span aria-hidden="true" class="line-numbers-rows">
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85.html" class="post-title-link" itemprop="url">软件安装</a>
+            <a href="/post/%E7%BC%93%E5%AD%98%E6%9B%BF%E6%8D%A2%E7%AD%96%E7%95%A5.html" class="post-title-link" itemprop="url">深入理解缓存替换策略</a>
         </h2>
 
         <div class="post-meta">
@@ -3307,53 +3307,67 @@ docker run -p 8080:8080 myapp<span aria-hidden="true" class="line-numbers-rows">
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Mysql安装"><a href="#Mysql安装" class="headerlink" title="Mysql安装"></a>Mysql安装</h1><h2 id="卸载自带mysql"><a href="#卸载自带mysql" class="headerlink" title="卸载自带mysql"></a>卸载自带mysql</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rpm</span> -e --nodeps mysql<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="创建mysql文件夹"><a href="#创建mysql文件夹" class="headerlink" title="创建mysql文件夹"></a>创建mysql文件夹</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> -p /var/lib/mysql<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> http://repo.mysql.com/mysql84-community-release-el7.rpm
-<span class="token function">rpm</span> -ivh mysql84-community-release-el7.rpm
-yum update
-yum <span class="token function">install</span> -y mysql-server<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="初始化mysql"><a href="#初始化mysql" class="headerlink" title="初始化mysql"></a>初始化mysql</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">mysqld --initialize<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="赋予mysql权限"><a href="#赋予mysql权限" class="headerlink" title="赋予mysql权限"></a>赋予mysql权限</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">chown</span> -R mysql:mysql  /var/lib/mysql<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="启动mysql"><a href="#启动mysql" class="headerlink" title="启动mysql"></a>启动mysql</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl start mysqld<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="查找默认密码"><a href="#查找默认密码" class="headerlink" title="查找默认密码"></a>查找默认密码</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">grep</span> <span class="token string">'temporary password'</span> /var/log/mysqld.log<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="测试登录"><a href="#测试登录" class="headerlink" title="测试登录"></a>测试登录</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">mysql -u root -p 
-<span class="token comment">#输入密码</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h2 id="修改默认密码"><a href="#修改默认密码" class="headerlink" title="修改默认密码"></a>修改默认密码</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">alter user <span class="token string">'root'</span>@<span class="token string">'localhost'</span> identified by <span class="token string">'123456'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-
-
-<h2 id="远程登录"><a href="#远程登录" class="headerlink" title="远程登录"></a>远程登录</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">mysql -u root -p 
-<span class="token comment"># 输入密码</span>
-use mysql<span class="token punctuation">;</span>
-update user <span class="token builtin class-name">set</span> <span class="token assign-left variable">host</span><span class="token operator">=</span><span class="token string">'%'</span> where user <span class="token operator">=</span><span class="token string">'root'</span><span class="token punctuation">;</span>
-flush privileges<span class="token punctuation">;</span>
-GRANT ALL PRIVILEGES ON *.* TO <span class="token string">'root'</span>@<span class="token string">'%'</span>WITH GRANT OPTION<span class="token punctuation">;</span>
-<span class="token comment"># 查询验证</span>
-<span class="token keyword">select</span> user,host from user<span class="token punctuation">;</span>
-<span class="token comment">#开放3306端口号，永久生效</span>
-firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span><span class="token number">3306</span>/tcp --permanent
-<span class="token comment">#重启防火墙</span>
-firewall-cmd --reload
-<span class="token comment"># 查看当前开放端口</span>
-firewall-cmd --list-ports<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="卸载mysql"><a href="#卸载mysql" class="headerlink" title="卸载mysql"></a>卸载mysql</h1><h2 id="关闭Mysql"><a href="#关闭Mysql" class="headerlink" title="关闭Mysql"></a>关闭Mysql</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl stop mysqld<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="使用yum卸载安装的mysql"><a href="#使用yum卸载安装的mysql" class="headerlink" title="使用yum卸载安装的mysql"></a>使用yum卸载安装的mysql</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yum remove  mysql mysql-server mysql-libs mysql-server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="删除残余安装包"><a href="#删除残余安装包" class="headerlink" title="删除残余安装包"></a>删除残余安装包</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rpm</span> -ev <span class="token variable"><span class="token variable">$(</span><span class="token function">rpm</span> -qa<span class="token operator">|</span><span class="token function">grep</span> mysql<span class="token variable">)</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="删除残余文件夹"><a href="#删除残余文件夹" class="headerlink" title="删除残余文件夹"></a>删除残余文件夹</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rm</span> -rf <span class="token variable"><span class="token variable">$(</span><span class="token function">find</span> / -name mysql<span class="token variable">)</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
+          <h1 id="缓存替换策略"><a href="#缓存替换策略" class="headerlink" title="缓存替换策略"></a>缓存替换策略</h1><blockquote>
+<p>缓存是常用的技术手段，它能够帮助我们更快地获取频繁使用的数据。不过当缓存满了以后，我们就需要选择某种策略来决定谁将从缓存中被优先移除。以下是一些常见的缓存替换策略及其实现。</p>
+</blockquote>
+<ol>
+<li><strong>LRU (Least Recently Used)</strong></li>
+</ol>
+<p>LRU是最近最少使用的缓存策略，它以时间为依据，优先替换最长时间未访问的数据。这是基于这样一个理论：如果一个数据最近被访问过，那么它在未来被再次访问的可能性很高。我们可以通过维护一个所有缓存条目的链表来实现这个策略。当一个条目被访问时，我们将其移到链表的顶部。当需要逐出数据时，移除链表尾部的条目。</p>
+<ol start="2">
+<li><strong>MRU (Most Recently Used)</strong></li>
+</ol>
+<p>MRU是与LRU恰恰相反的策略，它优先替换最近访问的数据。MRU假设最近访问过的数据在未来最不可能被访问，这在很多场景都是合理的。其实现与LRU类似，但当条目被访问时，我们将其移到链表的底部，而非顶部。替换时，我们移除链表顶部的项。</p>
+<ol start="3">
+<li><strong>SLRU (Segmented LRU)</strong></li>
+</ol>
+<p>SLRU是LRU的进阶版，它将缓存分为两个部分：probation（试用）和protected（保护）。新来的数据先进入probation部分，如果再次被访问则会被推到protected部分。当需要替换数据时，首先替换probation部分的，如果probation部分为空，那么从protected部分挤出一部分数据。</p>
+<ol start="4">
+<li><strong>LFU (Least Frequently Used)</strong></li>
+</ol>
+<p>LFU策略会优先替换那些访问次数最少的数据。实现LFU需要我们追踪每个条目被访问的频率，这可以通过哈希表实现。每当条目被访问，其计数就增加，当缓存满时，只需将计数最小的条目移除即可。</p>
+<ol start="5">
+<li><strong>FIFO (First In, First Out)</strong></li>
+</ol>
+<p>FIFO的策略很简单：先进入缓存的数据首先被替换。实现FIFO可以通过队列实现，新的条目添加到队尾，替换时移除队首条目。</p>
+<ol start="6">
+<li><strong>TTL (Time To Live)</strong></li>
+</ol>
+<p>TTL是一个时间相关的策略。在TTL策略中，缓存条目有一个剩余生命期，当生命期到达就将其从缓存中移除。这就意味着所有的缓存条目都有一个过期时间。</p>
+<ol start="7">
+<li><strong>双层缓存</strong></li>
+</ol>
+<p>在某些情况下，我们可能需要两层缓存：一层是在CPU里面，另一层在内存中。CPU层的缓存很小但是非常快速，内存层的缓存则大很多但是速度慢一些。数据首先从CPU缓存中获取，如果没有再去内存缓存中获取。对于这种策略，我们可以为每层都使用适合的策略，比如LRU等。</p>
+<ol start="8">
+<li><strong>RR (Random Replacement)</strong></li>
+</ol>
+<p>RR是最简单的一种缓存替换策略，它随机选择一个条目进行替换。实现RR策略则只需要在所有的缓存条目中随机选一个移除即可。</p>
+<h1 id="缓存替换策略实现算法"><a href="#缓存替换策略实现算法" class="headerlink" title="缓存替换策略实现算法"></a>缓存替换策略实现算法</h1><ol>
+<li><p><strong>LRU (Least Recently Used)</strong></p>
+<p>最简单的实现方式是使用一个队列和一个哈希表。队列用于保存元素的访问顺序，哈希表用于查找元素是否在队列中。每次使用某个元素时，将它添加到队列尾部或移动到队列尾部。当队列满时，队列头部的元素就是最长时间未被使用的元素，将其弹出。</p>
+</li>
+<li><p><strong>MRU (Most Recently Used)</strong></p>
+<p>MRU的实现方式与LRU类似。区别是每次使用某个元素时，将它添加到队列头部或者移动到队列头部。当队列满时，移除队列尾部的元素。</p>
+</li>
+<li><p><strong>SLRU (Segmented LRU)</strong></p>
+<p>SLRU具体实现可以借助两个队列：一个用于保护段（protected segment），一个用于试验段（probational segment）。新元素首先添加到试验段队列尾部。当元素再次被访问时，它被移到保护段队列尾部。如果试验段队列满，移除它的头部元素。如果保护段队列满，将头部元素移到试验段队列尾部。</p>
+</li>
+<li><p><strong>LFU (Least Frequently Used)</strong></p>
+<p>LFU可以通过优先队列和哈希表来实现。哈希表用于查找元素，优先队列用于保存访问频率和元素的对应关系。每次访问元素，都会更新其在优先队列中的优先级。当需要替换元素时，移除优先队列顶部的元素。</p>
+</li>
+<li><p><strong>FIFO (First In, First Out)</strong></p>
+<p>FIFO是最简单的策略，也是通过队列实现。新元素直接添加到队列尾部，需要替换时直接丢弃队列头部的元素。</p>
+</li>
+<li><p><strong>TTL (Time To Live)</strong></p>
+<p>TTL可以通过每个元素添加一个时间戳来实现。每次访问队列时，检查队列头部的元素，如果它们的有效期已经过期，就将它们出队。</p>
+</li>
+<li><p><strong>双层缓存</strong></p>
+<p>双层缓存的实现需要两个缓存，每个缓存都使用适当的替换策略，比如LRU或者FIFO。第一级缓存通常位于CPU中，非常小但速度很快。第二级缓存位于内存中，较大但速度较慢。</p>
+</li>
+<li><p><strong>RR (Random Replacement)</strong></p>
+<p>RR可能是最简单的缓存替换策略，每次替换时，从缓存中随机选择一个元素丢弃。</p>
+</li>
+</ol>
 
       
     </div>

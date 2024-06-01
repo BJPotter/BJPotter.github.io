@@ -165,7 +165,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E7%BC%93%E5%AD%98%E6%9B%BF%E6%8D%A2%E7%AD%96%E7%95%A5.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -179,7 +179,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/%E7%BC%93%E5%AD%98%E6%9B%BF%E6%8D%A2%E7%AD%96%E7%95%A5.html" class="post-title-link" itemprop="url">深入理解缓存替换策略</a>
+            <a href="/post/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85.html" class="post-title-link" itemprop="url">软件安装</a>
         </h2>
 
         <div class="post-meta">
@@ -203,67 +203,53 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="缓存替换策略"><a href="#缓存替换策略" class="headerlink" title="缓存替换策略"></a>缓存替换策略</h1><blockquote>
-<p>缓存是常用的技术手段，它能够帮助我们更快地获取频繁使用的数据。不过当缓存满了以后，我们就需要选择某种策略来决定谁将从缓存中被优先移除。以下是一些常见的缓存替换策略及其实现。</p>
-</blockquote>
-<ol>
-<li><strong>LRU (Least Recently Used)</strong></li>
-</ol>
-<p>LRU是最近最少使用的缓存策略，它以时间为依据，优先替换最长时间未访问的数据。这是基于这样一个理论：如果一个数据最近被访问过，那么它在未来被再次访问的可能性很高。我们可以通过维护一个所有缓存条目的链表来实现这个策略。当一个条目被访问时，我们将其移到链表的顶部。当需要逐出数据时，移除链表尾部的条目。</p>
-<ol start="2">
-<li><strong>MRU (Most Recently Used)</strong></li>
-</ol>
-<p>MRU是与LRU恰恰相反的策略，它优先替换最近访问的数据。MRU假设最近访问过的数据在未来最不可能被访问，这在很多场景都是合理的。其实现与LRU类似，但当条目被访问时，我们将其移到链表的底部，而非顶部。替换时，我们移除链表顶部的项。</p>
-<ol start="3">
-<li><strong>SLRU (Segmented LRU)</strong></li>
-</ol>
-<p>SLRU是LRU的进阶版，它将缓存分为两个部分：probation（试用）和protected（保护）。新来的数据先进入probation部分，如果再次被访问则会被推到protected部分。当需要替换数据时，首先替换probation部分的，如果probation部分为空，那么从protected部分挤出一部分数据。</p>
-<ol start="4">
-<li><strong>LFU (Least Frequently Used)</strong></li>
-</ol>
-<p>LFU策略会优先替换那些访问次数最少的数据。实现LFU需要我们追踪每个条目被访问的频率，这可以通过哈希表实现。每当条目被访问，其计数就增加，当缓存满时，只需将计数最小的条目移除即可。</p>
-<ol start="5">
-<li><strong>FIFO (First In, First Out)</strong></li>
-</ol>
-<p>FIFO的策略很简单：先进入缓存的数据首先被替换。实现FIFO可以通过队列实现，新的条目添加到队尾，替换时移除队首条目。</p>
-<ol start="6">
-<li><strong>TTL (Time To Live)</strong></li>
-</ol>
-<p>TTL是一个时间相关的策略。在TTL策略中，缓存条目有一个剩余生命期，当生命期到达就将其从缓存中移除。这就意味着所有的缓存条目都有一个过期时间。</p>
-<ol start="7">
-<li><strong>双层缓存</strong></li>
-</ol>
-<p>在某些情况下，我们可能需要两层缓存：一层是在CPU里面，另一层在内存中。CPU层的缓存很小但是非常快速，内存层的缓存则大很多但是速度慢一些。数据首先从CPU缓存中获取，如果没有再去内存缓存中获取。对于这种策略，我们可以为每层都使用适合的策略，比如LRU等。</p>
-<ol start="8">
-<li><strong>RR (Random Replacement)</strong></li>
-</ol>
-<p>RR是最简单的一种缓存替换策略，它随机选择一个条目进行替换。实现RR策略则只需要在所有的缓存条目中随机选一个移除即可。</p>
-<h1 id="缓存替换策略实现算法"><a href="#缓存替换策略实现算法" class="headerlink" title="缓存替换策略实现算法"></a>缓存替换策略实现算法</h1><ol>
-<li><p><strong>LRU (Least Recently Used)</strong></p>
-<p>最简单的实现方式是使用一个队列和一个哈希表。队列用于保存元素的访问顺序，哈希表用于查找元素是否在队列中。每次使用某个元素时，将它添加到队列尾部或移动到队列尾部。当队列满时，队列头部的元素就是最长时间未被使用的元素，将其弹出。</p>
-</li>
-<li><p><strong>MRU (Most Recently Used)</strong></p>
-<p>MRU的实现方式与LRU类似。区别是每次使用某个元素时，将它添加到队列头部或者移动到队列头部。当队列满时，移除队列尾部的元素。</p>
-</li>
-<li><p><strong>SLRU (Segmented LRU)</strong></p>
-<p>SLRU具体实现可以借助两个队列：一个用于保护段（protected segment），一个用于试验段（probational segment）。新元素首先添加到试验段队列尾部。当元素再次被访问时，它被移到保护段队列尾部。如果试验段队列满，移除它的头部元素。如果保护段队列满，将头部元素移到试验段队列尾部。</p>
-</li>
-<li><p><strong>LFU (Least Frequently Used)</strong></p>
-<p>LFU可以通过优先队列和哈希表来实现。哈希表用于查找元素，优先队列用于保存访问频率和元素的对应关系。每次访问元素，都会更新其在优先队列中的优先级。当需要替换元素时，移除优先队列顶部的元素。</p>
-</li>
-<li><p><strong>FIFO (First In, First Out)</strong></p>
-<p>FIFO是最简单的策略，也是通过队列实现。新元素直接添加到队列尾部，需要替换时直接丢弃队列头部的元素。</p>
-</li>
-<li><p><strong>TTL (Time To Live)</strong></p>
-<p>TTL可以通过每个元素添加一个时间戳来实现。每次访问队列时，检查队列头部的元素，如果它们的有效期已经过期，就将它们出队。</p>
-</li>
-<li><p><strong>双层缓存</strong></p>
-<p>双层缓存的实现需要两个缓存，每个缓存都使用适当的替换策略，比如LRU或者FIFO。第一级缓存通常位于CPU中，非常小但速度很快。第二级缓存位于内存中，较大但速度较慢。</p>
-</li>
-<li><p><strong>RR (Random Replacement)</strong></p>
-<p>RR可能是最简单的缓存替换策略，每次替换时，从缓存中随机选择一个元素丢弃。</p>
-</li>
-</ol>
+          <h1 id="Mysql安装"><a href="#Mysql安装" class="headerlink" title="Mysql安装"></a>Mysql安装</h1><h2 id="卸载自带mysql"><a href="#卸载自带mysql" class="headerlink" title="卸载自带mysql"></a>卸载自带mysql</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rpm</span> -e --nodeps mysql<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="创建mysql文件夹"><a href="#创建mysql文件夹" class="headerlink" title="创建mysql文件夹"></a>创建mysql文件夹</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> -p /var/lib/mysql<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> http://repo.mysql.com/mysql84-community-release-el7.rpm
+<span class="token function">rpm</span> -ivh mysql84-community-release-el7.rpm
+yum update
+yum <span class="token function">install</span> -y mysql-server<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="初始化mysql"><a href="#初始化mysql" class="headerlink" title="初始化mysql"></a>初始化mysql</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">mysqld --initialize<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="赋予mysql权限"><a href="#赋予mysql权限" class="headerlink" title="赋予mysql权限"></a>赋予mysql权限</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">chown</span> -R mysql:mysql  /var/lib/mysql<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="启动mysql"><a href="#启动mysql" class="headerlink" title="启动mysql"></a>启动mysql</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl start mysqld<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="查找默认密码"><a href="#查找默认密码" class="headerlink" title="查找默认密码"></a>查找默认密码</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">grep</span> <span class="token string">'temporary password'</span> /var/log/mysqld.log<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="测试登录"><a href="#测试登录" class="headerlink" title="测试登录"></a>测试登录</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">mysql -u root -p 
+<span class="token comment">#输入密码</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="修改默认密码"><a href="#修改默认密码" class="headerlink" title="修改默认密码"></a>修改默认密码</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">alter user <span class="token string">'root'</span>@<span class="token string">'localhost'</span> identified by <span class="token string">'123456'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+<h2 id="远程登录"><a href="#远程登录" class="headerlink" title="远程登录"></a>远程登录</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">mysql -u root -p 
+<span class="token comment"># 输入密码</span>
+use mysql<span class="token punctuation">;</span>
+update user <span class="token builtin class-name">set</span> <span class="token assign-left variable">host</span><span class="token operator">=</span><span class="token string">'%'</span> where user <span class="token operator">=</span><span class="token string">'root'</span><span class="token punctuation">;</span>
+flush privileges<span class="token punctuation">;</span>
+GRANT ALL PRIVILEGES ON *.* TO <span class="token string">'root'</span>@<span class="token string">'%'</span>WITH GRANT OPTION<span class="token punctuation">;</span>
+<span class="token comment"># 查询验证</span>
+<span class="token keyword">select</span> user,host from user<span class="token punctuation">;</span>
+<span class="token comment">#开放3306端口号，永久生效</span>
+firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span><span class="token number">3306</span>/tcp --permanent
+<span class="token comment">#重启防火墙</span>
+firewall-cmd --reload
+<span class="token comment"># 查看当前开放端口</span>
+firewall-cmd --list-ports<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="卸载mysql"><a href="#卸载mysql" class="headerlink" title="卸载mysql"></a>卸载mysql</h1><h2 id="关闭Mysql"><a href="#关闭Mysql" class="headerlink" title="关闭Mysql"></a>关闭Mysql</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl stop mysqld<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="使用yum卸载安装的mysql"><a href="#使用yum卸载安装的mysql" class="headerlink" title="使用yum卸载安装的mysql"></a>使用yum卸载安装的mysql</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yum remove  mysql mysql-server mysql-libs mysql-server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="删除残余安装包"><a href="#删除残余安装包" class="headerlink" title="删除残余安装包"></a>删除残余安装包</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rpm</span> -ev <span class="token variable"><span class="token variable">$(</span><span class="token function">rpm</span> -qa<span class="token operator">|</span><span class="token function">grep</span> mysql<span class="token variable">)</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="删除残余文件夹"><a href="#删除残余文件夹" class="headerlink" title="删除残余文件夹"></a>删除残余文件夹</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rm</span> -rf <span class="token variable"><span class="token variable">$(</span><span class="token function">find</span> / -name mysql<span class="token variable">)</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 
       
     </div>
@@ -2371,196 +2357,6 @@ Creating a new user...<span aria-hidden="true" class="line-numbers-rows"><span><
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%B8%83-JVM.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%B8%83-JVM.html" class="post-title-link" itemprop="url">java基础-JVM</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-22 21:58:55" itemprop="dateCreated datePublished" datetime="2024-04-22T21:58:55+08:00">2024-04-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-05-18 21:46:58" itemprop="dateModified" datetime="2024-05-18T21:46:58+08:00">2024-05-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="JVM基础"><a href="#JVM基础" class="headerlink" title="JVM基础"></a>JVM基础</h1><h2 id="JVM的主要组成部分及其作用"><a href="#JVM的主要组成部分及其作用" class="headerlink" title="JVM的主要组成部分及其作用"></a>JVM的主要组成部分及其作用</h2><ol>
-<li><strong>类加载器（ClassLoader）</strong>：负责加载Java类文件，将其转化为JVM能够识别的Class对象。</li>
-<li><strong>运行时数据区（Runtime Data Area）</strong>：JVM在执行Java程序时会使用到的数据区，包括方法区、堆、虚拟机栈、本地方法栈和程序计数器。</li>
-<li><strong>执行引擎（Execution Engine）</strong>：负责执行字节码，包括解释器、即时编译器（JIT）和垃圾回收器等。</li>
-<li><strong>本地接口（Native Interface）</strong>：JNI（Java Native Interface）允许Java代码与其他编程语言（如C&#x2F;C++）编写的代码进行交互。</li>
-</ol>
-<h2 id="JVM运行时数据区"><a href="#JVM运行时数据区" class="headerlink" title="JVM运行时数据区"></a>JVM运行时数据区</h2><ol>
-<li><strong>方法区（Method Area）</strong>：存储已被虚拟机加载的类信息、常量、静态变量和即时编译后的代码等数据。</li>
-<li><strong>堆（Heap）</strong>：存放对象实例和数组，是GC主要管理的区域。</li>
-<li><strong>虚拟机栈（Java Virtual Machine Stack）</strong>：存放每个线程的栈帧（方法调用过程中的局部变量表、操作数栈、方法返回地址等）。</li>
-<li><strong>本地方法栈（Native Method Stack）</strong>：为本地方法服务，与虚拟机栈类似。</li>
-<li><strong>程序计数器（Program Counter Register）</strong>：当前线程执行的字节码的行号指示器。</li>
-</ol>
-<h2 id="深拷贝和浅拷贝"><a href="#深拷贝和浅拷贝" class="headerlink" title="深拷贝和浅拷贝"></a>深拷贝和浅拷贝</h2><ul>
-<li><strong>浅拷贝</strong>：复制对象时只复制对象的引用，不复制对象本身。</li>
-<li><strong>深拷贝</strong>：复制对象时，除了复制对象的引用，还复制对象本身及其包含的所有对象。</li>
-</ul>
-<h2 id="堆和栈的区别"><a href="#堆和栈的区别" class="headerlink" title="堆和栈的区别"></a>堆和栈的区别</h2><ul>
-<li><strong>堆</strong>：用于存储对象实例，线程共享，生命周期较长，由GC管理。</li>
-<li><strong>栈</strong>：用于存储局部变量、方法调用等，线程私有，生命周期较短，方法执行完自动释放。</li>
-</ul>
-<h2 id="队列和栈是什么？有什么区别？"><a href="#队列和栈是什么？有什么区别？" class="headerlink" title="队列和栈是什么？有什么区别？"></a>队列和栈是什么？有什么区别？</h2><ul>
-<li><strong>队列（Queue）</strong>：FIFO（先进先出）数据结构，元素从尾部插入，从头部删除。</li>
-<li><strong>栈（Stack）</strong>：LIFO（后进先出）数据结构，元素从顶部插入和删除。</li>
-</ul>
-<h1 id="HotSpot虚拟机对象探秘"><a href="#HotSpot虚拟机对象探秘" class="headerlink" title="HotSpot虚拟机对象探秘"></a>HotSpot虚拟机对象探秘</h1><h2 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h2><ul>
-<li><strong>类加载检查</strong>：检查类是否已加载，未加载则加载类。</li>
-<li><strong>分配内存</strong>：在堆中为对象分配内存，使用指针碰撞或空闲列表。</li>
-<li><strong>初始化</strong>：对分配的内存进行零值初始化。</li>
-<li><strong>设置对象头</strong>：初始化对象的元数据信息。</li>
-<li><strong>执行构造方法</strong>：调用<init>方法进行初始化。</init></li>
-</ul>
-<h2 id="为对象分配内存"><a href="#为对象分配内存" class="headerlink" title="为对象分配内存"></a>为对象分配内存</h2><ul>
-<li><strong>指针碰撞</strong>：适用于内存规整的堆，通过移动指针分配内存。</li>
-<li><strong>空闲列表</strong>：适用于内存不规整的堆，通过维护空闲列表分配内存。</li>
-</ul>
-<h2 id="处理并发安全问题"><a href="#处理并发安全问题" class="headerlink" title="处理并发安全问题"></a>处理并发安全问题</h2><ul>
-<li><strong>CAS</strong>：通过乐观锁的方式解决并发问题。</li>
-<li><strong>TLAB</strong>：每个线程分配一个本地缓冲区（Thread Local Allocation Buffer）进行内存分配。</li>
-</ul>
-<h2 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h2><ul>
-<li><strong>句柄访问</strong>：对象引用存储的是句柄地址，句柄中包含对象实例数据和类型数据的指针。</li>
-<li><strong>直接指针</strong>：对象引用存储的是对象实例的直接地址。</li>
-</ul>
-<h1 id="内存溢出异常"><a href="#内存溢出异常" class="headerlink" title="内存溢出异常"></a>内存溢出异常</h1><h2 id="Java会存在内存泄漏吗？请简单描述"><a href="#Java会存在内存泄漏吗？请简单描述" class="headerlink" title="Java会存在内存泄漏吗？请简单描述"></a>Java会存在内存泄漏吗？请简单描述</h2><p>Java中也会存在内存泄漏，例如，长生命周期对象持有短生命周期对象的引用，导致短生命周期对象无法被GC回收。</p>
-<h1 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h1><h2 id="简述Java垃圾回收机制"><a href="#简述Java垃圾回收机制" class="headerlink" title="简述Java垃圾回收机制"></a>简述Java垃圾回收机制</h2><p>Java的垃圾回收机制通过GC自动回收不再使用的对象，主要算法包括标记-清除、复制和标记-整理等。</p>
-<h2 id="GC是什么？为什么要GC"><a href="#GC是什么？为什么要GC" class="headerlink" title="GC是什么？为什么要GC"></a>GC是什么？为什么要GC</h2><p>GC（Garbage Collection）是垃圾回收的缩写，自动管理内存，防止内存泄漏，提高程序稳定性和性能。</p>
-<h2 id="垃圾回收的优点和原理。并考虑2种回收机制"><a href="#垃圾回收的优点和原理。并考虑2种回收机制" class="headerlink" title="垃圾回收的优点和原理。并考虑2种回收机制"></a>垃圾回收的优点和原理。并考虑2种回收机制</h2><ul>
-<li><strong>优点</strong>：自动内存管理，减少内存泄漏，提高开发效率。</li>
-<li><strong>标记-清除</strong>：标记所有存活对象，清除未标记的对象。</li>
-<li><strong>复制</strong>：将存活对象复制到新空间，清除旧空间。</li>
-</ul>
-<h2 id="垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？"><a href="#垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？" class="headerlink" title="垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？"></a>垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？</h2><p>垃圾回收器通过跟踪对象的引用链，回收不可达的对象。垃圾回收器不能马上回收内存，可通过<code>System.gc()</code>或<code>Runtime.getRuntime().gc()</code>主动通知进行垃圾回收。</p>
-<h2 id="Java中都有哪些引用类型？"><a href="#Java中都有哪些引用类型？" class="headerlink" title="Java中都有哪些引用类型？"></a>Java中都有哪些引用类型？</h2><ul>
-<li><strong>强引用</strong>：不会被GC回收。</li>
-<li><strong>软引用</strong>：内存不足时会被回收。</li>
-<li><strong>弱引用</strong>：在GC时会被回收。</li>
-<li><strong>虚引用</strong>：无法通过引用访问对象，仅用于监控对象的回收。</li>
-</ul>
-<h2 id="怎么判断对象是否可以被回收？"><a href="#怎么判断对象是否可以被回收？" class="headerlink" title="怎么判断对象是否可以被回收？"></a>怎么判断对象是否可以被回收？</h2><p>通过引用计数或可达性分析算法判断对象是否可达，不可达的对象可以被回收。</p>
-<h2 id="在Java中，对象什么时候可以被垃圾回收？"><a href="#在Java中，对象什么时候可以被垃圾回收？" class="headerlink" title="在Java中，对象什么时候可以被垃圾回收？"></a>在Java中，对象什么时候可以被垃圾回收？</h2><p>当对象没有任何强引用时，可以被垃圾回收。</p>
-<h2 id="JVM中的永久代中会发生垃圾回收吗？"><a href="#JVM中的永久代中会发生垃圾回收吗？" class="headerlink" title="JVM中的永久代中会发生垃圾回收吗？"></a>JVM中的永久代中会发生垃圾回收吗？</h2><p>在JDK 8之前，永久代中会发生垃圾回收，但频率较低。JDK 8以后，永久代被移除，替代为元空间（Metaspace）。</p>
-<h2 id="说一下JVM有哪些垃圾回收算法？"><a href="#说一下JVM有哪些垃圾回收算法？" class="headerlink" title="说一下JVM有哪些垃圾回收算法？"></a>说一下JVM有哪些垃圾回收算法？</h2><ul>
-<li><strong>标记-清除算法</strong>：标记存活对象，清除未标记对象。</li>
-<li><strong>复制算法</strong>：将存活对象复制到新空间，清除旧空间。</li>
-<li><strong>标记-整理算法</strong>：标记存活对象，将存活对象移动到一端，清除剩余空间。</li>
-<li><strong>分代收集算法</strong>：将堆分为新生代和老年代，分别使用不同的垃圾回收算法。</li>
-</ul>
-<h2 id="说一下JVM有哪些垃圾回收器？"><a href="#说一下JVM有哪些垃圾回收器？" class="headerlink" title="说一下JVM有哪些垃圾回收器？"></a>说一下JVM有哪些垃圾回收器？</h2><ul>
-<li><strong>Serial收集器</strong>：单线程收集，适用于单CPU环境。</li>
-<li><strong>Parallel收集器</strong>：多线程收集，适用于多CPU环境。</li>
-<li><strong>CMS收集器</strong>：低停顿时间的并发收集器，适用于低停顿需求的应用。</li>
-<li><strong>G1收集器</strong>：面向服务端应用，适用于大内存、多CPU环境。</li>
-</ul>
-<h2 id="详细介绍一下CMS垃圾回收器？"><a href="#详细介绍一下CMS垃圾回收器？" class="headerlink" title="详细介绍一下CMS垃圾回收器？"></a>详细介绍一下CMS垃圾回收器？</h2><ul>
-<li><strong>初始标记</strong>：标记GC Roots可达的对象，短暂停顿。</li>
-<li><strong>并发标记</strong>：标记所有可达对象，不停顿。</li>
-<li><strong>重新标记</strong>：修正并发标记期间的变动，短暂停顿。</li>
-<li><strong>并发清除</strong>：清除不可达对象，不停顿。</li>
-</ul>
-<h2 id="新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？"><a href="#新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？" class="headerlink" title="新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？"></a>新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？</h2><ul>
-<li><strong>新生代垃圾回收器</strong>：Serial、ParNew、Parallel Scavenge。特点是频繁回收、停顿时间短。</li>
-<li><strong>老年代垃圾回收器</strong>：Serial Old、CMS、Parallel Old。特点是回收频率低、停顿时间长。</li>
-</ul>
-<h2 id="简述分代垃圾回收器是怎么工作的？"><a href="#简述分代垃圾回收器是怎么工作的？" class="headerlink" title="简述分代垃圾回收器是怎么工作的？"></a>简述分代垃圾回收器是怎么工作的？</h2><p>分代垃圾回收器将堆划分为新生代和老年代。新生代对象生命周期短，频繁回收；老年代对象生命周期长，较少回收。回收时，新生代使用复制算法，老年代使用标记-整理或CMS。</p>
-<h1 id="内存分配策略"><a href="#内存分配策略" class="headerlink" title="内存分配策略"></a>内存分配策略</h1><h2 id="简述java内存分配与回收策略以及Minor-GC和Major-GC"><a href="#简述java内存分配与回收策略以及Minor-GC和Major-GC" class="headerlink" title="简述java内存分配与回收策略以及Minor GC和Major GC"></a>简述java内存分配与回收策略以及Minor GC和Major GC</h2><ul>
-<li><strong>内存分配</strong>：对象优先在Eden区分配，大对象直接进入老年代，长期存活对象进入老年代。</li>
-<li><strong>Minor GC</strong>：针对新生代的垃圾回收，频繁但耗时短。</li>
-<li><strong>Major GC</strong>：针对老年代的垃圾回收，频率低但耗时长。</li>
-</ul>
-<h2 id="对象优先在Eden区分配"><a href="#对象优先在Eden区分配" class="headerlink" title="对象优先在Eden区分配"></a>对象优先在Eden区分配</h2><p>大多数新创建的对象在Eden区分配，当Eden区满时触发Minor GC，将存活对象移到Survivor区。</p>
-<h2 id="大对象直接进入老年代"><a href="#大对象直接进入老年代" class="headerlink" title="大对象直接进入老年代"></a>大对象直接进入老年代</h2><p>避免在新生代频繁复制大对象，减少内存复制开销。</p>
-<h2 id="长期存活对象将进入老年代"><a href="#长期存活对象将进入老年代" class="headerlink" title="长期存活对象将进入老年代"></a>长期存活对象将进入老年代</h2><p>对象在Survivor区经历多次GC后，晋升到老年代。</p>
-<h1 id="虚拟机类加载机制"><a href="#虚拟机类加载机制" class="headerlink" title="虚拟机类加载机制"></a>虚拟机类加载机制</h1><h2 id="简述java类加载机制"><a href="#简述java类加载机制" class="headerlink" title="简述java类加载机制"></a>简述java类加载机制</h2><p>Java类加载机制包括加载、链接和初始化三个步骤。加载阶段通过类加载器读取类文件，将其转化为二进制数据；链接阶段验证、准备和解析类；初始化阶段执行类的静态初始化器和静态变量初始化。</p>
-<h2 id="描述一下JVM加载Class文件的原理机制"><a href="#描述一下JVM加载Class文件的原理机制" class="headerlink" title="描述一下JVM加载Class文件的原理机制"></a>描述一下JVM加载Class文件的原理机制</h2><p>JVM通过类加载器加载Class文件，加载过程包括查找和加载Class文件，将其转化为Class对象。加载器遵循双亲委派模型，保证类加载的安全性和一致性。</p>
-<h2 id="什么是类加载器，类加载器有哪些"><a href="#什么是类加载器，类加载器有哪些" class="headerlink" title="什么是类加载器，类加载器有哪些?"></a>什么是类加载器，类加载器有哪些?</h2><p>类加载器是负责加载类文件的组件，主要有以下几种：</p>
-<ul>
-<li><strong>启动类加载器（Bootstrap ClassLoader）</strong>：加载JDK核心类库。</li>
-<li><strong>扩展类加载器（Extension ClassLoader）</strong>：加载扩展类库。</li>
-<li><strong>应用程序类加载器（Application ClassLoader）</strong>：加载应用程序类。</li>
-<li><strong>自定义类加载器</strong>：用户定义的类加载器。</li>
-</ul>
-<h2 id="说一下类装载的执行过程？"><a href="#说一下类装载的执行过程？" class="headerlink" title="说一下类装载的执行过程？"></a>说一下类装载的执行过程？</h2><p>类装载的执行过程包括：</p>
-<ol>
-<li><strong>加载</strong>：通过类加载器读取类文件。</li>
-<li><strong>链接</strong>：包括验证、准备和解析三个阶段。</li>
-<li><strong>初始化</strong>：执行类的静态初始化器和静态变量初始化。</li>
-</ol>
-<h2 id="什么是双亲委派模型？"><a href="#什么是双亲委派模型？" class="headerlink" title="什么是双亲委派模型？"></a>什么是双亲委派模型？</h2><p>双亲委派模型是指类加载时，类加载器先委托父类加载器加载，父类加载器无法加载时，子类加载器再尝试加载。这保证了类的加载安全和统一。</p>
-<h1 id="JVM调优"><a href="#JVM调优" class="headerlink" title="JVM调优"></a>JVM调优</h1><h2 id="说一下JVM调优的工具？"><a href="#说一下JVM调优的工具？" class="headerlink" title="说一下JVM调优的工具？"></a>说一下JVM调优的工具？</h2><p>常用的JVM调优工具包括：</p>
-<ul>
-<li><strong>jstat</strong>：监控JVM内存和垃圾回收情况。</li>
-<li><strong>jmap</strong>：生成堆转储快照，分析内存使用情况。</li>
-<li><strong>jstack</strong>：生成线程快照，分析线程状态。</li>
-<li><strong>VisualVM</strong>：图形化界面监控JVM性能。</li>
-</ul>
-<h2 id="常用的JVM调优的参数都有哪些？"><a href="#常用的JVM调优的参数都有哪些？" class="headerlink" title="常用的JVM调优的参数都有哪些？"></a>常用的JVM调优的参数都有哪些？</h2><ul>
-<li><strong>-Xms</strong>：设置初始堆大小。</li>
-<li><strong>-Xmx</strong>：设置最大堆大小。</li>
-<li><strong>-Xmn</strong>：设置新生代大小。</li>
-<li><strong>-XX:PermSize</strong>：设置初始永久代大小（JDK 8前）。</li>
-<li><strong>-XX:MaxPermSize</strong>：设置最大永久代大小（JDK 8前）。</li>
-<li><strong>-XX:MetaspaceSize</strong>：设置初始元空间大小（JDK 8后）。</li>
-<li><strong>-XX:MaxMetaspaceSize</strong>：设置最大元空间大小（JDK 8后）。</li>
-<li><strong>-XX:+UseG1GC</strong>：使用G1垃圾回收器。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%B8%80-%E5%B8%B8%E8%AF%86.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2870,6 +2666,196 @@ Creating a new user...<span aria-hidden="true" class="line-numbers-rows"><span><
 <li>如果参数是引用类型，传递的就是实参所引用的对象在堆中地址值的拷贝，同样也会创建副本</li>
 </ul>
 </blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%B8%83-JVM.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%B8%83-JVM.html" class="post-title-link" itemprop="url">java基础-JVM</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-22 21:58:55" itemprop="dateCreated datePublished" datetime="2024-04-22T21:58:55+08:00">2024-04-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-05-18 21:46:58" itemprop="dateModified" datetime="2024-05-18T21:46:58+08:00">2024-05-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="JVM基础"><a href="#JVM基础" class="headerlink" title="JVM基础"></a>JVM基础</h1><h2 id="JVM的主要组成部分及其作用"><a href="#JVM的主要组成部分及其作用" class="headerlink" title="JVM的主要组成部分及其作用"></a>JVM的主要组成部分及其作用</h2><ol>
+<li><strong>类加载器（ClassLoader）</strong>：负责加载Java类文件，将其转化为JVM能够识别的Class对象。</li>
+<li><strong>运行时数据区（Runtime Data Area）</strong>：JVM在执行Java程序时会使用到的数据区，包括方法区、堆、虚拟机栈、本地方法栈和程序计数器。</li>
+<li><strong>执行引擎（Execution Engine）</strong>：负责执行字节码，包括解释器、即时编译器（JIT）和垃圾回收器等。</li>
+<li><strong>本地接口（Native Interface）</strong>：JNI（Java Native Interface）允许Java代码与其他编程语言（如C&#x2F;C++）编写的代码进行交互。</li>
+</ol>
+<h2 id="JVM运行时数据区"><a href="#JVM运行时数据区" class="headerlink" title="JVM运行时数据区"></a>JVM运行时数据区</h2><ol>
+<li><strong>方法区（Method Area）</strong>：存储已被虚拟机加载的类信息、常量、静态变量和即时编译后的代码等数据。</li>
+<li><strong>堆（Heap）</strong>：存放对象实例和数组，是GC主要管理的区域。</li>
+<li><strong>虚拟机栈（Java Virtual Machine Stack）</strong>：存放每个线程的栈帧（方法调用过程中的局部变量表、操作数栈、方法返回地址等）。</li>
+<li><strong>本地方法栈（Native Method Stack）</strong>：为本地方法服务，与虚拟机栈类似。</li>
+<li><strong>程序计数器（Program Counter Register）</strong>：当前线程执行的字节码的行号指示器。</li>
+</ol>
+<h2 id="深拷贝和浅拷贝"><a href="#深拷贝和浅拷贝" class="headerlink" title="深拷贝和浅拷贝"></a>深拷贝和浅拷贝</h2><ul>
+<li><strong>浅拷贝</strong>：复制对象时只复制对象的引用，不复制对象本身。</li>
+<li><strong>深拷贝</strong>：复制对象时，除了复制对象的引用，还复制对象本身及其包含的所有对象。</li>
+</ul>
+<h2 id="堆和栈的区别"><a href="#堆和栈的区别" class="headerlink" title="堆和栈的区别"></a>堆和栈的区别</h2><ul>
+<li><strong>堆</strong>：用于存储对象实例，线程共享，生命周期较长，由GC管理。</li>
+<li><strong>栈</strong>：用于存储局部变量、方法调用等，线程私有，生命周期较短，方法执行完自动释放。</li>
+</ul>
+<h2 id="队列和栈是什么？有什么区别？"><a href="#队列和栈是什么？有什么区别？" class="headerlink" title="队列和栈是什么？有什么区别？"></a>队列和栈是什么？有什么区别？</h2><ul>
+<li><strong>队列（Queue）</strong>：FIFO（先进先出）数据结构，元素从尾部插入，从头部删除。</li>
+<li><strong>栈（Stack）</strong>：LIFO（后进先出）数据结构，元素从顶部插入和删除。</li>
+</ul>
+<h1 id="HotSpot虚拟机对象探秘"><a href="#HotSpot虚拟机对象探秘" class="headerlink" title="HotSpot虚拟机对象探秘"></a>HotSpot虚拟机对象探秘</h1><h2 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h2><ul>
+<li><strong>类加载检查</strong>：检查类是否已加载，未加载则加载类。</li>
+<li><strong>分配内存</strong>：在堆中为对象分配内存，使用指针碰撞或空闲列表。</li>
+<li><strong>初始化</strong>：对分配的内存进行零值初始化。</li>
+<li><strong>设置对象头</strong>：初始化对象的元数据信息。</li>
+<li><strong>执行构造方法</strong>：调用<init>方法进行初始化。</init></li>
+</ul>
+<h2 id="为对象分配内存"><a href="#为对象分配内存" class="headerlink" title="为对象分配内存"></a>为对象分配内存</h2><ul>
+<li><strong>指针碰撞</strong>：适用于内存规整的堆，通过移动指针分配内存。</li>
+<li><strong>空闲列表</strong>：适用于内存不规整的堆，通过维护空闲列表分配内存。</li>
+</ul>
+<h2 id="处理并发安全问题"><a href="#处理并发安全问题" class="headerlink" title="处理并发安全问题"></a>处理并发安全问题</h2><ul>
+<li><strong>CAS</strong>：通过乐观锁的方式解决并发问题。</li>
+<li><strong>TLAB</strong>：每个线程分配一个本地缓冲区（Thread Local Allocation Buffer）进行内存分配。</li>
+</ul>
+<h2 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h2><ul>
+<li><strong>句柄访问</strong>：对象引用存储的是句柄地址，句柄中包含对象实例数据和类型数据的指针。</li>
+<li><strong>直接指针</strong>：对象引用存储的是对象实例的直接地址。</li>
+</ul>
+<h1 id="内存溢出异常"><a href="#内存溢出异常" class="headerlink" title="内存溢出异常"></a>内存溢出异常</h1><h2 id="Java会存在内存泄漏吗？请简单描述"><a href="#Java会存在内存泄漏吗？请简单描述" class="headerlink" title="Java会存在内存泄漏吗？请简单描述"></a>Java会存在内存泄漏吗？请简单描述</h2><p>Java中也会存在内存泄漏，例如，长生命周期对象持有短生命周期对象的引用，导致短生命周期对象无法被GC回收。</p>
+<h1 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h1><h2 id="简述Java垃圾回收机制"><a href="#简述Java垃圾回收机制" class="headerlink" title="简述Java垃圾回收机制"></a>简述Java垃圾回收机制</h2><p>Java的垃圾回收机制通过GC自动回收不再使用的对象，主要算法包括标记-清除、复制和标记-整理等。</p>
+<h2 id="GC是什么？为什么要GC"><a href="#GC是什么？为什么要GC" class="headerlink" title="GC是什么？为什么要GC"></a>GC是什么？为什么要GC</h2><p>GC（Garbage Collection）是垃圾回收的缩写，自动管理内存，防止内存泄漏，提高程序稳定性和性能。</p>
+<h2 id="垃圾回收的优点和原理。并考虑2种回收机制"><a href="#垃圾回收的优点和原理。并考虑2种回收机制" class="headerlink" title="垃圾回收的优点和原理。并考虑2种回收机制"></a>垃圾回收的优点和原理。并考虑2种回收机制</h2><ul>
+<li><strong>优点</strong>：自动内存管理，减少内存泄漏，提高开发效率。</li>
+<li><strong>标记-清除</strong>：标记所有存活对象，清除未标记的对象。</li>
+<li><strong>复制</strong>：将存活对象复制到新空间，清除旧空间。</li>
+</ul>
+<h2 id="垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？"><a href="#垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？" class="headerlink" title="垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？"></a>垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？</h2><p>垃圾回收器通过跟踪对象的引用链，回收不可达的对象。垃圾回收器不能马上回收内存，可通过<code>System.gc()</code>或<code>Runtime.getRuntime().gc()</code>主动通知进行垃圾回收。</p>
+<h2 id="Java中都有哪些引用类型？"><a href="#Java中都有哪些引用类型？" class="headerlink" title="Java中都有哪些引用类型？"></a>Java中都有哪些引用类型？</h2><ul>
+<li><strong>强引用</strong>：不会被GC回收。</li>
+<li><strong>软引用</strong>：内存不足时会被回收。</li>
+<li><strong>弱引用</strong>：在GC时会被回收。</li>
+<li><strong>虚引用</strong>：无法通过引用访问对象，仅用于监控对象的回收。</li>
+</ul>
+<h2 id="怎么判断对象是否可以被回收？"><a href="#怎么判断对象是否可以被回收？" class="headerlink" title="怎么判断对象是否可以被回收？"></a>怎么判断对象是否可以被回收？</h2><p>通过引用计数或可达性分析算法判断对象是否可达，不可达的对象可以被回收。</p>
+<h2 id="在Java中，对象什么时候可以被垃圾回收？"><a href="#在Java中，对象什么时候可以被垃圾回收？" class="headerlink" title="在Java中，对象什么时候可以被垃圾回收？"></a>在Java中，对象什么时候可以被垃圾回收？</h2><p>当对象没有任何强引用时，可以被垃圾回收。</p>
+<h2 id="JVM中的永久代中会发生垃圾回收吗？"><a href="#JVM中的永久代中会发生垃圾回收吗？" class="headerlink" title="JVM中的永久代中会发生垃圾回收吗？"></a>JVM中的永久代中会发生垃圾回收吗？</h2><p>在JDK 8之前，永久代中会发生垃圾回收，但频率较低。JDK 8以后，永久代被移除，替代为元空间（Metaspace）。</p>
+<h2 id="说一下JVM有哪些垃圾回收算法？"><a href="#说一下JVM有哪些垃圾回收算法？" class="headerlink" title="说一下JVM有哪些垃圾回收算法？"></a>说一下JVM有哪些垃圾回收算法？</h2><ul>
+<li><strong>标记-清除算法</strong>：标记存活对象，清除未标记对象。</li>
+<li><strong>复制算法</strong>：将存活对象复制到新空间，清除旧空间。</li>
+<li><strong>标记-整理算法</strong>：标记存活对象，将存活对象移动到一端，清除剩余空间。</li>
+<li><strong>分代收集算法</strong>：将堆分为新生代和老年代，分别使用不同的垃圾回收算法。</li>
+</ul>
+<h2 id="说一下JVM有哪些垃圾回收器？"><a href="#说一下JVM有哪些垃圾回收器？" class="headerlink" title="说一下JVM有哪些垃圾回收器？"></a>说一下JVM有哪些垃圾回收器？</h2><ul>
+<li><strong>Serial收集器</strong>：单线程收集，适用于单CPU环境。</li>
+<li><strong>Parallel收集器</strong>：多线程收集，适用于多CPU环境。</li>
+<li><strong>CMS收集器</strong>：低停顿时间的并发收集器，适用于低停顿需求的应用。</li>
+<li><strong>G1收集器</strong>：面向服务端应用，适用于大内存、多CPU环境。</li>
+</ul>
+<h2 id="详细介绍一下CMS垃圾回收器？"><a href="#详细介绍一下CMS垃圾回收器？" class="headerlink" title="详细介绍一下CMS垃圾回收器？"></a>详细介绍一下CMS垃圾回收器？</h2><ul>
+<li><strong>初始标记</strong>：标记GC Roots可达的对象，短暂停顿。</li>
+<li><strong>并发标记</strong>：标记所有可达对象，不停顿。</li>
+<li><strong>重新标记</strong>：修正并发标记期间的变动，短暂停顿。</li>
+<li><strong>并发清除</strong>：清除不可达对象，不停顿。</li>
+</ul>
+<h2 id="新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？"><a href="#新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？" class="headerlink" title="新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？"></a>新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？</h2><ul>
+<li><strong>新生代垃圾回收器</strong>：Serial、ParNew、Parallel Scavenge。特点是频繁回收、停顿时间短。</li>
+<li><strong>老年代垃圾回收器</strong>：Serial Old、CMS、Parallel Old。特点是回收频率低、停顿时间长。</li>
+</ul>
+<h2 id="简述分代垃圾回收器是怎么工作的？"><a href="#简述分代垃圾回收器是怎么工作的？" class="headerlink" title="简述分代垃圾回收器是怎么工作的？"></a>简述分代垃圾回收器是怎么工作的？</h2><p>分代垃圾回收器将堆划分为新生代和老年代。新生代对象生命周期短，频繁回收；老年代对象生命周期长，较少回收。回收时，新生代使用复制算法，老年代使用标记-整理或CMS。</p>
+<h1 id="内存分配策略"><a href="#内存分配策略" class="headerlink" title="内存分配策略"></a>内存分配策略</h1><h2 id="简述java内存分配与回收策略以及Minor-GC和Major-GC"><a href="#简述java内存分配与回收策略以及Minor-GC和Major-GC" class="headerlink" title="简述java内存分配与回收策略以及Minor GC和Major GC"></a>简述java内存分配与回收策略以及Minor GC和Major GC</h2><ul>
+<li><strong>内存分配</strong>：对象优先在Eden区分配，大对象直接进入老年代，长期存活对象进入老年代。</li>
+<li><strong>Minor GC</strong>：针对新生代的垃圾回收，频繁但耗时短。</li>
+<li><strong>Major GC</strong>：针对老年代的垃圾回收，频率低但耗时长。</li>
+</ul>
+<h2 id="对象优先在Eden区分配"><a href="#对象优先在Eden区分配" class="headerlink" title="对象优先在Eden区分配"></a>对象优先在Eden区分配</h2><p>大多数新创建的对象在Eden区分配，当Eden区满时触发Minor GC，将存活对象移到Survivor区。</p>
+<h2 id="大对象直接进入老年代"><a href="#大对象直接进入老年代" class="headerlink" title="大对象直接进入老年代"></a>大对象直接进入老年代</h2><p>避免在新生代频繁复制大对象，减少内存复制开销。</p>
+<h2 id="长期存活对象将进入老年代"><a href="#长期存活对象将进入老年代" class="headerlink" title="长期存活对象将进入老年代"></a>长期存活对象将进入老年代</h2><p>对象在Survivor区经历多次GC后，晋升到老年代。</p>
+<h1 id="虚拟机类加载机制"><a href="#虚拟机类加载机制" class="headerlink" title="虚拟机类加载机制"></a>虚拟机类加载机制</h1><h2 id="简述java类加载机制"><a href="#简述java类加载机制" class="headerlink" title="简述java类加载机制"></a>简述java类加载机制</h2><p>Java类加载机制包括加载、链接和初始化三个步骤。加载阶段通过类加载器读取类文件，将其转化为二进制数据；链接阶段验证、准备和解析类；初始化阶段执行类的静态初始化器和静态变量初始化。</p>
+<h2 id="描述一下JVM加载Class文件的原理机制"><a href="#描述一下JVM加载Class文件的原理机制" class="headerlink" title="描述一下JVM加载Class文件的原理机制"></a>描述一下JVM加载Class文件的原理机制</h2><p>JVM通过类加载器加载Class文件，加载过程包括查找和加载Class文件，将其转化为Class对象。加载器遵循双亲委派模型，保证类加载的安全性和一致性。</p>
+<h2 id="什么是类加载器，类加载器有哪些"><a href="#什么是类加载器，类加载器有哪些" class="headerlink" title="什么是类加载器，类加载器有哪些?"></a>什么是类加载器，类加载器有哪些?</h2><p>类加载器是负责加载类文件的组件，主要有以下几种：</p>
+<ul>
+<li><strong>启动类加载器（Bootstrap ClassLoader）</strong>：加载JDK核心类库。</li>
+<li><strong>扩展类加载器（Extension ClassLoader）</strong>：加载扩展类库。</li>
+<li><strong>应用程序类加载器（Application ClassLoader）</strong>：加载应用程序类。</li>
+<li><strong>自定义类加载器</strong>：用户定义的类加载器。</li>
+</ul>
+<h2 id="说一下类装载的执行过程？"><a href="#说一下类装载的执行过程？" class="headerlink" title="说一下类装载的执行过程？"></a>说一下类装载的执行过程？</h2><p>类装载的执行过程包括：</p>
+<ol>
+<li><strong>加载</strong>：通过类加载器读取类文件。</li>
+<li><strong>链接</strong>：包括验证、准备和解析三个阶段。</li>
+<li><strong>初始化</strong>：执行类的静态初始化器和静态变量初始化。</li>
+</ol>
+<h2 id="什么是双亲委派模型？"><a href="#什么是双亲委派模型？" class="headerlink" title="什么是双亲委派模型？"></a>什么是双亲委派模型？</h2><p>双亲委派模型是指类加载时，类加载器先委托父类加载器加载，父类加载器无法加载时，子类加载器再尝试加载。这保证了类的加载安全和统一。</p>
+<h1 id="JVM调优"><a href="#JVM调优" class="headerlink" title="JVM调优"></a>JVM调优</h1><h2 id="说一下JVM调优的工具？"><a href="#说一下JVM调优的工具？" class="headerlink" title="说一下JVM调优的工具？"></a>说一下JVM调优的工具？</h2><p>常用的JVM调优工具包括：</p>
+<ul>
+<li><strong>jstat</strong>：监控JVM内存和垃圾回收情况。</li>
+<li><strong>jmap</strong>：生成堆转储快照，分析内存使用情况。</li>
+<li><strong>jstack</strong>：生成线程快照，分析线程状态。</li>
+<li><strong>VisualVM</strong>：图形化界面监控JVM性能。</li>
+</ul>
+<h2 id="常用的JVM调优的参数都有哪些？"><a href="#常用的JVM调优的参数都有哪些？" class="headerlink" title="常用的JVM调优的参数都有哪些？"></a>常用的JVM调优的参数都有哪些？</h2><ul>
+<li><strong>-Xms</strong>：设置初始堆大小。</li>
+<li><strong>-Xmx</strong>：设置最大堆大小。</li>
+<li><strong>-Xmn</strong>：设置新生代大小。</li>
+<li><strong>-XX:PermSize</strong>：设置初始永久代大小（JDK 8前）。</li>
+<li><strong>-XX:MaxPermSize</strong>：设置最大永久代大小（JDK 8前）。</li>
+<li><strong>-XX:MetaspaceSize</strong>：设置初始元空间大小（JDK 8后）。</li>
+<li><strong>-XX:MaxMetaspaceSize</strong>：设置最大元空间大小（JDK 8后）。</li>
+<li><strong>-XX:+UseG1GC</strong>：使用G1垃圾回收器。</li>
+</ul>
 
       
     </div>
