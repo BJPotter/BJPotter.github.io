@@ -165,6 +165,960 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E7%BC%93%E5%AD%98%E6%9B%BF%E6%8D%A2%E7%AD%96%E7%95%A5.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/%E7%BC%93%E5%AD%98%E6%9B%BF%E6%8D%A2%E7%AD%96%E7%95%A5.html" class="post-title-link" itemprop="url">深入理解缓存替换策略</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-04-26 09:46:48 / 修改时间：18:07:50" itemprop="dateCreated datePublished" datetime="2024-04-26T09:46:48+08:00">2024-04-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="缓存替换策略"><a href="#缓存替换策略" class="headerlink" title="缓存替换策略"></a>缓存替换策略</h1><blockquote>
+<p>缓存是常用的技术手段，它能够帮助我们更快地获取频繁使用的数据。不过当缓存满了以后，我们就需要选择某种策略来决定谁将从缓存中被优先移除。以下是一些常见的缓存替换策略及其实现。</p>
+</blockquote>
+<ol>
+<li><strong>LRU (Least Recently Used)</strong></li>
+</ol>
+<p>LRU是最近最少使用的缓存策略，它以时间为依据，优先替换最长时间未访问的数据。这是基于这样一个理论：如果一个数据最近被访问过，那么它在未来被再次访问的可能性很高。我们可以通过维护一个所有缓存条目的链表来实现这个策略。当一个条目被访问时，我们将其移到链表的顶部。当需要逐出数据时，移除链表尾部的条目。</p>
+<ol start="2">
+<li><strong>MRU (Most Recently Used)</strong></li>
+</ol>
+<p>MRU是与LRU恰恰相反的策略，它优先替换最近访问的数据。MRU假设最近访问过的数据在未来最不可能被访问，这在很多场景都是合理的。其实现与LRU类似，但当条目被访问时，我们将其移到链表的底部，而非顶部。替换时，我们移除链表顶部的项。</p>
+<ol start="3">
+<li><strong>SLRU (Segmented LRU)</strong></li>
+</ol>
+<p>SLRU是LRU的进阶版，它将缓存分为两个部分：probation（试用）和protected（保护）。新来的数据先进入probation部分，如果再次被访问则会被推到protected部分。当需要替换数据时，首先替换probation部分的，如果probation部分为空，那么从protected部分挤出一部分数据。</p>
+<ol start="4">
+<li><strong>LFU (Least Frequently Used)</strong></li>
+</ol>
+<p>LFU策略会优先替换那些访问次数最少的数据。实现LFU需要我们追踪每个条目被访问的频率，这可以通过哈希表实现。每当条目被访问，其计数就增加，当缓存满时，只需将计数最小的条目移除即可。</p>
+<ol start="5">
+<li><strong>FIFO (First In, First Out)</strong></li>
+</ol>
+<p>FIFO的策略很简单：先进入缓存的数据首先被替换。实现FIFO可以通过队列实现，新的条目添加到队尾，替换时移除队首条目。</p>
+<ol start="6">
+<li><strong>TTL (Time To Live)</strong></li>
+</ol>
+<p>TTL是一个时间相关的策略。在TTL策略中，缓存条目有一个剩余生命期，当生命期到达就将其从缓存中移除。这就意味着所有的缓存条目都有一个过期时间。</p>
+<ol start="7">
+<li><strong>双层缓存</strong></li>
+</ol>
+<p>在某些情况下，我们可能需要两层缓存：一层是在CPU里面，另一层在内存中。CPU层的缓存很小但是非常快速，内存层的缓存则大很多但是速度慢一些。数据首先从CPU缓存中获取，如果没有再去内存缓存中获取。对于这种策略，我们可以为每层都使用适合的策略，比如LRU等。</p>
+<ol start="8">
+<li><strong>RR (Random Replacement)</strong></li>
+</ol>
+<p>RR是最简单的一种缓存替换策略，它随机选择一个条目进行替换。实现RR策略则只需要在所有的缓存条目中随机选一个移除即可。</p>
+<h1 id="缓存替换策略实现算法"><a href="#缓存替换策略实现算法" class="headerlink" title="缓存替换策略实现算法"></a>缓存替换策略实现算法</h1><ol>
+<li><p><strong>LRU (Least Recently Used)</strong></p>
+<p>最简单的实现方式是使用一个队列和一个哈希表。队列用于保存元素的访问顺序，哈希表用于查找元素是否在队列中。每次使用某个元素时，将它添加到队列尾部或移动到队列尾部。当队列满时，队列头部的元素就是最长时间未被使用的元素，将其弹出。</p>
+</li>
+<li><p><strong>MRU (Most Recently Used)</strong></p>
+<p>MRU的实现方式与LRU类似。区别是每次使用某个元素时，将它添加到队列头部或者移动到队列头部。当队列满时，移除队列尾部的元素。</p>
+</li>
+<li><p><strong>SLRU (Segmented LRU)</strong></p>
+<p>SLRU具体实现可以借助两个队列：一个用于保护段（protected segment），一个用于试验段（probational segment）。新元素首先添加到试验段队列尾部。当元素再次被访问时，它被移到保护段队列尾部。如果试验段队列满，移除它的头部元素。如果保护段队列满，将头部元素移到试验段队列尾部。</p>
+</li>
+<li><p><strong>LFU (Least Frequently Used)</strong></p>
+<p>LFU可以通过优先队列和哈希表来实现。哈希表用于查找元素，优先队列用于保存访问频率和元素的对应关系。每次访问元素，都会更新其在优先队列中的优先级。当需要替换元素时，移除优先队列顶部的元素。</p>
+</li>
+<li><p><strong>FIFO (First In, First Out)</strong></p>
+<p>FIFO是最简单的策略，也是通过队列实现。新元素直接添加到队列尾部，需要替换时直接丢弃队列头部的元素。</p>
+</li>
+<li><p><strong>TTL (Time To Live)</strong></p>
+<p>TTL可以通过每个元素添加一个时间戳来实现。每次访问队列时，检查队列头部的元素，如果它们的有效期已经过期，就将它们出队。</p>
+</li>
+<li><p><strong>双层缓存</strong></p>
+<p>双层缓存的实现需要两个缓存，每个缓存都使用适当的替换策略，比如LRU或者FIFO。第一级缓存通常位于CPU中，非常小但速度很快。第二级缓存位于内存中，较大但速度较慢。</p>
+</li>
+<li><p><strong>RR (Random Replacement)</strong></p>
+<p>RR可能是最简单的缓存替换策略，每次替换时，从缓存中随机选择一个元素丢弃。</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%BA%94-IO.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%BA%94-IO.html" class="post-title-link" itemprop="url">java基础-io</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-25 14:31:35" itemprop="dateCreated datePublished" datetime="2024-04-25T14:31:35+08:00">2024-04-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-28 17:42:25" itemprop="dateModified" datetime="2024-04-28T17:42:25+08:00">2024-04-28</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是IO"><a href="#什么是IO" class="headerlink" title="什么是IO"></a>什么是IO</h1><h2 id="冯诺依曼结构"><a href="#冯诺依曼结构" class="headerlink" title="冯诺依曼结构"></a>冯诺依曼结构</h2><p>根据冯.诺依曼结构，计算机结构分为 5 大部分：运算器、控制器、存储器、输入设备、输出设备。</p>
+<img src="https://telegraph-image-2ni.pages.dev/file/b412f6130798df7f5dcf8.jpg" style="zoom: 33%;">
+
+<p>我们的IO主要指的是输入设备和输出设备，输入设备（比如键盘）和输出设备（比如显示器）都属于外部设备。</p>
+<h2 id="IO的具体流程"><a href="#IO的具体流程" class="headerlink" title="IO的具体流程"></a>IO的具体流程</h2><p>一个进程的地址空间划分为用户空间和内核空间，内核空间负责系统级别的资源操作（文件管理、进程通信、内存管理等等）。如果要进行IO。必须依赖内核空间，用户空间（应用程序空间）没有权限进行IO操作，如果想要进行IO操作，只能发起系统调用请求操作系统，由操作系统调用内核完成具体的IO操作，（<strong>应用程序实际上只发起了IO操作的调用，具体IO的执行是由操作系统的内核来完成的。</strong>）</p>
+<h2 id="IO步骤总结"><a href="#IO步骤总结" class="headerlink" title="IO步骤总结"></a>IO步骤总结</h2><ol>
+<li>内核等待 I&#x2F;O 设备准备好数据</li>
+<li>内核将数据从内核空间拷贝到用户空间。</li>
+</ol>
+<h3 id="磁盘IO的数据流向"><a href="#磁盘IO的数据流向" class="headerlink" title="磁盘IO的数据流向"></a>磁盘IO的数据流向</h3><p>在读操作时，数据从磁盘设备流向内核空间，然后再流向用户空间；在写操作时，数据从用户空间流向内核空间，然后再流向磁盘设备。</p>
+<h3 id="网络IO数据流向"><a href="#网络IO数据流向" class="headerlink" title="网络IO数据流向"></a>网络IO数据流向</h3><p>在接收数据时，数据从网络设备流向内核空间，再流向用户空间（应用程序的内存空间）；在发送数据时，数据从应用程序的内存流向内核空间，最后流向网络设备。</p>
+<h1 id="Java中3种常见-IO-模型"><a href="#Java中3种常见-IO-模型" class="headerlink" title="Java中3种常见 IO 模型"></a>Java中3种常见 IO 模型</h1><h2 id="BIO"><a href="#BIO" class="headerlink" title="BIO"></a>BIO</h2><p>同步阻塞IO，应用程序发起 read 调用后，会一直阻塞，直到内核把数据拷贝到用户空间。</p>
+<h2 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h2><p>同步非阻塞IO中，应用程序发起read调用后，如果内核中没有就绪的数据，内核会立即返回一个错误，应用程序继续执行其他操作，这是非阻塞的；如果内核中数据已经就绪，当应用程序需要再次发起read调用来读取数据时是阻塞的。（<strong>阻不阻塞取决于内核数据是否准备就绪，不阻塞可以执行其他操作，阻塞的话只能等待</strong>）</p>
+<p><strong>缺点：</strong>不断轮询询问内核空间是否准备就绪，浪费CPU性能</p>
+<h2 id="AIO"><a href="#AIO" class="headerlink" title="AIO"></a>AIO</h2><p>应用程序发起read调用后，内核会立即返回，不需要阻塞等待数据的准备和拷贝，内核在后台会继续处理这些IO，并在IO完成后通过事件或者回调机制通知应用程序。</p>
+<p><strong>回调函数（Callback）</strong>：在发起异步I&#x2F;O请求时，一般会传递一个回调函数给操作系统。一旦I&#x2F;O操作完成，操作系统就会调用这个回调函数，以此来通知应用程序。这个回调函数通常会包含操作的结果，比如操作是否成功，读取或写入的数据量等信息。</p>
+<p><strong>事件通知（Event Notification）</strong>：操作系统提供一种机制，允许应用程序询问或者等待一个或多个I&#x2F;O操作的完成通知。例如Linux的epoll，BSD的kqueue，Java的NIO(Non-blocking I&#x2F;O)库等。应用程序可以在一次查询中得知多个I&#x2F;O操作是否完成，这在处理大量并发连接时，可以提高效率。</p>
+<h1 id="BIO-1"><a href="#BIO-1" class="headerlink" title="BIO"></a>BIO</h1><blockquote>
+<p>BIO是同步阻塞IO，当一个线程进行IO操作的时候，它会阻塞到线程执行完毕。以流的方式处理数据，基于字符流和字节流操作的</p>
+</blockquote>
+<h2 id="字符流和字节流的区别"><a href="#字符流和字节流的区别" class="headerlink" title="字符流和字节流的区别"></a>字符流和字节流的区别</h2><img src="/images/IO.drawio.svg" style="zoom:70%;">
+
+<p>在java中IO指的是input和output，在java中分为输入流和输出流，根据处理数据不同的单位分为字节流和字符流。字节流以字节（8位）为单位进行数据处理，如图片、视频，字符流是以字符进行为单位进行数据处理，如文本。</p>
+<ul>
+<li>处理单位：字节流以字节为单位，字符流以字符为单位。</li>
+<li>用途：字节流可以处理所有类型的数据，字符流只能处理字符类型的数据。</li>
+<li>处理中文字符：字节流可能会出现乱码的情况，字符流按字符处理，不会出现乱码</li>
+</ul>
+<h2 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a>字节流</h2><h3 id="InputStream"><a href="#InputStream" class="headerlink" title="InputStream"></a>InputStream</h3><p><code>InputStream</code>用于从源头（通常是文件）读取数据（字节信息）到内存中，<code>java.io.InputStream</code>抽象类是所有字节输入流的父类。</p>
+<p><code>read()</code>：返回输入流中下一个字节的数据。返回的值介于 0 到 255 之间。如果未读取任何字节，则代码返回 <code>-1</code> ，表示文件结束。</p>
+<p><code>read(byte b[ ])</code> : 从输入流中读取一些字节存储到数组 <code>b</code> 中。如果数组 <code>b</code> 的长度为零，则不读取。如果没有可用字节读取，返回 <code>-1</code>。如果有可用字节读取，则最多读取的字节数最多等于 <code>b.length</code> ， 返回读取的字节数。这个方法等价于 <code>read(b, 0, b.length)</code>。</p>
+<p><code>read(byte b[], int off, int len)</code>：在<code>read(byte b[ ])</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字节数）。</p>
+<p><code>skip(long n)</code>：忽略输入流中的 n 个字节 ,返回实际忽略的字节数。</p>
+<p><code>available()</code>：返回输入流中可以读取的字节数。</p>
+<p><code>close()</code>：关闭输入流释放相关的系统资源。</p>
+<h3 id="OutputStream"><a href="#OutputStream" class="headerlink" title="OutputStream"></a>OutputStream</h3><p><code>write(int b)</code>：将特定字节写入输出流。</p>
+<p><code>write(byte b[ ])</code> : 将数组<code>b</code> 写入到输出流，等价于 <code>write(b, 0, b.length)</code> 。</p>
+<p><code>write(byte[] b, int off, int len)</code> : 在<code>write(byte b[ ])</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字节数）。</p>
+<p><code>flush()</code>：刷新此输出流并强制写出所有缓冲的输出字节。</p>
+<p><code>close()</code>：关闭输出流释放相关的系统资源。</p>
+<h2 id="字符流"><a href="#字符流" class="headerlink" title="字符流"></a>字符流</h2><p>字节流对字符的处理（特别是中文）会出现乱码，字符流默认采用unicode编码，避免这个情况。</p>
+<p><strong>字符流的优点：</strong></p>
+<p>1.可以处理中文字符</p>
+<p>2.支持unicode编码，也可以根据构造函数自定义编码集</p>
+<p>3.可以实现读一行，写一行</p>
+<h3 id="Reader"><a href="#Reader" class="headerlink" title="Reader"></a>Reader</h3><p><code>read()</code> : 从输入流读取一个字符。</p>
+<p><code>read(char[] cbuf)</code> : 从输入流中读取一些字符，并将它们存储到字符数组 <code>cbuf</code>中，等价于 <code>read(cbuf, 0, cbuf.length)</code> 。</p>
+<p><code>read(char[] cbuf, int off, int len)</code>：在<code>read(char[] cbuf)</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字符数）。</p>
+<p><code>skip(long n)</code>：忽略输入流中的 n 个字符 ,返回实际忽略的字符数。</p>
+<p><code>close()</code> : 关闭输入流并释放相关的系统资源。</p>
+<h3 id="Writer"><a href="#Writer" class="headerlink" title="Writer"></a>Writer</h3><p><code>write(int c)</code> : 写入单个字符。</p>
+<p><code>write(char[] cbuf)</code>：写入字符数组 <code>cbuf</code>，等价于<code>write(cbuf, 0, cbuf.length)</code>。</p>
+<p><code>write(char[] cbuf, int off, int len)</code>：在<code>write(char[] cbuf)</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字符数）。</p>
+<p><code>write(String str)</code>：写入字符串，等价于 <code>write(str, 0, str.length())</code> 。</p>
+<p><code>write(String str, int off, int len)</code>：在<code>write(String str)</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字符数）。</p>
+<p><code>append(CharSequence csq)</code>：将指定的字符序列附加到指定的 <code>Writer</code> 对象并返回该 <code>Writer</code> 对象。</p>
+<p><code>append(char c)</code>：将指定的字符附加到指定的 <code>Writer</code> 对象并返回该 <code>Writer</code> 对象。</p>
+<p><code>flush()</code>：刷新此输出流并强制写出所有缓冲的输出字符。</p>
+<p><code>close()</code>:关闭输出流释放相关的系统资源。</p>
+<h2 id="缓冲流"><a href="#缓冲流" class="headerlink" title="缓冲流"></a>缓冲流</h2><p>IO 操作是很消耗性能的，缓冲流将数据加载至缓冲区，一次性读取&#x2F;写入多个字节，从而避免频繁的 IO 操作，提高流的传输效率。</p>
+<h3 id="字节缓冲流"><a href="#字节缓冲流" class="headerlink" title="字节缓冲流"></a>字节缓冲流</h3><p><code>BufferedInputStream</code> 从源头（通常是文件）读取数据（字节信息）到内存的过程中不会一个字节一个字节的读取，而是会先将读取到的字节存放在缓存区，并从内部缓冲区中单独读取字节。这样大幅减少了 IO 次数，提高了读取效率。</p>
+<p><code>BufferedOutputStream</code> 将数据（字节信息）写入到目的地（通常是文件）的过程中不会一个字节一个字节的写入，而是会先将要写入的字节存放在缓存区，并从内部缓冲区中单独写入字节。这样大幅减少了 IO 次数，提高了读取效率</p>
+<h3 id="字符缓冲流"><a href="#字符缓冲流" class="headerlink" title="字符缓冲流"></a>字符缓冲流</h3><p><code>BufferedReader</code> （字符缓冲输入流）和 <code>BufferedWriter</code>（字符缓冲输出流）类似于 <code>BufferedInputStream</code>（字节缓冲输入流）和<code>BufferedOutputStream</code>（字节缓冲输入流），内部都维护了一个字节数组作为缓冲区。不过，前者主要是用来操作字符信息。</p>
+<h2 id="转换流"><a href="#转换流" class="headerlink" title="转换流"></a>转换流</h2><p>转换流主要是InputStreamReader和OutputStreamWriter,InputStreamReader 用于将字节输入流转换为字符输入流，其中 OutputStreamWriter 用于将字节输出流转换为字符输出流。使用转换流可以在一定程度上避免乱码，还可以指定输入输出所使用的字符集。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">InputStreamReader</span> isr <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"example.txt"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> "UTF<span class="token operator">-</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">OutputStreamWriter</span> osw <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">OutputStreamWriter</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span><span class="token string">"example.txt"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h1 id="NIO-1"><a href="#NIO-1" class="headerlink" title="NIO"></a>NIO</h1><blockquote>
+<p>NIO是同步非阻塞IO，它是非阻塞、面向缓冲、基于通道的IO,可以通过少量的线程处理多个连接，相关的类在java.nio包下，主要有三大核心channel（通道）、buffer（缓存）、selector（选择器）</p>
+</blockquote>
+<h2 id="NIO和BIO的区别"><a href="#NIO和BIO的区别" class="headerlink" title="NIO和BIO的区别"></a>NIO和BIO的区别</h2><ul>
+<li>数据单位：BIO以流的方式处理数据，NIO是以块的方式处理数据</li>
+<li>是否阻塞：BIO是阻塞的，NIO是非阻塞的</li>
+<li>操作方式：BIO是以字符流或者字节流处理数据，NIO是基于通道和缓冲进行数据处理</li>
+</ul>
+<h2 id="NIO核心组件"><a href="#NIO核心组件" class="headerlink" title="NIO核心组件"></a>NIO核心组件</h2><p>NIO的核心组件是Channel、Buffer、Selector,如下图所示</p>
+<img src="/images/NIO.png" style="zoom:43%;">
+
+<h3 id="数据流向"><a href="#数据流向" class="headerlink" title="数据流向"></a>数据流向</h3><blockquote>
+<p>缓冲区是数据的临时存储区，通道是连接数据源和缓冲区的桥梁，负责数据的实际传输。</p>
+<p>读操作时，数据从数据源流向缓冲区。</p>
+<p>写操作时，数据从缓冲区流向目标位置。</p>
+</blockquote>
+<p><img src="/images/NIO.drawio.svg"></p>
+<h3 id="缓冲区"><a href="#缓冲区" class="headerlink" title="缓冲区"></a>缓冲区</h3><p>所有数据的读写都是通过缓冲区进行的，缓冲区实质上是一块可以写数据和读取数据的内存，这块内存被包装成 NIO Buffer 对象，并提供一组方法，用来方便地操作这块内存。</p>
+<ul>
+<li><p>容量(Capacity)：缓冲区能够容纳的数据元素的最大数量。这一容量在缓冲区创建时被设定并且不能改变。</p>
+</li>
+<li><p>位置(Position)：下一个要被读或写的元素的索引。位置会自动由相应的 get 或 put 方法更新。</p>
+</li>
+<li><p>限制(Limit)：缓冲区中第一个不应该读取或写入的元素的索引。或者说，你可操作的数据大小（limit - position）。</p>
+</li>
+<li><p>标记(Mark)：一个备忘位置。可以通过 Buffer.mark() 在此位置设置标记，之后可以通过 Buffer.reset() 方法恢复到这个位置。</p>
+</li>
+</ul>
+<p><strong>操作步骤：</strong></p>
+<ol>
+<li><p>写数据到Buffer：调用 Buffer.put() 之类的方法写数据。写完后，position 显示最新写入数据的位置。</p>
+</li>
+<li><p>调用flip()方法：切换Buffer到读模式。读写模式切换是通过 Buffer.flip() 方法完成的，它将 limit 设置为当前 position 的值，position 设置为 0 ，准备读取数据。</p>
+</li>
+<li><p>从Buffer中读数据：调用 Buffer.get() 读取数据。</p>
+</li>
+<li><p>调用clear()方法或compact()方法：读完后，调用 Buffer.clear() 或 Buffer.compact() 切换到写模式，准备再次写入。清空缓冲区并不会删除其中的数据，只是所有的状态值(position、limit、mark)都被设定为初始状态。所以看起来它是空的。</p>
+</li>
+</ol>
+<h3 id="通道"><a href="#通道" class="headerlink" title="通道"></a>通道</h3><p>通道代表了与能够执行 I&#x2F;O 操作的实体（例如，文件、套接字）的连接。简单来说，任何时候你想读写数据（不论是来自文件、网络还是其他地方）</p>
+<ul>
+<li><p>双向性：Java NIO的通道可以同时进行读和写操作，而Java IO流通常都是单向的（InputStream或OutputStream）。</p>
+</li>
+<li><p>非阻塞性：Java NIO的通道可以被配置为非阻塞模式，因此我们可以在异步模式中使用它们。例如，一个线程可以请求写数据到一个通道，但是该线程继续做别的事情，当数据写入成功后，线程将收到通知。</p>
+</li>
+<li><p>可直接访问缓冲区：数据可以直接从缓冲区写入到通道，或者从通道读取到缓冲区。它们之间的连接足够紧密，以至于Java编译器会为其生成优化的代码。</p>
+</li>
+<li><p>通道实现：Java NIO中最重要的通道实现是 FileChannel（用于文件读写），SocketChannel和ServerSocketChannel（用于TCP网络读写）和DatagramChannel（用于UDP网络读写）。</p>
+</li>
+</ul>
+<h3 id="选择器"><a href="#选择器" class="headerlink" title="选择器"></a>选择器</h3><p>选择器（Selector）是一个特殊的组件，允许一个单一的线程管理多个通道。也就是说，如果你的应用程序有成千上万的开放连接，每个连接都有它的通道，那么你可以用一个单独的线程，使用一个选择器来管理这些通道，而不是为每一个通道都创建一个线程。这就是NIO实现高并发的一种方式，由于创建和切换线程都是相对高昂的操作，所以使用选择器能极大提升效率。</p>
+<ul>
+<li><p>多路复用：选择器允许一个单独的线程管理多个通道，或者说“选择”出已经准备好进行I&#x2F;O操作的通道。这就是NIO中经常提到的“多路复用”。</p>
+</li>
+<li><p>非阻塞式的I&#x2F;O操作：通过将一或多个通道注册到选择器上，你可以询问选择器是否有准备好的通道，或者更精确的，是否有满足我们关心的事件的通道。</p>
+</li>
+<li><p>选择键（SelectionKey）：当你将通道注册到选择器上时，选择器会返回一个SelectionKey对象，这个对象包含了一些你对之后能发生在注册的通道上面的操作的信息。这是通过对Interest集合进行设置来完成的，最常用的就是SelectionKey.OPREAD（读取操作准备好）和SelectionKey.OPWRITE（写入操作准备好）</p>
+</li>
+<li><p>通道的注册和查询：通常会将通道注册(register)到选择器，然后通过调用选择器的 select()方法，查询准备好的通道。这个方法会阻塞，直到至少有一个通道准备好了你感兴趣的事件。你还可以使用 select(long timeout)方法或 selectNow()方法，前者会在指定时间内等待，后者则不会阻塞。</p>
+</li>
+</ul>
+<h1 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h1><h2 id="什么是零拷贝"><a href="#什么是零拷贝" class="headerlink" title="什么是零拷贝"></a>什么是零拷贝</h2><p>传统的数据传输需要数据在用户空间（User Space）和内核空间（Kernel Space）之间进行多次复制操作，这不仅会占用大量CPU，还会增大系统的内存压力。零拷贝减少了两次CPU将数据从内核空间到用户空间的拷贝。</p>
+<h2 id="零拷贝的实现方式"><a href="#零拷贝的实现方式" class="headerlink" title="零拷贝的实现方式"></a>零拷贝的实现方式</h2><ol>
+<li><p>内存映射文件（MappedByteBuffer）：这是一种将文件或文件的一部分映射到内存中的方式。当映射完成后，你可以直接对映射内存进行操作，任何对内存的修改都会反映到文件上，反之亦然。这种方式避免了Java堆和文件之间的数据拷贝，意味着可以直接对文件进行操作，而不需要在Java堆上创建一个中间缓冲区。</p>
+</li>
+<li><p>文件通道的传输（transferTo&#x2F;transferFrom）：这是另一种零拷贝技术，允许我们将一个通道的数据直接传输到另一个通道。传输数据时，数据并没有经过用户空间，而是直接通过内核空间，从而避免了多余的数据复制过程。</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E5%9B%9B-%E9%9B%86%E5%90%88.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/java%E5%9F%BA%E7%A1%80%E5%9B%9B-%E9%9B%86%E5%90%88.html" class="post-title-link" itemprop="url">java基础-集合</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-04-24 08:50:54 / 修改时间：15:11:49" itemprop="dateCreated datePublished" datetime="2024-04-24T08:50:54+08:00">2024-04-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是集合"><a href="#什么是集合" class="headerlink" title="什么是集合"></a>什么是集合</h1><p>java中集合也叫容器，由两大派类接口而来，一类是Conllection接口，存放的是单类型的元素，一类是Map，存放的是键值对。Collection接口主要有三大子接口分别为List、Set、Queue（线性表、链表、栈、队列都在这些接口中）</p>
+<img src="/images/集合.drawio.svg" style="zoom:70%;">
+
+<h1 id="List、Set、Queue、Map的区别"><a href="#List、Set、Queue、Map的区别" class="headerlink" title="List、Set、Queue、Map的区别"></a>List、Set、Queue、Map的区别</h1><ul>
+<li>List 存储的元素是有序可以重复的。</li>
+<li>Set 存储的元素是无序不可以重复。</li>
+<li>Queue 存储的元素有先后的顺序</li>
+<li>Map 存储的是一对键值对，key是无序不可以重复的，value是无序可以重复的。</li>
+</ul>
+<h1 id="List"><a href="#List" class="headerlink" title="List"></a>List</h1><h2 id="ArrayList和Array的区别"><a href="#ArrayList和Array的区别" class="headerlink" title="ArrayList和Array的区别"></a>ArrayList和Array的区别</h2><p>ArrayList是基于动态数组实现的，Array是一个静态数组。</p>
+<ul>
+<li>存储空间：数组是固定长度的，集合可变长度的。</li>
+<li>存储类型：ArrayList只能存储引用数据类型，Array可以存储基本数据类型，也可以存储引用数据类型</li>
+<li>存储内容：ArrayList可以存储不同数据类型的对象，Array只能存储一种数据类型的元素</li>
+</ul>
+<h2 id="ArrayList和Array转换"><a href="#ArrayList和Array转换" class="headerlink" title="ArrayList和Array转换"></a>ArrayList和Array转换</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// 数组转换ArrayList的方法</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token class-name">ArrayToArrayList</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> array <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token string">"a"</span><span class="token punctuation">,</span> <span class="token string">"b"</span><span class="token punctuation">,</span> <span class="token string">"c"</span><span class="token punctuation">,</span> <span class="token string">"d"</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token comment">//1. use Arrays.asList()</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> listOne <span class="token operator">=</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//2. use Collections.addAll()</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> listTwo <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>listTwo<span class="token punctuation">,</span>array<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//3. use Constructor</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> listThree <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//4. use lambda</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> listFour <span class="token operator">=</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span><span class="token class-name">Collectors</span><span class="token punctuation">.</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token comment">// ArrayList转换数组的方法</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token class-name">ArrayListToArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token string">"a"</span><span class="token punctuation">,</span><span class="token string">"b"</span><span class="token punctuation">,</span><span class="token string">"c"</span><span class="token punctuation">,</span><span class="token string">"d"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//1. 转成Object数组</span>
+        <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span> objects <span class="token operator">=</span> list<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//2. 转成指定类型的数组</span>
+        <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> stringOne <span class="token operator">=</span> list<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//3. 使用lambda的方式转换成数组</span>
+        <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> stringsTwo <span class="token operator">=</span> list<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">::</span><span class="token keyword">new</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="ArrayList和Vector的区别"><a href="#ArrayList和Vector的区别" class="headerlink" title="ArrayList和Vector的区别"></a>ArrayList和Vector的区别</h2><ul>
+<li><p>ArrayList是List的主要实现类，线程不安全</p>
+</li>
+<li><p>Vector是List的古老实现类，线程安全。</p>
+</li>
+</ul>
+<h2 id="Vector和Stack的关系"><a href="#Vector和Stack的关系" class="headerlink" title="Vector和Stack的关系"></a>Vector和Stack的关系</h2><p>Stack继承Vector，Stack实现了后进先出的栈，Vector是一个列表，两个都是线程安全。</p>
+<h2 id="ArrayList的插入和删除的时间复杂度"><a href="#ArrayList的插入和删除的时间复杂度" class="headerlink" title="ArrayList的插入和删除的时间复杂度"></a>ArrayList的插入和删除的时间复杂度</h2><p>插入：</p>
+<ul>
+<li>头插法：O(n)</li>
+<li>尾插法：O(1)</li>
+<li>指定位置插入：O(n)</li>
+</ul>
+<p>删除：</p>
+<ul>
+<li>头删法：O(n)</li>
+<li>尾删法：O(1)</li>
+<li>指定位置删除：O(n)</li>
+</ul>
+<h2 id="LinkedList的插入和删除的时间复杂度"><a href="#LinkedList的插入和删除的时间复杂度" class="headerlink" title="LinkedList的插入和删除的时间复杂度"></a>LinkedList的插入和删除的时间复杂度</h2><ul>
+<li>头插法&#x2F;删法：O(1)</li>
+<li>尾插法&#x2F;删法：O(1)</li>
+<li>指定位置插入&#x2F;删除：O(n)</li>
+</ul>
+<h2 id="LinkedList为什么没有实现RandomAccess接口"><a href="#LinkedList为什么没有实现RandomAccess接口" class="headerlink" title="LinkedList为什么没有实现RandomAccess接口"></a>LinkedList为什么没有实现RandomAccess接口</h2><p>RandomAccess是一个标记接口，用来表明实现该接口的类支持随机访问（通过元素下标访问）。LinkedList底层是双向链表，内存不连续，无法支持随机访问。</p>
+<h2 id="ArrayList和LinkedList的区别"><a href="#ArrayList和LinkedList的区别" class="headerlink" title="ArrayList和LinkedList的区别"></a>ArrayList和LinkedList的区别</h2><ul>
+<li>数据结构：ArrayList是基于动态数组实现的，是顺序存储，支持随机访问，LinkedList是基于双向链表实现的（JDK 1.6之前为循环双向链表，JDK 1.7取消了循环）不支持顺序存储和随机访问</li>
+<li>效率：ArrayList如果涉及数组重组的插入和删除的操作效率较低，查询比较快，LinkedList查询效率比较低，插入删除效率比较高。</li>
+</ul>
+<h1 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h1><h2 id="Comparable-和-Comparator-的区别"><a href="#Comparable-和-Comparator-的区别" class="headerlink" title="Comparable 和 Comparator 的区别"></a>Comparable 和 Comparator 的区别</h2><p><strong>Comparable 可以看作是“对内”进行排序接口，而 Comparator 是“对外”进行排序的接口。</strong></p>
+<ul>
+<li>含义区别：comparable是比较，comparator是比较器的意思。</li>
+<li>重写方法：comparable要重写compareTo方法,comparator要重写compare方法。</li>
+<li>应用方式：comparable一般是在类中重写，comparator一般在集合工具类中传入匿名内部类。</li>
+</ul>
+<h3 id="基于comparator实现"><a href="#基于comparator实现" class="headerlink" title="基于comparator实现"></a>基于comparator实现</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Data</span>
+<span class="token annotation punctuation">@AllArgsConstructor</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Subject</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">Integer</span> subject_id<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> subject_name<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BasicOfComparator</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">Subject</span> s1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Subject</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token string">"java"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Subject</span> s2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Subject</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token string">"mysql"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Subject</span> s3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Subject</span><span class="token punctuation">(</span><span class="token number">14</span><span class="token punctuation">,</span><span class="token string">"redis"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Subject</span><span class="token punctuation">></span></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Subject</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token punctuation">&#123;</span>
+                <span class="token function">add</span><span class="token punctuation">(</span>s1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">add</span><span class="token punctuation">(</span>s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">add</span><span class="token punctuation">(</span>s3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>list<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Comparator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Subject</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span><span class="token class-name">Subject</span> o1<span class="token punctuation">,</span> <span class="token class-name">Subject</span> o2<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">return</span> o2<span class="token punctuation">.</span><span class="token function">getSubject_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>o1<span class="token punctuation">.</span><span class="token function">getSubject_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Subject</span> subject <span class="token operator">:</span> list<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>subject<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="基于comparbale实现"><a href="#基于comparbale实现" class="headerlink" title="基于comparbale实现"></a>基于comparbale实现</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Data</span>
+<span class="token annotation punctuation">@AllArgsConstructor</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Subject</span> <span class="token keyword">implements</span> <span class="token class-name">Comparable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Subject</span><span class="token punctuation">></span></span><span class="token punctuation">&#123;</span>
+    <span class="token class-name">Integer</span> subject_id<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> subject_name<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">compareTo</span><span class="token punctuation">(</span><span class="token class-name">Subject</span> o<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> o<span class="token punctuation">.</span><span class="token function">getSubject_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getSubject_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BasicOfComparable</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">Subject</span> s1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Subject</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token string">"java"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Subject</span> s2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Subject</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token string">"mysql"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Subject</span> s3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Subject</span><span class="token punctuation">(</span><span class="token number">14</span><span class="token punctuation">,</span><span class="token string">"redis"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Subject</span><span class="token punctuation">></span></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Subject</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token punctuation">&#123;</span>
+                <span class="token function">add</span><span class="token punctuation">(</span>s1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">add</span><span class="token punctuation">(</span>s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">add</span><span class="token punctuation">(</span>s3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>list<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Subject</span> subject <span class="token operator">:</span> list<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>subject<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="如何理解SET集合无序性和不可重复性"><a href="#如何理解SET集合无序性和不可重复性" class="headerlink" title="如何理解SET集合无序性和不可重复性"></a>如何理解SET集合无序性和不可重复性</h2><p>Set是一个基于Hash算法的数组，它的无序性体现在元素经过hash算法以后，存储在数组中的位置是无序的，不可重复性是指元素经过hash算法之后，计算出来的数组下标，如果存在数据元素，根据equals方法判断是否是同一个，如果是则新的覆盖旧的，所以set里面没有重复的元素。</p>
+<h2 id="HashSet、LinkedHashSet、TreeSet的区别"><a href="#HashSet、LinkedHashSet、TreeSet的区别" class="headerlink" title="HashSet、LinkedHashSet、TreeSet的区别"></a>HashSet、LinkedHashSet、TreeSet的区别</h2><p><strong>相同点</strong>：都是Set集合的实现类，元素唯一不重复，都不是现成安全</p>
+<p><strong>区别：</strong></p>
+<p>数据结构：HashSet是底层是哈希表，基于hashmap实现的，LinkedHashSet底层是链表和哈希表，满足FIFO，TreeSet底层是红黑树，元素是有序的。</p>
+<p>应用场景：HashSet应用不保证插入和取出元素顺序的场景，LinkedHashSet应用于FIFO场景，TreeSet应用于排序场景</p>
+<h1 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h1><h2 id="Queue和Deque的区别"><a href="#Queue和Deque的区别" class="headerlink" title="Queue和Deque的区别"></a>Queue和Deque的区别</h2><p>Queue是单端队列，只能从一端插入元素，另一端删除元素。Queue扩展了collection的接口分为两类方法，一类是操作失败后抛出异常，另一种是返回特殊值</p>
+<table>
+<thead>
+<tr>
+<th><code>Queue</code> 接口</th>
+<th>抛出异常</th>
+<th>返回特殊值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>插入队尾</td>
+<td>add(E e)</td>
+<td>offer(E e)</td>
+</tr>
+<tr>
+<td>删除队首</td>
+<td>remove()</td>
+<td>poll()</td>
+</tr>
+<tr>
+<td>查询队首元素</td>
+<td>element()</td>
+<td>peek()</td>
+</tr>
+</tbody></table>
+<p>Deque是双端队列，可以在队尾和队首进行插入元素和删除元素。Deque扩展了Queue的接口，增加了队尾和队首的进行删除和插入的方法，根据失败后处理方式的不同分为两类。</p>
+<table>
+<thead>
+<tr>
+<th><code>Deque</code> 接口</th>
+<th>抛出异常</th>
+<th>返回特殊值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>插入队首</td>
+<td>addFirst(E e)</td>
+<td>offerFirst(E e)</td>
+</tr>
+<tr>
+<td>插入队尾</td>
+<td>addLast(E e)</td>
+<td>offerLast(E e)</td>
+</tr>
+<tr>
+<td>删除队首</td>
+<td>removeFirst()</td>
+<td>pollFirst()</td>
+</tr>
+<tr>
+<td>删除队尾</td>
+<td>removeLast()</td>
+<td>pollLast()</td>
+</tr>
+<tr>
+<td>查询队首元素</td>
+<td>getFirst()</td>
+<td>peekFirst()</td>
+</tr>
+<tr>
+<td>查询队尾元素</td>
+<td>getLast()</td>
+<td>peekLast()</td>
+</tr>
+</tbody></table>
+<h2 id="ArrayDeque与LinkedList的区别"><a href="#ArrayDeque与LinkedList的区别" class="headerlink" title="ArrayDeque与LinkedList的区别"></a>ArrayDeque与LinkedList的区别</h2><p>相同点：ArrayDeque和LinkedList都实现了Deque接口，两个都有队列的功能。</p>
+<p>区别：</p>
+<ul>
+<li>ArrayDeque是基于可变长数组和双指针实现的，而LinkedList是基于链表实现的</li>
+<li>ArrayDeque不能存储Null数据，LinkedList可以存储</li>
+<li>ArrayDeque当容量满了以后涉及扩容会复制整个数组，丢弃旧数组，涉及了内存复制性能较低，当数据量大的时候LinkedList处理效率比较低，整体而言优先使用ArrayDeque实现队列</li>
+</ul>
+<h2 id="为什么有Stack还要用Deque实现栈"><a href="#为什么有Stack还要用Deque实现栈" class="headerlink" title="为什么有Stack还要用Deque实现栈"></a>为什么有Stack还要用Deque实现栈</h2><p>Stack继承了vector属于线程安全的，当处理大量数据的时候效率比较低。</p>
+<h2 id="什么是优先级队列"><a href="#什么是优先级队列" class="headerlink" title="什么是优先级队列"></a>什么是优先级队列</h2><p>优先级队列（Priority Queue）跟普通的队列有相似的行为，都是遵循队列的基本原则—先进先出（FIFO）, 但它有一个额外的特性：每个元素都有各自的“优先级”。</p>
+<p>在优先级队列中，元素被赋予优先级。当访问元素时，具有最高优先级的元素最先被访问。优先级队列有两个常见的应用场景：</p>
+<ol>
+<li><p>数据压缩：优先级队列常常被用于数据压缩，特别是霍夫曼编码。</p>
+</li>
+<li><p>Dijkstra算法：优先级队列也是实现Dijkstra算法的关键工具。</p>
+</li>
+</ol>
+<p>优先级队列是通过二叉堆实现的，它提供了O(log n)的添加和删除时间复杂度，以及O(1)的查询最大 &#x2F; 最小元素时间复杂度。</p>
+<p><strong>特点：</strong></p>
+<p><code>PriorityQueue</code> 利用了二叉堆的数据结构来实现的，底层使用可变长的数组来存储数据</p>
+<p><code>PriorityQueue</code> 通过堆元素的上浮和下沉，实现了在 O(logn) 的时间复杂度内插入元素和删除堆顶元素。</p>
+<p><code>PriorityQueue</code> 是非线程安全的，且不支持存储 <code>NULL</code> 和 <code>non-comparable</code> 的对象。</p>
+<p><code>PriorityQueue</code> 默认是小顶堆，但可以接收一个 <code>Comparator</code> 作为构造参数，从而来自定义元素优先级的先后。</p>
+<h2 id="什么是阻塞队列"><a href="#什么是阻塞队列" class="headerlink" title="什么是阻塞队列"></a>什么是阻塞队列</h2><p>阻塞队列（Blocking Queue）是一种特殊的队列，当队列为空时，消费者尝试从队列里取出元素的操作会被阻塞，直到队列中有可用元素；同样，当队列已满时，生产者尝试向队列添加元素的操作也会被阻塞，直到队列有可用空间。</p>
+<h3 id="阻塞队列的实现类"><a href="#阻塞队列的实现类" class="headerlink" title="阻塞队列的实现类"></a>阻塞队列的实现类</h3><ol>
+<li><p>ArrayBlockingQueue：是一个由数组支持的有界阻塞队列，队列的容量在初始化时设定。</p>
+</li>
+<li><p>LinkedBlockingQueue：是一个由链表支持的可选定长（即可以选择是否定长）阻塞队列。</p>
+</li>
+<li><p>PriorityBlockingQueue：是一个不限大小的并发阻塞队列。队列中的元素可按自然顺序进行排序，也可以通过Comparator接口进行排序。</p>
+</li>
+<li><p>DelayQueue：是一个在定时未到时，不能从中获取元素的无界阻塞队列，其内部实现是一个PriorityQueue。元素由其时间戳的长短决定队列中的排序，队头对象的定时时间最长。</p>
+</li>
+<li><p>SynchronousQueue：不存储元素的阻塞队列，每一个put操作必须等待一个take操作，反之亦然。</p>
+</li>
+<li><p>LinkedTransferQueue：是一种由链表结构组成的无界阻塞TransferQueue队列，相当于其他队列的综合体。TransferQueue是一种阻塞队列，其中的生产者的等待可能是为了将元素转移&#x2F;传递到消费者。</p>
+</li>
+<li><p>LinkedBlockingDeque：是一个由链表结构组成的双向阻塞队列。在最初提供的阻塞队列中，LinkedBlockingDeque是唯一一个支持前后两端插入和移除元素的队列。</p>
+</li>
+</ol>
+<h3 id="ArrayBlockingQueue和LinkedBlockingDeque的区别"><a href="#ArrayBlockingQueue和LinkedBlockingDeque的区别" class="headerlink" title="ArrayBlockingQueue和LinkedBlockingDeque的区别"></a>ArrayBlockingQueue和LinkedBlockingDeque的区别</h3><ol>
+<li><p>数据结构：ArrayBlockingQueue基于数组实现的。LinkedBlockingDeque基于链表实现的。</p>
+</li>
+<li><p>性能：LinkedBlockingDeque基于链表结构，插入和移除元素效率比较高。</p>
+</li>
+<li><p>双端访问：LinkedBlockingDeque支持从两端插入和移除元素。而ArrayBlockingQueue只能在队尾插入，在对头移除。</p>
+</li>
+<li><p>灵活性：LinkedBlockingDeque支持双端插入和移除，且可以选择是否定长，更具灵活性。</p>
+</li>
+</ol>
+<h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><h2 id="HashMap和HashTable的区别"><a href="#HashMap和HashTable的区别" class="headerlink" title="HashMap和HashTable的区别"></a>HashMap和HashTable的区别</h2><p>线程安全：HashMap非线程安全，HashTable内部方法用了synchronized修饰是线程安全的</p>
+<p>效率问题：HashMap不是线程安全的，效率比较高，考虑线程安全的请看，一般用concurrenthashmap</p>
+<p>NULL值和NULL键问题：hashmap允许一个null键多个null值，hashtable不允许null键和null值。</p>
+<p>初始容量和扩容问题：hashtable初始容量是11，扩容是2n+1,hashmap初始容量是16，扩容是2n</p>
+<p>底层数据结构：hashmap是数组+链表组成的，当链表长度大于8且数组长度大于64会转换为红黑树，hashtable也是数组和链表组成的，但是不会有生成红黑树的机制</p>
+<p>遍历方式：hashmap可以通过iterator和foreach遍历，hashtable只能通过iterator遍历。</p>
+<h2 id="HashMap和HashSet的关系"><a href="#HashMap和HashSet的关系" class="headerlink" title="HashMap和HashSet的关系"></a>HashMap和HashSet的关系</h2><p>HashSet基于HashMap实现的，hashmap存储的key-value pair,而hashset只存储对象</p>
+<h2 id="HashMap和TreeMap的关系"><a href="#HashMap和TreeMap的关系" class="headerlink" title="HashMap和TreeMap的关系"></a>HashMap和TreeMap的关系</h2><p>HashMap和TreeMao都实现了AbstractMap,但是TreeMap实现了NavigableMap和SortedMap两个接口，NavigableMap接口可以实现对集合内的元素搜索的能力，SortedMap接口实现了对集合的键进行排序的能力。</p>
+<h2 id="HashSet如何检查重复"><a href="#HashSet如何检查重复" class="headerlink" title="HashSet如何检查重复"></a>HashSet如何检查重复</h2><p>hashset添加一个对象的时候，首先计算这个对象的hashcode,找到数组下标的位置，如果这个位置是空的直接插入，如果不是空的就会使用equals()方法判断，两个hashcode相等的对象是否真的相同，如果相同的话就不会让它加入进去。</p>
+<h2 id="HashMap的底层实现"><a href="#HashMap的底层实现" class="headerlink" title="HashMap的底层实现"></a>HashMap的底层实现</h2><p>hashmap解决冲突用的链地址法，jdk 1.8之前用数组和链表的数据结构，1.8以后优化成了数组+链表+红黑树，当数组长度大于64，链表长度大于8链表部分会转换为红黑树。</p>
+<p><strong>红黑树：叫自平衡二叉搜索树，根节点都是黑色的，其余的节点可以是红色也可以是黑色的，插入、搜索、删除操作时间复杂度都是在O(log n)</strong></p>
+<h2 id="HashMap长度为什么是2的幂次方"><a href="#HashMap长度为什么是2的幂次方" class="headerlink" title="HashMap长度为什么是2的幂次方"></a>HashMap长度为什么是2的幂次方</h2><p><code>hash(key) % array.length</code></p>
+<ol>
+<li><p>逻辑与计算索引快：当确定键值对应的桶的位置时，需要对哈希编码进行一次模运算，即hash(key) % array.length。当数组长度为2的幂时，这个运算可以用更快的位操作来完成，即hash(key) &amp; (array.length - 1)，位操作的速度一般要快于除法和求余数运算。</p>
+</li>
+<li><p>散列更均匀：数组长度为2的幂次模运算后的散列的更加均匀</p>
+</li>
+</ol>
+<h2 id="HashMap的遍历方式"><a href="#HashMap的遍历方式" class="headerlink" title="HashMap的遍历方式"></a>HashMap的遍历方式</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HashMapIterator</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span><span class="token class-name">String</span><span class="token punctuation">></span></span> map <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">,</span> <span class="token string">"Java"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"2"</span><span class="token punctuation">,</span> <span class="token string">"JDK"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"3"</span><span class="token punctuation">,</span> <span class="token string">"Spring Framework"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"4"</span><span class="token punctuation">,</span> <span class="token string">"MyBatis framework"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"5"</span><span class="token punctuation">,</span> <span class="token string">"Redis"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"迭代器"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Iterator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Map<span class="token punctuation">.</span>Entry</span><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span><span class="token punctuation">></span></span> iterator <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">entrySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">iterator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>iterator<span class="token punctuation">.</span><span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token class-name">Map<span class="token punctuation">.</span>Entry</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span></span> entry <span class="token operator">=</span> iterator<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>entry<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>entry<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token class-name">Iterator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> iterator1 <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">keySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">iterator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>iterator1<span class="token punctuation">.</span><span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token class-name">String</span> string <span class="token operator">=</span> iterator1<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>string<span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>map<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>string<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"foreach"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Set</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Map<span class="token punctuation">.</span>Entry</span><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span><span class="token punctuation">></span></span> entries <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">entrySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Map<span class="token punctuation">.</span>Entry</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span></span> entry <span class="token operator">:</span> entries<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>entry<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>entry<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token class-name">Set</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> strings <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">keySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">String</span> string <span class="token operator">:</span> strings<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>string<span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>map<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>string<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"lambda"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span>value<span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>key<span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">entrySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>stringStringEntry<span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>stringStringEntry<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>stringStringEntry<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="什么是concurrenthashmap"><a href="#什么是concurrenthashmap" class="headerlink" title="什么是concurrenthashmap"></a>什么是concurrenthashmap</h2><p>jdk1.8之前concurrenthashmap由segment数组和hashentry数组和链表组成，将数据分为一段一段的就是segment，是对每个segment进行加锁保证线程安全，由于segment初始化之后就固定容量，所以concurrenthashmap最多支持16个并发线程。</p>
+<p>jdk1.8中concurrenthashmap由Node数组和链表和红黑树组成，采用Node+cas+synchronized保证线程安全，锁粒度更细，<code>synchronized</code> 只锁定当前链表或红黑二叉树的首节点。</p>
+<p><strong>1.CAS是一种无锁算法，它通过比较当前值和预期值，如果相同则进行更新，不同则重新操作的方式，减小了对整个数据的锁定概率。这属于乐观锁的一种，尝试不通过加锁的方式达到线程安全，但在高并发情况下，可能导致大量的失败重试。</strong></p>
+<p><strong>2.ConcurrentHashMap不能由NUll值NULL键。</strong></p>
+<h1 id="集合注意事项"><a href="#集合注意事项" class="headerlink" title="集合注意事项"></a>集合注意事项</h1><h2 id="Collections工具类"><a href="#Collections工具类" class="headerlink" title="Collections工具类"></a>Collections工具类</h2><p>collections工具类常用的方法有三大类，排序、查找、线程安全方法（不推荐使用）</p>
+<h2 id="集合判空"><a href="#集合判空" class="headerlink" title="集合判空"></a>集合判空</h2><p>判断集合元素是否为空，使用isempty()</p>
+<h2 id="集合转Map"><a href="#集合转Map" class="headerlink" title="集合转Map"></a>集合转Map</h2><p><strong>在使用 <code>java.util.stream.Collectors</code> 类的 <code>toMap()</code> 方法转为 <code>Map</code> 集合时，一定要注意当 value 为 null 时会抛 NPE 异常。</strong></p>
+<h2 id="集合遍历"><a href="#集合遍历" class="headerlink" title="集合遍历"></a>集合遍历</h2><p><strong>不要在 foreach 循环里进行元素的 <code>remove/add</code> 操作。remove 元素请使用 <code>Iterator</code> 方式，如果并发操作，需要对 <code>Iterator</code> 对象加锁。</strong></p>
+<h2 id="集合去重"><a href="#集合去重" class="headerlink" title="集合去重"></a>集合去重</h2><p><strong>可以利用 <code>Set</code> 元素唯一的特性，可以快速对一个集合进行去重操作，避免使用 <code>List</code> 的 <code>contains()</code> 进行遍历去重或者判断包含操作。</strong></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E5%85%AD-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/java%E5%9F%BA%E7%A1%80%E5%85%AD-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B.html" class="post-title-link" itemprop="url">java基础-并发编程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-22 13:16:27" itemprop="dateCreated datePublished" datetime="2024-04-22T13:16:27+08:00">2024-04-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-05-15 13:45:04" itemprop="dateModified" datetime="2024-05-15T13:45:04+08:00">2024-05-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="线程和进程"><a href="#线程和进程" class="headerlink" title="线程和进程"></a>线程和进程</h1><p>进程和线程都属于计算机中的执行单位，进程是操作系统分配的资源（CPU、内存）单位，线程是CPU的调度单位，线程属于进程，一个进程包含多个线程，处理多任务时，一般采用多线程处理，多进程切换开销较大，效率低。在Java中，当我们启动 main 函数时其实就是启动了一个 JVM 的进程，而 main 函数所在的线程就是这个进程中的一个线程，也称主线程。</p>
+<h1 id="java实现多线程的方式"><a href="#java实现多线程的方式" class="headerlink" title="java实现多线程的方式"></a>java实现多线程的方式</h1><h2 id="继承Thread类"><a href="#继承Thread类" class="headerlink" title="继承Thread类"></a>继承Thread类</h2><blockquote>
+<p>通过继承Thread类，重写run(),创建子类对象即为创建一个线程，调用start方法即可启动线程</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MultiThread</span> <span class="token keyword">extends</span> <span class="token class-name">Thread</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"基于Thread子类创建多线程,当前线程为:"</span><span class="token operator">+</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">MultiThread</span> multiThread1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MultiThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        multiThread1<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">"Thread-1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">MultiThread</span> multiThread2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MultiThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        multiThread1<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">"Thread-2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">MultiThread</span> multiThread3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MultiThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        multiThread1<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">"Thread-3"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        multiThread1<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        multiThread2<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        multiThread3<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>注意：线程的执行顺序和代码编写的顺序没有关系</strong></p>
+<h2 id="实现Runnable接口"><a href="#实现Runnable接口" class="headerlink" title="实现Runnable接口"></a>实现Runnable接口</h2><blockquote>
+<p>Runnable接口只有一个run方法，实现Runnable接口，实现run()，创建Thread类并传入Runnable实例，调用Thread类实例的start()</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// Runnable接口</span>
+<span class="token annotation punctuation">@FunctionalInterface</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Runnable</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// 实现Runnable接口创建多线程</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MultiThread</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"基于Runnable接口实现多线程,当前线程为:"</span><span class="token operator">+</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">MultiThread</span> multiThread1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MultiThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Thread</span> thread1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>multiThread1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        thread1<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">"Thread-1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        thread1<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">MultiThread</span> multiThread2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MultiThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Thread</span> thread2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>multiThread2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        thread2<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">"Thread-2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        thread2<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">MultiThread</span> multiThread3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MultiThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Thread</span> thread3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>multiThread3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        thread3<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">"Thread-3"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        thread3<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="实现Callable接口"><a href="#实现Callable接口" class="headerlink" title="实现Callable接口"></a>实现Callable接口</h2><blockquote>
+<p>Callable接口只有一个call(),它与Runnable接口都属于接口，不同的是它可以返回值，实现Callable接口，实现call(),创建FutureTask,传入callbale接口实例，创建Thread类实例，传入FutureTask实例，调用Thread的start方法</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// Callable接口</span>
+<span class="token annotation punctuation">@FunctionalInterface</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Callable</span>接口<span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">V</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">V</span> <span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// 基于Callable接口实现多线程</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MultiThread</span> <span class="token keyword">implements</span> <span class="token class-name">Callable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"基于Callable接口实现多线程,当前线程为: "</span><span class="token operator">+</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">MultiThread</span> multiThread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MultiThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">FutureTask</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> futureTask <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FutureTask</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span><span class="token punctuation">(</span>multiThread<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>futureTask<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+        thread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"返回值为: "</span><span class="token operator">+</span>futureTask<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><blockquote>
+<p>通过线程池创建多线程</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MultiThread</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//1. 创建单一线程的线程池</span>
+        <span class="token class-name">ExecutorService</span> executorService <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newSingleThreadExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//2. 创建固定大小的线程池</span>
+        <span class="token class-name">ExecutorService</span> fixedThreadPool <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newFixedThreadPool</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//3. 创建可缓存的线程池</span>
+        <span class="token class-name">ExecutorService</span> cachedThreadPool <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newCachedThreadPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//4. 创建一个拥有多个任务队列的线程池</span>
+        <span class="token class-name">ExecutorService</span> workStealingPool <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newWorkStealingPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//5. 创建一个定长线程池，支持定时及周期性任务执行</span>
+        <span class="token class-name">ScheduledExecutorService</span> scheduledExecutorService <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newScheduledThreadPool</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        executorService<span class="token punctuation">.</span><span class="token function">submit</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"线程池提交Runnable任务！！！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> submit <span class="token operator">=</span> executorService<span class="token punctuation">.</span><span class="token function">submit</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Callable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">return</span> <span class="token string">"线程池提交Callable任务！！！"</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>submit<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        executorService<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>java的线程启动，最终依赖于Thread.start方法</strong></p>
+<h1 id="线程的生命周期和状态"><a href="#线程的生命周期和状态" class="headerlink" title="线程的生命周期和状态"></a>线程的生命周期和状态</h1><ul>
+<li>NEW：新建状态，线程被创建出来，没有调用start方法</li>
+<li>RUNABBLE：运行状态，线程调用了start方法，等待运行的状态</li>
+<li>BLOCKED：阻塞状态，需要等待锁的释放</li>
+<li>WAITING：等待状态，线程需要等待其他线程做出一些特定工作</li>
+<li>TIME_WAITING: 超时等待状态，可以在指定时间内自动返回，不像WATING那样一直等待</li>
+<li>TERMINATED: 终止状态，表示线程已经执行完毕</li>
+</ul>
+<h1 id="什么是线程的上下文切换"><a href="#什么是线程的上下文切换" class="headerlink" title="什么是线程的上下文切换"></a>什么是线程的上下文切换</h1><p>上下文切换是指CPU切换线程的执行过程，当一个线程正在执行时，CPU需要暂停当前线程的执行，并将其上下文（如程序计数器、寄存器内容、堆栈指针等）保存到内存中，然后加载另一个线程的上下文，使其继续执行。</p>
+<h1 id="Thread-sleep方法和Object-wait方法的区别"><a href="#Thread-sleep方法和Object-wait方法的区别" class="headerlink" title="Thread.sleep方法和Object.wait方法的区别"></a>Thread.sleep方法和Object.wait方法的区别</h1><p>相同：两个方法都可以停止线程的执行</p>
+<p>区别：</p>
+<ul>
+<li>sleep方法没有释放锁，wait方法释放锁</li>
+<li>wait方法用于线程间的通信，线程不会自动苏醒，需要别的线程调用notify()或者notifyAll()，sleep()方法是暂停线程执行，到达指定时间后会自动苏醒。（wait(long timeout)方法也是这个作用）</li>
+<li>sleep()是Thread类的方法，wait方法是Object类的</li>
+</ul>
+<p>​	</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Spring.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Spring.html" class="post-title-link" itemprop="url">Spring</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-04-22 12:56:21 / 修改时间：12:57:11" itemprop="dateCreated datePublished" datetime="2024-04-22T12:56:21+08:00">2024-04-22</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h1><p>Spring Framework 是一个用于创建 Java 企业应用程序的框架，它提供了企业环境中使用 Java 语言所需的一切。</p>
+<p>Spring Framework 被划分为多个模块，应用程序可以选择他们需要的模块。</p>
+<p>Spring Framework 的设计理念包括在每个层面上提供选择、适应不同的观点、保持强大的后向兼容性、关心 API 的设计和为代码质量设定高标准。</p>
+<h1 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h1><h2 id="IOC容器"><a href="#IOC容器" class="headerlink" title="IOC容器"></a>IOC容器</h2><h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><h1 id="数据访问"><a href="#数据访问" class="headerlink" title="数据访问"></a>数据访问</h1><h1 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h1><h1 id="Reactive"><a href="#Reactive" class="headerlink" title="Reactive"></a>Reactive</h1>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Elasticsearch.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1416,665 +2370,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98.html" class="post-title-link" itemprop="url">缓存问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本篇博客主要介绍了缓存在系统设计中可能会遇到的一些问题及其解决方案</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98.html">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E5%BA%8F%E5%88%97%E5%8C%96.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E5%BA%8F%E5%88%97%E5%8C%96.html" class="post-title-link" itemprop="url">序列化</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="什么是序列化和反序列化"><a href="#什么是序列化和反序列化" class="headerlink" title="什么是序列化和反序列化"></a>什么是序列化和反序列化</h1><blockquote>
-<p>将对象转化成字节流，可以将其保存在文件系统、数据库或其他持久性存储介质中，以实现数据的持久化存储。</p>
-<p>简单说：</p>
-<ul>
-<li><strong>序列化</strong>：把对象转换成二进制字节流的过程</li>
-<li><strong>反序列化</strong>：将在序列化过程中所生成的二进制字节流转换成对象的过程</li>
-</ul>
-</blockquote>
-<img src="https://telegraph-image-2ni.pages.dev/file/1fff0f9d66252dbcbf26e.png" style="zoom:33%;">
-
-
-
-<h1 id="为什么要用序列化呢，序列化的好处"><a href="#为什么要用序列化呢，序列化的好处" class="headerlink" title="为什么要用序列化呢，序列化的好处"></a>为什么要用序列化呢，序列化的好处</h1><ol>
-<li><strong>持久化数据</strong>：序列化允许将对象转换为字节流或其他格式，从而可以将其保存在文件系统、数据库或其他持久性存储介质中。通过序列化，数据可以在不同的应用程序执行之间进行持久化，并且在程序重新启动后仍然可用。</li>
-<li><strong>数据交换</strong>：序列化使得数据可以在网络上传输或在进程之间进行通信。通过将对象序列化为字节流或其他格式，可以轻松地在不同的系统或平台之间交换数据。</li>
-<li><strong>跨平台兼容性</strong>：序列化可以帮助解决不同操作系统、编程语言或硬件架构之间的兼容性问题。通过序列化，数据可以以通用格式存储，从而使得不同系统之间的数据交换更加简单。</li>
-<li><strong>对象传递</strong>：在分布式系统中，序列化可以使得对象可以在网络上传输并在远程系统上重建。这对于远程过程调用（RPC）和分布式系统通信非常有用。</li>
-<li><strong>数据备份和恢复</strong>：通过序列化，可以将应用程序的状态保存为数据流，并在需要时进行恢复。这对于实现备份和恢复功能非常有用，以及在应用程序发生崩溃或异常情况下保存数据状态。</li>
-</ol>
-<h1 id="序列化协议在哪层"><a href="#序列化协议在哪层" class="headerlink" title="序列化协议在哪层"></a>序列化协议在哪层</h1><p>osi的7层模型中表示层主要做数据处理包括编解码、加解密、压缩和解压缩，包括对用户数据进行转换成二进制流，正好对应序列化协议。</p>
-<h1 id="序列化协议有哪些"><a href="#序列化协议有哪些" class="headerlink" title="序列化协议有哪些"></a>序列化协议有哪些</h1><ul>
-<li>JDK 自带的序列化，要实现 <code>java.io.Serializable</code>接口</li>
-<li>Kryo：运行速度快，生成的二进制流体积小，Hive和Storm中用</li>
-<li>Protobuf: 谷歌出的，支持多种语言，跨平台的，但是操作复杂。</li>
-<li>Hessian: 跨语言，高效的二进制序列化</li>
-</ul>
-<h1 id="如何实现序列化呢"><a href="#如何实现序列化呢" class="headerlink" title="如何实现序列化呢"></a>如何实现序列化呢</h1><blockquote>
-<p>例如：JDK 自带的序列化，只需实现 <code>java.io.Serializable</code>接口即可</p>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token keyword">implements</span> <span class="token class-name">Serializable</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">long</span> serialVersionUID <span class="token operator">=</span> <span class="token number">1807122061950651809L</span><span class="token punctuation">;</span>
-    <span class="token keyword">private</span> <span class="token class-name">String</span> username<span class="token punctuation">;</span>
-    <span class="token keyword">private</span> <span class="token class-name">String</span> password<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>serialVersionUID 有什么作用？</strong></p>
-<p>序列化号 <code>serialVersionUID</code> 属于版本控制的作用。反序列化时，会检查 <code>serialVersionUID</code> 是否和当前类的 <code>serialVersionUID</code> 一致。如果 <code>serialVersionUID</code> 不一致则会抛出 <code>InvalidClassException</code> 异常。强烈推荐每个序列化类都手动指定其 <code>serialVersionUID</code>，如果不手动指定，那么编译器会动态生成默认的 <code>serialVersionUID</code>。</p>
-<p><strong>如果有些字段不想进行序列化怎么办？</strong></p>
-<p>对于不想进行序列化的变量，可以使用 <code>transient</code> 关键字修饰。</p>
-<p><code>transient</code> 关键字的作用是：阻止实例中那些用此关键字修饰的的变量序列化；当对象被反序列化时，被 <code>transient</code> 修饰的变量值不会被持久化和恢复。</p>
-<p>关于 <code>transient</code> 还有几点注意：</p>
-<ul>
-<li><code>transient</code> 只能修饰变量，不能修饰类和方法。</li>
-<li><code>transient</code> 修饰的变量，在反序列化后变量值将会被置成类型的默认值。例如，如果是修饰 <code>int</code> 类型，那么反序列后结果就是 <code>0</code>。</li>
-<li><code>static</code> 变量因为不属于任何对象(Object)，所以无论有没有 <code>transient</code> 关键字修饰，均不会被序列化。</li>
-</ul>
-<p><strong>JDK自带序列化的问题</strong></p>
-<p>1.<strong>不支持跨语言</strong> : 只支持java语言开发的程序调用</p>
-<p>2.<strong>性能差</strong>：序列化之后的字节数组体积较大，导致传输成本加大。</p>
-<p>3.<strong>存在安全问题</strong>：序列化和反序列化本身并不存在问题。但当输入的反序列化的数据可被用户控制，那么攻击者即可通过构造恶意输入，让反序列化产生非预期的对象，在此过程中执行构造的任意代码。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82.html" class="post-title-link" itemprop="url">数仓分层</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="数仓分层"><a href="#数仓分层" class="headerlink" title="数仓分层"></a>数仓分层</h1><h2 id="数仓概念"><a href="#数仓概念" class="headerlink" title="数仓概念"></a>数仓概念</h2><h3 id="什么是数据仓库"><a href="#什么是数据仓库" class="headerlink" title="什么是数据仓库"></a>什么是数据仓库</h3><blockquote>
-<p>数据仓库，英文名称为<code>Data Warehouse</code>，可简写为<code>DW</code>或<code>DWH</code>,是为企业所有级别的决策制定过程，提供所有类型数据支持的战略集合。<strong>它出于分析性报告和决策支持目的而创建</strong>。</p>
-</blockquote>
-<h3 id="数据仓库作用"><a href="#数据仓库作用" class="headerlink" title="数据仓库作用"></a>数据仓库作用</h3><blockquote>
-<p>构建面向分析的集成化数据环境，提供指导业务流程改进、监视时间、成本、质量以及控制。数据仓库本身并不 “生产” 任何数据，同时自身也不需要 “消费” 任何的数据，数据来源于外部，并且开放给外部应用，这也是为什么叫 “仓库” ，而不叫 “工厂” 的原因。</p>
-</blockquote>
-<h3 id="数据仓库的特点"><a href="#数据仓库的特点" class="headerlink" title="数据仓库的特点"></a>数据仓库的特点</h3><h4 id="面向主题"><a href="#面向主题" class="headerlink" title="面向主题"></a>面向主题</h4><blockquote>
-<p>操作型数据库的数据组织面向事务处理任务，各个业务系统之间各自分离，而数据仓库中的数据是按照一定的主题域进行组织。主题是一个抽象的概念，是指用户使用数据仓库进行决策时所关心的重点方面，一个主题通常包含多个操作型信息系统。</p>
-</blockquote>
-<h4 id="集成"><a href="#集成" class="headerlink" title="集成"></a>集成</h4><blockquote>
-<p>面向事务处理的操作型数据库通常与某些特定的应用相关，数据库之间相互独立，并且往往是异构的。而数据仓库中的数据是在对原有分散的数据库数据抽取、清理的基础上经过系统加工、汇总和整理得到的，必须消除元数据中的不一致性，以保证数据仓库内的信息关于整个企业的一致的全局信息。</p>
-</blockquote>
-<h4 id="不可更新"><a href="#不可更新" class="headerlink" title="不可更新"></a>不可更新</h4><blockquote>
-<p>操作型数据库中的数据通常实时更新，数据根据需要及时发生变化。数据仓库的数据主要供企业决策分析之用，所涉及的数据操作主要是数据查询，一旦某个数据进入数据很残酷以后，一般情况下将被长期保留，也就是数据仓库中一般有大量的查询操作，但修改和删除操作很少，通常只需要定期的加载、刷新。</p>
-</blockquote>
-<h4 id="时变性"><a href="#时变性" class="headerlink" title="时变性"></a>时变性</h4><blockquote>
-<p>操作型数据库主要关心当前某一个时间段内的数据，而数据仓库中的数据通常包含历史信息，系统记录了企业从过去某一个时点（如开始应用数据仓库的时点）到目前的各个阶段的信息，通过这些信息，可以对企业的发展历程和未来趋势做出定量分析和预测。</p>
-</blockquote>
-<h4 id="数据仓库中的数据"><a href="#数据仓库中的数据" class="headerlink" title="数据仓库中的数据"></a>数据仓库中的数据</h4><blockquote>
-<p>包括元数据，粒度数据、当前详细数据，历史数据、档案数据。</p>
-</blockquote>
-<p>1.4.1 元数据</p>
-<blockquote>
-<p>最重要的部分，关于数据的数据。也成为数据仓库的结构，是所有数据集成体现。仓库开发者使用元素来管理和控制仓库的建立和维护。</p>
-</blockquote>
-<p>1.4.2 粒度数据</p>
-<blockquote>
-<p>定义为呼叫仓库所保存的信息的概要程度。不同粒度表示为不同级别的汇总数据。汇总数据是信息仓库的特点，所有的企业数据分类（按部门、地区、功能等）需要的信息都不同，同时有效的信息仓库是未不同风格提供的，轻量级汇总数据是企业自行的主要依据，它来自根据企业组成部分的轻量级汇总数据或来自当前详细数据。这一层的数据容量比其他任何一个都少，代表一个折衷的积累，用来支撑广泛的各式的需要和兴趣。通过高度汇总，执行者能够使用“钻取”到达逐步增加的详细层。</p>
-</blockquote>
-<p>1.4.3 当前详细数据</p>
-<blockquote>
-<p>是信息仓库的核心，存放大量数据。数据来自业务操作数据库，通过主题来组织，不是代表特定应用，而是代表整个企业。在仓库中数据粒度最低，当数据精确化时，其中的每一个数据实体都是一个块照、一个时刻，表示一个瞬间。一旦需要经常支持企业需求，数据随即进行更新。</p>
-</blockquote>
-<p>1.4.4 历史数据</p>
-<blockquote>
-<p>以前的有意义数据（一般两年以上），给企业带来延续的利益和价值。包含巨大的数据量，可以用来预测和趋势分析。包括：旧数据（原始或汇总形式）、描述旧数据特征的元数据。</p>
-</blockquote>
-<h4 id="1-5-数据仓库的基本架构"><a href="#1-5-数据仓库的基本架构" class="headerlink" title="1.5 数据仓库的基本架构"></a>1.5 数据仓库的基本架构</h4><blockquote>
-<p>数据仓库的目的是构建面向分析的继承化数据环境，为企业提供决策支持（Decision Support）。其实数据仓库本身并不“生产”然后数据，同时自身也不需要“消费”任何数据，数据来源于外部，并且开放给外部应用，这也是为什么叫“仓库”，而不叫“工厂”的原因。因此数据仓库的基本架构主要包含的数据流入流出的过程，可以分为三层</p>
-<p>–原始层（元数据）</p>
-<p>–仓库层（数据仓库）</p>
-<p>–应用层（数据应用）</p>
-</blockquote>
-<img src="https://pic4.zhimg.com/80/v2-91d6a6ca901449e1e3dc96851f408453_1440w.webp" alt="img" style="zoom: 50%;">
-
-<img src="/post/Users\Administrator\AppData\Local\Temp\WeChat Files\1bcb8ac1f3fd27d4452992905efd093.jpg" alt="1bcb8ac1f3fd27d4452992905efd093" style="zoom: 50%;">
-
-
-
-
-
-<h4 id="1-6-数据库和数据仓库的区别"><a href="#1-6-数据库和数据仓库的区别" class="headerlink" title="1.6 数据库和数据仓库的区别"></a>1.6 数据库和数据仓库的区别</h4><img src="https://pic1.zhimg.com/80/v2-ce707b3e18e8fa5bb6adc377acedcf78_1440w.webp" alt="img" style="zoom:50%;">
-
-<p>数据仓库是在传统数据库的基础之上发展起来的，但它并不是对传统数据库的彻底抛弃，而是旨在弥补传统数据库在数据分析能力方面的不足，以提供良好的大规模数据分析能力为己任，力图为决策提供有效的技术支持。和传统数据库相比，数据仓库在总体特征、面向用户、存储内容等方面，都有着重大的差异（如下表）。</p>
-<img src="https://pic2.zhimg.com/80/v2-a0874931c5b236e904ff335547bf88ad_1440w.webp" alt="img" style="zoom: 33%;">
-
-<h3 id="原始数据层"><a href="#原始数据层" class="headerlink" title="原始数据层"></a>原始数据层</h3><blockquote>
-<p>ODS(Operational Data Store)</p>
-<ol>
-<li>保持数据原貌，不做任何修改</li>
-<li>压缩采用 LZO，压缩比是 100g 数据压缩完 10g 左右。</li>
-<li>创建分区表</li>
-</ol>
-</blockquote>
-<h3 id="明细数据层"><a href="#明细数据层" class="headerlink" title="明细数据层"></a>明细数据层</h3><blockquote>
-<p>DWD</p>
-<p>1.数据清洗<br>（1）空值去除<br>（2）过滤核心字段无意义的数据，比如订单表中订单 id 为 null，支付表中支付 id 为空<br>（3）将用户行为宽表和业务表进行数据一致性处理</p>
-<p>2.清洗的手段<br>Sql、mr、rdd、kettle、Python等等</p>
-<p>3.清洗掉多少数据算合理<br>1 万条数据清洗掉 1 条。</p>
-<p>4.脱敏<br>对手机号、身份证号等敏感数据脱敏</p>
-<p>5.维度退化<br>对业务数据传过来的表进行维度退化和降维。（商品一级二级三级、省市县、年月日）</p>
-<p>6.LZO压缩</p>
-<p>7.列式存储 parquet</p>
-</blockquote>
-<h3 id="服务数据层"><a href="#服务数据层" class="headerlink" title="服务数据层"></a>服务数据层</h3><blockquote>
-<p>DWS</p>
-<ol>
-<li><p>DWS 层有 3-5 张宽表（处理 100-200 个指标 70%以上的需求）</p>
-<p>  具体宽表名称：用户行为宽表，用户购买商品明细行为宽表，商品宽表，购物车宽表，物流宽表、登录注册、售后等。</p>
-</li>
-<li><p>哪个宽表最宽？大概有多少个字段？<br>最宽的是用户行为宽表。大概有 60-100 个字段</p>
-</li>
-<li><p>具体用户行为宽表字段名称<br>评论、打赏、收藏、关注–商品、关注–人、点赞、分享、好价爆料、文章发布、活跃、签到、补签卡、幸运屋、礼品、金币、电商点击、gmv</p>
-</li>
-</ol>
-</blockquote>
-<h3 id="主题数据层"><a href="#主题数据层" class="headerlink" title="主题数据层"></a>主题数据层</h3><blockquote>
-<p>DWT</p>
-<p>分析过的指标<br>日活、月活、周活、留存、留存率、新增（日、周、年）、转化率、流失、回流、七天内连续 3 天登录（点赞、收藏、评价、购买、加购、下单、活动）、连续 3 周（月）登录、GMV、复购率、复购率排行、点赞、评论、收藏、领优惠价人数、使用优惠价、沉默、值不值得买、退款人数、退款率 topn 热门商品</p>
-<p>留转 G 复活指标<br>（1）活跃<br>日活：100 万 ；月活：是日活的 2-3 倍 300 万<br>总注册的用户多少？1000 万-3000 万之间<br>（2）GMV<br>GMV：每天 10 万订单 （50 – 100 元） 500 万-1000 万<br>10%-20% 100 万-200 万<br>（3）复购率<br>某日常商品复购；（手纸、面膜、牙膏）10%-20%<br>电脑、显示器、手表 1%<br>（4）转化率<br>商品详情 &#x3D;》 加购物车 &#x3D;》下单 &#x3D;》 支付<br>5%-10% 60-70% 90%-95%<br>（5）留存率<br>1&#x2F;2&#x2F;3、周留存、月留存<br>搞活动： 10-20%</p>
-</blockquote>
-<h3 id="应用数据层"><a href="#应用数据层" class="headerlink" title="应用数据层"></a>应用数据层</h3><blockquote>
-<ol>
-<li><p>如何分析用户活跃？<br> 在启动日志中统计不同设备 id 出现次数。</p>
-</li>
-<li><p>如何分析用户新增?<br> 用活跃用户表 left join 用户新增表，用户新增表中 mid 为空的即为用户新增。</p>
-</li>
-<li><p>如何分析用户 1 天留存？<br> 留存用户&#x3D;前一天新增 join 今天活跃<br> 用户留存率&#x3D;留存用户&#x2F;前一天新增</p>
-</li>
-<li><p>如何分析沉默用户？<br> (登录时间为 7 天前,且只出现过一次)<br> 按照设备 id 对日活表分组，登录次数为 1，且是在一周前登录。</p>
-</li>
-<li><p>如何分析本周回流用户？<br> 本周活跃 left join 本周新增 left join 上周活跃，且本周新增 id 和上周活跃 id 都为 null。</p>
-</li>
-<li><p>如何分析流失用户？<br> (登录时间为 7 天前)<br> 按照设备 id 对日活表分组，且七天内没有登录过。</p>
-</li>
-<li><p>如何分析最近连续 3 周活跃用户数？<br> 按照设备 id 对周活进行分组，统计次数大于 3 次。</p>
-</li>
-<li><p>如何分析最近七天内连续三天活跃用户数？<br> 1）查询出最近 7 天的活跃用户，并对用户活跃日期进行排名<br> 2）计算用户活跃日期及排名之间的差值<br> 3）对同用户及差值分组，统计差值个数<br> 4）将差值相同个数大于等于 3 的数据取出，然后去重，即为连续 3 天及以上活跃的用户<br> 7天连续收藏、点赞、购买、加购、付款、浏览、商品点击、退货、1 个月连续 7 天、连续两周</p>
-</li>
-</ol>
-</blockquote>
-<h1 id="数仓建模"><a href="#数仓建模" class="headerlink" title="数仓建模"></a>数仓建模</h1><h2 id="常用建模工具"><a href="#常用建模工具" class="headerlink" title="常用建模工具"></a>常用建模工具</h2><blockquote>
-<p>PowerDesigner&#x2F;SQLYog&#x2F;EZDML</p>
-</blockquote>
-<h2 id="ODS层"><a href="#ODS层" class="headerlink" title="ODS层"></a>ODS层</h2><blockquote>
-<ol>
-<li>保持数据原貌不做任何修改，起到备份数据的作用。</li>
-<li>数据采用压缩，减少磁盘存储空间（例如：原始数据 100G，可以压缩到 10G 左右）</li>
-<li>创建分区表，防止后续的全表扫描</li>
-</ol>
-</blockquote>
-<h2 id="DWD层"><a href="#DWD层" class="headerlink" title="DWD层"></a>DWD层</h2><blockquote>
-<p>DWD 层需构建维度模型，一般采用星型模型，呈现的状态一般为星座模型。维度建模一般按照以下四个步骤：</p>
-<p>选择业务过程→声明粒度→确认维度→确认事实</p>
-<p>（1）选择业务过程</p>
-<p>在业务系统中，如果业务表过多，挑选我们感兴趣的业务线，比如下单业务，支付业务，退款业务，物流业务，一条业务线对应一张事实表。如果小公司业务表比较少，建议选择所有业务线。</p>
-<p>（2）声明粒度</p>
-<p>数据粒度指数据仓库的数据中保存数据的细化程度或综合程度的级别。<br>声明粒度意味着精确定义事实表中的一行数据表示什么，应该尽可能选择最小粒度，以此来应各种各样的需求。<br>典型的粒度声明如下：</p>
-<p>订单当中的每个商品项作为下单事实表中的一行，粒度为每次<br>每周的订单次数作为一行，粒度为每周。<br>每月的订单次数作为一行，粒度为每月。<br>注意：如果在 DWD 层粒度就是每周或者每月，那么后续就没有办法统计细粒度的指标了。所有建议采用最小粒度。<br>（3）确定维度</p>
-<p>维度的主要作用是描述业务是事实，主要表示的是“谁，何处，何时”等信息。例如：<br>时间维度、用户维度、地区维度等常见维度。</p>
-<p>（4）确定事实</p>
-<p>此处的“事实”一词，指的是业务中的度量值，例如订单金额、下单次数等。<br>在 DWD 层，以业务过程为建模驱动，基于每个具体业务过程的特点，构建最细粒度的明细层事实表。事实表可做适当的宽表化处理。</p>
-<p>根据维度建模中的星型模型思想，将维度进行退化。例如：地区表和省份表退化为地区维度表，商品表、品类表、spu 表、商品三级分类、商品二级分类、商品一级分类表退化为商品维度表，活动信息表和活动规则表退化为活动维度表。至此，数仓的维度建模已经完毕，DWS、DWT 和 ADS 和维度建模已经没有关系了。DWS 和 DWT 都是建宽表，宽表都是按照主题去建。主题相当于观察问题的角度，对应着维度表。</p>
-</blockquote>
-<h2 id="DWS层"><a href="#DWS层" class="headerlink" title="DWS层"></a>DWS层</h2><blockquote>
-<p>DWS 层统计各个主题对象的当天行为，服务于 DWT 层的主题宽表。DWS层的宽表字段，是站在不同维度的视角去看事实表，重点关注事实表的度量值，通过与之关联的事实表，获得不同的事实表的度量值。</p>
-</blockquote>
-<h2 id="DWT层"><a href="#DWT层" class="headerlink" title="DWT层"></a>DWT层</h2><blockquote>
-<p>以分析的主题对象为建模驱动，基于上层的应用和产品的指标需求，构建主题对象的全量宽表。<br>DWT 层主题宽表都记录什么字段？<br>每个维度关联的不同事实表度量值以及首次、末次时间、累积至今的度量值、累积某个时间段的度量值。</p>
-</blockquote>
-<h2 id="ADS层"><a href="#ADS层" class="headerlink" title="ADS层"></a>ADS层</h2><blockquote>
-<p>分别对设备主题、会员主题、商品主题和营销主题进行指标分析，其中营销主题是用户主题和商品主题的跨主题分析案例</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E6%96%B0%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E6%96%B0%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF.html" class="post-title-link" itemprop="url">新学习路线</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="/images/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF%E5%9B%BE.drawio.svg"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/webhook.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/webhook.html" class="post-title-link" itemprop="url">webhook</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Webhook基础"><a href="#Webhook基础" class="headerlink" title="Webhook基础"></a><strong>Webhook基础</strong></h1><blockquote>
-<p>Webhook是一种通过HTTP协议将实时数据传输到指定URL的机制。与传统API不同，它不需要客户端主动轮询服务器以获取更新，而是由服务器主动向客户端推送数据。这种设计使得Webhook非常适合用于实时通知、事件驱动的应用和集成不同系统之间的数据。</p>
-</blockquote>
-<h2 id="WebHook与传统API的区别"><a href="#WebHook与传统API的区别" class="headerlink" title="WebHook与传统API的区别"></a><strong>WebHook与传统API的区别</strong></h2><ul>
-<li><strong>触发方式</strong>：传统API是由客户端主动发起请求来获取数据或执行操作，而Webhook是由服务端主动向客户端推送数据。</li>
-<li><strong>实时性</strong>：Webhook可以实现实时通知，当事件发生时立即推送数据给客户端，而传统API则需要客户端定期轮询或手动发起请求来获取数据，可能存在一定的延迟。</li>
-<li><strong>节省资源</strong>：使用Webhook可以减少无效请求和服务器负载，因为只有在事件发生时才会触发数据传输，而传统API可能会频繁发送不必要的请求。</li>
-<li><strong>适用场景</strong>：Webhook适用于需要实时数据更新和事件驱动的场景，例如实时通知、即时聊天等，而传统API更适用于按需获取数据或执行操作的场景。</li>
-</ul>
-<img src="https://telegraph-image-2ni.pages.dev/file/4f4a8d0b71e6f3f828444.png" style="zoom:50%;">
-
-<h2 id="Webhook的工作原理"><a href="#Webhook的工作原理" class="headerlink" title="Webhook的工作原理"></a>Webhook的工作原理</h2><ol>
-<li><strong>注册Webhook</strong>：在目标服务上，客户端需要注册一个Webhook，通常是通过提供一个URL来告知目标服务在发生特定事件时向该URL发送数据。</li>
-<li><strong>事件触发</strong>：当目标服务上发生了注册的事件，比如数据更新、状态更改等，服务会触发Webhook，即向注册的URL发送HTTP请求。</li>
-<li><strong>HTTP请求</strong>：服务向注册的URL发送HTTP请求，通常是一个POST请求。这个请求会包含一些元数据，比如事件类型、发生时间等，以及相关的数据，比如更新的数据内容。这些数据通常以JSON格式或其他常见的数据格式进行传输。</li>
-<li><strong>客户端接收请求</strong>：客户端（Webhook的接收端）接收到这个HTTP请求后，需要解析其中的数据。这可以通过读取请求体中的内容来完成。客户端应该验证请求的来源和完整性，以确保安全性。</li>
-<li><strong>处理数据</strong>：一旦客户端解析了请求中的数据，它可以根据需要进行进一步的处理。这可能涉及将数据存储到数据库中、更新应用程序的状态、发送通知给用户等等。</li>
-<li><strong>响应</strong>：处理完数据后，客户端需要向目标服务发送一个响应，通常是一个HTTP状态码。这个响应可以告知目标服务数据是否已经成功接收和处理。通常情况下，目标服务不会对这个响应做出太多的处理，但一些服务可能会根据响应来判断是否继续尝试发送数据。</li>
-<li><strong>错误处理</strong>：在整个过程中，客户端需要注意处理可能出现的错误，比如网络连接问题、数据格式错误等。一些常见的错误处理方式包括记录错误日志、发送警报通知等。</li>
-</ol>
-<h1 id="Java实现WebHook"><a href="#Java实现WebHook" class="headerlink" title="Java实现WebHook"></a><strong>Java实现WebHook</strong></h1><h2 id="WebHookClient"><a href="#WebHookClient" class="headerlink" title="WebHookClient"></a>WebHookClient</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpExchange</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpHandler</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpServer</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">InputStream</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">OutputStream</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">InetSocketAddress</span></span><span class="token punctuation">;</span>
-
-<span class="token comment">/**
- * Author: Zhi Liu
- * Date: 2024/2/7 14:09
- * Contact: liuzhi0531@gmail.com
- * Desc: webhook客户端测试类
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WebhookClient</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">int</span> port <span class="token operator">=</span> <span class="token number">8000</span><span class="token punctuation">;</span> <span class="token comment">// 定义服务器端口号</span>
-        <span class="token class-name">HttpServer</span> server <span class="token operator">=</span> <span class="token class-name">HttpServer</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InetSocketAddress</span><span class="token punctuation">(</span>port<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 创建HTTP服务器实例</span>
-        server<span class="token punctuation">.</span><span class="token function">createContext</span><span class="token punctuation">(</span><span class="token string">"/webhook"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">WebhookHandler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 设置请求处理程序</span>
-        server<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 启动服务器</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Webhook 服务器已启动，监听端口 "</span> <span class="token operator">+</span> port<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">WebhookHandler</span> <span class="token keyword">implements</span> <span class="token class-name">HttpHandler</span> <span class="token punctuation">&#123;</span>
-        <span class="token annotation punctuation">@Override</span>
-        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handle</span><span class="token punctuation">(</span><span class="token class-name">HttpExchange</span> exchange<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"POST"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>exchange<span class="token punctuation">.</span><span class="token function">getRequestMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                <span class="token class-name">InputStream</span> requestBody <span class="token operator">=</span> exchange<span class="token punctuation">.</span><span class="token function">getRequestBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 获取请求体</span>
-                <span class="token comment">// 读取请求体中的数据</span>
-                <span class="token class-name">StringBuilder</span> requestData <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token keyword">int</span> byteRead<span class="token punctuation">;</span>
-                <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>byteRead <span class="token operator">=</span> requestBody<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                    requestData<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span> byteRead<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token punctuation">&#125;</span>
-                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"收到Webhook请求：\n"</span> <span class="token operator">+</span> requestData<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-                <span class="token comment">// 响应webhook服务端</span>
-                <span class="token class-name">String</span> response <span class="token operator">=</span> <span class="token string">"Webhook 请求已收到"</span><span class="token punctuation">;</span>
-                exchange<span class="token punctuation">.</span><span class="token function">sendResponseHeaders</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">,</span> response<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token class-name">OutputStream</span> responseBody <span class="token operator">=</span> exchange<span class="token punctuation">.</span><span class="token function">getResponseBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                responseBody<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                responseBody<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-                <span class="token comment">// 如果不是POST请求，返回405 Method Not Allowed</span>
-                exchange<span class="token punctuation">.</span><span class="token function">sendResponseHeaders</span><span class="token punctuation">(</span><span class="token number">405</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="WebHookServer"><a href="#WebHookServer" class="headerlink" title="WebHookServer"></a>WebHookServer</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">BufferedReader</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">InputStreamReader</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">OutputStream</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">HttpURLConnection</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">URL</span></span><span class="token punctuation">;</span>
-
-<span class="token comment">/**
- * Author: Zhi Liu
- * Date: 2024/2/7 14:15
- * Contact: liuzhi0531@gmail.com
- * Desc:
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WebhookServer</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">String</span> url <span class="token operator">=</span> <span class="token string">"http://localhost:8000/webhook"</span><span class="token punctuation">;</span>
-        <span class="token class-name">String</span> postData <span class="token operator">=</span> <span class="token string">"&#123;hello,world&#125;"</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-            <span class="token function">sendPostRequest</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> postData<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">sendPostRequest</span><span class="token punctuation">(</span><span class="token class-name">String</span> url<span class="token punctuation">,</span> <span class="token class-name">String</span> postData<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">URL</span> urlObj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">URL</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">HttpURLConnection</span> connection <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">HttpURLConnection</span><span class="token punctuation">)</span> urlObj<span class="token punctuation">.</span><span class="token function">openConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 设置请求方法为POST</span>
-        connection<span class="token punctuation">.</span><span class="token function">setRequestMethod</span><span class="token punctuation">(</span><span class="token string">"POST"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 设置请求头部信息</span>
-        connection<span class="token punctuation">.</span><span class="token function">setRequestProperty</span><span class="token punctuation">(</span><span class="token string">"Content-Type"</span><span class="token punctuation">,</span> <span class="token string">"application/json"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 允许向服务器输出内容</span>
-        connection<span class="token punctuation">.</span><span class="token function">setDoOutput</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 写入请求数据</span>
-        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">OutputStream</span> outputStream <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">getOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> postDataBytes <span class="token operator">=</span> postData<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            outputStream<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>postDataBytes<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            outputStream<span class="token punctuation">.</span><span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-
-        <span class="token comment">// 获取客户端的响应状态码</span>
-        <span class="token keyword">int</span> responseCode <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">getResponseCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Response Code: "</span> <span class="token operator">+</span> responseCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 读取响应内容</span>
-        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">BufferedReader</span> reader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span>connection<span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token class-name">StringBuilder</span> response <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token class-name">String</span> line<span class="token punctuation">;</span>
-            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>line <span class="token operator">=</span> reader<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                response<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Response Content: "</span> <span class="token operator">+</span> response<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token comment">// 关闭连接</span>
-        connection<span class="token punctuation">.</span><span class="token function">disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<ol>
-<li><p><strong>阅读相关文档</strong>：</p>
-<ul>
-<li>查阅Webhook服务提供商的文档，了解如何创建和管理Webhook。</li>
-<li>阅读关于HTTP请求和响应的文档，以便了解如何处理Webhook请求和发送响应。</li>
-</ul>
-</li>
-<li><p><strong>编写代码</strong>：</p>
-<ul>
-<li>编写一个简单的Webhook接收端，用于接收来自外部服务的HTTP请求。</li>
-<li>编写处理Webhook请求的代码，例如解析请求、处理数据、执行逻辑等。</li>
-</ul>
-</li>
-<li><p><strong>测试和调试</strong>：</p>
-<ul>
-<li>使用工具（例如Postman）测试Webhook端点，确保它能够正确处理来自外部服务的请求。</li>
-<li>调试代码，解决可能出现的问题和错误。</li>
-</ul>
-</li>
-<li><p><strong>进阶学习</strong>：</p>
-<ul>
-<li>学习如何实现安全性和可靠性，例如使用HTTPS、认证、重试机制等。</li>
-<li>探索如何处理各种类型的Webhook事件，例如GitHub的push事件、Stripe的支付通知等。</li>
-</ul>
-</li>
-<li><p><strong>实践项目</strong>：</p>
-<ul>
-<li>开发一个实际的项目，其中包括使用Webhook与其他服务进行集成。</li>
-<li>参与开源项目，贡献Webhook相关的代码或解决问题。</li>
-</ul>
-</li>
-<li><p><strong>不断更新知识</strong>：</p>
-<ul>
-<li>持续关注Webhook领域的新发展和最佳实践。</li>
-<li>参加相关的线上或线下培训课程，与其他开发者交流经验。</li>
-</ul>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2144,7 +2439,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">63</span>
+          <span class="site-state-item-count">68</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
