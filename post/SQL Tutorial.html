@@ -28,7 +28,7 @@
 <meta property="og:description" content="重新学习如何使用SQL">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-06-17T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-04-15T09:52:24.869Z">
+<meta property="article:modified_time" content="2024-06-11T01:24:03.343Z">
 <meta property="article:author" content="potter">
 <meta property="article:tag" content="SQL">
 <meta name="twitter:card" content="summary">
@@ -201,7 +201,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 17:52:24" itemprop="dateModified" datetime="2024-04-15T17:52:24+08:00">2024-04-15</time>
+                <time title="修改时间：2024-06-11 09:24:03" itemprop="dateModified" datetime="2024-06-11T09:24:03+08:00">2024-06-11</time>
               </span>
 
           
@@ -1028,10 +1028,48 @@ LOWER<span class="token punctuation">(</span>string<span class="token punctuatio
 <h1 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a>触发器</h1><blockquote>
 <p>触发器是一个特殊SQL存储过程，它在事件（INSERT、DELETE、UPDATE）发生时触发触发器，运行指定函数，触发器对于维护数据库的完整性很有用，触发器还可以用于记录历史数据。</p>
 </blockquote>
-<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><blockquote>
-<p>SQL中的索引是一个数据库对象，用于提高数据库表上数据检索操作的速度。与书中的索引如何帮助您快速查找信息而无需阅读整本书类似，数据库中的索引可以帮助数据库软件快速查找数据而无需扫描整个表。</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="什么是索引"><a href="#什么是索引" class="headerlink" title="什么是索引"></a>什么是索引</h3><blockquote>
+<p>索引是DBMS中辅助快速查找数据的辅助数据结构，类似于书籍的目录，快速定位所需信息</p>
 </blockquote>
-<h2 id="索引的分类"><a href="#索引的分类" class="headerlink" title="索引的分类"></a>索引的分类</h2><ol>
+<h3 id="索引的作用"><a href="#索引的作用" class="headerlink" title="索引的作用"></a>索引的作用</h3><ol>
+<li>提高查询速度</li>
+<li>提高连接操作的效率（连接键有索引）</li>
+<li>加速排序和分组操作（利用索引的有序性）</li>
+<li>强制唯一性（唯一索引可以避免重复数据）</li>
+</ol>
+<h3 id="索引的数据结构和工作原理"><a href="#索引的数据结构和工作原理" class="headerlink" title="索引的数据结构和工作原理"></a>索引的数据结构和工作原理</h3><h4 id="B-Tree索引"><a href="#B-Tree索引" class="headerlink" title="B-Tree索引"></a>B-Tree索引</h4><p>B-树是一种自平衡的树数据结构，其节点按照一定的顺序排列，保证从根节点到叶节点的路径长度相同，数据都存储在叶节点中，内部节点只存储键值和指针，MySQL的InnoDB使用B+树作为默认索引结构。</p>
+<p><strong>工作原理</strong></p>
+<ol>
+<li><strong>查找</strong>：从根节点开始，根据键值逐层向下查找，直到找到叶节点。</li>
+<li><strong>插入</strong>：找到适当的叶节点插入新键值，如果节点满了，则进行分裂，可能导致树的高度增加。</li>
+<li><strong>删除</strong>：找到要删除的键值，从叶节点删除，如果节点变得太空，则进行合并或重分配，可能导致树的高度减少。</li>
+<li><strong>范围查询</strong>：从根节点开始，根据键值逐层向下查找，找到起始叶节点，然后顺序读取叶节点。</li>
+</ol>
+<h4 id="Hash索引"><a href="#Hash索引" class="headerlink" title="Hash索引"></a>Hash索引</h4><p>哈希索引基于哈希表实现，使用哈希函数将键值映射到哈希桶（Bucket）,主要用于等值查询。</p>
+<p><strong>工作原理</strong></p>
+<ol>
+<li><strong>查找</strong>：使用哈希函数计算键值的哈希码，定位到对应的哈希桶，然后在桶中查找具体的键值。</li>
+<li><strong>插入</strong>：使用哈希函数计算键值的哈希码，定位到对应的哈希桶，然后插入键值和指针。</li>
+<li><strong>删除</strong>：使用哈希函数计算键值的哈希码，定位到对应的哈希桶，然后删除键值和指针。</li>
+<li><strong>等值查询</strong>：哈希索引非常适合等值查询，但不适合范围查询。</li>
+</ol>
+<h4 id="BitMap索引"><a href="#BitMap索引" class="headerlink" title="BitMap索引"></a>BitMap索引</h4><p>位图索引使用位图（Bitmap）来表示数据的存在性，适用于低基数列（如性别、状态等）多条件查询。</p>
+<p><strong>工作原理</strong></p>
+<ol>
+<li><strong>查找</strong>：根据键值找到对应的位图，然后扫描位图获取匹配的行记录。</li>
+<li><strong>插入</strong>：更新对应的位图。</li>
+<li><strong>删除</strong>：更新对应的位图。</li>
+<li><strong>多条件查询</strong>：通过位图的按位操作（如AND、OR）高效地进行多条件查询。</li>
+</ol>
+<h4 id="全文索引"><a href="#全文索引" class="headerlink" title="全文索引"></a>全文索引</h4><p>全文索引用于对文本数据进行全文搜索，通常基于倒排索引（Inverted Index）实现，适用于文本数据全文搜索查询。</p>
+<p><strong>工作原理</strong></p>
+<ol>
+<li><strong>查找</strong>：根据查询词找到对应的词条列表，然后合并词条列表获取匹配的文档。</li>
+<li><strong>插入</strong>：将文档中的每个词添加到倒排索引中。</li>
+<li><strong>删除</strong>：从倒排索引中删除文档中的每个词。</li>
+<li><strong>查询</strong>：通过倒排索引高效地进行全文搜索。</li>
+</ol>
+<h3 id="索引的分类"><a href="#索引的分类" class="headerlink" title="索引的分类"></a>索引的分类</h3><ol>
 <li><p>根据存储结构分类:</p>
 <ul>
 <li>B-Tree索引：这是最常见的索引类型，支持随机访问、顺序访问、范围访问和部分键匹配查询。</li>
@@ -1078,86 +1116,304 @@ LOWER<span class="token punctuation">(</span>string<span class="token punctuatio
 </li>
 </ol>
 <p>索引的选择和使用应该基于数据的使用模式、查询类型、数据分布和数据库管理系统的特性。合适的索引能够大幅提高查询性能，但是也会消耗额外的存储空间，且在数据变更时需要维护，可能影响写入性能。因此，设计索引时需要权衡查询优化与资源消耗。</p>
-<h2 id="管理索引"><a href="#管理索引" class="headerlink" title="管理索引"></a>管理索引</h2><p>创建索引</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> index_name <span class="token keyword">ON</span> table_name<span class="token punctuation">(</span>column_name<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="索引创建与管理"><a href="#索引创建与管理" class="headerlink" title="索引创建与管理"></a>索引创建与管理</h2><h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 创建单列索引</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> index_name <span class="token keyword">ON</span> table_name<span class="token punctuation">(</span>column_name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">-- 创建复合索引/多列索引</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> index_name <span class="token keyword">ON</span> table_name<span class="token punctuation">(</span>column1，column2，column3，……<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>删除索引</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">DROP</span> <span class="token keyword">INDEX</span> index_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h3><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">DROP</span> <span class="token keyword">INDEX</span> index_name <span class="token keyword">ON</span> table_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>修改索引</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">REINDEX <span class="token keyword">INDEX</span> index_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="重建索引"><a href="#重建索引" class="headerlink" title="重建索引"></a>重建索引</h3><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 频繁操作后可能会产生碎片，重建索引可以提高效率</span>
+REINDEX <span class="token keyword">INDEX</span> index_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<p>查询索引</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SHOW</span> INDEXES <span class="token operator">IN</span> table_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="查询索引"><a href="#查询索引" class="headerlink" title="查询索引"></a>查询索引</h3><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SHOW</span> INDEXES <span class="token keyword">FROM</span>  table_name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<h2 id="查询优化"><a href="#查询优化" class="headerlink" title="查询优化"></a>查询优化</h2><ol>
-<li><p>使用索引：</p>
-<ul>
-<li>为经常作为查询条件的列添加索引。</li>
-<li>使用复合索引针对包含多个条件的查询进行优化。</li>
-<li>确保索引字段的选择性好，以允许数据库快速缩小搜索结果范围。</li>
+<h2 id="索引的使用"><a href="#索引的使用" class="headerlink" title="索引的使用"></a>索引的使用</h2><h3 id="查询优化"><a href="#查询优化" class="headerlink" title="查询优化"></a>查询优化</h3><h4 id="创建适当的索引"><a href="#创建适当的索引" class="headerlink" title="创建适当的索引"></a>创建适当的索引</h4><ul>
+<li><strong>单列索引</strong>：对经常用于查询条件的单个列创建索引。</li>
+<li><strong>多列索引（复合索引）</strong>：对经常一起使用的多个列创建复合索引，特别是WHERE子句中多个条件的组合。</li>
+<li><strong>唯一索引</strong>：对需要唯一值的列（如用户名、电子邮件等）创建唯一索引，以确保数据的唯一性和加速查询。</li>
+</ul>
+<h4 id="使用覆盖索引"><a href="#使用覆盖索引" class="headerlink" title="使用覆盖索引"></a>使用覆盖索引</h4><p>覆盖索引包含查询所需的所有列，避免了回表操作（即从索引中找到主键后，再去主表中查找其他列），进一步提高查询效率。</p>
+<h4 id="利用索引优化排序和分组"><a href="#利用索引优化排序和分组" class="headerlink" title="利用索引优化排序和分组"></a>利用索引优化排序和分组</h4><p>对经常用于ORDER BY和GROUP BY操作的列创建索引，可以显著提高排序和分组操作的性能。</p>
+<h4 id="查询优化器的使用"><a href="#查询优化器的使用" class="headerlink" title="查询优化器的使用"></a>查询优化器的使用</h4><p>使用数据库的查询优化工具（如MySQL的EXPLAIN、PostgreSQL的EXPLAIN ANALYZE）来分析查询计划，确保索引被合理利用。</p>
+<h3 id="索引的索引"><a href="#索引的索引" class="headerlink" title="索引的索引"></a>索引的索引</h3><h4 id="选择经常用于查询条件的列"><a href="#选择经常用于查询条件的列" class="headerlink" title="选择经常用于查询条件的列"></a>选择经常用于查询条件的列</h4><ul>
+<li><strong>WHERE子句</strong>：对经常出现在WHERE子句中的列创建索引。</li>
+<li><strong>JOIN操作</strong>：对经常用于表连接的列创建索引。</li>
+</ul>
+<h4 id="选择经常用于排序和分组的列"><a href="#选择经常用于排序和分组的列" class="headerlink" title="选择经常用于排序和分组的列"></a>选择经常用于排序和分组的列</h4><ul>
+<li><strong>ORDER BY子句</strong>：对经常用于排序的列创建索引。</li>
+<li><strong>GROUP BY子句</strong>：对经常用于分组的列创建索引。</li>
+</ul>
+<h4 id="选择基数较高的列"><a href="#选择基数较高的列" class="headerlink" title="选择基数较高的列"></a>选择基数较高的列</h4><ul>
+<li><strong>高基数列</strong>：选择基数较高的列（即唯一值较多的列）创建索引，因为这些列的选择性较高，索引的效率更高。</li>
+</ul>
+<h4 id="选择适当的索引类型"><a href="#选择适当的索引类型" class="headerlink" title="选择适当的索引类型"></a>选择适当的索引类型</h4><ul>
+<li><strong>B-树索引</strong>：适用于大多数查询操作，包括等值查询、范围查询、排序和分组。</li>
+<li><strong>哈希索引</strong>：适用于等值查询，但不适用于范围查询。</li>
+<li><strong>位图索引</strong>：适用于低基数列和多条件查询。</li>
+<li><strong>全文索引</strong>：适用于全文搜索</li>
+</ul>
+<blockquote>
+<ol>
+<li><strong>避免过多索引</strong>：创建过多的索引会增加维护开销和存储空间，影响插入、更新和删除操作的性能。</li>
+<li><strong>定期维护索引</strong>：定期重建或优化索引，以减少碎片和保持索引的高效性。</li>
+<li><strong>监控和分析</strong>：使用查询优化工具（如EXPLAIN）监控和分析查询性能，确保索引被合理利用。</li>
+<li><strong>选择合适的索引类型</strong>：根据查询类型和数据特性选择合适的索引类型，以达到最佳的查询性能。</li>
+<li><strong>考虑复合索引的顺序</strong>：在创建复合索引时，考虑列的顺序。一般来说，选择性较高的列应放在前面。</li>
+</ol>
+</blockquote>
+<h3 id="索引的缺点"><a href="#索引的缺点" class="headerlink" title="索引的缺点"></a>索引的缺点</h3><ol>
+<li><strong>空间开销</strong>：索引需要额外的存储空间来维护数据结构，特别是对于大型表和多个索引。</li>
+<li><strong>维护开销</strong>：插入、更新和删除操作需要同时更新索引，增加了维护开销。</li>
+<li><strong>不适用于所有查询</strong>：某些查询类型（如模糊查询、复杂的计算列查询）可能无法有效利用索引。</li>
+<li><strong>索引选择性</strong>：低选择性的列（如布尔值、性别等）创建索引效果不佳，可能会导致索引扫描而不是索引查找。</li>
+</ol>
+<h2 id="索引性能调优"><a href="#索引性能调优" class="headerlink" title="索引性能调优"></a>索引性能调优</h2><h3 id="执行计划"><a href="#执行计划" class="headerlink" title="执行计划"></a>执行计划</h3><h4 id="什么是执行计划（EXPLAIN）"><a href="#什么是执行计划（EXPLAIN）" class="headerlink" title="什么是执行计划（EXPLAIN）"></a>什么是执行计划（EXPLAIN）</h4><p><code>EXPLAIN</code>是一个SQL命令，用于显示查询的执行计划。执行计划提供了查询优化器选择的执行路径，包括表的访问顺序、使用的索引、连接方式和估计的行数等信息。</p>
+<h4 id="EXPLAIN的基本语法"><a href="#EXPLAIN的基本语法" class="headerlink" title="EXPLAIN的基本语法"></a><code>EXPLAIN</code>的基本语法</h4><pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">EXPLAIN SELECT * FROM table_name WHERE condition;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="解释执行计划的输出"><a href="#解释执行计划的输出" class="headerlink" title="解释执行计划的输出"></a>解释执行计划的输出</h4><ol>
+<li>id：查询中每个子查询的标识符。查询的执行顺序是按照<code>id</code>的顺序进行的。</li>
+<li>select_type：查询的类型，如<code>SIMPLE</code>（简单查询）、<code>PRIMARY</code>（主查询）、<code>SUBQUERY</code>（子查询）等。</li>
+<li>table：查询中访问的表。</li>
+<li>type：访问类型，表示查询使用的访问方法。常见的类型包括：<ul>
+<li><code>ALL</code>：全表扫描。</li>
+<li><code>index</code>：索引扫描。</li>
+<li><code>range</code>：范围扫描。</li>
+<li><code>ref</code>：使用非唯一索引扫描。</li>
+<li><code>eq_ref</code>：使用唯一索引扫描。</li>
+<li><code>const</code>：常量访问。</li>
 </ul>
 </li>
-<li><p>优化查询语句：</p>
+<li>possible_keys：查询中可能使用的索引。</li>
+<li>key：查询实际使用的索引。</li>
+<li>key_len：使用的索引的长度。</li>
+<li>ref：索引列与查询条件的比较。</li>
+<li>rows：查询优化器估计的需要读取的行数。</li>
+<li>Extra：额外的信息，如<code>Using where</code>、<code>Using index</code>、<code>Using temporary</code>、<code>Using filesort</code>等。</li>
+</ol>
+<h4 id="常见的Extra列值及优化建议"><a href="#常见的Extra列值及优化建议" class="headerlink" title="常见的Extra列值及优化建议"></a>常见的<code>Extra</code>列值及优化建议</h4><h5 id="Using-where"><a href="#Using-where" class="headerlink" title="Using where"></a><code>Using where</code></h5><p>表示查询使用了WHERE条件进行过滤。这通常是正常的，但你可以确保WHERE条件中的列有适当的索引，以提高查询性能。</p>
+<p><strong>优化建议</strong>：</p>
 <ul>
-<li>避免使用SELECT *，只选择所需的列。</li>
-<li>尽量使用表的别名和前缀，尤其是在连接多个表的查询中。</li>
-<li>确保WHERE子句中的条件尽可能使查询能利用索引。</li>
+<li>确保WHERE条件中的列有索引。</li>
+<li>考虑创建复合索引以覆盖多个WHERE条件。</li>
+</ul>
+<h5 id="Using-index"><a href="#Using-index" class="headerlink" title="Using index"></a><code>Using index</code></h5><p>表示查询使用了覆盖索引，所有需要的数据都从索引中获取，无需回表操作。这通常是理想的情况。</p>
+<p><strong>优化建议</strong>：</p>
+<ul>
+<li>确保查询所需的所有列都包含在索引中，以实现覆盖索引。</li>
+<li>定期检查和维护索引，以确保索引的高效性。</li>
+</ul>
+<h5 id="Using-temporary"><a href="#Using-temporary" class="headerlink" title="Using temporary"></a><code>Using temporary</code></h5><p>表示查询使用了临时表，通常发生在需要排序或分组的查询中。这可能会影响查询性能。</p>
+<p><strong>优化建议</strong>：</p>
+<ul>
+<li>确保ORDER BY和GROUP BY子句中的列有索引。</li>
+<li>尽量减少使用临时表的查询操作。</li>
+<li>通过调整查询语句或创建适当的索引，减少临时表的使用。</li>
+</ul>
+<h5 id="Using-filesort"><a href="#Using-filesort" class="headerlink" title="Using filesort"></a><code>Using filesort</code></h5><p>表示查询使用了文件排序，通常发生在需要排序的查询中。这可能会影响查询性能。</p>
+<p><strong>优化建议</strong>：</p>
+<ul>
+<li>确保ORDER BY子句中的列有索引。</li>
+<li>尽量减少使用文件排序的查询操作。</li>
+<li>通过调整查询语句或创建适当的索引，减少文件排序的使用。</li>
+</ul>
+<h5 id="Using-join-buffer"><a href="#Using-join-buffer" class="headerlink" title="Using join buffer"></a><code>Using join buffer</code></h5><p>表示查询使用了连接缓冲区，通常发生在没有适当索引的连接操作中。这可能会影响查询性能。</p>
+<p><strong>优化建议</strong>：</p>
+<ul>
+<li>确保连接列有适当的索引。</li>
+<li>考虑调整连接顺序或使用不同的连接方式（如嵌套循环连接、哈希连接等）。</li>
+</ul>
+<h5 id="Using-index-condition"><a href="#Using-index-condition" class="headerlink" title="Using index condition"></a><code>Using index condition</code></h5><p>表示查询使用了索引条件下推（Index Condition Pushdown，ICP），这是一种优化技术，可以减少回表操作。</p>
+<p><strong>优化建议</strong>：</p>
+<ul>
+<li>确保索引覆盖查询条件，以充分利用索引条件下推。</li>
+</ul>
+<h5 id="Using-intersect-union"><a href="#Using-intersect-union" class="headerlink" title="Using intersect/union"></a><code>Using intersect/union</code></h5><p>表示查询使用了索引合并，通过交集或并集操作合并多个索引的结果。</p>
+<p><strong>优化建议</strong>：</p>
+<ul>
+<li>确保查询条件中的列有适当的索引。</li>
+<li>考虑创建复合索引以替代索引合并。</li>
+</ul>
+<h3 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h3><p>覆盖索引是指包含查询所需的所有列的索引。覆盖索引并不是一种不同的索引类型，而是复合索引的一种特殊用法。当一个索引包含了查询所需的所有列时，这个索引就被称为覆盖索引。覆盖索引可以避免回表操作，从而提高查询性能。</p>
+<p>回表操作（Table Lookup 或 Table Access by Rowid）是指在使用索引查询时，数据库系统需要从索引中找到主键或行标识符（Rowid），然后再访问实际的数据行以获取所需的列数据。回表操作通常发生在索引不包含查询所需的所有列的情况下。</p>
+<p><strong>回表操作的过程:</strong></p>
+<ol>
+<li><strong>索引查找</strong>：首先，数据库系统使用索引来快速定位符合查询条件的记录。在这个过程中，索引只包含索引列和指向实际数据行的指针（如主键或Rowid）。</li>
+<li><strong>回表查找</strong>：一旦找到符合条件的索引记录，数据库系统使用指针（如主键或Rowid）访问实际的数据行，以获取查询所需的其他列的数据。</li>
+</ol>
+<h3 id="索引合并"><a href="#索引合并" class="headerlink" title="索引合并"></a>索引合并</h3><p>索引合并（Index Merge）是数据库查询优化器在执行查询时的一种优化策略。它允许查询优化器同时使用多个索引来满足查询条件，然后合并这些索引的结果，从而提高查询性能。</p>
+<p><strong>索引合并的原理</strong></p>
+<p>索引合并的基本思想是，当一个查询可以利用多个索引时，查询优化器会分别使用这些索引进行部分查询，然后将结果合并。</p>
+<ol>
+<li><strong>AND条件</strong>：当查询条件中包含多个列的AND操作时，查询优化器可以分别使用每个列上的索引，然后合并结果。</li>
+<li><strong>OR条件</strong>：当查询条件中包含多个列的OR操作时，查询优化器可以分别使用每个列上的索引，然后合并结果。</li>
+<li><strong>覆盖索引</strong>：当查询条件和选择列可以分别由不同的索引覆盖时，查询优化器可以分别使用这些索引，然后合并结果。</li>
+</ol>
+<p><strong>索引合并的类型</strong></p>
+<ol>
+<li><strong>联合索引合并（Union Index Merge）</strong>：用于处理OR条件。查询优化器分别使用每个列上的索引，然后将结果进行并集操作。</li>
+<li><strong>交集索引合并（Intersection Index Merge）</strong>：用于处理AND条件。查询优化器分别使用每个列上的索引，然后将结果进行交集操作。</li>
+<li><strong>排序合并（Sort-Union Index Merge）</strong>：用于处理需要排序的查询。查询优化器分别使用每个列上的索引，然后对结果进行排序和合并。</li>
+</ol>
+<h2 id="聚簇索引和非聚簇索引"><a href="#聚簇索引和非聚簇索引" class="headerlink" title="聚簇索引和非聚簇索引"></a>聚簇索引和非聚簇索引</h2><p>从物理存储方式来看索引可以分为聚簇索引（Clustered Index）和非聚簇索引（Non-Clustered Index）。</p>
+<h3 id="聚簇索引（Clustered-index）"><a href="#聚簇索引（Clustered-index）" class="headerlink" title="聚簇索引（Clustered index）"></a>聚簇索引（Clustered index）</h3><p>聚簇索引是按照索引键值顺序存储数据的索引。</p>
+<h4 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h4><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">create</span> custered <span class="token keyword">index</span> index_name <span class="token keyword">on</span> table_name<span class="token punctuation">(</span>cloum<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><ol>
+<li>数据存储顺序：数据行按照索引值进行物理排序存储。</li>
+<li>唯一性：一个表只能由一个聚簇索引，默认是主键。</li>
+<li>主键默认聚簇：数据库如果没有明确创建聚簇索引，默认主键就是聚簇索引。</li>
+</ol>
+<h4 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h4><ol>
+<li>查询性能：根据数据行的有序性，进行范围查询、排序查询、分组查询、去重查询效率高。</li>
+<li>快速检索：找到聚簇索引键值后可以快速定位到数据行，快速的查找其他的列的值。</li>
+</ol>
+<h4 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h4><ol>
+<li>插入和更新开销：插入和更新操作可能会导致部分数据行重新排列。</li>
+<li>表重建：更改聚簇索引，会导致整张表重新排列。</li>
+</ol>
+<h3 id="非聚簇索引（Non-Clustered-Index）"><a href="#非聚簇索引（Non-Clustered-Index）" class="headerlink" title="非聚簇索引（Non-Clustered Index）"></a>非聚簇索引（Non-Clustered Index）</h3><p>非聚簇索引不影响数据行的顺序，索引存在独立的B+树中，存储的是索引键值和指向数据的行指针</p>
+<h4 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h4><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> idx_last_name <span class="token keyword">ON</span> employees<span class="token punctuation">(</span>last_name<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h4><ol>
+<li>独立存储：与数据分开存储，存储索引键值和数据的行指针</li>
+<li>多个索引：不唯一，可以有多个</li>
+</ol>
+<h4 id="优点-2"><a href="#优点-2" class="headerlink" title="优点"></a>优点</h4><ol>
+<li>灵活性：可以有多个聚簇索引，每个索引可以加速不同的查询操作。</li>
+<li>插入和更新效率：数据行不受影响，效率高</li>
+</ol>
+<h4 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h4><ol>
+<li>回表操作：非聚簇索引需要进行回表操作（Table Lookup），即从索引中找到RowID或指针后，再访问实际的数据行。</li>
+</ol>
+<h2 id="数据分区"><a href="#数据分区" class="headerlink" title="数据分区"></a>数据分区</h2><p>数据分区是DBMS的一种功能，可以将一个大表或者索引分成更小、更易于管理的分区，每个分区独立存储和管理。</p>
+<h3 id="数据分区的类型"><a href="#数据分区的类型" class="headerlink" title="数据分区的类型"></a>数据分区的类型</h3><ol>
+<li>范围分区（Rang partitioning）: 根据列值分范围将数据分成不同的区，例如，根据日期范围分区，将数据按年份或月份分区。</li>
+<li>列表分区（List partitioning）: 根据列值的具体列表将数据分成不同的分区,例如，根据地区代码分区，将数据按不同的地区分区。</li>
+<li>哈希分区（Hash partitioning）: 根据列值的哈希值将数据分成不同的分区,适用于数据分布均匀的情况。</li>
+<li>键值分区（Key partitioning）: 类似于哈希分区，但使用的是数据库系统内部的哈希函数,通常用于主键或唯一键。</li>
+<li>复合分区（Composite partition）: 结合多种分区方法，将数据分成更细的分区,例如，先按范围分区，再按哈希分区。</li>
+</ol>
+<h3 id="数据分区的优点"><a href="#数据分区的优点" class="headerlink" title="数据分区的优点"></a>数据分区的优点</h3><ol>
+<li><strong>提高查询性能</strong>：<ul>
+<li>在特定分区内执行，减少数据扫描的范围，提高查询效率。</li>
+<li>适用于范围查询和大数据量的查询。</li>
 </ul>
 </li>
-<li><p>调整数据模型：</p>
-<ul>
-<li>正规化数据结构以避免冗余，并减少数据的管理工作。</li>
-<li>在需要频繁读取的场景下考虑反正规化，以减少JOIN操作的需要。</li>
+<li><strong>简化管理</strong>：<ul>
+<li>独立管理每个分区，例如备份、恢复、加载和卸载数据。</li>
+<li>分区可以独立维护和优化，减少对整个表的影响。</li>
 </ul>
 </li>
-<li><p>使用查询缓存：</p>
-<ul>
-<li>利用数据库提供的查询缓存，对于那些不经常改变的数据，利用缓存可以大大加快查询速度。</li>
+<li><strong>提高可扩展性</strong>：<ul>
+<li>分区可以分布在不同的存储设备上，提高数据存储和处理的可扩展性。</li>
+<li>支持大规模数据的存储和处理。</li>
 </ul>
 </li>
-<li><p>查询计划分析：</p>
-<ul>
-<li>使用EXPLAIN或其他分析工具查看查询的执行计划。</li>
-<li>根据执行计划调整查询方式，比如改变JOIN的类型或顺序。</li>
-</ul>
-</li>
-<li><p>使用批处理：</p>
-<ul>
-<li>对于数据插入和更新操作，使用批处理可以减少I&#x2F;O次数，提高性能。</li>
-</ul>
-</li>
-<li><p>避免复杂的子查询：</p>
-<ul>
-<li>能用JOIN解决的问题就不要用子查询。</li>
-<li>尝试把复杂的子查询改写为临时表。</li>
-</ul>
-</li>
-<li><p>减少事务大小：</p>
-<ul>
-<li>长事务会锁定资源较长时间，减小事务的处理数据量可以提高并发性能。</li>
-</ul>
-</li>
-<li><p>硬件和系统优化：</p>
-<ul>
-<li>确保有足够的内存和高效的CPU。</li>
-<li>磁盘I&#x2F;O性能常常是瓶颈，选择适合的存储解决方案。</li>
-<li>良好的网络基础设施，尤其是在分布式数据库环境中。</li>
-</ul>
-</li>
-<li><p>监控和分析：</p>
-<ul>
-<li>监控数据库的性能，分析瓶颈点。</li>
-<li>定期进行数据库维护，比如索引重建和统计信息的更新。</li>
+<li><strong>提高可用性</strong>：<ul>
+<li>如果一个分区出现故障，其他分区仍然可以正常工作，提高系统的可用性。</li>
 </ul>
 </li>
 </ol>
-<h2 id="索引的缺点"><a href="#索引的缺点" class="headerlink" title="索引的缺点"></a>索引的缺点</h2><ol>
-<li><p>占用空间：每个索引会在数据库中创建一个单独的数据结构（如B+树），这会占用磁盘空间。</p>
-</li>
-<li><p>写操作性能下降：每次数据变更时如插入、更新、删除操作时，数据发生变更索引同步更新，这会增加额外的处理时间。</p>
-</li>
+<h3 id="语法-2"><a href="#语法-2" class="headerlink" title="语法"></a>语法</h3><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 范围分区</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> orders <span class="token punctuation">(</span>
+    order_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    order_date <span class="token keyword">DATE</span><span class="token punctuation">,</span>
+    customer_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    amount <span class="token keyword">DECIMAL</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token punctuation">(</span><span class="token keyword">YEAR</span><span class="token punctuation">(</span>order_date<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p2020 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2021</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2021 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2022</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2022 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2023</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">-- 列表分区</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> orders <span class="token punctuation">(</span>
+    order_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    order_date <span class="token keyword">DATE</span><span class="token punctuation">,</span>
+    customer_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    amount <span class="token keyword">DECIMAL</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    region_code <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> LIST <span class="token punctuation">(</span>region_code<span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p_north <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token string">'N1'</span><span class="token punctuation">,</span> <span class="token string">'N2'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p_south <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token string">'S1'</span><span class="token punctuation">,</span> <span class="token string">'S2'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p_east <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token string">'E1'</span><span class="token punctuation">,</span> <span class="token string">'E2'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p_west <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token string">'W1'</span><span class="token punctuation">,</span> <span class="token string">'W2'</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">-- 哈希分区</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> orders <span class="token punctuation">(</span>
+    order_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    order_date <span class="token keyword">DATE</span><span class="token punctuation">,</span>
+    customer_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    amount <span class="token keyword">DECIMAL</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> <span class="token keyword">HASH</span><span class="token punctuation">(</span>order_id<span class="token punctuation">)</span> PARTITIONS <span class="token number">4</span><span class="token punctuation">;</span>
+<span class="token comment">-- 键值分区</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> orders <span class="token punctuation">(</span>
+    order_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    order_date <span class="token keyword">DATE</span><span class="token punctuation">,</span>
+    customer_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    amount <span class="token keyword">DECIMAL</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> <span class="token keyword">KEY</span><span class="token punctuation">(</span>order_id<span class="token punctuation">)</span> PARTITIONS <span class="token number">4</span><span class="token punctuation">;</span>
+<span class="token comment">-- 复合分区</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> orders <span class="token punctuation">(</span>
+    order_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    order_date <span class="token keyword">DATE</span><span class="token punctuation">,</span>
+    customer_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    amount <span class="token keyword">DECIMAL</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token punctuation">(</span><span class="token keyword">YEAR</span><span class="token punctuation">(</span>order_date<span class="token punctuation">)</span><span class="token punctuation">)</span> SUBPARTITION <span class="token keyword">BY</span> <span class="token keyword">HASH</span><span class="token punctuation">(</span>order_id<span class="token punctuation">)</span> SUBPARTITIONS <span class="token number">4</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p2020 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2021</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2021 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2022</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2022 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2023</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="mysql数据分区如何分布在不同的存储设备"><a href="#mysql数据分区如何分布在不同的存储设备" class="headerlink" title="mysql数据分区如何分布在不同的存储设备"></a>mysql数据分区如何分布在不同的存储设备</h2><ol>
+<li>创建表空间</li>
 </ol>
+<p>假设有三个存储设备，分别位于路径<code>/mnt/device1</code>、<code>/mnt/device2</code>和<code>/mnt/device3</code>。在每个存储设备上创建一个表空间：</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLESPACE</span> ts1 <span class="token keyword">ADD</span> DATAFILE <span class="token string">'/mnt/device1/datafile1.ibd'</span><span class="token punctuation">;</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">TABLESPACE</span> ts2 <span class="token keyword">ADD</span> DATAFILE <span class="token string">'/mnt/device2/datafile2.ibd'</span><span class="token punctuation">;</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">TABLESPACE</span> ts3 <span class="token keyword">ADD</span> DATAFILE <span class="token string">'/mnt/device3/datafile3.ibd'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<ol start="2">
+<li>创建分区表并指向表空间</li>
+</ol>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> orders <span class="token punctuation">(</span>
+    order_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    order_date <span class="token keyword">DATE</span><span class="token punctuation">,</span>
+    customer_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    amount <span class="token keyword">DECIMAL</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token punctuation">(</span><span class="token keyword">YEAR</span><span class="token punctuation">(</span>order_date<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p2020 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2021</span><span class="token punctuation">)</span> <span class="token keyword">TABLESPACE</span> ts1<span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2021 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2022</span><span class="token punctuation">)</span> <span class="token keyword">TABLESPACE</span> ts2<span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2022 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2023</span><span class="token punctuation">)</span> <span class="token keyword">TABLESPACE</span> ts3
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="3">
+<li>添加新的分区和表空间</li>
+</ol>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLESPACE</span> ts4 <span class="token keyword">ADD</span> DATAFILE <span class="token string">'/mnt/device4/datafile4.ibd'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> orders <span class="token keyword">ADD</span> <span class="token keyword">PARTITION</span> <span class="token punctuation">(</span><span class="token keyword">PARTITION</span> p2023 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2024</span><span class="token punctuation">)</span> <span class="token keyword">TABLESPACE</span> ts4<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<ol start="4">
+<li>删除分区</li>
+</ol>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> orders <span class="token keyword">DROP</span> <span class="token keyword">PARTITION</span> p2020<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="5">
+<li>查看分区</li>
+</ol>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SHOW</span> <span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> orders<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+
+
 <h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><blockquote>
 <p>SQL中的事务是由一组有逻辑的数据库操作组成的工作单元，一个事务内的所有操作要么全部成功，要么全部失败，通过事务保证数据库数据的一致性。</p>
 </blockquote>
@@ -1588,7 +1844,7 @@ EmployeeID <span class="token operator">|</span> EmployeeName <span class="token
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Sql%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">Sql介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">关系型数据库是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDBMS%E7%9A%84%E4%BC%98%E7%82%B9%E5%92%8C%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">RDBMS的优点和缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">1.2.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E5%92%8CNoSql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.3.</span> <span class="nav-text">SQL和NoSql数据库的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Sql%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.3.1.</span> <span class="nav-text">Sql数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NoSQL-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.3.2.</span> <span class="nav-text">NoSQL 数据库</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">SQL基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">2.1.</span> <span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">2.3.</span> <span class="nav-text">操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.1.</span> <span class="nav-text">算术运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E8%BE%83-%E5%85%B3%E7%B3%BB-%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.2.</span> <span class="nav-text">比较(关系)运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.3.</span> <span class="nav-text">逻辑运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.4.</span> <span class="nav-text">位运算符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E5%8F%A5"><span class="nav-number">2.4.</span> <span class="nav-text">语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT"><span class="nav-number">2.4.1.</span> <span class="nav-text">SELECT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#INSERT"><span class="nav-number">2.4.2.</span> <span class="nav-text">INSERT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UPDATE"><span class="nav-number">2.4.3.</span> <span class="nav-text">UPDATE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DELETE"><span class="nav-number">2.4.4.</span> <span class="nav-text">DELETE</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80"><span class="nav-number">3.</span> <span class="nav-text">数据定义语言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C%E8%AF%AD%E8%A8%80"><span class="nav-number">4.</span> <span class="nav-text">数据操作语言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="nav-number">5.</span> <span class="nav-text">聚合查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0"><span class="nav-number">5.1.</span> <span class="nav-text">聚合函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GROUP-BY%E5%92%8CHAVING%E5%AD%90%E5%8F%A5"><span class="nav-number">5.2.</span> <span class="nav-text">GROUP BY和HAVING子句</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.</span> <span class="nav-text">数据约束</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NOT-NULL-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.1.</span> <span class="nav-text">NOT NULL 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UNIQUE-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.2.</span> <span class="nav-text">UNIQUE 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PRIMARY-KEY-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.3.</span> <span class="nav-text">PRIMARY KEY 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%96%E9%94%AE%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.4.</span> <span class="nav-text">外键约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CHECK-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.5.</span> <span class="nav-text">CHECK 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DEFAULT-Constraint"><span class="nav-number">6.6.</span> <span class="nav-text">DEFAULT Constraint</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#INDEX-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.7.</span> <span class="nav-text">INDEX 约束</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E6%9F%A5%E8%AF%A2"><span class="nav-number">7.</span> <span class="nav-text">连接查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.1.</span> <span class="nav-text">内连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A6%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.2.</span> <span class="nav-text">左连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%B3%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.3.</span> <span class="nav-text">右连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E5%A4%96%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.4.</span> <span class="nav-text">全外连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.5.</span> <span class="nav-text">自连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.6.</span> <span class="nav-text">交叉连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="nav-number">8.</span> <span class="nav-text">子查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E9%87%8F%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E5%8D%95%E8%A1%8C%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.1.</span> <span class="nav-text">标量子查询（单行子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%97%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E5%A4%9A%E8%A1%8C%E5%8D%95%E5%88%97%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.2.</span> <span class="nav-text">列子查询（多行单列子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E5%A4%9A%E8%A1%8C%E5%A4%9A%E5%88%97%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.3.</span> <span class="nav-text">行子查询（多行多列子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E7%9B%B8%E5%85%B3%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.4.</span> <span class="nav-text">相关子查询（相关子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E6%B4%BE%E7%94%9F%E8%A1%A8%E6%88%96%E5%86%85%E8%81%94%E8%A7%86%E5%9B%BE%EF%BC%89"><span class="nav-number">8.5.</span> <span class="nav-text">表子查询（派生表或内联视图）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXISTS%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="nav-number">8.6.</span> <span class="nav-text">EXISTS子查询</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7-SQL-%E5%87%BD%E6%95%B0"><span class="nav-number">9.</span> <span class="nav-text">高级 SQL 函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%87%BD%E6%95%B0"><span class="nav-number">9.1.</span> <span class="nav-text">数学函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0"><span class="nav-number">9.2.</span> <span class="nav-text">字符串函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0"><span class="nav-number">9.3.</span> <span class="nav-text">条件函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%87%BD%E6%95%B0"><span class="nav-number">9.4.</span> <span class="nav-text">时间函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DATE"><span class="nav-number">9.4.1.</span> <span class="nav-text">DATE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TIME"><span class="nav-number">9.4.2.</span> <span class="nav-text">TIME</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DATEPART"><span class="nav-number">9.4.3.</span> <span class="nav-text">DATEPART</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DATEADD"><span class="nav-number">9.4.4.</span> <span class="nav-text">DATEADD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TIMESTAMP"><span class="nav-number">9.4.5.</span> <span class="nav-text">TIMESTAMP</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%86%E5%9B%BE"><span class="nav-number">10.</span> <span class="nav-text">视图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="nav-number">11.</span> <span class="nav-text">触发器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">12.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">12.1.</span> <span class="nav-text">索引的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E7%B4%A2%E5%BC%95"><span class="nav-number">12.2.</span> <span class="nav-text">管理索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-number">12.3.</span> <span class="nav-text">查询优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="nav-number">12.4.</span> <span class="nav-text">索引的缺点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1"><span class="nav-number">13.</span> <span class="nav-text">事务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E4%BA%8B%E5%8A%A1"><span class="nav-number">13.1.</span> <span class="nav-text">如何使用事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AE%8C%E6%95%B4%E6%80%A7%E5%92%8C%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-number">13.2.</span> <span class="nav-text">如何保证数据的完整性和可靠性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E5%B9%B6%E5%8F%91%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E8%AF%BB%E5%8F%96%E9%97%AE%E9%A2%98"><span class="nav-number">13.3.</span> <span class="nav-text">事务并发时遇到的读取问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-number">13.4.</span> <span class="nav-text">事务隔离级别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0"><span class="nav-number">14.</span> <span class="nav-text">存储过程和函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="nav-number">14.1.</span> <span class="nav-text">存储过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-number">14.1.1.</span> <span class="nav-text">存储过程的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="nav-number">14.1.2.</span> <span class="nav-text">存储过程如何使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0"><span class="nav-number">14.2.</span> <span class="nav-text">函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E8%A1%A8%E5%80%BC%E5%87%BD%E6%95%B0%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">14.3.</span> <span class="nav-text">存储过程和表值函数的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-number">15.</span> <span class="nav-text">性能优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF"><span class="nav-number">15.1.</span> <span class="nav-text">查询优化技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95-1"><span class="nav-number">15.1.1.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E9%80%89%E6%8B%A9"><span class="nav-number">15.1.2.</span> <span class="nav-text">避免选择*</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-number">15.1.3.</span> <span class="nav-text">连接查询优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Limit"><span class="nav-number">15.1.4.</span> <span class="nav-text">使用Limit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E5%9C%A8%E5%BC%80%E5%A4%B4%E4%BD%BF%E7%94%A8%E5%B8%A6%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84-LIKE-%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">15.1.5.</span> <span class="nav-text">避免在开头使用带通配符的 LIKE 运算符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF"><span class="nav-number">15.2.</span> <span class="nav-text">查询分析技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E8%AE%A1%E5%88%92"><span class="nav-number">15.2.1.</span> <span class="nav-text">解释计划</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8%E7%B4%A2%E5%BC%95"><span class="nav-number">15.2.2.</span> <span class="nav-text">合理使用索引</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7SQL"><span class="nav-number">16.</span> <span class="nav-text">高级SQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E6%9F%A5%E8%AF%A2"><span class="nav-number">16.1.</span> <span class="nav-text">递归查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E7%BD%AE%E6%93%8D%E4%BD%9C"><span class="nav-number">16.2.</span> <span class="nav-text">转置操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0"><span class="nav-number">16.3.</span> <span class="nav-text">窗口函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CTE%EF%BC%88%E9%80%9A%E7%94%A8%E8%A1%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%89"><span class="nav-number">16.4.</span> <span class="nav-text">CTE（通用表表达式）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81SQL"><span class="nav-number">16.5.</span> <span class="nav-text">动态SQL</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Sql%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">Sql介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">关系型数据库是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDBMS%E7%9A%84%E4%BC%98%E7%82%B9%E5%92%8C%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">RDBMS的优点和缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">1.2.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E5%92%8CNoSql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.3.</span> <span class="nav-text">SQL和NoSql数据库的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Sql%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.3.1.</span> <span class="nav-text">Sql数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NoSQL-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.3.2.</span> <span class="nav-text">NoSQL 数据库</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">SQL基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">2.1.</span> <span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">2.3.</span> <span class="nav-text">操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.1.</span> <span class="nav-text">算术运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E8%BE%83-%E5%85%B3%E7%B3%BB-%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.2.</span> <span class="nav-text">比较(关系)运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.3.</span> <span class="nav-text">逻辑运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.3.4.</span> <span class="nav-text">位运算符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E5%8F%A5"><span class="nav-number">2.4.</span> <span class="nav-text">语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT"><span class="nav-number">2.4.1.</span> <span class="nav-text">SELECT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#INSERT"><span class="nav-number">2.4.2.</span> <span class="nav-text">INSERT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UPDATE"><span class="nav-number">2.4.3.</span> <span class="nav-text">UPDATE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DELETE"><span class="nav-number">2.4.4.</span> <span class="nav-text">DELETE</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80"><span class="nav-number">3.</span> <span class="nav-text">数据定义语言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C%E8%AF%AD%E8%A8%80"><span class="nav-number">4.</span> <span class="nav-text">数据操作语言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="nav-number">5.</span> <span class="nav-text">聚合查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0"><span class="nav-number">5.1.</span> <span class="nav-text">聚合函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GROUP-BY%E5%92%8CHAVING%E5%AD%90%E5%8F%A5"><span class="nav-number">5.2.</span> <span class="nav-text">GROUP BY和HAVING子句</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.</span> <span class="nav-text">数据约束</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NOT-NULL-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.1.</span> <span class="nav-text">NOT NULL 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UNIQUE-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.2.</span> <span class="nav-text">UNIQUE 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PRIMARY-KEY-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.3.</span> <span class="nav-text">PRIMARY KEY 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%96%E9%94%AE%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.4.</span> <span class="nav-text">外键约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CHECK-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.5.</span> <span class="nav-text">CHECK 约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DEFAULT-Constraint"><span class="nav-number">6.6.</span> <span class="nav-text">DEFAULT Constraint</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#INDEX-%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.7.</span> <span class="nav-text">INDEX 约束</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E6%9F%A5%E8%AF%A2"><span class="nav-number">7.</span> <span class="nav-text">连接查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.1.</span> <span class="nav-text">内连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A6%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.2.</span> <span class="nav-text">左连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%B3%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.3.</span> <span class="nav-text">右连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E5%A4%96%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.4.</span> <span class="nav-text">全外连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.5.</span> <span class="nav-text">自连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.6.</span> <span class="nav-text">交叉连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="nav-number">8.</span> <span class="nav-text">子查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E9%87%8F%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E5%8D%95%E8%A1%8C%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.1.</span> <span class="nav-text">标量子查询（单行子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%97%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E5%A4%9A%E8%A1%8C%E5%8D%95%E5%88%97%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.2.</span> <span class="nav-text">列子查询（多行单列子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E5%A4%9A%E8%A1%8C%E5%A4%9A%E5%88%97%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.3.</span> <span class="nav-text">行子查询（多行多列子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E7%9B%B8%E5%85%B3%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="nav-number">8.4.</span> <span class="nav-text">相关子查询（相关子查询）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%88%E6%B4%BE%E7%94%9F%E8%A1%A8%E6%88%96%E5%86%85%E8%81%94%E8%A7%86%E5%9B%BE%EF%BC%89"><span class="nav-number">8.5.</span> <span class="nav-text">表子查询（派生表或内联视图）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXISTS%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="nav-number">8.6.</span> <span class="nav-text">EXISTS子查询</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7-SQL-%E5%87%BD%E6%95%B0"><span class="nav-number">9.</span> <span class="nav-text">高级 SQL 函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%87%BD%E6%95%B0"><span class="nav-number">9.1.</span> <span class="nav-text">数学函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0"><span class="nav-number">9.2.</span> <span class="nav-text">字符串函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0"><span class="nav-number">9.3.</span> <span class="nav-text">条件函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%87%BD%E6%95%B0"><span class="nav-number">9.4.</span> <span class="nav-text">时间函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DATE"><span class="nav-number">9.4.1.</span> <span class="nav-text">DATE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TIME"><span class="nav-number">9.4.2.</span> <span class="nav-text">TIME</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DATEPART"><span class="nav-number">9.4.3.</span> <span class="nav-text">DATEPART</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DATEADD"><span class="nav-number">9.4.4.</span> <span class="nav-text">DATEADD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TIMESTAMP"><span class="nav-number">9.4.5.</span> <span class="nav-text">TIMESTAMP</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%86%E5%9B%BE"><span class="nav-number">10.</span> <span class="nav-text">视图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="nav-number">11.</span> <span class="nav-text">触发器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">12.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">12.1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%B4%A2%E5%BC%95"><span class="nav-number">12.1.1.</span> <span class="nav-text">什么是索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">12.1.2.</span> <span class="nav-text">索引的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">12.1.3.</span> <span class="nav-text">索引的数据结构和工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#B-Tree%E7%B4%A2%E5%BC%95"><span class="nav-number">12.1.3.1.</span> <span class="nav-text">B-Tree索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hash%E7%B4%A2%E5%BC%95"><span class="nav-number">12.1.3.2.</span> <span class="nav-text">Hash索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BitMap%E7%B4%A2%E5%BC%95"><span class="nav-number">12.1.3.3.</span> <span class="nav-text">BitMap索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%A8%E6%96%87%E7%B4%A2%E5%BC%95"><span class="nav-number">12.1.3.4.</span> <span class="nav-text">全文索引</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">12.1.4.</span> <span class="nav-text">索引的分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA%E4%B8%8E%E7%AE%A1%E7%90%86"><span class="nav-number">12.2.</span> <span class="nav-text">索引创建与管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95"><span class="nav-number">12.2.1.</span> <span class="nav-text">创建索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E7%B4%A2%E5%BC%95"><span class="nav-number">12.2.2.</span> <span class="nav-text">删除索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%BB%BA%E7%B4%A2%E5%BC%95"><span class="nav-number">12.2.3.</span> <span class="nav-text">重建索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E7%B4%A2%E5%BC%95"><span class="nav-number">12.2.4.</span> <span class="nav-text">查询索引</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">12.3.</span> <span class="nav-text">索引的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-number">12.3.1.</span> <span class="nav-text">查询优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E9%80%82%E5%BD%93%E7%9A%84%E7%B4%A2%E5%BC%95"><span class="nav-number">12.3.1.1.</span> <span class="nav-text">创建适当的索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95"><span class="nav-number">12.3.1.2.</span> <span class="nav-text">使用覆盖索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96%E6%8E%92%E5%BA%8F%E5%92%8C%E5%88%86%E7%BB%84"><span class="nav-number">12.3.1.3.</span> <span class="nav-text">利用索引优化排序和分组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">12.3.1.4.</span> <span class="nav-text">查询优化器的使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E7%B4%A2%E5%BC%95"><span class="nav-number">12.3.2.</span> <span class="nav-text">索引的索引</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E7%BB%8F%E5%B8%B8%E7%94%A8%E4%BA%8E%E6%9F%A5%E8%AF%A2%E6%9D%A1%E4%BB%B6%E7%9A%84%E5%88%97"><span class="nav-number">12.3.2.1.</span> <span class="nav-text">选择经常用于查询条件的列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E7%BB%8F%E5%B8%B8%E7%94%A8%E4%BA%8E%E6%8E%92%E5%BA%8F%E5%92%8C%E5%88%86%E7%BB%84%E7%9A%84%E5%88%97"><span class="nav-number">12.3.2.2.</span> <span class="nav-text">选择经常用于排序和分组的列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%9F%BA%E6%95%B0%E8%BE%83%E9%AB%98%E7%9A%84%E5%88%97"><span class="nav-number">12.3.2.3.</span> <span class="nav-text">选择基数较高的列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E9%80%82%E5%BD%93%E7%9A%84%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B"><span class="nav-number">12.3.2.4.</span> <span class="nav-text">选择适当的索引类型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="nav-number">12.3.3.</span> <span class="nav-text">索引的缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98"><span class="nav-number">12.4.</span> <span class="nav-text">索引性能调优</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92"><span class="nav-number">12.4.1.</span> <span class="nav-text">执行计划</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%EF%BC%88EXPLAIN%EF%BC%89"><span class="nav-number">12.4.1.1.</span> <span class="nav-text">什么是执行计划（EXPLAIN）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EXPLAIN%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="nav-number">12.4.1.2.</span> <span class="nav-text">EXPLAIN的基本语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E7%9A%84%E8%BE%93%E5%87%BA"><span class="nav-number">12.4.1.3.</span> <span class="nav-text">解释执行计划的输出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84Extra%E5%88%97%E5%80%BC%E5%8F%8A%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE"><span class="nav-number">12.4.1.4.</span> <span class="nav-text">常见的Extra列值及优化建议</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Using-where"><span class="nav-number">12.4.1.4.1.</span> <span class="nav-text">Using where</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Using-index"><span class="nav-number">12.4.1.4.2.</span> <span class="nav-text">Using index</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Using-temporary"><span class="nav-number">12.4.1.4.3.</span> <span class="nav-text">Using temporary</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Using-filesort"><span class="nav-number">12.4.1.4.4.</span> <span class="nav-text">Using filesort</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Using-join-buffer"><span class="nav-number">12.4.1.4.5.</span> <span class="nav-text">Using join buffer</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Using-index-condition"><span class="nav-number">12.4.1.4.6.</span> <span class="nav-text">Using index condition</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Using-intersect-union"><span class="nav-number">12.4.1.4.7.</span> <span class="nav-text">Using intersect&#x2F;union</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95"><span class="nav-number">12.4.2.</span> <span class="nav-text">覆盖索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%90%88%E5%B9%B6"><span class="nav-number">12.4.3.</span> <span class="nav-text">索引合并</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E5%92%8C%E9%9D%9E%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95"><span class="nav-number">12.5.</span> <span class="nav-text">聚簇索引和非聚簇索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%EF%BC%88Clustered-index%EF%BC%89"><span class="nav-number">12.5.1.</span> <span class="nav-text">聚簇索引（Clustered index）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-number">12.5.1.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">12.5.1.2.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E7%82%B9-1"><span class="nav-number">12.5.1.3.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="nav-number">12.5.1.4.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%EF%BC%88Non-Clustered-Index%EF%BC%89"><span class="nav-number">12.5.2.</span> <span class="nav-text">非聚簇索引（Non-Clustered Index）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95-1"><span class="nav-number">12.5.2.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E7%82%B9-1"><span class="nav-number">12.5.2.2.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E7%82%B9-2"><span class="nav-number">12.5.2.3.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9-2"><span class="nav-number">12.5.2.4.</span> <span class="nav-text">缺点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E5%8C%BA"><span class="nav-number">12.6.</span> <span class="nav-text">数据分区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E5%8C%BA%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="nav-number">12.6.1.</span> <span class="nav-text">数据分区的类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E5%8C%BA%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-number">12.6.2.</span> <span class="nav-text">数据分区的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95-2"><span class="nav-number">12.6.3.</span> <span class="nav-text">语法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql%E6%95%B0%E6%8D%AE%E5%88%86%E5%8C%BA%E5%A6%82%E4%BD%95%E5%88%86%E5%B8%83%E5%9C%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E5%AD%98%E5%82%A8%E8%AE%BE%E5%A4%87"><span class="nav-number">12.7.</span> <span class="nav-text">mysql数据分区如何分布在不同的存储设备</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1"><span class="nav-number">13.</span> <span class="nav-text">事务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E4%BA%8B%E5%8A%A1"><span class="nav-number">13.1.</span> <span class="nav-text">如何使用事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AE%8C%E6%95%B4%E6%80%A7%E5%92%8C%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-number">13.2.</span> <span class="nav-text">如何保证数据的完整性和可靠性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E5%B9%B6%E5%8F%91%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E8%AF%BB%E5%8F%96%E9%97%AE%E9%A2%98"><span class="nav-number">13.3.</span> <span class="nav-text">事务并发时遇到的读取问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-number">13.4.</span> <span class="nav-text">事务隔离级别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0"><span class="nav-number">14.</span> <span class="nav-text">存储过程和函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="nav-number">14.1.</span> <span class="nav-text">存储过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-number">14.1.1.</span> <span class="nav-text">存储过程的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="nav-number">14.1.2.</span> <span class="nav-text">存储过程如何使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0"><span class="nav-number">14.2.</span> <span class="nav-text">函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E8%A1%A8%E5%80%BC%E5%87%BD%E6%95%B0%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">14.3.</span> <span class="nav-text">存储过程和表值函数的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-number">15.</span> <span class="nav-text">性能优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF"><span class="nav-number">15.1.</span> <span class="nav-text">查询优化技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95-1"><span class="nav-number">15.1.1.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E9%80%89%E6%8B%A9"><span class="nav-number">15.1.2.</span> <span class="nav-text">避免选择*</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-number">15.1.3.</span> <span class="nav-text">连接查询优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Limit"><span class="nav-number">15.1.4.</span> <span class="nav-text">使用Limit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E5%9C%A8%E5%BC%80%E5%A4%B4%E4%BD%BF%E7%94%A8%E5%B8%A6%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84-LIKE-%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">15.1.5.</span> <span class="nav-text">避免在开头使用带通配符的 LIKE 运算符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF"><span class="nav-number">15.2.</span> <span class="nav-text">查询分析技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E8%AE%A1%E5%88%92"><span class="nav-number">15.2.1.</span> <span class="nav-text">解释计划</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8%E7%B4%A2%E5%BC%95"><span class="nav-number">15.2.2.</span> <span class="nav-text">合理使用索引</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7SQL"><span class="nav-number">16.</span> <span class="nav-text">高级SQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E6%9F%A5%E8%AF%A2"><span class="nav-number">16.1.</span> <span class="nav-text">递归查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E7%BD%AE%E6%93%8D%E4%BD%9C"><span class="nav-number">16.2.</span> <span class="nav-text">转置操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0"><span class="nav-number">16.3.</span> <span class="nav-text">窗口函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CTE%EF%BC%88%E9%80%9A%E7%94%A8%E8%A1%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%89"><span class="nav-number">16.4.</span> <span class="nav-text">CTE（通用表表达式）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81SQL"><span class="nav-number">16.5.</span> <span class="nav-text">动态SQL</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
