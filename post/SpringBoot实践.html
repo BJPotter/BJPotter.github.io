@@ -28,7 +28,7 @@
 <meta property="og:description" content="入门SringBoot介绍Spring Boot是一个用于创建独立、生产级Spring应用程序的框架。它简化了Spring应用程序的开发，通过提供一系列开箱即用的配置和功能，使开发者能够快速上手并专注于业务逻辑。 主要特点：  简化Spring开发：提供更快、更广泛的入门体验。 默认配置：提供开箱即用的配置，同时允许灵活定制。 嵌入式服务器：支持内置服务器（如Tomcat、Jetty），无需外部部">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-04-01T13:31:45.224Z">
-<meta property="article:modified_time" content="2024-06-02T09:32:52.434Z">
+<meta property="article:modified_time" content="2024-06-14T12:29:07.801Z">
 <meta property="article:author" content="potter">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="springboot">
@@ -202,7 +202,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-02 17:32:52" itemprop="dateModified" datetime="2024-06-02T17:32:52+08:00">2024-06-02</time>
+                <time title="修改时间：2024-06-14 20:29:07" itemprop="dateModified" datetime="2024-06-14T20:29:07+08:00">2024-06-14</time>
               </span>
 
           
@@ -613,7 +613,9 @@
 
 
 
-<h1 id="核心特性"><a href="#核心特性" class="headerlink" title="核心特性"></a>核心特性</h1><h2 id="SpringApplication"><a href="#SpringApplication" class="headerlink" title="SpringApplication"></a>SpringApplication</h2><p>通过 <code>SpringApplication</code> 类，你可以从 <code>main()</code> 方法中启动Spring应用程序。 在许多情况下，你可以直接调动 <code>SpringApplication.run</code> 静态方法，如以下例子所示。</p>
+<h1 id="核心特性"><a href="#核心特性" class="headerlink" title="核心特性"></a>核心特性</h1><h2 id="SpringApplication"><a href="#SpringApplication" class="headerlink" title="SpringApplication"></a>SpringApplication</h2><blockquote>
+<p>通过调用SpringApplication类的run静态方法，启动springboot应用程序</p>
+</blockquote>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -621,26 +623,38 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>默认情况下，会显示 <code>INFO</code> 级别的日志信息，包括一些相关的启动细节，比如启动应用程序的用户。 如果你需要 <code>INFO</code> 以外级别的日志，你可以设置它，如日志级别中所述。 应用程序的版本是使用main方法所在类的包的实现版本来确定的。 启动信息的记录可以通过设置 <code>spring.main.log-startup-info</code> 为 <code>false</code> 来关闭。 这也将关闭应用程序的激活的profiles的日志记录。</p>
-<h2 id="启用失败"><a href="#启用失败" class="headerlink" title="启用失败"></a>启用失败</h2><p>如果你的应用程序启动失败，注册的 <code>FailureAnalyzers</code> 会尝试提供一个专门的错误信息提示和具体的解决办法。 例如，如果你在端口 <code>8080</code> 上启动一个网络应用，而该端口已经被使用，你应该看到类似于下面的信息。</p>
-<pre class="line-numbers language-none"><code class="language-none">***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Embedded servlet container failed to start. Port 8080 was already in use.
-
-Action:
-
-Identify and stop the process that is listening on port 8080 or configure this application to listen on another port.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>如果 failure analyzer 不能够处理异常，你仍然可以显示完整的条件报告以更好地了解出错的原因。例如，如果你通过使用 <code>java -jar</code> 来运行你的应用程序，你可以按以下方式启用 <code>debug</code> 属性。</p>
+<h3 id="启用失败"><a href="#启用失败" class="headerlink" title="启用失败"></a>启用失败</h3><p>如果应用程序启动失败，日志里面异常信息不够，可以通过debug模式启动，来显示完整的报告，更好的了解报错原因。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ java -jar myproject-0.0.1-SNAPSHOT.jar --debug<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<h2 id="懒初始化（Lazy-Initialization）"><a href="#懒初始化（Lazy-Initialization）" class="headerlink" title="懒初始化（Lazy Initialization）"></a>懒初始化（Lazy Initialization）</h2><p><code>SpringApplication</code> 允许应用程序被懒初始化。 当启用懒初始化时，Bean在需要时被创建，而不是在应用程序启动时。 因此，懒初始化可以减少应用程序的启动时间。 在一个Web应用程序中，启用懒初始化后将导致许多与Web相关的Bean在收到HTTP请求之后才会进行初始化。</p>
-<p>懒初始化的一个缺点是它会延迟发现应用程序的问题。 如果一个配置错误的Bean被懒初始化了，那么在启动过程中就不会再出现故障，问题只有在Bean被初始化时才会显现出来。 还必须注意确保JVM有足够的内存来容纳应用程序的所有Bean，而不仅仅是那些在启动期间被初始化的Bean。 由于这些原因，默认情况下不启用懒初始化，建议在启用懒初始化之前，对JVM的堆大小进行微调。</p>
-<p>可以使用 <code>SpringApplicationBuilder</code> 的 <code>lazyInitialization</code> 方法或 <code>SpringApplication</code> 的 <code>setLazyInitialization</code> 方法以编程方式启用懒初始化。 另外，也可以使用 <code>spring.main.lazy-initialization</code> 属性来启用，如下例所示。</p>
+<h3 id="懒初始化（Lazy-Initialization）"><a href="#懒初始化（Lazy-Initialization）" class="headerlink" title="懒初始化（Lazy Initialization）"></a>懒初始化（Lazy Initialization）</h3><p>懒加载就是应用程序启动的时候不会创建所有Bean，只有在需要这个Bean的时候才会创建这个Bean。</p>
+<p><strong>创建懒加载的方式</strong></p>
+<ol>
+<li>使用 <code>SpringApplicationBuilder</code> 的 <code>lazyInitialization</code> 方法</li>
+</ol>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Application</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">new</span> <span class="token class-name">SpringApplicationBuilder</span><span class="token punctuation">(</span><span class="token class-name">Application</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">lazyInitialization</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="2">
+<li>使用 <code>SpringApplication</code> 的 <code>setLazyInitialization</code> 方法</li>
+</ol>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Application</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">SpringApplication</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SpringApplication</span><span class="token punctuation">(</span><span class="token class-name">Application</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        app<span class="token punctuation">.</span><span class="token function">setLazyInitialization</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        app<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="3">
+<li>使用 <code>spring.main.lazy-initialization</code> 属性</li>
+</ol>
 <pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">spring</span><span class="token punctuation">:</span>
   <span class="token key atrule">main</span><span class="token punctuation">:</span>
     <span class="token key atrule">lazy-initialization</span><span class="token punctuation">:</span> <span class="token boolean important">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
@@ -648,83 +662,814 @@ Identify and stop the process that is listening on port 8080 or configure this a
 <blockquote>
 <p>如果你想禁用某些Bean的懒初始化，同时对应用程序的其他部分使用懒初始化，你可以使用 <code>@Lazy(false)</code> 注解将其<code>Lazy</code> 属性显式地设置为 false。</p>
 </blockquote>
-<h2 id="自定义-Banner"><a href="#自定义-Banner" class="headerlink" title="自定义 Banner"></a>自定义 Banner</h2><p>启动时打印的Banner可以通过在 classpath 中添加 <code>banner.txt</code> 文件或通过将 <code>spring.banner.location</code> 属性设置为该文件的位置来自定义。 如果该文件的编码不是UTF-8，你可以通过 <code>spring.banner.charset</code> 属性设置其字符编码。</p>
-<h2 id="自定义-SpringApplication"><a href="#自定义-SpringApplication" class="headerlink" title="自定义 SpringApplication"></a>自定义 SpringApplication</h2><p>如果 <code>SpringApplication</code> 的默认值不符合你的需求，你可以创建一个实例并对其进行自定义。 例如，要关闭Banner，你可以这样写。</p>
+<h3 id="自定义-Banner"><a href="#自定义-Banner" class="headerlink" title="自定义 Banner"></a>自定义 Banner</h3><p>启动时打印的Banner可以通过在 classpath 中添加 <code>banner.txt</code> 文件或通过将 <code>spring.banner.location</code> 属性设置为该文件的位置来自定义。 如果该文件的编码不是UTF-8，你可以通过 <code>spring.banner.charset</code> 属性设置其字符编码。</p>
+<h3 id="自定义SpringApplication"><a href="#自定义SpringApplication" class="headerlink" title="自定义SpringApplication"></a>自定义SpringApplication</h3><p>如果需要修改springBoot的默认值，可以进行自定义，如关闭banner</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplication</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MpApplication</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">SpringApplication</span> application <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SpringApplication</span><span class="token punctuation">(</span><span class="token class-name">MyApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        application<span class="token punctuation">.</span><span class="token function">setBannerMode</span><span class="token punctuation">(</span><span class="token class-name">Banner<span class="token punctuation">.</span>Mode</span><span class="token punctuation">.</span>OFF<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        application<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">SpringApplication</span> springApplication <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SpringApplication</span><span class="token punctuation">(</span><span class="token class-name">MpApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        springApplication<span class="token punctuation">.</span><span class="token function">setBannerMode</span><span class="token punctuation">(</span><span class="token class-name">Banner<span class="token punctuation">.</span>Mode</span><span class="token punctuation">.</span>OFF<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        springApplication<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>传递给 <code>SpringApplication</code> 的构造参数是 Spring Bean 的配置源。 在大多数情况下，这些是对 <code>@Configuration</code> 类的引用，但它们也可能是对 <code>@Component</code> 类的直接引用。</p>
-<h2 id="Builder-API"><a href="#Builder-API" class="headerlink" title="Builder API"></a>Builder API</h2><p><code>SpringApplicationBuilder</code> 允许你链式调用多个方法，包括调用 <code>parent</code> 和 <code>child</code> 方法，创建一个层次结构，如下例所示。</p>
+<h3 id="Builder-API"><a href="#Builder-API" class="headerlink" title="Builder API"></a>Builder API</h3><p><code>SpringApplicationBuilder</code> 允许你链式调用多个方法，包括调用 <code>parent</code> 和 <code>child</code> 方法，创建一个层次结构，如下例所示。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">new</span> <span class="token class-name">SpringApplicationBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">sources</span><span class="token punctuation">(</span><span class="token class-name">Parent</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
     <span class="token punctuation">.</span><span class="token function">child</span><span class="token punctuation">(</span><span class="token class-name">Application</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
     <span class="token punctuation">.</span><span class="token function">bannerMode</span><span class="token punctuation">(</span><span class="token class-name">Banner<span class="token punctuation">.</span>Mode</span><span class="token punctuation">.</span>OFF<span class="token punctuation">)</span>
     <span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="Application-可用性"><a href="#Application-可用性" class="headerlink" title="Application 可用性"></a>Application 可用性</h2><p>在平台上部署时，应用程序可以使用 Kubernetes Probes等基础设施向平台提供有关其可用性的信息。Spring Boot对常用的 “liveness” 和 “readiness” 可用性状态提供了开箱即用的支持。如果你使用Spring Boot的 “actuator” ，那么这些状态将作为健康端点组（health endpoint groups）暴露出来。</p>
-<h2 id="Liveness-State"><a href="#Liveness-State" class="headerlink" title="Liveness State"></a>Liveness State</h2><p>一个应用程序的 “Liveness” 状态告诉我们它的内部状态是否允许它正常工作，或者在当前失败的情况下自行恢复。 一个broken状态的 “Liveness” 状态意味着应用程序处于一个无法恢复的状态，基础设施应该重新启动应用程序。Spring Boot应用程序的内部状态大多由Spring <code>ApplicationContext</code> 表示。如果 application context 已成功启动，Spring Boot就认为应用程序处于有效状态。一旦context被刷新，应用程序就被认为是活的</p>
-<h2 id="Readiness-State"><a href="#Readiness-State" class="headerlink" title="Readiness State"></a>Readiness State</h2><p>应用程序的 “Readiness” 状态告诉平台，该应用程序是否准备好处理流量。 failing状态的 “Readiness” 告诉平台，它暂时不应该将流量发送到该应用程序。 这通常发生在启动期间，当 <code>CommandLineRunner</code> 和 <code>ApplicationRunner</code> 组件还在被处理的时候，或者是应用程序觉得目前负载已经到了极限，不能再处理额外的请求的时候。</p>
-<p>一旦 <code>ApplicationRunner</code> 和 <code>CommandLineRunner</code> 被调用完成，就认为应用程序已经准备好了</p>
-<h2 id="管理应用程序的可用性状态"><a href="#管理应用程序的可用性状态" class="headerlink" title="管理应用程序的可用性状态"></a>管理应用程序的可用性状态</h2><h2 id="Application-事件和监听器"><a href="#Application-事件和监听器" class="headerlink" title="Application 事件和监听器"></a>Application 事件和监听器</h2><p>有些事件实际上是在 <code>ApplicationContext</code> 被创建之前触发的，所以你不能以 <code>@Bean</code> 的形式注册一个监听器。 你可以通过 <code>SpringApplication.addListeners(…)</code> 方法或 <code>SpringApplicationBuilder.listeners(…)</code> 方法注册它们。</p>
-<p>如果你想让这些监听器自动注册，不管应用程序是如何创建的，你可以在你的项目中添加一个 <code>META-INF/spring.factories</code> 文件，并通过 <code>org.springframework.context.ApplicationListener</code> 属性来配置你的监听器，如以下例子所示。</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">org.springframework.context.ApplicationListener=com.example.project.MyListener<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>当应用程序运行时，Application event按以下顺序发布。</p>
+<h3 id="Application-事件和监听器"><a href="#Application-事件和监听器" class="headerlink" title="Application 事件和监听器"></a>Application 事件和监听器</h3><p>在 Spring Boot 应用程序中，除了常见的 Spring 框架事件（如 <code>ContextRefreshedEvent</code>）之外，<code>SpringApplication</code> 还会发布一些额外的应用事件。这些事件可以帮助开发者在应用程序的不同启动阶段执行特定的逻辑。</p>
+<p><strong>1.事件发布顺序</strong></p>
+<p>以下是 <code>SpringApplication</code> 发布的事件按顺序列出：</p>
 <ol>
-<li>一个 <code>ApplicationStartingEvent</code> 在运行开始时被发布，但在任何处理之前，除了注册监听器和初始化器之外。</li>
-<li>当在上下文中使用的 <code>Environment</code> 已知，但在创建上下文之前，将发布 <code>ApplicationEnvironmentPreparedEvent</code>。</li>
-<li>当 <code>ApplicationContext</code> 已准备好并且 <code>ApplicationContextInitializers</code> 被调用，但在任何Bean定义被加载之前，<code>ApplicationContextInitializedEvent</code> 被发布。</li>
-<li>一个 <code>ApplicationPreparedEvent</code> 将在刷新开始前但在Bean定义加载后被发布。</li>
-<li>在上下文被刷新之后，但在任何应用程序和命令行运行程序被调用之前，将发布一个 <code>ApplicationStartedEvent</code>。</li>
-<li>紧接着发布 <code>LivenessState.CORRECT</code> 状态的 <code>AvailabilityChangeEvent</code>，表明应用程序被认为是存活的。</li>
-<li>在任何<a target="_blank" rel="noopener" href="https://springdoc.cn/spring-boot/features.html#features.spring-application.command-line-runner">ApplicationRunner 和 CommandLineRunner</a>被调用后，将发布一个 <code>ApplicationReadyEvent</code>。</li>
-<li>紧接着发布 <code>ReadinessState.ACCEPTING_TRAFFIC</code> 状态的 <code>AvailabilityChangeEvent</code>，表明应用程序已经准备好为请求提供服务。</li>
-<li>如果启动时出现异常，将发布一个 <code>ApplicationFailedEvent</code>。</li>
+<li><strong>ApplicationStartingEvent</strong>：<ul>
+<li><strong>时机</strong>：应用程序启动时，最早发布的事件。</li>
+<li><strong>作用</strong>：在任何处理之前（除了注册监听器和初始化器），发布此事件。</li>
+</ul>
+</li>
+<li><strong>ApplicationEnvironmentPreparedEvent</strong>：<ul>
+<li><strong>时机</strong>：在上下文创建之前，当 <code>Environment</code> 已知时发布。</li>
+<li><strong>作用</strong>：表示 <code>Environment</code> 已准备好，但上下文还未创建。</li>
+</ul>
+</li>
+<li><strong>ApplicationContextInitializedEvent</strong>：<ul>
+<li><strong>时机</strong>：<code>ApplicationContext</code> 已准备好并且 <code>ApplicationContextInitializers</code> 被调用，但在任何 Bean 定义被加载之前发布。</li>
+<li><strong>作用</strong>：表示上下文已初始化，但还未加载 Bean 定义。</li>
+</ul>
+</li>
+<li><strong>ApplicationPreparedEvent</strong>：<ul>
+<li><strong>时机</strong>：在刷新开始前但在 Bean 定义加载后发布。</li>
+<li><strong>作用</strong>：表示 Bean 定义已加载，但上下文还未刷新。</li>
+</ul>
+</li>
+<li><strong>ApplicationStartedEvent</strong>：<ul>
+<li><strong>时机</strong>：上下文被刷新之后，但在任何应用程序和命令行运行程序被调用之前发布。</li>
+<li><strong>作用</strong>：表示应用程序已启动，但还未运行任何 <code>ApplicationRunner</code> 和 <code>CommandLineRunner</code>。</li>
+</ul>
+</li>
+<li>**AvailabilityChangeEvent (LivenessState.CORRECT)**：<ul>
+<li><strong>时机</strong>：紧接着 <code>ApplicationStartedEvent</code> 发布。</li>
+<li><strong>作用</strong>：表明应用程序被认为是存活的（Liveness）。</li>
+</ul>
+</li>
+<li><strong>ApplicationReadyEvent</strong>：<ul>
+<li><strong>时机</strong>：在所有 <code>ApplicationRunner</code> 和 <code>CommandLineRunner</code> 被调用后发布。</li>
+<li><strong>作用</strong>：表示应用程序已准备好，可以接受请求。</li>
+</ul>
+</li>
+<li>**AvailabilityChangeEvent (ReadinessState.ACCEPTING_TRAFFIC)**：<ul>
+<li><strong>时机</strong>：紧接着 <code>ApplicationReadyEvent</code> 发布。</li>
+<li><strong>作用</strong>：表明应用程序已准备好为请求提供服务（Readiness）。</li>
+</ul>
+</li>
+<li><strong>ApplicationFailedEvent</strong>：<ul>
+<li><strong>时机</strong>：启动时出现异常时发布。</li>
+<li><strong>作用</strong>：表示应用程序启动失败。</li>
+</ul>
+</li>
 </ol>
-<p>Application event 是通过使用Spring框架的事件发布机制来发布的。 该机制的一部分确保了发布给子context中的listener的事件也会发布给任何祖先context的listener。 因此，如果你的应用程序使用了多层级的 <code>SpringApplication</code>，一个监听器可能会收到同一类型应用程序事件的多个实例（重复收到事件通知）。</p>
-<p>为了让你的listener能够区分事件是由哪个context（子、父）发送的，可以注入其application context，然后将注入的context与事件的context进行比较。 context可以通过实现 <code>ApplicationContextAware</code> 来注入，如果监听器是一个Bean，则可以通过使用 <code>@Autowired</code> 来注入。</p>
-<h2 id="WEB-环境（Environment）"><a href="#WEB-环境（Environment）" class="headerlink" title="WEB 环境（Environment）"></a>WEB 环境（Environment）</h2><p><code>SpringApplication</code> 会试图帮你创建正确类型的 <code>ApplicationContext</code>。 确定为 <code>WebApplicationType</code> 的算法如下。</p>
+<p>2.<strong>注册监听器</strong></p>
+<p>有些事件是在 <code>ApplicationContext</code> 被创建之前触发的，所以你不能以 <code>@Bean</code> 的形式注册监听器。你可以通过以下方式注册监听器：</p>
+<ol>
+<li><strong>通过 <code>SpringApplication.addListeners(…)</code> 方法</strong>：</li>
+</ol>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">SpringApplication</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SpringApplication</span><span class="token punctuation">(</span><span class="token class-name">MyApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+app<span class="token punctuation">.</span><span class="token function">addListeners</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">MyApplicationListener</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+app<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<ol start="2">
+<li><strong>通过 <code>SpringApplicationBuilder.listeners(…)</code> 方法</strong>：</li>
+</ol>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">new</span> <span class="token class-name">SpringApplicationBuilder</span><span class="token punctuation">(</span><span class="token class-name">MyApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">listeners</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">MyApplicationListener</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="WEB-环境（Environment）"><a href="#WEB-环境（Environment）" class="headerlink" title="WEB 环境（Environment）"></a>WEB 环境（Environment）</h3><p><code>SpringApplication</code> 会试图帮你创建正确类型的 <code>ApplicationContext</code>，具体 <code>WebApplicationType</code> 的算法如下。</p>
 <ul>
 <li>如果Spring MVC存在，就会使用 <code>AnnotationConfigServletWebServerApplicationContext</code>。</li>
 <li>如果Spring MVC不存在而Spring WebFlux存在，则使用 <code>AnnotationConfigReactiveWebServerApplicationContext</code>。</li>
 <li>否则，将使用 <code>AnnotationConfigApplicationContext</code>。</li>
 </ul>
-<p>这意味着，如果你在同一个应用程序中使用Spring MVC和新的 <code>WebClient</code>（来自于Spring WebFlux），Spring MVC将被默认使用。 你可以通过调用 <code>setWebApplicationType(WebApplicationType)</code> 来轻松覆盖。</p>
-<p>也可以通过调用 <code>setApplicationContextFactory(…)</code> 来完全控制使用的 <code>ApplicationContext</code> 类型。</p>
-<h2 id="访问应用参数"><a href="#访问应用参数" class="headerlink" title="访问应用参数"></a>访问应用参数</h2><p>如果你需要访问传递给 <code>SpringApplication.run(..)</code> 的命令行参数，你可以注入一个 <code>org.springframework.boot.ApplicationArguments</code> bean。 通过 <code>ApplicationArguments</code> 接口，你可以访问原始的 <code>String[]</code> 参数以及经过解析的 <code>option</code> 和 <code>non-option</code> 参数。如以下例子所示。</p>
-<h2 id="使用-ApplicationRunner-或-CommandLineRunner"><a href="#使用-ApplicationRunner-或-CommandLineRunner" class="headerlink" title="使用 ApplicationRunner 或 CommandLineRunner"></a>使用 ApplicationRunner 或 CommandLineRunner</h2><p>如果你需要在 <code>SpringApplication</code> 启动后运行一些特定的代码，你可以实现 <code>ApplicationRunner</code> 或 <code>CommandLineRunner</code> 接口。 这两个接口以相同的方式工作，并提供一个单一的 <code>run</code> 方法，该方法在 <code>SpringApplication.run(…)</code> 执行完毕之前被调用。</p>
+<h3 id="访问应用参数"><a href="#访问应用参数" class="headerlink" title="访问应用参数"></a>访问应用参数</h3><p>传递给 <code>SpringApplication.run(..)</code> 的命令行参数,通过 <code>ApplicationArguments</code> 接口，访问原始的 <code>String[]</code> 参数以及经过解析的 <code>option</code> 和 <code>non-option</code> 参数。</p>
+<h3 id="使用-ApplicationRunner-或-CommandLineRunner"><a href="#使用-ApplicationRunner-或-CommandLineRunner" class="headerlink" title="使用 ApplicationRunner 或 CommandLineRunner"></a>使用 ApplicationRunner 或 CommandLineRunner</h3><p><code>ApplicationRunner</code> 和 <code>CommandLineRunner</code> 是 Spring Boot 提供的两个接口，用于在 Spring Boot 应用程序启动完成后执行特定的代码。这两个接口的主要作用是在应用程序启动并初始化所有 Spring 容器和 beans 之后，执行一些自定义逻辑。它们提供了在应用程序初始化完成后立即执行代码的机制，适用于各种初始化任务、资源加载、数据检查等场景。</p>
+<p><strong>1.ApplicationRunner</strong></p>
+<p><code>ApplicationRunner</code> 接口的 <code>run</code> 方法接受一个 <code>ApplicationArguments</code> 对象，该对象包含传递给应用程序的参数。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplicationRunner</span> <span class="token keyword">implements</span> <span class="token class-name">ApplicationRunner</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">ApplicationArguments</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"ApplicationRunner is running with args: "</span> <span class="token operator">+</span> args<span class="token punctuation">.</span><span class="token function">getOptionNames</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>2.CommandLineRunner</strong></p>
+<p><code>CommandLineRunner</code> 接口的 <code>run</code> 方法接受一个 <code>String</code> 数组，该数组包含传递给应用程序的原始命令行参数。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyCommandLineRunner</span> <span class="token keyword">implements</span> <span class="token class-name">CommandLineRunner</span> <span class="token punctuation">&#123;</span>
 
     <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token comment">// Do something...</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"CommandLineRunner is running with args: "</span> <span class="token operator">+</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">", "</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>如果定义了多个 <code>CommandLineRunner</code> 或 <code>ApplicationRunner</code> Bean，并且需要它们按照特定的顺序先后执行。那么可以实现 <code>org.springframework.core.Ordered</code> 接口或使用 <code>org.springframework.core.annotation.Order</code> 注解来指定顺序。</p>
-<h2 id="程序退出"><a href="#程序退出" class="headerlink" title="程序退出"></a>程序退出</h2><p>每个 <code>SpringApplication</code> 都向JVM注册了一个shutdown hook，以确保 <code>ApplicationContext</code> 在退出时优雅地关闭。 所有标准的Spring生命周期回调（如 <code>DisposableBean</code> 接口或 <code>@PreDestroy</code> 注解）都可以使用。</p>
-<p>此外，如果Bean希望在调用 <code>SpringApplication.exit()</code> 时返回特定的退出代码，可以实现 <code>org.springframework.boot.ExitCodeGenerator</code> 接口。 然后，这个退出代码可以被传递给 <code>System.exit()</code> ，将其作为状态代码返回，如下面的例子所示。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Bean</span>
-<span class="token keyword">public</span> <span class="token class-name">ExitCodeGenerator</span> <span class="token function">exitCodeGenerator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-       <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token number">42</span><span class="token punctuation">;</span>
-   <span class="token punctuation">&#125;</span>
+<p><strong>3.主要区别</strong></p>
+<ul>
+<li><strong>参数类型</strong>：<ul>
+<li><code>ApplicationRunner</code> 接受 <code>ApplicationArguments</code> 对象，提供了对传递给应用程序的参数的更丰富的访问方式。</li>
+<li><code>CommandLineRunner</code> 接受一个 <code>String</code> 数组，包含传递给应用程序的原始命令行参数。</li>
+</ul>
+</li>
+<li><strong>使用场景</strong>：<ul>
+<li><code>ApplicationRunner</code> 更适合需要解析和处理复杂参数的场景。</li>
+<li><code>CommandLineRunner</code> 更适合处理简单的命令行参数。</li>
+</ul>
+</li>
+</ul>
+<h3 id="SpringBoot程序退出机制"><a href="#SpringBoot程序退出机制" class="headerlink" title="SpringBoot程序退出机制"></a>SpringBoot程序退出机制</h3><p><strong>1.JVM Shutdown Hook</strong></p>
+<p>每个 <code>SpringApplication</code> 都会向 JVM 注册一个 shutdown hook，以确保在 JVM 退出时优雅地关闭 <code>ApplicationContext</code>。这意味着在应用程序退出时，Spring 会自动调用所有标准的生命周期回调，例如实现了 <code>DisposableBean</code> 接口的 bean 或带有 <code>@PreDestroy</code> 注解的方法。</p>
+<p><strong>2.ExitCodeGenerator 接口</strong></p>
+<p>如果你希望在应用程序退出时返回特定的退出代码，可以实现 <code>org.springframework.boot.ExitCodeGenerator</code> 接口。这个接口只有一个方法 <code>getExitCode()</code>，返回一个整数作为退出代码。</p>
+<h3 id="开启管理功能"><a href="#开启管理功能" class="headerlink" title="开启管理功能"></a>开启管理功能</h3><p>设置 <code>spring.application.admin.enabled</code> 属性为true，启用应用程序的管理相关功能，它会在 <code>MBeanServer</code> 平台上暴露了 <code>SpringApplicationAdminMXBean</code>，<strong>打开 JMX 客户端</strong>，<strong>连接到应用程序</strong>。</p>
+<h3 id="SpringBoot启动流程分析"><a href="#SpringBoot启动流程分析" class="headerlink" title="SpringBoot启动流程分析"></a>SpringBoot启动流程分析</h3><p>在 Spring Boot 应用程序启动期间，<code>SpringApplication</code> 和 <code>ApplicationContext</code> 会执行许多与应用程序生命周期相关的任务，包括 Bean 的生命周期管理和事件处理。为了更好地了解和分析应用程序的启动过程，Spring 框架提供了 <code>ApplicationStartup</code> 接口，通过 <code>StartupStep</code> 对象来跟踪应用程序的启动顺序。</p>
+<h2 id="外部化的配置"><a href="#外部化的配置" class="headerlink" title="外部化的配置"></a>外部化的配置</h2><p>在不同的环境中使用相同的应用程序代码,可以通过多种外部配置源（如properties、YAML、环境变量、命令行参数）来实现。Spring Boot 使用一个特定的 <code>PropertySource</code> 顺序来加载配置，这样后面的配置源可以覆盖前面的配置源。</p>
+<p>properties文件 &gt; YAML文件 &gt; 环境变量 &gt; 命令行参数  </p>
+<blockquote>
+<p>properties文件和YAML文件，按顺序加载，JAR包内的先执行，JAR 包外的文件优先于 JAR 包内的文件。</p>
+</blockquote>
+<p><strong>配置数据文件的加载顺序</strong></p>
+<ol>
+<li><strong>在 JAR 包内的 <code>application.properties</code> 和 YAML 文件</strong>。</li>
+<li><strong>在 JAR 包内的特定 Profile 的 <code>application-&#123;profile&#125;.properties</code> 和 YAML 文件</strong>。</li>
+<li><strong>在 JAR 包外的 <code>application.properties</code> 和 YAML 文件</strong>。</li>
+<li><strong>在 JAR 包外的特定 Profile 的 <code>application-&#123;profile&#125;.properties</code> 和 YAML 文件</strong>。</li>
+</ol>
+<h3 id="通过命令行参数获取属性"><a href="#通过命令行参数获取属性" class="headerlink" title="通过命令行参数获取属性"></a>通过命令行参数获取属性</h3><ul>
+<li><strong>通过 <code>@Value</code> 注解</strong>：直接注入属性值。</li>
+<li><strong>通过 <code>Environment</code> 接口</strong>：使用 <code>Environment</code> 获取属性值。</li>
+<li><strong>通过 <code>@ConfigurationProperties</code> 注解</strong>：将属性绑定到一个 POJO 类中。</li>
+<li><strong>通过 <code>ApplicationArguments</code> 接口</strong>：获取原始的命令行参数。</li>
+</ul>
+<h3 id="通过Json获取属性"><a href="#通过Json获取属性" class="headerlink" title="通过Json获取属性"></a>通过Json获取属性</h3><p>环境变量和系统属性往往有限制，这意味着有些属性名称不能使用。 为了帮助解决这个问题，Spring Boot允许你将一个属性块编码为一个单一的JSON结构。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token assign-left variable">SPRING_APPLICATION_JSON</span><span class="token operator">=</span><span class="token string">'&#123;"my":&#123;"name":"test"&#125;&#125;'</span> java -jar myapp.jar
+$ java -Dspring.application.json<span class="token operator">=</span><span class="token string">'&#123;"my":&#123;"name":"test"&#125;&#125;'</span> -jar myapp.jar
+$ java -jar myapp.jar --spring.application.json<span class="token operator">=</span><span class="token string">'&#123;"my":&#123;"name":"test"&#125;&#125;'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-       <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">exit</span><span class="token punctuation">(</span><span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">exit</span><span class="token punctuation">(</span><span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">MainApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span>args<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-   <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="通过Application-Properties获取属性"><a href="#通过Application-Properties获取属性" class="headerlink" title="通过Application Properties获取属性"></a>通过Application Properties获取属性</h3><p>Spring Boot会自动从以下位置找到并加载 <code>application.properties</code> 和 <code>application.yaml</code> 文件。</p>
+<h4 id="加载顺序"><a href="#加载顺序" class="headerlink" title="加载顺序"></a>加载顺序</h4><p>加载顺序如下，最后的会覆盖前面的</p>
+<ol>
+<li><strong>当前目录的 <code>/config</code> 子目录</strong>：<ul>
+<li><code>file:./config/</code></li>
+</ul>
+</li>
+<li><strong>当前目录</strong>：<ul>
+<li><code>file:./</code></li>
+</ul>
+</li>
+<li><strong>类路径的 <code>/config</code> 包</strong>：<ul>
+<li><code>classpath:/config/</code></li>
+</ul>
+</li>
+<li><strong>类路径的根目录</strong>：<ul>
+<li><code>classpath:/</code></li>
+</ul>
+</li>
+</ol>
+<p>示例说明</p>
+<p>假设你有以下配置文件内容：</p>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment">#./config/application.properties</span>
+<span class="token key attr-name">server.port</span><span class="token punctuation">=</span><span class="token value attr-value">8081</span>
+<span class="token key attr-name">spring.datasource.url</span><span class="token punctuation">=</span><span class="token value attr-value">jdbc:mysql://localhost:3306/mydb_config</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<p>另外，<code>ExitCodeGenerator</code> 接口可以由异常（Exception）实现。 当遇到这种异常时，Spring Boot会返回由实现的 <code>getExitCode()</code> 方法提供的退出代码。</p>
-<p>如果有多个 <code>ExitCodeGenerator</code> ，则使用第一个生成的非零退出代码。 要控制生成器（Generator）的调用顺序，你可以实现 <code>org.springframework.core.Ordered</code> 接口或使用 <code>org.springframework.core.annotation.Order</code> 注解。</p>
-<h2 id="管理功能"><a href="#管理功能" class="headerlink" title="管理功能"></a>管理功能</h2><p>通过指定 <code>spring.application.admin.enabled</code> 属性，可以启用应用程序的管理相关功能。 这在 <code>MBeanServer</code> 平台上暴露了 <a target="_blank" rel="noopener" href="https://github.com/spring-projects/spring-boot/tree/main/spring-boot-project/spring-boot/src/main/java/org/springframework/boot/admin/SpringApplicationAdminMXBean.java"><code>SpringApplicationAdminMXBean</code></a>。 你可以使用这个功能来远程管理你的Spring Boot应用程序。 这个功能对任何服务包装器的实现也很有用。</p>
-<h2 id="应用程序启动追踪"><a href="#应用程序启动追踪" class="headerlink" title="应用程序启动追踪"></a>应用程序启动追踪</h2><p>在应用程序启动期间，<code>SpringApplication</code> 和 <code>ApplicationContext</code> 执行许多与应用程序生命周期相关的任务。 beans的生命周期，甚至是处理应用事件。 通过 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/6.1.0-M1/javadoc-api/org/springframework/core/metrics/ApplicationStartup.html"><code>ApplicationStartup</code></a>, ，Spring框架 <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/6.1.0-M1/reference/html/core.html#context-functionality-startup">允许你用 <code>StartupStep</code> 对象来跟踪应用程序的启动顺序</a>。 这些数据可以为分析目的而收集，或者只是为了更好地了解应用程序的启动过程。</p>
-<p>你可以在设置 <code>SpringApplication</code> 实例时选择一个 <code>ApplicationStartup</code> 实现。 例如，要使用 <code>BufferingApplicationStartup</code>，你可以这么写。</p>
-<h2 id="外部化的配置"><a href="#外部化的配置" class="headerlink" title="外部化的配置"></a>外部化的配置</h2>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment">#./application.properties</span>
+<span class="token key attr-name">server.port</span><span class="token punctuation">=</span><span class="token value attr-value">8082</span>
+<span class="token key attr-name">spring.datasource.url</span><span class="token punctuation">=</span><span class="token value attr-value">jdbc:mysql://localhost:3306/mydb_root</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment">#src/main/resources/config/application.properties</span>
+<span class="token key attr-name">server.port</span><span class="token punctuation">=</span><span class="token value attr-value">8083</span>
+<span class="token key attr-name">spring.datasource.url</span><span class="token punctuation">=</span><span class="token value attr-value">jdbc:mysql://localhost:3306/mydb_classpath_config</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment">#src/main/resources/application.properties</span>
+<span class="token key attr-name">server.port</span><span class="token punctuation">=</span><span class="token value attr-value">8084</span>
+<span class="token key attr-name">spring.datasource.url</span><span class="token punctuation">=</span><span class="token value attr-value">jdbc:mysql://localhost:3306/mydb_classpath_root</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>最终结果</p>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment">#src/main/resources/application.properties</span>
+<span class="token key attr-name">server.port</span><span class="token punctuation">=</span><span class="token value attr-value">8084</span>
+<span class="token key attr-name">spring.datasource.url</span><span class="token punctuation">=</span><span class="token value attr-value">jdbc:mysql://localhost:3306/mydb_classpath_root</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="特定文件"><a href="#特定文件" class="headerlink" title="特定文件"></a>特定文件</h4><p>Spring Boot可以使用 <code>application-&#123;profile&#125;</code> 的命名惯例加载profile特定的文件。</p>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment">#application.profile</span>
+<span class="token key attr-name">spring.profiles.active</span><span class="token punctuation">=</span><span class="token value attr-value">prod</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment">#application-prod.profile</span>
+<span class="token key attr-name">server.port</span><span class="token punctuation">=</span><span class="token value attr-value">8080</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h4 id="ConfigurationProperties"><a href="#ConfigurationProperties" class="headerlink" title="@ConfigurationProperties"></a>@ConfigurationProperties</h4><p><code>@ConfigurationProperties</code> 注解用于将外部化配置（如 <code>application.properties</code> 或 <code>application.yml</code> 文件中的属性）绑定到一个 POJO 类中。通过 <code>@ConfigurationProperties</code> 注解，你可以将一组相关的属性集中到一个类中，便于管理和使用。</p>
+<ol>
+<li><strong>定义配置属性类</strong>：创建一个 POJO 类，并使用 <code>@ConfigurationProperties</code> 注解指定属性前缀。</li>
+<li><strong>启用配置属性</strong>：在启动类中使用 <code>@EnableConfigurationProperties</code> 注解启用配置属性绑定。</li>
+<li><strong>在其他组件中使用配置属性类</strong>：通过依赖注入将配置属性类注入到需要使用的组件中。</li>
+</ol>
+<h3 id="通过环境变量获取参数"><a href="#通过环境变量获取参数" class="headerlink" title="通过环境变量获取参数"></a>通过环境变量获取参数</h3><p>在 Unix&#x2F;Linux&#x2F;MacOS 中，你可以使用 <code>export</code> 命令</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">SERVER_PORT</span><span class="token operator">=</span><span class="token number">8085</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">SPRING_DATASOURCE_URL</span><span class="token operator">=</span>jdbc:mysql://localhost:3306/mydb_env<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>通过Environment接口获取变量</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyComponent</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">Environment</span> env<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> serverPort <span class="token operator">=</span> env<span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">"server.port"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> datasourceUrl <span class="token operator">=</span> env<span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">"spring.datasource.url"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Server Port: "</span> <span class="token operator">+</span> serverPort<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Datasource URL: "</span> <span class="token operator">+</span> datasourceUrl<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="国际化"><a href="#国际化" class="headerlink" title="国际化"></a>国际化</h1><p>在 Spring Boot 中，实现国际化（i18n）可以让应用程序支持多种语言和区域设置。以下是如何在 Spring Boot 应用程序中使用国际化的详细步骤：</p>
+<h2 id="配置国际化资源文件"><a href="#配置国际化资源文件" class="headerlink" title="配置国际化资源文件"></a>配置国际化资源文件</h2><p>首先，你需要创建包含不同语言的资源文件。通常，这些文件位于 <code>src/main/resources</code> 目录下，并且以 <code>.properties</code> 文件的形式存在。</p>
+<ul>
+<li><code>messages.properties</code>（默认语言）</li>
+</ul>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">greeting</span><span class="token punctuation">=</span><span class="token value attr-value">Hello</span>
+<span class="token key attr-name">farewell</span><span class="token punctuation">=</span><span class="token value attr-value">Goodbye</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<ul>
+<li><code>messages_fr.properties</code>（法语）</li>
+</ul>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">greeting</span><span class="token punctuation">=</span><span class="token value attr-value">Bonjour</span>
+<span class="token key attr-name">farewell</span><span class="token punctuation">=</span><span class="token value attr-value">Au revoir</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<ul>
+<li><code>messages_es.properties</code>（西班牙语）</li>
+</ul>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">greeting</span><span class="token punctuation">=</span><span class="token value attr-value">Hola</span>
+<span class="token key attr-name">farewell</span><span class="token punctuation">=</span><span class="token value attr-value">Adiós</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="配置-MessageSource-Bean"><a href="#配置-MessageSource-Bean" class="headerlink" title="配置 MessageSource Bean"></a>配置 <code>MessageSource</code> Bean</h2><p>在你的 Spring Boot 应用程序配置类中，配置 <code>MessageSource</code> Bean 以加载国际化资源文件。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">InternationalizationConfig</span> <span class="token keyword">implements</span> <span class="token class-name">WebMvcConfigurer</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">MessageSource</span> <span class="token function">messageSource</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">ReloadableResourceBundleMessageSource</span> messageSource <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ReloadableResourceBundleMessageSource</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        messageSource<span class="token punctuation">.</span><span class="token function">setBasename</span><span class="token punctuation">(</span><span class="token string">"classpath:messages"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        messageSource<span class="token punctuation">.</span><span class="token function">setDefaultEncoding</span><span class="token punctuation">(</span><span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> messageSource<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">LocaleResolver</span> <span class="token function">localeResolver</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">CookieLocaleResolver</span> localeResolver <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CookieLocaleResolver</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        localeResolver<span class="token punctuation">.</span><span class="token function">setDefaultLocale</span><span class="token punctuation">(</span><span class="token class-name">Locale</span><span class="token punctuation">.</span>US<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> localeResolver<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">LocaleChangeInterceptor</span> <span class="token function">localeChangeInterceptor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">LocaleChangeInterceptor</span> interceptor <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LocaleChangeInterceptor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        interceptor<span class="token punctuation">.</span><span class="token function">setParamName</span><span class="token punctuation">(</span><span class="token string">"lang"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> interceptor<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">addInterceptors</span><span class="token punctuation">(</span><span class="token class-name">InterceptorRegistry</span> registry<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        registry<span class="token punctuation">.</span><span class="token function">addInterceptor</span><span class="token punctuation">(</span><span class="token function">localeChangeInterceptor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="使用国际化资源"><a href="#使用国际化资源" class="headerlink" title="使用国际化资源"></a>使用国际化资源</h2><p>在你的控制器或服务中，你可以通过 <code>MessageSource</code> Bean 来获取国际化消息。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GreetingController</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">MessageSource</span> messageSource<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/greeting"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">greeting</span><span class="token punctuation">(</span><span class="token annotation punctuation">@RequestParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"lang"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token class-name">String</span> lang<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">Locale</span> locale <span class="token operator">=</span> lang <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">?</span> <span class="token keyword">new</span> <span class="token class-name">Locale</span><span class="token punctuation">(</span>lang<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token class-name">Locale</span><span class="token punctuation">.</span><span class="token function">getDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> messageSource<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token string">"greeting"</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">,</span> locale<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="切换语言"><a href="#切换语言" class="headerlink" title="切换语言"></a>切换语言</h2><p>你可以通过在 URL 中添加语言参数来切换语言。例如：</p>
+<ul>
+<li><code>http://localhost:8080/greeting?lang=fr</code> 将返回 “Bonjour”</li>
+<li><code>http://localhost:8080/greeting?lang=es</code> 将返回 “Hola”</li>
+<li><code>http://localhost:8080/greeting</code> 将返回 “Hello”（默认语言）</li>
+</ul>
+<h2 id="使用-RequestHeader-注解自动检测语言"><a href="#使用-RequestHeader-注解自动检测语言" class="headerlink" title="使用 @RequestHeader 注解自动检测语言"></a>使用 <code>@RequestHeader</code> 注解自动检测语言</h2><p>你还可以使用 <code>@RequestHeader</code> 注解自动检测请求中的 <code>Accept-Language</code> 头来设置语言。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GreetingController</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">MessageSource</span> messageSource<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/greeting"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">greeting</span><span class="token punctuation">(</span><span class="token annotation punctuation">@RequestHeader</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"Accept-Language"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token class-name">Locale</span> locale<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> messageSource<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token string">"greeting"</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">,</span> locale <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">?</span> locale <span class="token operator">:</span> <span class="token class-name">Locale</span><span class="token punctuation">.</span><span class="token function">getDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="Json"><a href="#Json" class="headerlink" title="Json"></a>Json</h1><p>Spring Boot提供了与三个JSON库的集成,Jackson是首选和默认的库。</p>
+<ul>
+<li>Gson</li>
+<li>Jackson</li>
+<li>JSON-B</li>
+</ul>
+<p>Jackson 是一个用于处理 JSON 数据的流行库，广泛应用于 Java 应用程序中。它可以轻松地将 Java 对象转换为 JSON 格式（序列化），以及将 JSON 数据转换为 Java 对象（反序列化）。在 Spring Boot 中，Jackson 通常用于处理 RESTful API 的请求和响应。</p>
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><h3 id="序列化（将-Java-对象转换为-JSON）"><a href="#序列化（将-Java-对象转换为-JSON）" class="headerlink" title="序列化（将 Java 对象转换为 JSON）"></a>序列化（将 Java 对象转换为 JSON）</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JacksonExample</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">ObjectMapper</span> objectMapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 创建一个示例对象</span>
+        <span class="token class-name">User</span> user <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token string">"John Doe"</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 将对象转换为 JSON 字符串</span>
+        <span class="token class-name">String</span> jsonString <span class="token operator">=</span> objectMapper<span class="token punctuation">.</span><span class="token function">writeValueAsString</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>jsonString<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token annotation punctuation">@Data</span>
+<span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> age<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="反序列化（将-JSON-转换为-Java-对象）"><a href="#反序列化（将-JSON-转换为-Java-对象）" class="headerlink" title="反序列化（将 JSON 转换为 Java 对象）"></a>反序列化（将 JSON 转换为 Java 对象）</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JacksonExample</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">ObjectMapper</span> objectMapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// JSON 字符串</span>
+        <span class="token class-name">String</span> jsonString <span class="token operator">=</span> <span class="token string">"&#123;\"name\":\"John Doe\",\"age\":30&#125;"</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 将 JSON 字符串转换为对象</span>
+        <span class="token class-name">User</span> user <span class="token operator">=</span> objectMapper<span class="token punctuation">.</span><span class="token function">readValue</span><span class="token punctuation">(</span>jsonString<span class="token punctuation">,</span> <span class="token class-name">User</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">" - "</span> <span class="token operator">+</span> user<span class="token punctuation">.</span><span class="token function">getAge</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="SpringBoot中使用-Jackson"><a href="#SpringBoot中使用-Jackson" class="headerlink" title="SpringBoot中使用 Jackson"></a>SpringBoot中使用 Jackson</h2><p>在 Spring Boot 中，Jackson 通常用于处理 RESTful API 的请求和响应。Spring Boot 默认使用 Jackson 作为 JSON 处理库。</p>
+<h3 id="创建Rest控制器"><a href="#创建Rest控制器" class="headerlink" title="创建Rest控制器"></a>创建Rest控制器</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/api"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserController</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/user"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">User</span> <span class="token function">getUser</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token string">"John Doe"</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="发送请求并查看响应"><a href="#发送请求并查看响应" class="headerlink" title="发送请求并查看响应"></a>发送请求并查看响应</h3><p>启动应用程序后，访问 <code>http://localhost:8080/api/user</code>，你将看到以下 JSON 响应：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"John Doe"</span><span class="token punctuation">,</span>
+    <span class="token property">"age"</span><span class="token operator">:</span> <span class="token number">30</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="自定义-Jackson-配置"><a href="#自定义-Jackson-配置" class="headerlink" title="自定义 Jackson 配置"></a>自定义 Jackson 配置</h2><p>在 Spring Boot 配置类中定义 <code>ObjectMapper</code> Bean 来自定义 Jackson 的配置。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JacksonConfig</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">ObjectMapper</span> <span class="token function">objectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">ObjectMapper</span> objectMapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        objectMapper<span class="token punctuation">.</span><span class="token function">enable</span><span class="token punctuation">(</span><span class="token class-name">SerializationFeature</span><span class="token punctuation">.</span>INDENT_OUTPUT<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 启用缩进输出</span>
+        <span class="token keyword">return</span> objectMapper<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Jackson注解"><a href="#Jackson注解" class="headerlink" title="Jackson注解"></a>Jackson注解</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@JsonPropertyOrder</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> <span class="token string">"age"</span><span class="token punctuation">,</span> <span class="token string">"name"</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span> <span class="token comment">// 指定 JSON 属性的顺序</span>
+<span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span><span class="token string">"full_name"</span><span class="token punctuation">)</span> <span class="token comment">// 自定义 JSON 属性名</span>
+<span class="token annotation punctuation">@JsonIgnore</span> <span class="token comment">// 忽略这个属性,使其不被序列化或反序列化</span>
+<span class="token annotation punctuation">@JsonInclude</span> 注解可以指定只包含非空属性    
+<span class="token annotation punctuation">@JsonSerialize</span> 、<span class="token annotation punctuation">@JsonDeserialize</span> <span class="token comment">//注解可以自定义序列化和反序列化的逻辑。    </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="Executor和TaskScheduler"><a href="#Executor和TaskScheduler" class="headerlink" title="Executor和TaskScheduler"></a>Executor<code>和</code>TaskScheduler</h1><p><code>Executor</code> 和 <code>TaskScheduler</code> 在Spring Boot中的主要作用就是执行异步任务和定时任务。</p>
+<h2 id="异步任务执行-Executor"><a href="#异步任务执行-Executor" class="headerlink" title="异步任务执行 (Executor)"></a>异步任务执行 (<code>Executor</code>)</h2><h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><p>异步任务允许你在后台执行一些耗时的操作，而不会阻塞主线程。这对于提高应用程序的性能和响应速度非常有用。常见的异步任务包括：</p>
+<ul>
+<li>发送电子邮件</li>
+<li>处理文件上传</li>
+<li>调用远程服务</li>
+<li>数据处理和计算</li>
+</ul>
+<h3 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h3><p>使用 <code>@EnableAsync</code> 注解来启用异步任务执行，并使用 <code>@Async</code> 注解来标记需要异步执行的方法。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token annotation punctuation">@EnableAsync</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AsyncApplication</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">AsyncApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AsyncService</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Async</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">executeAsyncTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Executing async task..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 模拟耗时操作</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">interrupt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Async task completed."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="定时任务执行-TaskScheduler"><a href="#定时任务执行-TaskScheduler" class="headerlink" title="定时任务执行 (TaskScheduler)"></a>定时任务执行 (<code>TaskScheduler</code>)</h2><h3 id="作用-1"><a href="#作用-1" class="headerlink" title="作用"></a>作用</h3><p>定时任务允许你在指定的时间间隔或特定的时间点执行某些操作。这对于执行周期性任务非常有用。常见的定时任务包括：</p>
+<ul>
+<li>数据备份</li>
+<li>日志清理</li>
+<li>定期报告生成</li>
+<li>定时发送通知</li>
+</ul>
+<h3 id="如何使用-1"><a href="#如何使用-1" class="headerlink" title="如何使用"></a>如何使用</h3><p>使用 <code>@EnableScheduling</code> 注解来启用定时任务执行，并使用 <code>@Scheduled</code> 注解来标记需要定时执行的方法。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token annotation punctuation">@EnableScheduling</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SchedulingApplication</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">SchedulingApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ScheduledService</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Scheduled</span><span class="token punctuation">(</span>fixedRate <span class="token operator">=</span> <span class="token number">5000</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">executeScheduledTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Executing scheduled task..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="配置和优化"><a href="#配置和优化" class="headerlink" title="配置和优化"></a>配置和优化</h2><p>通过配置文件或自定义配置类来优化 <code>Executor</code> 和 <code>TaskScheduler</code> 的性能，以满足特定的需求。</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">spring:
+  task:
+    execution:
+      pool:
+        max-size: 16
+        queue-capacity: 100
+        keep-alive: "10s"
+    scheduling:
+      thread-name-prefix: "scheduling-"
+      pool:
+        size: 2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppConfig</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Bean</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"taskExecutor"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">Executor</span> <span class="token function">taskExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">ThreadPoolTaskExecutor</span> executor <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThreadPoolTaskExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        executor<span class="token punctuation">.</span><span class="token function">setCorePoolSize</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        executor<span class="token punctuation">.</span><span class="token function">setMaxPoolSize</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        executor<span class="token punctuation">.</span><span class="token function">setQueueCapacity</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        executor<span class="token punctuation">.</span><span class="token function">setKeepAliveSeconds</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        executor<span class="token punctuation">.</span><span class="token function">setThreadNamePrefix</span><span class="token punctuation">(</span><span class="token string">"Async-"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        executor<span class="token punctuation">.</span><span class="token function">initialize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> executor<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">ThreadPoolTaskScheduler</span> <span class="token function">taskScheduler</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">ThreadPoolTaskScheduler</span> scheduler <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThreadPoolTaskScheduler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        scheduler<span class="token punctuation">.</span><span class="token function">setPoolSize</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        scheduler<span class="token punctuation">.</span><span class="token function">setThreadNamePrefix</span><span class="token punctuation">(</span><span class="token string">"Scheduling-"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> scheduler<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h1><p>Spring Boot提供了强大的测试支持，可以帮助你编写和运行各种类型的测试，包括单元测试、集成测试和端到端测试。</p>
+<h2 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h2><p>单元测试是测试代码的最小单位，通常是一个方法或一个类。Spring Boot提供了JUnit和Mockito等工具来编写单元测试。</p>
+<h3 id="依赖配置"><a href="#依赖配置" class="headerlink" title="依赖配置"></a>依赖配置</h3><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-test<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>scope</span><span class="token punctuation">></span></span>test<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>scope</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependencies</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="测试类"><a href="#测试类" class="headerlink" title="测试类"></a>测试类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootTest</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyServiceTest</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testAddition</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">int</span> result <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="使用Mockito进行单元测试"><a href="#使用Mockito进行单元测试" class="headerlink" title="使用Mockito进行单元测试"></a>使用Mockito进行单元测试</h2><p>Mockito是一个流行的Java库，用于创建和配置模拟对象。它非常适合用来测试依赖于其他类或服务的类。</p>
+<h3 id="服务类"><a href="#服务类" class="headerlink" title="服务类"></a>服务类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyService</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">greet</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"Hello, "</span> <span class="token operator">+</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="测试类-1"><a href="#测试类-1" class="headerlink" title="测试类"></a>测试类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyServiceTest</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Mock</span>
+    <span class="token keyword">private</span> <span class="token class-name">MyService</span> myService<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@InjectMocks</span>
+    <span class="token keyword">private</span> <span class="token class-name">MyServiceTest</span> myServiceTest<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">MyServiceTest</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">MockitoAnnotations</span><span class="token punctuation">.</span><span class="token function">openMocks</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testGreet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">when</span><span class="token punctuation">(</span>myService<span class="token punctuation">.</span><span class="token function">greet</span><span class="token punctuation">(</span><span class="token string">"World"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenReturn</span><span class="token punctuation">(</span><span class="token string">"Hello, World"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> result <span class="token operator">=</span> myService<span class="token punctuation">.</span><span class="token function">greet</span><span class="token punctuation">(</span><span class="token string">"World"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"Hello, World"</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="集成测试"><a href="#集成测试" class="headerlink" title="集成测试"></a>集成测试</h2><p>集成测试用于测试应用程序的不同部分如何协同工作。Spring Boot提供了 <code>@SpringBootTest</code> 注解来方便地进行集成测试。</p>
+<h3 id="控制器类"><a href="#控制器类" class="headerlink" title="控制器类"></a>控制器类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyController</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/hello"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">hello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"Hello, World"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="测试类-2"><a href="#测试类-2" class="headerlink" title="测试类"></a>测试类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootTest</span><span class="token punctuation">(</span>webEnvironment <span class="token operator">=</span> <span class="token class-name">SpringBootTest<span class="token punctuation">.</span>WebEnvironment</span><span class="token punctuation">.</span>RANDOM_PORT<span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyControllerTest</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">TestRestTemplate</span> restTemplate<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">ResponseEntity</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> response <span class="token operator">=</span> restTemplate<span class="token punctuation">.</span><span class="token function">getForEntity</span><span class="token punctuation">(</span><span class="token string">"/hello"</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"Hello, World"</span><span class="token punctuation">,</span> response<span class="token punctuation">.</span><span class="token function">getBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="使用MockMvc进行Web层测试"><a href="#使用MockMvc进行Web层测试" class="headerlink" title="使用MockMvc进行Web层测试"></a>使用MockMvc进行Web层测试</h2><p>MockMvc是Spring提供的一个工具，用于测试Spring MVC控制器，而不需要启动整个服务器。</p>
+<h3 id="控制器类-1"><a href="#控制器类-1" class="headerlink" title="控制器类"></a>控制器类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyController</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/hello"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">hello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"Hello, World"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="测试类-3"><a href="#测试类-3" class="headerlink" title="测试类"></a>测试类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@WebMvcTest</span><span class="token punctuation">(</span><span class="token class-name">MyController</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyControllerTest</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">MockMvc</span> mockMvc<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        mockMvc<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/hello"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isOk</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">content</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token string">"Hello, World"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><p>SpringBoot支持Web开发，目前有两大框架，Servlet web Application、Reactive Web两种框架</p>
+<h2 id="Servlet-Web-Application"><a href="#Servlet-Web-Application" class="headerlink" title="Servlet Web Application"></a>Servlet Web Application</h2><p>构建基于Servlet的Web应用，可以利用Spring Boot对Spring MVC或Jersey的自动配置，常用的是MVC模式。</p>
+<h3 id="Spring-web-Mvc框架"><a href="#Spring-web-Mvc框架" class="headerlink" title="Spring web Mvc框架"></a>Spring web Mvc框架</h3><h4 id="两种编程风格"><a href="#两种编程风格" class="headerlink" title="两种编程风格"></a>两种编程风格</h4><ul>
+<li><p>基于注解编程风格</p>
+</li>
+<li><p>基于函数式编程的风格</p>
+</li>
+</ul>
+<h4 id="SpringBoot中的Spring-Mvc自动配置"><a href="#SpringBoot中的Spring-Mvc自动配置" class="headerlink" title="SpringBoot中的Spring Mvc自动配置"></a>SpringBoot中的Spring Mvc自动配置</h4><ol>
+<li><strong>视图解析器</strong>：<ul>
+<li>包含 <code>ContentNegotiatingViewResolver</code> 和 <code>BeanNameViewResolver</code> Bean，用于视图解析。</li>
+</ul>
+</li>
+<li><strong>静态资源支持</strong>：<ul>
+<li>提供对静态资源（如CSS、JavaScript、图像）的服务支持，包括对WebJars的支持。</li>
+</ul>
+</li>
+<li><strong>类型转换和格式化</strong>：<ul>
+<li>自动注册 <code>Converter</code>、<code>GenericConverter</code> 和 <code>Formatter</code> Bean，用于类型转换和格式化。</li>
+<li>支持 <code>HttpMessageConverters</code>，用于将请求和响应转换为对象。</li>
+</ul>
+</li>
+<li><strong>消息代码解析器</strong>：<ul>
+<li>自动注册 <code>MessageCodesResolver</code>，用于国际化和本地化消息的解析。</li>
+</ul>
+</li>
+<li><strong>静态首页</strong>：<ul>
+<li>支持静态的 <code>index.html</code> 作为应用程序的首页。</li>
+</ul>
+</li>
+<li><strong>数据绑定初始化</strong>：<ul>
+<li>自动使用 <code>ConfigurableWebBindingInitializer</code> Bean，用于初始化数据绑定。</li>
+</ul>
+</li>
+</ol>
+<h4 id="定制Spring-MVC"><a href="#定制Spring-MVC" class="headerlink" title="定制Spring MVC"></a>定制Spring MVC</h4><p>如果你需要在保留Spring Boot自动配置的基础上进行更多的MVC定制，可以使用以下方法：</p>
+<ol>
+<li>使用 <code>WebMvcConfigurer</code></li>
+</ol>
+<ul>
+<li>添加一个不含 <code>@EnableWebMvc</code> 注解的 <code>@Configuration</code> 类，实现 <code>WebMvcConfigurer</code> 接口。</li>
+<li>适用于添加拦截器、格式化器、视图控制器等。</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyWebMvcConfig</span> <span class="token keyword">implements</span> <span class="token class-name">WebMvcConfigurer</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">addInterceptors</span><span class="token punctuation">(</span><span class="token class-name">InterceptorRegistry</span> registry<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        registry<span class="token punctuation">.</span><span class="token function">addInterceptor</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">MyInterceptor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">addFormatters</span><span class="token punctuation">(</span><span class="token class-name">FormatterRegistry</span> registry<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        registry<span class="token punctuation">.</span><span class="token function">addFormatter</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">MyFormatter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="2">
+<li>使用 <code>WebMvcRegistrations</code></li>
+</ol>
+<ul>
+<li>声明一个 <code>WebMvcRegistrations</code> 类型的Bean，用于提供 <code>RequestMappingHandlerMapping</code>、<code>RequestMappingHandlerAdapter</code> 或 <code>ExceptionHandlerExceptionResolver</code> 的自定义实例。</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyWebMvcRegistrations</span> <span class="token keyword">implements</span> <span class="token class-name">WebMvcRegistrations</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">RequestMappingHandlerMapping</span> <span class="token function">getRequestMappingHandlerMapping</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">MyRequestMappingHandlerMapping</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">RequestMappingHandlerAdapter</span> <span class="token function">getRequestMappingHandlerAdapter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">MyRequestMappingHandlerAdapter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">ExceptionHandlerExceptionResolver</span> <span class="token function">getExceptionHandlerExceptionResolver</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">MyExceptionHandlerExceptionResolver</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="3">
+<li>完全控制Spring MVC</li>
+</ol>
+<ul>
+<li>添加自己的 <code>@Configuration</code> 并使用 <code>@EnableWebMvc</code> 注解，完全接管Spring MVC的配置。</li>
+<li>适用于需要完全自定义Spring MVC行为的场景。</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token annotation punctuation">@EnableWebMvc</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyWebMvcConfig</span> <span class="token keyword">implements</span> <span class="token class-name">WebMvcConfigurer</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 完全自定义Spring MVC配置</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="HTTP消息转换器（HttpMessageConverter）"><a href="#HTTP消息转换器（HttpMessageConverter）" class="headerlink" title="HTTP消息转换器（HttpMessageConverter）"></a>HTTP消息转换器（HttpMessageConverter）</h4><p><code>HttpMessageConverter</code> 是 Spring MVC 中用于将 HTTP 请求和响应的内容转换为 Java 对象和反之的接口。它在处理 RESTful Web 服务时非常有用，特别是当你需要将请求体转换为 Java 对象，或者将 Java 对象转换为响应体时。</p>
+<p><strong>1.主要用途</strong></p>
+<ol>
+<li><strong>请求体到Java对象的转换</strong>：<ul>
+<li>将客户端发送的 JSON、XML 或其他格式的数据转换为 Java 对象。</li>
+<li>例如，将一个 JSON 请求体转换为一个 Java 对象，以便在控制器方法中使用。</li>
+</ul>
+</li>
+<li><strong>Java对象到响应体的转换</strong>：<ul>
+<li>将控制器方法返回的 Java 对象转换为 JSON、XML 或其他格式的数据，以便发送给客户端。</li>
+<li>例如，将一个 Java 对象转换为 JSON 响应体，发送给客户端。</li>
+</ul>
+</li>
+</ol>
+<p><strong>2.默认行为</strong></p>
+<p>Spring Boot 提供了一些开箱即用的合理默认值。默认情况下，Spring Boot 会自动配置以下 <code>HttpMessageConverter</code>：</p>
+<ul>
+<li><strong>JSON 转换</strong>：使用 Jackson 库将 Java 对象转换为 JSON 格式，或将 JSON 格式的数据转换为 Java 对象。</li>
+<li><strong>XML 转换</strong>：如果 Jackson XML 扩展可用，使用 Jackson XML 扩展进行 XML 转换；否则，使用 JAXB 进行 XML 转换。</li>
+<li><strong>字符串转换</strong>：默认情况下，字符串是以 UTF-8 编码的。</li>
+</ul>
+<p><strong>3.自定义</strong> <code>HttpMessageConverter</code></p>
+<p>如果你需要添加或定制 <code>HttpMessageConverter</code>，可以通过配置类来实现。你可以添加新的转换器，或者覆盖默认的转换器。</p>
+<p><strong>pom.xml</strong></p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-web<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>com.fasterxml.jackson.core<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>jackson-databind<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependencies</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>自定义转换器配置</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span><span class="token punctuation">(</span>proxyBeanMethods <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyHttpMessageConvertersConfiguration</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">HttpMessageConverters</span> <span class="token function">customConverters</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HttpMessageConverter</span><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span><span class="token punctuation">></span></span> converters <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+        <span class="token comment">// 添加一个自定义的字符串转换器</span>
+        <span class="token class-name">StringHttpMessageConverter</span> stringConverter <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringHttpMessageConverter</span><span class="token punctuation">(</span><span class="token class-name">StandardCharsets</span><span class="token punctuation">.</span>UTF_8<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        converters<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>stringConverter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+        <span class="token comment">// 添加一个自定义的 JSON 转换器</span>
+        <span class="token class-name">MappingJackson2HttpMessageConverter</span> jsonConverter <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MappingJackson2HttpMessageConverter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        converters<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>jsonConverter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">HttpMessageConverters</span><span class="token punctuation">(</span>converters<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>/api/hello</code> 端点将返回一个字符串，<code>/api/json</code> 端点将返回一个 JSON 对象,自定义的 <code>HttpMessageConverter</code> 将处理这些。</p>
+<h4 id="CORS-跨域的支持"><a href="#CORS-跨域的支持" class="headerlink" title="CORS 跨域的支持"></a>CORS 跨域的支持</h4><p>跨源资源共享（CORS，Cross-Origin Resource Sharing）是一种W3C规范，允许服务器定义哪些跨域请求是被允许的。这对于现代Web应用程序来说非常重要，因为它允许客户端（如浏览器）从不同的域名请求资源，而不会受到同源策略的限制。</p>
+<p>从Spring 4.2版本开始，Spring MVC 支持CORS。Spring Boot 提供了两种配置CORS的方法：</p>
+<p><strong>1.局部CORS配置</strong></p>
+<p>你可以在控制器类或方法上使用 <code>@CrossOrigin</code> 注解来配置CORS。例如</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyController</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@CrossOrigin</span><span class="token punctuation">(</span>origins <span class="token operator">=</span> <span class="token string">"http://example.com"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/api/data"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getData</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"Hello, World!"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>2.全局CORS配置</strong></p>
+<p>为整个应用程序配置CORS，可以通过实现 <code>WebMvcConfigurer</code> 接口并重写 <code>addCorsMappings</code> 方法来实现全局CORS配置。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span><span class="token punctuation">(</span>proxyBeanMethods <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyCorsConfiguration</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">WebMvcConfigurer</span> <span class="token function">corsConfigurer</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">WebMvcConfigurer</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">addCorsMappings</span><span class="token punctuation">(</span><span class="token class-name">CorsRegistry</span> registry<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">// 允许跨域访问的路径</span>
+                registry<span class="token punctuation">.</span><span class="token function">addMapping</span><span class="token punctuation">(</span><span class="token string">"/api/**"</span><span class="token punctuation">)</span>
+                        <span class="token comment">// 允许的源</span>
+                        <span class="token punctuation">.</span><span class="token function">allowedOrigins</span><span class="token punctuation">(</span><span class="token string">"http://example.com"</span><span class="token punctuation">)</span>
+                        <span class="token comment">// 允许的方法</span>
+                        <span class="token punctuation">.</span><span class="token function">allowedMethods</span><span class="token punctuation">(</span><span class="token string">"GET"</span><span class="token punctuation">,</span> <span class="token string">"POST"</span><span class="token punctuation">,</span> <span class="token string">"PUT"</span><span class="token punctuation">,</span> <span class="token string">"DELETE"</span><span class="token punctuation">)</span>
+                        <span class="token comment">// 允许的请求头</span>
+                        <span class="token punctuation">.</span><span class="token function">allowedHeaders</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span>
+                        <span class="token comment">// 是否允许发送Cookie</span>
+                        <span class="token punctuation">.</span><span class="token function">allowCredentials</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
+                        <span class="token comment">// 预检请求的缓存时间（秒）</span>
+                        <span class="token punctuation">.</span><span class="token function">maxAge</span><span class="token punctuation">(</span><span class="token number">3600</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>3.CORS应用场景</strong></p>
+<ul>
+<li>前后端分离</li>
+<li>微服务</li>
+<li>第三方API调用</li>
+</ul>
+<h3 id="JAX-RS-和-Jersey"><a href="#JAX-RS-和-Jersey" class="headerlink" title="JAX-RS 和 Jersey"></a>JAX-RS 和 Jersey</h3><ul>
+<li><strong>JAX-RS</strong>：Java API for RESTful Web Services，是一个标准的 API，用于创建 RESTful Web 服务。它提供了一组注解和接口，简化了 RESTful 服务的开发。</li>
+<li><strong>Jersey</strong>：JAX-RS 的参考实现，提供了完整的 JAX-RS 功能，并扩展了许多额外的特性和功能，帮助开发者更高效地构建 RESTful 服务。</li>
+</ul>
+<h3 id="嵌入式Servlet容器支持"><a href="#嵌入式Servlet容器支持" class="headerlink" title="嵌入式Servlet容器支持"></a>嵌入式Servlet容器支持</h3><p>对于Servlet应用，Spring Boot包括对嵌入式 <a target="_blank" rel="noopener" href="https://tomcat.apache.org/">Tomcat</a>、 <a target="_blank" rel="noopener" href="https://www.eclipse.org/jetty/">Jetty</a> 和 <a target="_blank" rel="noopener" href="https://github.com/undertow-io/undertow">Undertow</a> 服务器的支持。默认情况下，嵌入式服务器监听 <code>8080</code> 端口的HTTP请求。</p>
+<h2 id="优雅停机"><a href="#优雅停机" class="headerlink" title="优雅停机"></a>优雅停机</h2><p>在生产环境中，应用程序的优雅停机（Graceful Shutdown）是一个非常重要的功能。它确保应用程序在停止或重启时能够完成正在进行的请求处理，并且正确地释放资源，从而避免数据丢失和服务中断。Spring Boot 提供了对优雅停机的支持，使得开发者可以更轻松地实现这一功能。</p>
+<h3 id="优雅停机的作用"><a href="#优雅停机的作用" class="headerlink" title="优雅停机的作用"></a>优雅停机的作用</h3><ol>
+<li><strong>完成正在进行的请求</strong>：确保正在处理的请求能够在应用程序停止前完成，避免请求被中断。</li>
+<li><strong>释放资源</strong>：正确地关闭数据库连接、文件句柄、线程池等资源，避免资源泄漏。</li>
+<li><strong>避免数据丢失</strong>：确保数据处理操作（如事务、文件写入）能够在应用程序停止前完成，避免数据丢失。</li>
+<li><strong>提高系统稳定性</strong>：在应用程序停止或重启时，减少对系统其他部分的影响，提高系统的整体稳定性。</li>
+</ol>
+<h3 id="Spring-Boot-的优雅停机配置"><a href="#Spring-Boot-的优雅停机配置" class="headerlink" title="Spring Boot 的优雅停机配置"></a>Spring Boot 的优雅停机配置</h3><p>从 Spring Boot 2.3 开始，Spring Boot 提供了对优雅停机的内置支持。你可以通过配置文件来启用和配置优雅停机功能。</p>
+<h4 id="配置示例"><a href="#配置示例" class="headerlink" title="配置示例"></a>配置示例</h4><p>在 <code>application.properties</code> 或 <code>application.yml</code> 文件中配置优雅停机。</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">server:
+#启用优雅停机功能。
+  shutdown: graceful
+
+spring:
+  lifecycle:
+#设置每个停机阶段的超时时间为30秒。
+    timeout-per-shutdown-phase: 30s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="优雅停机的实现"><a href="#优雅停机的实现" class="headerlink" title="优雅停机的实现"></a>优雅停机的实现</h3><p>Spring Boot 的优雅停机机制主要通过以下几个步骤实现：</p>
+<ol>
+<li><strong>接收停机信号</strong>：当应用程序接收到停机信号（如 <code>SIGTERM</code>）时，Spring Boot 会开始优雅停机过程。</li>
+<li><strong>停止接受新请求</strong>：应用程序会停止接受新的请求，但会继续处理已经接收的请求。</li>
+<li><strong>完成正在进行的请求</strong>：应用程序会等待正在进行的请求处理完成，直到达到配置的超时时间。</li>
+<li><strong>释放资源</strong>：应用程序会正确地关闭数据库连接、文件句柄、线程池等资源。</li>
+<li><strong>停止应用程序</strong>：在所有请求处理完成并释放资源后，应用程序会停止。</li>
+</ol>
+<blockquote>
+<p><strong>使用Tomcat的优雅关机需要Tomcat 9.0.33或更高版本。</strong></p>
+</blockquote>
+<h1 id="整合技术"><a href="#整合技术" class="headerlink" title="整合技术"></a>整合技术</h1><h2 id="整合数据库"><a href="#整合数据库" class="headerlink" title="整合数据库"></a>整合数据库</h2><p>数据源的配置</p>
+<p>连接池配置</p>
+<h2 id="整合Mybatis"><a href="#整合Mybatis" class="headerlink" title="整合Mybatis"></a>整合Mybatis</h2><h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><h2 id="Quartz-Scheduler"><a href="#Quartz-Scheduler" class="headerlink" title="Quartz Scheduler"></a>Quartz Scheduler</h2><h2 id="发送邮件"><a href="#发送邮件" class="headerlink" title="发送邮件"></a>发送邮件</h2><h2 id="校验"><a href="#校验" class="headerlink" title="校验"></a>校验</h2><h2 id="调用Rest服务"><a href="#调用Rest服务" class="headerlink" title="调用Rest服务"></a>调用Rest服务</h2><h2 id="Web-Service"><a href="#Web-Service" class="headerlink" title="Web Service"></a>Web Service</h2>
     </div>
 
     
@@ -808,7 +1553,7 @@ Identify and stop the process that is listening on port 8080 or configure this a
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A5%E9%97%A8"><span class="nav-number">1.</span> <span class="nav-text">入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SringBoot%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">SringBoot介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%A6%81%E6%B1%82"><span class="nav-number">1.2.</span> <span class="nav-text">系统要求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet-%E5%AE%B9%E5%99%A8"><span class="nav-number">1.2.1.</span> <span class="nav-text">Servlet 容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GraalVM-%E5%8E%9F%E7%94%9F%E9%95%9C%E5%83%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">GraalVM 原生镜像</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hello-world"><span class="nav-number">1.3.</span> <span class="nav-text">hello world</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.3.1.</span> <span class="nav-text">前提条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Maven%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="nav-number">1.3.2.</span> <span class="nav-text">Maven创建项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%88%B0classpath"><span class="nav-number">1.3.3.</span> <span class="nav-text">添加依赖到classpath</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81"><span class="nav-number">1.3.4.</span> <span class="nav-text">编写代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RestController-%E5%92%8C-RequestMapping-%E6%B3%A8%E8%A7%A3"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">@RestController 和 @RequestMapping 注解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SpringBootApplication-%E6%B3%A8%E8%A7%A3"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">@SpringBootApplication 注解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#main-%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.4.3.</span> <span class="nav-text">main 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.3.5.</span> <span class="nav-text">运行程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%8F%AF%E6%89%A7%E8%A1%8C-Jar"><span class="nav-number">1.3.6.</span> <span class="nav-text">创建一个可执行 Jar</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Spring-Boot%E8%BF%9B%E8%A1%8C%E5%BC%80%E5%8F%91"><span class="nav-number">2.</span> <span class="nav-text">使用Spring Boot进行开发</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#starter"><span class="nav-number">2.1.</span> <span class="nav-text">starter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84"><span class="nav-number">2.2.</span> <span class="nav-text">代码结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E7%B1%BB%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">2.3.</span> <span class="nav-text">启动类的位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configuration-%E7%B1%BB"><span class="nav-number">2.4.</span> <span class="nav-text">Configuration 类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5Configuration-%E7%B1%BB"><span class="nav-number">2.4.1.</span> <span class="nav-text">导入Configuration 类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5XML%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.4.2.</span> <span class="nav-text">导入XML配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%EF%BC%88%E9%85%8D%E7%BD%AE%EF%BC%89"><span class="nav-number">2.5.</span> <span class="nav-text">自动装配（配置）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">2.5.1.</span> <span class="nav-text">自动配置的工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E7%94%A8%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.2.</span> <span class="nav-text">启用自动配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="nav-number">2.5.3.</span> <span class="nav-text">示例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.3.1.</span> <span class="nav-text">自动配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%8B%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.3.2.</span> <span class="nav-text">手动配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%A6%81%E7%94%A8%E6%8C%87%E5%AE%9A%E7%B1%BB%E8%BF%9B%E8%A1%8C%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D"><span class="nav-number">2.5.4.</span> <span class="nav-text">如何禁用指定类进行自动装配</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5Bean"><span class="nav-number">2.6.</span> <span class="nav-text">依赖注入Bean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBootApplication-%E6%B3%A8%E8%A7%A3%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.7.</span> <span class="nav-text">@SpringBootApplication 注解介绍</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">核心特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringApplication"><span class="nav-number">3.1.</span> <span class="nav-text">SpringApplication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E7%94%A8%E5%A4%B1%E8%B4%A5"><span class="nav-number">3.2.</span> <span class="nav-text">启用失败</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%87%92%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%88Lazy-Initialization%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">懒初始化（Lazy Initialization）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89-Banner"><span class="nav-number">3.4.</span> <span class="nav-text">自定义 Banner</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89-SpringApplication"><span class="nav-number">3.5.</span> <span class="nav-text">自定义 SpringApplication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Builder-API"><span class="nav-number">3.6.</span> <span class="nav-text">Builder API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Application-%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-number">3.7.</span> <span class="nav-text">Application 可用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Liveness-State"><span class="nav-number">3.8.</span> <span class="nav-text">Liveness State</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Readiness-State"><span class="nav-number">3.9.</span> <span class="nav-text">Readiness State</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%8F%AF%E7%94%A8%E6%80%A7%E7%8A%B6%E6%80%81"><span class="nav-number">3.10.</span> <span class="nav-text">管理应用程序的可用性状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Application-%E4%BA%8B%E4%BB%B6%E5%92%8C%E7%9B%91%E5%90%AC%E5%99%A8"><span class="nav-number">3.11.</span> <span class="nav-text">Application 事件和监听器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WEB-%E7%8E%AF%E5%A2%83%EF%BC%88Environment%EF%BC%89"><span class="nav-number">3.12.</span> <span class="nav-text">WEB 环境（Environment）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E5%BA%94%E7%94%A8%E5%8F%82%E6%95%B0"><span class="nav-number">3.13.</span> <span class="nav-text">访问应用参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-ApplicationRunner-%E6%88%96-CommandLineRunner"><span class="nav-number">3.14.</span> <span class="nav-text">使用 ApplicationRunner 或 CommandLineRunner</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E9%80%80%E5%87%BA"><span class="nav-number">3.15.</span> <span class="nav-text">程序退出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E5%8A%9F%E8%83%BD"><span class="nav-number">3.16.</span> <span class="nav-text">管理功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E5%90%AF%E5%8A%A8%E8%BF%BD%E8%B8%AA"><span class="nav-number">3.17.</span> <span class="nav-text">应用程序启动追踪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E5%8C%96%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="nav-number">3.18.</span> <span class="nav-text">外部化的配置</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A5%E9%97%A8"><span class="nav-number">1.</span> <span class="nav-text">入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SringBoot%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">SringBoot介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%A6%81%E6%B1%82"><span class="nav-number">1.2.</span> <span class="nav-text">系统要求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet-%E5%AE%B9%E5%99%A8"><span class="nav-number">1.2.1.</span> <span class="nav-text">Servlet 容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GraalVM-%E5%8E%9F%E7%94%9F%E9%95%9C%E5%83%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">GraalVM 原生镜像</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hello-world"><span class="nav-number">1.3.</span> <span class="nav-text">hello world</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.3.1.</span> <span class="nav-text">前提条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Maven%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="nav-number">1.3.2.</span> <span class="nav-text">Maven创建项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E5%88%B0classpath"><span class="nav-number">1.3.3.</span> <span class="nav-text">添加依赖到classpath</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81"><span class="nav-number">1.3.4.</span> <span class="nav-text">编写代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RestController-%E5%92%8C-RequestMapping-%E6%B3%A8%E8%A7%A3"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">@RestController 和 @RequestMapping 注解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SpringBootApplication-%E6%B3%A8%E8%A7%A3"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">@SpringBootApplication 注解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#main-%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.4.3.</span> <span class="nav-text">main 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.3.5.</span> <span class="nav-text">运行程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%8F%AF%E6%89%A7%E8%A1%8C-Jar"><span class="nav-number">1.3.6.</span> <span class="nav-text">创建一个可执行 Jar</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Spring-Boot%E8%BF%9B%E8%A1%8C%E5%BC%80%E5%8F%91"><span class="nav-number">2.</span> <span class="nav-text">使用Spring Boot进行开发</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#starter"><span class="nav-number">2.1.</span> <span class="nav-text">starter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84"><span class="nav-number">2.2.</span> <span class="nav-text">代码结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E7%B1%BB%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">2.3.</span> <span class="nav-text">启动类的位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configuration-%E7%B1%BB"><span class="nav-number">2.4.</span> <span class="nav-text">Configuration 类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5Configuration-%E7%B1%BB"><span class="nav-number">2.4.1.</span> <span class="nav-text">导入Configuration 类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5XML%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.4.2.</span> <span class="nav-text">导入XML配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%EF%BC%88%E9%85%8D%E7%BD%AE%EF%BC%89"><span class="nav-number">2.5.</span> <span class="nav-text">自动装配（配置）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">2.5.1.</span> <span class="nav-text">自动配置的工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E7%94%A8%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.2.</span> <span class="nav-text">启用自动配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="nav-number">2.5.3.</span> <span class="nav-text">示例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.3.1.</span> <span class="nav-text">自动配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%8B%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.3.2.</span> <span class="nav-text">手动配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%A6%81%E7%94%A8%E6%8C%87%E5%AE%9A%E7%B1%BB%E8%BF%9B%E8%A1%8C%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D"><span class="nav-number">2.5.4.</span> <span class="nav-text">如何禁用指定类进行自动装配</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5Bean"><span class="nav-number">2.6.</span> <span class="nav-text">依赖注入Bean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBootApplication-%E6%B3%A8%E8%A7%A3%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.7.</span> <span class="nav-text">@SpringBootApplication 注解介绍</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">核心特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringApplication"><span class="nav-number">3.1.</span> <span class="nav-text">SpringApplication</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E7%94%A8%E5%A4%B1%E8%B4%A5"><span class="nav-number">3.1.1.</span> <span class="nav-text">启用失败</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%87%92%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%88Lazy-Initialization%EF%BC%89"><span class="nav-number">3.1.2.</span> <span class="nav-text">懒初始化（Lazy Initialization）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89-Banner"><span class="nav-number">3.1.3.</span> <span class="nav-text">自定义 Banner</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89SpringApplication"><span class="nav-number">3.1.4.</span> <span class="nav-text">自定义SpringApplication</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Builder-API"><span class="nav-number">3.1.5.</span> <span class="nav-text">Builder API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Application-%E4%BA%8B%E4%BB%B6%E5%92%8C%E7%9B%91%E5%90%AC%E5%99%A8"><span class="nav-number">3.1.6.</span> <span class="nav-text">Application 事件和监听器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WEB-%E7%8E%AF%E5%A2%83%EF%BC%88Environment%EF%BC%89"><span class="nav-number">3.1.7.</span> <span class="nav-text">WEB 环境（Environment）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E5%BA%94%E7%94%A8%E5%8F%82%E6%95%B0"><span class="nav-number">3.1.8.</span> <span class="nav-text">访问应用参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-ApplicationRunner-%E6%88%96-CommandLineRunner"><span class="nav-number">3.1.9.</span> <span class="nav-text">使用 ApplicationRunner 或 CommandLineRunner</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringBoot%E7%A8%8B%E5%BA%8F%E9%80%80%E5%87%BA%E6%9C%BA%E5%88%B6"><span class="nav-number">3.1.10.</span> <span class="nav-text">SpringBoot程序退出机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%90%AF%E7%AE%A1%E7%90%86%E5%8A%9F%E8%83%BD"><span class="nav-number">3.1.11.</span> <span class="nav-text">开启管理功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringBoot%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90"><span class="nav-number">3.1.12.</span> <span class="nav-text">SpringBoot启动流程分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E5%8C%96%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="nav-number">3.2.</span> <span class="nav-text">外部化的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0%E8%8E%B7%E5%8F%96%E5%B1%9E%E6%80%A7"><span class="nav-number">3.2.1.</span> <span class="nav-text">通过命令行参数获取属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87Json%E8%8E%B7%E5%8F%96%E5%B1%9E%E6%80%A7"><span class="nav-number">3.2.2.</span> <span class="nav-text">通过Json获取属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87Application-Properties%E8%8E%B7%E5%8F%96%E5%B1%9E%E6%80%A7"><span class="nav-number">3.2.3.</span> <span class="nav-text">通过Application Properties获取属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E9%A1%BA%E5%BA%8F"><span class="nav-number">3.2.3.1.</span> <span class="nav-text">加载顺序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E5%AE%9A%E6%96%87%E4%BB%B6"><span class="nav-number">3.2.3.2.</span> <span class="nav-text">特定文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ConfigurationProperties"><span class="nav-number">3.2.3.3.</span> <span class="nav-text">@ConfigurationProperties</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0"><span class="nav-number">3.2.4.</span> <span class="nav-text">通过环境变量获取参数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BD%E9%99%85%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">国际化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%9B%BD%E9%99%85%E5%8C%96%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6"><span class="nav-number">4.1.</span> <span class="nav-text">配置国际化资源文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-MessageSource-Bean"><span class="nav-number">4.2.</span> <span class="nav-text">配置 MessageSource Bean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9B%BD%E9%99%85%E5%8C%96%E8%B5%84%E6%BA%90"><span class="nav-number">4.3.</span> <span class="nav-text">使用国际化资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%87%E6%8D%A2%E8%AF%AD%E8%A8%80"><span class="nav-number">4.4.</span> <span class="nav-text">切换语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-RequestHeader-%E6%B3%A8%E8%A7%A3%E8%87%AA%E5%8A%A8%E6%A3%80%E6%B5%8B%E8%AF%AD%E8%A8%80"><span class="nav-number">4.5.</span> <span class="nav-text">使用 @RequestHeader 注解自动检测语言</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Json"><span class="nav-number">5.</span> <span class="nav-text">Json</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">5.1.</span> <span class="nav-text">基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%88%E5%B0%86-Java-%E5%AF%B9%E8%B1%A1%E8%BD%AC%E6%8D%A2%E4%B8%BA-JSON%EF%BC%89"><span class="nav-number">5.1.1.</span> <span class="nav-text">序列化（将 Java 对象转换为 JSON）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%88%E5%B0%86-JSON-%E8%BD%AC%E6%8D%A2%E4%B8%BA-Java-%E5%AF%B9%E8%B1%A1%EF%BC%89"><span class="nav-number">5.1.2.</span> <span class="nav-text">反序列化（将 JSON 转换为 Java 对象）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot%E4%B8%AD%E4%BD%BF%E7%94%A8-Jackson"><span class="nav-number">5.2.</span> <span class="nav-text">SpringBoot中使用 Jackson</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BARest%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="nav-number">5.2.1.</span> <span class="nav-text">创建Rest控制器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82%E5%B9%B6%E6%9F%A5%E7%9C%8B%E5%93%8D%E5%BA%94"><span class="nav-number">5.2.2.</span> <span class="nav-text">发送请求并查看响应</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89-Jackson-%E9%85%8D%E7%BD%AE"><span class="nav-number">5.3.</span> <span class="nav-text">自定义 Jackson 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jackson%E6%B3%A8%E8%A7%A3"><span class="nav-number">5.4.</span> <span class="nav-text">Jackson注解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Executor%E5%92%8CTaskScheduler"><span class="nav-number">6.</span> <span class="nav-text">Executor和TaskScheduler</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%E6%89%A7%E8%A1%8C-Executor"><span class="nav-number">6.1.</span> <span class="nav-text">异步任务执行 (Executor)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8"><span class="nav-number">6.1.1.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="nav-number">6.1.2.</span> <span class="nav-text">如何使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E6%89%A7%E8%A1%8C-TaskScheduler"><span class="nav-number">6.2.</span> <span class="nav-text">定时任务执行 (TaskScheduler)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8-1"><span class="nav-number">6.2.1.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-1"><span class="nav-number">6.2.2.</span> <span class="nav-text">如何使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BC%98%E5%8C%96"><span class="nav-number">6.3.</span> <span class="nav-text">配置和优化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Test"><span class="nav-number">7.</span> <span class="nav-text">Test</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95"><span class="nav-number">7.1.</span> <span class="nav-text">单元测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E9%85%8D%E7%BD%AE"><span class="nav-number">7.1.1.</span> <span class="nav-text">依赖配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%B1%BB"><span class="nav-number">7.1.2.</span> <span class="nav-text">测试类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Mockito%E8%BF%9B%E8%A1%8C%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95"><span class="nav-number">7.2.</span> <span class="nav-text">使用Mockito进行单元测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%B1%BB"><span class="nav-number">7.2.1.</span> <span class="nav-text">服务类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%B1%BB-1"><span class="nav-number">7.2.2.</span> <span class="nav-text">测试类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95"><span class="nav-number">7.3.</span> <span class="nav-text">集成测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%99%A8%E7%B1%BB"><span class="nav-number">7.3.1.</span> <span class="nav-text">控制器类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%B1%BB-2"><span class="nav-number">7.3.2.</span> <span class="nav-text">测试类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8MockMvc%E8%BF%9B%E8%A1%8CWeb%E5%B1%82%E6%B5%8B%E8%AF%95"><span class="nav-number">7.4.</span> <span class="nav-text">使用MockMvc进行Web层测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%99%A8%E7%B1%BB-1"><span class="nav-number">7.4.1.</span> <span class="nav-text">控制器类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%B1%BB-3"><span class="nav-number">7.4.2.</span> <span class="nav-text">测试类</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Web"><span class="nav-number">8.</span> <span class="nav-text">Web</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Servlet-Web-Application"><span class="nav-number">8.1.</span> <span class="nav-text">Servlet Web Application</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-web-Mvc%E6%A1%86%E6%9E%B6"><span class="nav-number">8.1.1.</span> <span class="nav-text">Spring web Mvc框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E7%BC%96%E7%A8%8B%E9%A3%8E%E6%A0%BC"><span class="nav-number">8.1.1.1.</span> <span class="nav-text">两种编程风格</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SpringBoot%E4%B8%AD%E7%9A%84Spring-Mvc%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">8.1.1.2.</span> <span class="nav-text">SpringBoot中的Spring Mvc自动配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E5%88%B6Spring-MVC"><span class="nav-number">8.1.1.3.</span> <span class="nav-text">定制Spring MVC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP%E6%B6%88%E6%81%AF%E8%BD%AC%E6%8D%A2%E5%99%A8%EF%BC%88HttpMessageConverter%EF%BC%89"><span class="nav-number">8.1.1.4.</span> <span class="nav-text">HTTP消息转换器（HttpMessageConverter）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CORS-%E8%B7%A8%E5%9F%9F%E7%9A%84%E6%94%AF%E6%8C%81"><span class="nav-number">8.1.1.5.</span> <span class="nav-text">CORS 跨域的支持</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JAX-RS-%E5%92%8C-Jersey"><span class="nav-number">8.1.2.</span> <span class="nav-text">JAX-RS 和 Jersey</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B5%8C%E5%85%A5%E5%BC%8FServlet%E5%AE%B9%E5%99%A8%E6%94%AF%E6%8C%81"><span class="nav-number">8.1.3.</span> <span class="nav-text">嵌入式Servlet容器支持</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA"><span class="nav-number">8.2.</span> <span class="nav-text">优雅停机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">8.2.1.</span> <span class="nav-text">优雅停机的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Boot-%E7%9A%84%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA%E9%85%8D%E7%BD%AE"><span class="nav-number">8.2.2.</span> <span class="nav-text">Spring Boot 的优雅停机配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="nav-number">8.2.2.1.</span> <span class="nav-text">配置示例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">8.2.3.</span> <span class="nav-text">优雅停机的实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B4%E5%90%88%E6%8A%80%E6%9C%AF"><span class="nav-number">9.</span> <span class="nav-text">整合技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B4%E5%90%88%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">9.1.</span> <span class="nav-text">整合数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B4%E5%90%88Mybatis"><span class="nav-number">9.2.</span> <span class="nav-text">整合Mybatis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98"><span class="nav-number">9.3.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Quartz-Scheduler"><span class="nav-number">9.4.</span> <span class="nav-text">Quartz Scheduler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6"><span class="nav-number">9.5.</span> <span class="nav-text">发送邮件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%A1%E9%AA%8C"><span class="nav-number">9.6.</span> <span class="nav-text">校验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E7%94%A8Rest%E6%9C%8D%E5%8A%A1"><span class="nav-number">9.7.</span> <span class="nav-text">调用Rest服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-Service"><span class="nav-number">9.8.</span> <span class="nav-text">Web Service</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -822,7 +1567,7 @@ Identify and stop the process that is listening on port 8080 or configure this a
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">63</span>
+          <span class="site-state-item-count">68</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
