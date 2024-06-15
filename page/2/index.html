@@ -1413,7 +1413,7 @@ docker run -p 8080:8080 myapp<span aria-hidden="true" class="line-numbers-rows">
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E7%BC%93%E5%AD%98%E6%9B%BF%E6%8D%A2%E7%AD%96%E7%95%A5.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E7%BC%93%E5%AD%98.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1427,7 +1427,7 @@ docker run -p 8080:8080 myapp<span aria-hidden="true" class="line-numbers-rows">
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/%E7%BC%93%E5%AD%98%E6%9B%BF%E6%8D%A2%E7%AD%96%E7%95%A5.html" class="post-title-link" itemprop="url">深入理解缓存替换策略</a>
+            <a href="/post/%E7%BC%93%E5%AD%98.html" class="post-title-link" itemprop="url">缓存</a>
         </h2>
 
         <div class="post-meta">
@@ -1439,6 +1439,13 @@ docker run -p 8080:8080 myapp<span aria-hidden="true" class="line-numbers-rows">
 
               <time title="创建时间：2024-05-17 22:17:42" itemprop="dateCreated datePublished" datetime="2024-05-17T22:17:42+08:00">2024-05-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-06-15 23:29:53" itemprop="dateModified" datetime="2024-06-15T23:29:53+08:00">2024-06-15</time>
+              </span>
 
           
 
@@ -1451,7 +1458,271 @@ docker run -p 8080:8080 myapp<span aria-hidden="true" class="line-numbers-rows">
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="缓存替换策略"><a href="#缓存替换策略" class="headerlink" title="缓存替换策略"></a>缓存替换策略</h1><blockquote>
+          <h1 id="多级缓存架构"><a href="#多级缓存架构" class="headerlink" title="多级缓存架构"></a>多级缓存架构</h1><h2 id="什么是多级缓存架构"><a href="#什么是多级缓存架构" class="headerlink" title="什么是多级缓存架构"></a>什么是多级缓存架构</h2><p>多级缓存架构是一种缓存系统，它将缓存分为多个级别，每个级别都有其特定的作用和特点。这种架构的主要目的是提高缓存命中率和系统性能。</p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><ol>
+<li><strong>分布式缓存系统</strong>：在分布式系统中，多级缓存架构可以将缓存分配到不同的节点上，提高缓存的可用性和可扩展性。</li>
+<li><strong>高性能计算</strong>：在高性能计算中，多级缓存架构可以将缓存分为不同的级别，例如 CPU 缓存、内存缓存和磁盘缓存，提高计算速度和性能。</li>
+<li><strong>数据库缓存</strong>：在数据库缓存中，多级缓存架构可以将缓存分为不同的级别，例如一级缓存（内存）和二级缓存（磁盘），提高数据库查询速度和性能。</li>
+</ol>
+<h2 id="如何实现多级缓存架构"><a href="#如何实现多级缓存架构" class="headerlink" title="如何实现多级缓存架构"></a>如何实现多级缓存架构</h2><p>实现多级缓存架构需要考虑以下几个方面：</p>
+<ol>
+<li><strong>缓存分配</strong>：将缓存分配到不同的级别上，例如CPU缓存、内存缓存和磁盘缓存。</li>
+<li><strong>缓存管理</strong>：管理缓存的生命周期，例如缓存的加载、更新和失效。</li>
+<li><strong>缓存命中</strong>：实现缓存命中的机制，例如缓存的查找和替换。</li>
+</ol>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>多级缓存架构的原理是将缓存分为不同的级别，每个级别都有其特定的作用和特点。例如：</p>
+<ol>
+<li><strong>CPU缓存</strong>：CPU 缓存是最快的缓存级别，用于存储常用的数据和指令。</li>
+<li><strong>内存缓存</strong>：内存缓存是第二快的缓存级别，用于存储较大的数据和对象。</li>
+<li><strong>磁盘缓存</strong>：磁盘缓存是最慢的缓存级别，用于存储大量的数据和文件。</li>
+</ol>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>优点：</strong></p>
+<ol>
+<li>提高缓存的命中率。</li>
+<li>在高性能计算和数据库缓存场景中，提高系统性能。</li>
+</ol>
+<p><strong>缺点：</strong></p>
+<ol>
+<li><p>引入了多级缓存后，需要进行缓存管理和命中率高的缓存机制，增加了系统复杂性。</p>
+</li>
+<li><p>引入多级缓存后，需要更多的存储空间，本质上是空间换时间。</p>
+</li>
+</ol>
+<h2 id="通用方案"><a href="#通用方案" class="headerlink" title="通用方案"></a>通用方案</h2><p>实际中不会使用cpu缓存，这是硬件缓存，一般常用的2级缓存的架构方案，一级缓存：本地缓存<code>guava</code>，二级缓存：分布式缓存<code>redis</code>。</p>
+<h3 id="Guava-VS-Redis"><a href="#Guava-VS-Redis" class="headerlink" title="Guava VS Redis"></a>Guava VS Redis</h3><p><strong>1. Guava</strong></p>
+<p>特点：</p>
+<ul>
+<li><p>内嵌缓存，数据存储在JVM中，适用于单机应用或者本地缓存。</p>
+</li>
+<li><p>数据存在JVM中，读取和写入时延低。</p>
+</li>
+</ul>
+<p><strong>2. Redis</strong></p>
+<p>特点：</p>
+<ul>
+<li>Redis是是一个独立的数据库，可以用作分布式缓存，适用于多个应用实例。</li>
+<li>适用于分布式系统、多实例共享数据缓存、可以持久化的数据缓存。</li>
+</ul>
+<h3 id="为什么Redis稍慢"><a href="#为什么Redis稍慢" class="headerlink" title="为什么Redis稍慢"></a>为什么Redis稍慢</h3><p>Guava Cache存储在JVM内存中，所有操作都是本地内存访问，不涉及网络通信。Redis通常作为一个独立的服务运行，应用程序需要通过网络协议（如TCP）进行通信，增加了网络延迟。</p>
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><p>多级缓存架构，能在很多场景下显著提升性能。然而，这种架构也存在一些问题，需要通过特定的方法来解决。</p>
+<h4 id="缓存一致性问题"><a href="#缓存一致性问题" class="headerlink" title="缓存一致性问题"></a>缓存一致性问题</h4><p>本地缓存和分布式缓存的数据可能不同步，导致缓存数据不一致。比如，当数据在分布式缓存中更新时，本地缓存可能仍然存储旧的数据。</p>
+<p>解决方法：</p>
+<ul>
+<li><strong>缓存失效策略</strong>：在分布式缓存中更新数据时，立即使相关的本地缓存失效或删除。例如，通过发布&#x2F;订阅机制（如Redis的Pub&#x2F;Sub）通知所有应用实例清除或更新其本地缓存。</li>
+<li><strong>缓存一致性协议</strong>：使用一致性协议（如基于Zookeeper的分布式一致性算法）来确保缓存一致性，但这种方式复杂度较高。</li>
+</ul>
+<h4 id="缓存雪崩问题"><a href="#缓存雪崩问题" class="headerlink" title="缓存雪崩问题"></a>缓存雪崩问题</h4><p>当缓存中的大量数据同时过期，或者缓存服务器宕机时，所有请求直接涌向数据库，可能导致数据库过载。</p>
+<p>解决方法：</p>
+<ul>
+<li><p><strong>缓存预热</strong>：在缓存启动时预加载常用数据，避免大量请求直接打到数据库。</p>
+</li>
+<li><p><strong>分散过期时间</strong>：为不同的缓存键设置不同的过期时间，避免大量数据同时过期。</p>
+</li>
+<li><p><strong>降级策略</strong>：在缓存不可用时，采用降级方案，如返回默认值或部分数据。</p>
+</li>
+</ul>
+<h4 id="缓存穿透问题"><a href="#缓存穿透问题" class="headerlink" title="缓存穿透问题"></a>缓存穿透问题</h4><p>恶意请求或查询结果不存在的数据直接打到数据库，绕过缓存，导致缓存失效。</p>
+<p>解决方法：</p>
+<ul>
+<li><p><strong>缓存空结果</strong>：对于查询结果不存在的数据，也缓存一个空值，但要设置较短的过期时间。</p>
+</li>
+<li><p><strong>布隆过滤器</strong>：在缓存层之前引入布隆过滤器，快速判断请求的数据是否存在，从而减少对数据库的直接查询。</p>
+</li>
+</ul>
+<h4 id="缓存击穿问题"><a href="#缓存击穿问题" class="headerlink" title="缓存击穿问题"></a>缓存击穿问题</h4><p>热点数据在缓存过期的一瞬间，大量请求同时打到数据库，导致数据库压力骤增。</p>
+<p>解决方法：</p>
+<ul>
+<li><strong>互斥锁&#x2F;信号量</strong>：在缓存失效时，对同一个键的请求加锁，只有一个请求去加载数据，其余请求等待。</li>
+<li><strong>预加载&#x2F;延迟更新</strong>：在缓存即将过期时，提前加载和更新缓存中的热点数据。</li>
+</ul>
+<h4 id="数据一致性问题"><a href="#数据一致性问题" class="headerlink" title="数据一致性问题"></a>数据一致性问题</h4><p>当缓存中的数据需要与数据库保持严格一致时，如何处理缓存与数据库的更新操作。</p>
+<p>解决方法：</p>
+<ul>
+<li><strong>读写穿透</strong>：在更新数据库的同时更新缓存，确保缓存中的数据与数据库一致。</li>
+<li><strong>异步更新</strong>：使用消息队列或事件驱动架构，在数据库更新后异步更新缓存。</li>
+<li><strong>事务性缓存</strong>：使用分布式事务，确保数据库和缓存更新操作的原子性和一致性。</li>
+</ul>
+<h4 id="本地缓存过期问题"><a href="#本地缓存过期问题" class="headerlink" title="本地缓存过期问题"></a>本地缓存过期问题</h4><p>本地缓存没有及时更新，可能会存储旧数据。</p>
+<p>解决方法：</p>
+<ul>
+<li><strong>定期刷新</strong>：定期刷新本地缓存，确保数据不过期。</li>
+<li><strong>实时更新</strong>：通过事件驱动机制（如Kafka或Redis的Pub&#x2F;Sub），在分布式缓存更新时实时通知本地缓存进行更新。</li>
+</ul>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><h3 id="示例应用架构"><a href="#示例应用架构" class="headerlink" title="示例应用架构"></a>示例应用架构</h3><ul>
+<li><p><strong>本地缓存</strong>：Guava Cache，用于快速访问常用数据。</p>
+</li>
+<li><p><strong>分布式缓存</strong>：Redis，用于跨实例共享数据。</p>
+</li>
+<li><p><strong>数据库</strong>：用一个HashMap来模拟数据库。</p>
+</li>
+<li><p><strong>一致性维护</strong>：使用Redis的Pub&#x2F;Sub机制通知本地缓存失效。</p>
+</li>
+</ul>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><h4 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token generics"><span class="token punctuation">&lt;</span>dependency<span class="token punctuation">></span></span>
+   <span class="token generics"><span class="token punctuation">&lt;</span>groupId<span class="token punctuation">></span></span>org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>boot<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">></span>
+   <span class="token generics"><span class="token punctuation">&lt;</span>artifactId<span class="token punctuation">></span></span>spring<span class="token operator">-</span>boot<span class="token operator">-</span>starter<span class="token operator">-</span>data<span class="token operator">-</span>redis<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">></span>
+   <span class="token operator">&lt;</span><span class="token operator">/</span>dependency<span class="token operator">></span>
+<span class="token generics"><span class="token punctuation">&lt;</span>dependency<span class="token punctuation">></span></span>
+   <span class="token generics"><span class="token punctuation">&lt;</span>groupId<span class="token punctuation">></span></span>com<span class="token punctuation">.</span>google<span class="token punctuation">.</span>guava<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">></span>
+   <span class="token generics"><span class="token punctuation">&lt;</span>artifactId<span class="token punctuation">></span></span>guava<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">></span>
+   <span class="token generics"><span class="token punctuation">&lt;</span>version<span class="token punctuation">></span></span><span class="token number">30.1</span><span class="token operator">-</span>jre<span class="token operator">&lt;</span><span class="token operator">/</span>version<span class="token operator">></span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>dependency<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="模拟数据库"><a href="#模拟数据库" class="headerlink" title="模拟数据库"></a>模拟数据库</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Database</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Long</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span></span> data <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token class-name">Long</span> key<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> data<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token class-name">Long</span> key<span class="token punctuation">,</span> <span class="token class-name">String</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        data<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="缓存服务"><a href="#缓存服务" class="headerlink" title="缓存服务"></a>缓存服务</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CacheService</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">Cache</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Long</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span></span> localCache<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Database</span> database <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Database</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">RedisTemplate</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span></span> redisTemplate<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">RedisMessageListenerContainer</span> redisMessageListenerContainer<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@PostConstruct</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 初始化本地缓存</span>
+        localCache <span class="token operator">=</span> <span class="token class-name">CacheBuilder</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">maximumSize</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">expireAfterWrite</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MINUTES<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 配置Redis的消息监听器，监听"cache:evict"频道</span>
+        <span class="token class-name">MessageListenerAdapter</span> listenerAdapter <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MessageListenerAdapter</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> <span class="token string">"handleCacheEvict"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        redisMessageListenerContainer<span class="token punctuation">.</span><span class="token function">addMessageListener</span><span class="token punctuation">(</span>listenerAdapter<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">ChannelTopic</span><span class="token punctuation">(</span><span class="token string">"cache:evict"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token class-name">Long</span> key<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 尝试从本地缓存获取</span>
+        <span class="token class-name">String</span> value <span class="token operator">=</span> localCache<span class="token punctuation">.</span><span class="token function">getIfPresent</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 如果本地缓存有数据，但Redis缓存没有数据，将数据回填到Redis缓存</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>redisTemplate<span class="token punctuation">.</span><span class="token function">opsForValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"cache:"</span> <span class="token operator">+</span> key<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                redisTemplate<span class="token punctuation">.</span><span class="token function">opsForValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"cache:"</span> <span class="token operator">+</span> key<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">return</span> value<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token comment">// 尝试从分布式缓存获取</span>
+        value <span class="token operator">=</span> redisTemplate<span class="token punctuation">.</span><span class="token function">opsForValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"cache:"</span> <span class="token operator">+</span> key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 将数据更新到本地缓存</span>
+            localCache<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> value<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token comment">// 最后从数据库获取</span>
+        value <span class="token operator">=</span> database<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            localCache<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            redisTemplate<span class="token punctuation">.</span><span class="token function">opsForValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"cache:"</span> <span class="token operator">+</span> key<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">return</span> value<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token class-name">Long</span> key<span class="token punctuation">,</span> <span class="token class-name">String</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 更新数据库</span>
+        database<span class="token punctuation">.</span><span class="token function">setValue</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 更新缓存</span>
+        localCache<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        redisTemplate<span class="token punctuation">.</span><span class="token function">opsForValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"cache:"</span> <span class="token operator">+</span> key<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 通知其他实例的本地缓存失效</span>
+        redisTemplate<span class="token punctuation">.</span><span class="token function">convertAndSend</span><span class="token punctuation">(</span><span class="token string">"cache:evict"</span><span class="token punctuation">,</span> key<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// 处理缓存失效的通知</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handleCacheEvict</span><span class="token punctuation">(</span><span class="token class-name">String</span> key<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        localCache<span class="token punctuation">.</span><span class="token function">invalidate</span><span class="token punctuation">(</span><span class="token class-name">Long</span><span class="token punctuation">.</span><span class="token function">parseLong</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="配置Redis"><a href="#配置Redis" class="headerlink" title="配置Redis"></a>配置Redis</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CacheApplication</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">CacheApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">RedisTemplate</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span></span> <span class="token function">redisTemplate</span><span class="token punctuation">(</span><span class="token class-name">RedisConnectionFactory</span> connectionFactory<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">RedisTemplate</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span></span> template <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RedisTemplate</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        template<span class="token punctuation">.</span><span class="token function">setConnectionFactory</span><span class="token punctuation">(</span>connectionFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> template<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">RedisMessageListenerContainer</span> <span class="token function">redisMessageListenerContainer</span><span class="token punctuation">(</span><span class="token class-name">RedisConnectionFactory</span> connectionFactory<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">RedisMessageListenerContainer</span> container <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RedisMessageListenerContainer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        container<span class="token punctuation">.</span><span class="token function">setConnectionFactory</span><span class="token punctuation">(</span>connectionFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> container<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="进行数据操作"><a href="#进行数据操作" class="headerlink" title="进行数据操作"></a>进行数据操作</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CacheRunner</span> <span class="token keyword">implements</span> <span class="token class-name">CommandLineRunner</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">CacheService</span> cacheService<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 设置值</span>
+        cacheService<span class="token punctuation">.</span><span class="token function">setValue</span><span class="token punctuation">(</span><span class="token number">1L</span><span class="token punctuation">,</span> <span class="token string">"Value1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 获取值</span>
+        <span class="token class-name">String</span> value <span class="token operator">=</span> cacheService<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token number">1L</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Get value for key 1: "</span> <span class="token operator">+</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 更新值</span>
+        cacheService<span class="token punctuation">.</span><span class="token function">setValue</span><span class="token punctuation">(</span><span class="token number">1L</span><span class="token punctuation">,</span> <span class="token string">"UpdatedValue1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 再次获取值，应该是更新后的值</span>
+        value <span class="token operator">=</span> cacheService<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token number">1L</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Get updated value for key 1: "</span> <span class="token operator">+</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="代码流程"><a href="#代码流程" class="headerlink" title="代码流程"></a>代码流程</h4><p><strong>初始化本地缓存</strong>：</p>
+<ul>
+<li>使用Guava Cache构建一个本地缓存。</li>
+<li><code>maximumSize</code>设置缓存最大条目数。</li>
+<li><code>expireAfterWrite</code>设置缓存条目的过期时间。</li>
+</ul>
+<p><strong>消息监听器</strong>：</p>
+<ul>
+<li>使用Spring的<code>RedisMessageListenerContainer</code>监听Redis的Pub&#x2F;Sub频道<code>cache:evict</code>。</li>
+<li>当有消息发布到<code>cache:evict</code>频道时，<code>handleCacheEvict</code>方法将被调用，失效本地缓存中的相应条目。</li>
+</ul>
+<p><strong>数据获取</strong>：</p>
+<ul>
+<li><code>getValue</code>方法首先尝试从本地缓存获取数据，如果本地缓存没有命中，再尝试从Redis缓存获取，如果redis命中了，做一个缓存回填，否则从数据库获取。</li>
+<li>如果数据从数据库获取成功，会同时更新本地缓存和Redis缓存。</li>
+</ul>
+<p><strong>数据设置</strong>：</p>
+<ul>
+<li><code>setValue</code>方法更新模拟数据库的数据，同时更新本地缓存和Redis缓存。</li>
+<li>通过<code>redisTemplate.convertAndSend</code>方法，将缓存失效通知发布到<code>cache:evict</code>频道，通知其他实例失效相应的本地缓存。</li>
+</ul>
+<p><strong>处理缓存失效通知</strong>：</p>
+<ul>
+<li><code>handleCacheEvict</code>方法负责处理从<code>cache:evict</code>频道接收到的消息，失效本地缓存中的相应条目。</li>
+</ul>
+<h1 id="缓存淘汰"><a href="#缓存淘汰" class="headerlink" title="缓存淘汰"></a>缓存淘汰</h1><h2 id="缓存替换策略有哪些"><a href="#缓存替换策略有哪些" class="headerlink" title="缓存替换策略有哪些"></a>缓存替换策略有哪些</h2><blockquote>
 <p>缓存是常用的技术手段，它能够帮助我们更快地获取频繁使用的数据。不过当缓存满了以后，我们就需要选择某种策略来决定谁将从缓存中被优先移除。以下是一些常见的缓存替换策略及其实现。</p>
 </blockquote>
 <ol>
@@ -1486,7 +1757,7 @@ docker run -p 8080:8080 myapp<span aria-hidden="true" class="line-numbers-rows">
 <li><strong>RR (Random Replacement)</strong></li>
 </ol>
 <p>RR是最简单的一种缓存替换策略，它随机选择一个条目进行替换。实现RR策略则只需要在所有的缓存条目中随机选一个移除即可。</p>
-<h1 id="缓存替换策略实现算法"><a href="#缓存替换策略实现算法" class="headerlink" title="缓存替换策略实现算法"></a>缓存替换策略实现算法</h1><ol>
+<h2 id="缓存替换策略实现算法"><a href="#缓存替换策略实现算法" class="headerlink" title="缓存替换策略实现算法"></a>缓存替换策略实现算法</h2><ol>
 <li><p><strong>LRU (Least Recently Used)</strong></p>
 <p>最简单的实现方式是使用一个队列和一个哈希表。队列用于保存元素的访问顺序，哈希表用于查找元素是否在队列中。每次使用某个元素时，将它添加到队列尾部或移动到队列尾部。当队列满时，队列头部的元素就是最长时间未被使用的元素，将其弹出。</p>
 </li>
@@ -1661,6 +1932,13 @@ firewall-cmd --list-ports<span aria-hidden="true" class="line-numbers-rows"><spa
 
               <time title="创建时间：2024-05-17 22:17:42" itemprop="dateCreated datePublished" datetime="2024-05-17T22:17:42+08:00">2024-05-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-06-15 21:39:11" itemprop="dateModified" datetime="2024-06-15T21:39:11+08:00">2024-06-15</time>
+              </span>
 
           
 
@@ -3246,7 +3524,7 @@ Creating a new user...<span aria-hidden="true" class="line-numbers-rows"><span><
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
