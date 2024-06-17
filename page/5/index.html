@@ -165,546 +165,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E6%97%A5%E5%BF%97.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E6%97%A5%E5%BF%97.html" class="post-title-link" itemprop="url">日志框架</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-01 12:41:55" itemprop="dateModified" datetime="2024-06-01T12:41:55+08:00">2024-06-01</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LogBack"><a href="#LogBack" class="headerlink" title="LogBack"></a>LogBack</h1><p>Logback 是 Spring Boot 默认的日志框架，功能强大且性能优越。它是由 Log4j 的创始人开发的，提供了更好的配置和更高的性能。</p>
-<h2 id="配置-Logback"><a href="#配置-Logback" class="headerlink" title="配置 Logback"></a>配置 Logback</h2><p>在 Spring Boot 项目中，你可以通过 <code>logback-spring.xml</code> 文件来配置 Logback。将该文件放在 <code>src/main/resources</code> 目录下。</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
-
-    <span class="token comment">&lt;!-- 控制台输出 --></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>STDOUT<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.core.ConsoleAppender<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>encoder</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pattern</span><span class="token punctuation">></span></span>%d&#123;yyyy-MM-dd HH:mm:ss&#125; %-5level %logger&#123;36&#125; - %msg%n<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pattern</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>encoder</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>appender</span><span class="token punctuation">></span></span>
-
-    <span class="token comment">&lt;!-- 文件输出 --></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>FILE<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.core.rolling.RollingFileAppender<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token comment">&lt;!-- 日志文件路径 --></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>file</span><span class="token punctuation">></span></span>logs/app.log<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>file</span><span class="token punctuation">></span></span>
-
-        <span class="token comment">&lt;!-- 滚动策略：按天滚动日志文件 --></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>rollingPolicy</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.core.rolling.TimeBasedRollingPolicy<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-            <span class="token comment">&lt;!-- 日志文件命名模式 --></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>fileNamePattern</span><span class="token punctuation">></span></span>logs/app.%d&#123;yyyy-MM-dd&#125;.log<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>fileNamePattern</span><span class="token punctuation">></span></span>
-            <span class="token comment">&lt;!-- 保留历史日志文件的最大天数 --></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>maxHistory</span><span class="token punctuation">></span></span>30<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>maxHistory</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>rollingPolicy</span><span class="token punctuation">></span></span>
-
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>encoder</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pattern</span><span class="token punctuation">></span></span>%d&#123;yyyy-MM-dd HH:mm:ss&#125; %-5level %logger&#123;36&#125; - %msg%n<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pattern</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>encoder</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>appender</span><span class="token punctuation">></span></span>
-
-    <span class="token comment">&lt;!-- 根日志记录器 --></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>root</span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>info<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>STDOUT<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>FILE<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>root</span><span class="token punctuation">></span></span>
-
-    <span class="token comment">&lt;!-- 特定包或类的日志记录器 --></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>logger</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>com.example<span class="token punctuation">"</span></span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>debug<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="使用日志"><a href="#使用日志" class="headerlink" title="使用日志"></a>使用日志</h2><p>在你的代码中使用 SLF4J API 来记录日志</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
-<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/api"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExampleController</span> <span class="token punctuation">&#123;</span>
-
-    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Logger</span> logger <span class="token operator">=</span> <span class="token class-name">LoggerFactory</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token class-name">ExampleController</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/example"</span><span class="token punctuation">)</span>
-    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"Handling /example request"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token string">"Hello, Logback!"</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h1 id="Log4j2"><a href="#Log4j2" class="headerlink" title="Log4j2"></a>Log4j2</h1><p>Log4j2 是另一个流行的日志框架，提供了丰富的功能和高性能。你可以选择使用 Log4j2 作为 Spring Boot 项目的日志框架。</p>
-<h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><p>在 <code>pom.xml</code> 文件中添加 Log4j2 依赖。</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-log4j2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="配置-Log4j2"><a href="#配置-Log4j2" class="headerlink" title="配置 Log4j2"></a>配置 Log4j2</h2><p>在 <code>src/main/resources</code> 目录下创建 <code>log4j2-spring.xml</code> 配置文件。</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token comment">&lt;!-- log4j2-spring.xml --></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Configuration</span> <span class="token attr-name">status</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>WARN<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Appenders</span><span class="token punctuation">></span></span>
-        <span class="token comment">&lt;!-- 控制台输出 --></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Console</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Console<span class="token punctuation">"</span></span> <span class="token attr-name">target</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>SYSTEM_OUT<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>PatternLayout</span> <span class="token attr-name">pattern</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>%d&#123;yyyy-MM-dd HH:mm:ss&#125; %-5level %logger&#123;36&#125; - %msg%n<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Console</span><span class="token punctuation">></span></span>
-
-        <span class="token comment">&lt;!-- 文件输出 --></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>RollingFile</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>File<span class="token punctuation">"</span></span> <span class="token attr-name">fileName</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>logs/app.log<span class="token punctuation">"</span></span> <span class="token attr-name">filePattern</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>logs/app-%d&#123;yyyy-MM-dd&#125;.log<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>PatternLayout</span> <span class="token attr-name">pattern</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>%d&#123;yyyy-MM-dd HH:mm:ss&#125; %-5level %logger&#123;36&#125; - %msg%n<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Policies</span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>TimeBasedTriggeringPolicy</span><span class="token punctuation">/></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Policies</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>RollingFile</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Appenders</span><span class="token punctuation">></span></span>
-
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Loggers</span><span class="token punctuation">></span></span>
-        <span class="token comment">&lt;!-- 根日志记录器 --></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Root</span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>info<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>AppenderRef</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Console<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>AppenderRef</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>File<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Root</span><span class="token punctuation">></span></span>
-
-        <span class="token comment">&lt;!-- 特定包或类的日志记录器 --></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Logger</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>com.example<span class="token punctuation">"</span></span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>debug<span class="token punctuation">"</span></span> <span class="token attr-name">additivity</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>AppenderRef</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Console<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>AppenderRef</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>File<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Logger</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Loggers</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Configuration</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="使用日志-1"><a href="#使用日志-1" class="headerlink" title="使用日志"></a>使用日志</h2><p>在你的代码中使用 SLF4J API 来记录日志。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
-<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/api"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExampleController</span> <span class="token punctuation">&#123;</span>
-
-    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Logger</span> logger <span class="token operator">=</span> <span class="token class-name">LoggerFactory</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token class-name">ExampleController</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/example"</span><span class="token punctuation">)</span>
-    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"Handling /example request"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token string">"Hello, Log4j2!"</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h1 id="SLF4J"><a href="#SLF4J" class="headerlink" title="SLF4J"></a>SLF4J</h1><p>SLF4J 是一个简单的日志门面（Facade），它为各种日志框架（如 Logback、Log4j、Log4j2、Java Util Logging 等）提供了统一的接口。SLF4J 本身并不实现日志记录功能，而是通过绑定（Binding）将日志调用委托给具体的日志框架。</p>
-<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
-<li><strong>统一接口</strong>：提供统一的日志记录接口，解耦了应用程序和具体的日志框架。</li>
-<li><strong>灵活性</strong>：可以在不修改代码的情况下切换日志框架，只需更改绑定依赖。</li>
-<li><strong>简洁性</strong>：简化了日志记录的 API，使得代码更加简洁和易读。</li>
-</ul>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>使用 SLF4J 的典型示例：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>slf4j<span class="token punctuation">.</span></span><span class="token class-name">Logger</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>slf4j<span class="token punctuation">.</span></span><span class="token class-name">LoggerFactory</span></span><span class="token punctuation">;</span>
-
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Example</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Logger</span> logger <span class="token operator">=</span> <span class="token class-name">LoggerFactory</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token class-name">Example</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"This is an info message"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        logger<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"This is an error message"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="SLF4J-和-Logback-的关系"><a href="#SLF4J-和-Logback-的关系" class="headerlink" title="SLF4J 和 Logback 的关系"></a>SLF4J 和 Logback 的关系</h2><ol>
-<li><p><strong>接口与实现</strong>：</p>
-<ul>
-<li>SLF4J 提供了统一的日志记录接口，而 Logback 是 SLF4J 的一个实现。</li>
-<li>通过 SLF4J 的 API 进行日志记录时，实际的日志记录操作由 Logback 执行。</li>
-</ul>
-</li>
-<li><p><strong>绑定（Binding）</strong>：</p>
-<ul>
-<li><p>使用 SLF4J 时，需要引入一个绑定库（如 <code>slf4j-logback</code>），将 SLF4J 的日志调用委托给 Logback。</p>
-</li>
-<li><p>在 Maven 项目中，可以通过以下依赖来实现绑定：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.slf4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>slf4j-api<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.7.30<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>ch.qos.logback<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>logback-classic<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.2.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-</ul>
-</li>
-<li><p><strong>使用 SLF4J 进行日志记录</strong>：</p>
-</li>
-</ol>
-<ul>
-<li>在代码中使用 SLF4J 的 API 进行日志记录，而具体的日志记录操作由 Logback 执行。</li>
-<li>这种方式使得应用程序与具体的日志框架解耦，可以在不修改代码的情况下切换日志框架。</li>
-</ul>
-<h2 id="SLF4J-和-Log4j2-的关系"><a href="#SLF4J-和-Log4j2-的关系" class="headerlink" title="SLF4J 和 Log4j2 的关系"></a>SLF4J 和 Log4j2 的关系</h2><ol>
-<li><p><strong>接口与实现</strong>：</p>
-<ul>
-<li>SLF4J 提供了统一的日志记录接口，而 Log4j2 是 SLF4J 的一个实现之一。</li>
-<li>通过 SLF4J 的 API 进行日志记录时，实际的日志记录操作可以由 Log4j2 执行。</li>
-</ul>
-</li>
-<li><p><strong>绑定（Binding）</strong>：</p>
-<ul>
-<li><p>使用 SLF4J 时，需要引入一个绑定库（如 <code>log4j-slf4j-impl</code>），将 SLF4J 的日志调用委托给 Log4j2。</p>
-</li>
-<li><p>在 Maven 项目中，可以通过以下依赖来实现绑定：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.slf4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>slf4j-api<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.7.30<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.logging.log4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>log4j-slf4j-impl<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.13.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.logging.log4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>log4j-core<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.13.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.logging.log4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>log4j-api<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.13.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-</ul>
-</li>
-<li><p><strong>使用 SLF4J 进行日志记录</strong></p>
-</li>
-</ol>
-<ul>
-<li>在代码中使用 SLF4J 的 API 进行日志记录，而具体的日志记录操作由 Log4j2 执行。</li>
-<li>这种方式使得应用程序与具体的日志框架解耦，可以在不修改代码的情况下切换日志框架。</li>
-</ul>
-<h1 id="基于SpringBoot的统一日志管理"><a href="#基于SpringBoot的统一日志管理" class="headerlink" title="基于SpringBoot的统一日志管理"></a>基于SpringBoot的统一日志管理</h1><h2 id="日志框架"><a href="#日志框架" class="headerlink" title="日志框架"></a>日志框架</h2><blockquote>
-<p>logBack框架Springboot已经内置了，默认采用slf4j+logback,详细配置如上面代码配置</p>
-</blockquote>
-<h2 id="创建日志拦截器"><a href="#创建日志拦截器" class="headerlink" title="创建日志拦截器"></a>创建日志拦截器</h2><p>为了统一记录请求和响应，创建一个日志拦截器：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LoggingInterceptor</span> <span class="token keyword">implements</span> <span class="token class-name">HandlerInterceptor</span> <span class="token punctuation">&#123;</span>
-
-    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Logger</span> logger <span class="token operator">=</span> <span class="token class-name">LoggerFactory</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token class-name">LoggingInterceptor</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">preHandle</span><span class="token punctuation">(</span><span class="token class-name">HttpServletRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> response<span class="token punctuation">,</span> <span class="token class-name">Object</span> handler<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
-        logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"Incoming request: &#123;&#125; &#123;&#125;"</span><span class="token punctuation">,</span> request<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> request<span class="token punctuation">.</span><span class="token function">getRequestURI</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">postHandle</span><span class="token punctuation">(</span><span class="token class-name">HttpServletRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> response<span class="token punctuation">,</span> <span class="token class-name">Object</span> handler<span class="token punctuation">,</span> <span class="token class-name">ModelAndView</span> modelAndView<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
-        <span class="token comment">// 可以在这里记录响应信息</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">afterCompletion</span><span class="token punctuation">(</span><span class="token class-name">HttpServletRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> response<span class="token punctuation">,</span> <span class="token class-name">Object</span> handler<span class="token punctuation">,</span> <span class="token class-name">Exception</span> ex<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>ex <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            logger<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Request raised an exception"</span><span class="token punctuation">,</span> ex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"Outgoing response: &#123;&#125; &#123;&#125;"</span><span class="token punctuation">,</span> request<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> request<span class="token punctuation">.</span><span class="token function">getRequestURI</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="注册拦截器"><a href="#注册拦截器" class="headerlink" title="注册拦截器"></a>注册拦截器</h2><p>在Spring Boot应用中注册这个拦截器,不拦截swagger请求：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WebConfig</span> <span class="token keyword">implements</span> <span class="token class-name">WebMvcConfigurer</span> <span class="token punctuation">&#123;</span>
-    <span class="token annotation punctuation">@Autowired</span>
-    <span class="token keyword">private</span> <span class="token class-name">LoggingInterceptor</span> loggingInterceptor<span class="token punctuation">;</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">addInterceptors</span><span class="token punctuation">(</span><span class="token class-name">InterceptorRegistry</span> registry<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        registry
-                <span class="token punctuation">.</span><span class="token function">addInterceptor</span><span class="token punctuation">(</span>loggingInterceptor<span class="token punctuation">)</span>
-                <span class="token punctuation">.</span><span class="token function">addPathPatterns</span><span class="token punctuation">(</span><span class="token string">"/**"</span><span class="token punctuation">)</span>
-                <span class="token punctuation">.</span><span class="token function">excludePathPatterns</span><span class="token punctuation">(</span>
-                <span class="token string">"/swagger-resources/**"</span><span class="token punctuation">,</span>
-                <span class="token string">"/swagger-ui.html"</span><span class="token punctuation">,</span>
-                <span class="token string">"/v2/api-docs"</span><span class="token punctuation">,</span>
-                <span class="token string">"/v3/api-docs"</span><span class="token punctuation">,</span>
-                <span class="token string">"/webjars/**"</span>
-        <span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="记录错误信息"><a href="#记录错误信息" class="headerlink" title="记录错误信息"></a>记录错误信息</h2><p>为了记录全局的错误信息，可以创建全局异常处理器：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@ControllerAdvice</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GlobalExceptionHandler</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Logger</span> logger <span class="token operator">=</span> <span class="token class-name">LoggerFactory</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token class-name">GlobalExceptionHandler</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token annotation punctuation">@ExceptionHandler</span><span class="token punctuation">(</span><span class="token class-name">Exception</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
-    <span class="token keyword">public</span> <span class="token class-name">ResponseEntity</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">ApiResponse</span><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span><span class="token punctuation">></span></span> <span class="token function">handleException</span><span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        logger<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Exception occurred: "</span><span class="token punctuation">,</span> ex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">ApiResponse</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> response <span class="token operator">=</span> <span class="token class-name">ResponseUtil</span><span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token class-name">HttpStatus</span><span class="token punctuation">.</span>INTERNAL_SERVER_ERROR<span class="token punctuation">.</span><span class="token function">value</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"Internal Server Error"</span><span class="token punctuation">,</span> ex<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ResponseEntity</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span>response<span class="token punctuation">,</span> <span class="token class-name">HttpStatus</span><span class="token punctuation">.</span>INTERNAL_SERVER_ERROR<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>正常会在请求前打印请求信息，结束后也会打印请求信息，出现异常，也会打印异常信息。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82.html" class="post-title-link" itemprop="url">数仓分层</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:45" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:45+08:00">2024-04-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:14:48" itemprop="dateModified" datetime="2024-04-15T20:14:48+08:00">2024-04-15</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="数仓分层"><a href="#数仓分层" class="headerlink" title="数仓分层"></a>数仓分层</h1><h2 id="数仓概念"><a href="#数仓概念" class="headerlink" title="数仓概念"></a>数仓概念</h2><h3 id="什么是数据仓库"><a href="#什么是数据仓库" class="headerlink" title="什么是数据仓库"></a>什么是数据仓库</h3><blockquote>
-<p>数据仓库，英文名称为<code>Data Warehouse</code>，可简写为<code>DW</code>或<code>DWH</code>,是为企业所有级别的决策制定过程，提供所有类型数据支持的战略集合。<strong>它出于分析性报告和决策支持目的而创建</strong>。</p>
-</blockquote>
-<h3 id="数据仓库作用"><a href="#数据仓库作用" class="headerlink" title="数据仓库作用"></a>数据仓库作用</h3><blockquote>
-<p>构建面向分析的集成化数据环境，提供指导业务流程改进、监视时间、成本、质量以及控制。数据仓库本身并不 “生产” 任何数据，同时自身也不需要 “消费” 任何的数据，数据来源于外部，并且开放给外部应用，这也是为什么叫 “仓库” ，而不叫 “工厂” 的原因。</p>
-</blockquote>
-<h3 id="数据仓库的特点"><a href="#数据仓库的特点" class="headerlink" title="数据仓库的特点"></a>数据仓库的特点</h3><h4 id="面向主题"><a href="#面向主题" class="headerlink" title="面向主题"></a>面向主题</h4><blockquote>
-<p>操作型数据库的数据组织面向事务处理任务，各个业务系统之间各自分离，而数据仓库中的数据是按照一定的主题域进行组织。主题是一个抽象的概念，是指用户使用数据仓库进行决策时所关心的重点方面，一个主题通常包含多个操作型信息系统。</p>
-</blockquote>
-<h4 id="集成"><a href="#集成" class="headerlink" title="集成"></a>集成</h4><blockquote>
-<p>面向事务处理的操作型数据库通常与某些特定的应用相关，数据库之间相互独立，并且往往是异构的。而数据仓库中的数据是在对原有分散的数据库数据抽取、清理的基础上经过系统加工、汇总和整理得到的，必须消除元数据中的不一致性，以保证数据仓库内的信息关于整个企业的一致的全局信息。</p>
-</blockquote>
-<h4 id="不可更新"><a href="#不可更新" class="headerlink" title="不可更新"></a>不可更新</h4><blockquote>
-<p>操作型数据库中的数据通常实时更新，数据根据需要及时发生变化。数据仓库的数据主要供企业决策分析之用，所涉及的数据操作主要是数据查询，一旦某个数据进入数据很残酷以后，一般情况下将被长期保留，也就是数据仓库中一般有大量的查询操作，但修改和删除操作很少，通常只需要定期的加载、刷新。</p>
-</blockquote>
-<h4 id="时变性"><a href="#时变性" class="headerlink" title="时变性"></a>时变性</h4><blockquote>
-<p>操作型数据库主要关心当前某一个时间段内的数据，而数据仓库中的数据通常包含历史信息，系统记录了企业从过去某一个时点（如开始应用数据仓库的时点）到目前的各个阶段的信息，通过这些信息，可以对企业的发展历程和未来趋势做出定量分析和预测。</p>
-</blockquote>
-<h4 id="数据仓库中的数据"><a href="#数据仓库中的数据" class="headerlink" title="数据仓库中的数据"></a>数据仓库中的数据</h4><blockquote>
-<p>包括元数据，粒度数据、当前详细数据，历史数据、档案数据。</p>
-</blockquote>
-<p>1.4.1 元数据</p>
-<blockquote>
-<p>最重要的部分，关于数据的数据。也成为数据仓库的结构，是所有数据集成体现。仓库开发者使用元素来管理和控制仓库的建立和维护。</p>
-</blockquote>
-<p>1.4.2 粒度数据</p>
-<blockquote>
-<p>定义为呼叫仓库所保存的信息的概要程度。不同粒度表示为不同级别的汇总数据。汇总数据是信息仓库的特点，所有的企业数据分类（按部门、地区、功能等）需要的信息都不同，同时有效的信息仓库是未不同风格提供的，轻量级汇总数据是企业自行的主要依据，它来自根据企业组成部分的轻量级汇总数据或来自当前详细数据。这一层的数据容量比其他任何一个都少，代表一个折衷的积累，用来支撑广泛的各式的需要和兴趣。通过高度汇总，执行者能够使用“钻取”到达逐步增加的详细层。</p>
-</blockquote>
-<p>1.4.3 当前详细数据</p>
-<blockquote>
-<p>是信息仓库的核心，存放大量数据。数据来自业务操作数据库，通过主题来组织，不是代表特定应用，而是代表整个企业。在仓库中数据粒度最低，当数据精确化时，其中的每一个数据实体都是一个块照、一个时刻，表示一个瞬间。一旦需要经常支持企业需求，数据随即进行更新。</p>
-</blockquote>
-<p>1.4.4 历史数据</p>
-<blockquote>
-<p>以前的有意义数据（一般两年以上），给企业带来延续的利益和价值。包含巨大的数据量，可以用来预测和趋势分析。包括：旧数据（原始或汇总形式）、描述旧数据特征的元数据。</p>
-</blockquote>
-<h4 id="1-5-数据仓库的基本架构"><a href="#1-5-数据仓库的基本架构" class="headerlink" title="1.5 数据仓库的基本架构"></a>1.5 数据仓库的基本架构</h4><blockquote>
-<p>数据仓库的目的是构建面向分析的继承化数据环境，为企业提供决策支持（Decision Support）。其实数据仓库本身并不“生产”然后数据，同时自身也不需要“消费”任何数据，数据来源于外部，并且开放给外部应用，这也是为什么叫“仓库”，而不叫“工厂”的原因。因此数据仓库的基本架构主要包含的数据流入流出的过程，可以分为三层</p>
-<p>–原始层（元数据）</p>
-<p>–仓库层（数据仓库）</p>
-<p>–应用层（数据应用）</p>
-</blockquote>
-<img src="https://pic4.zhimg.com/80/v2-91d6a6ca901449e1e3dc96851f408453_1440w.webp" alt="img" style="zoom: 50%;">
-
-<img src="/post/Users\Administrator\AppData\Local\Temp\WeChat Files\1bcb8ac1f3fd27d4452992905efd093.jpg" alt="1bcb8ac1f3fd27d4452992905efd093" style="zoom: 50%;">
-
-
-
-
-
-<h4 id="1-6-数据库和数据仓库的区别"><a href="#1-6-数据库和数据仓库的区别" class="headerlink" title="1.6 数据库和数据仓库的区别"></a>1.6 数据库和数据仓库的区别</h4><img src="https://pic1.zhimg.com/80/v2-ce707b3e18e8fa5bb6adc377acedcf78_1440w.webp" alt="img" style="zoom:50%;">
-
-<p>数据仓库是在传统数据库的基础之上发展起来的，但它并不是对传统数据库的彻底抛弃，而是旨在弥补传统数据库在数据分析能力方面的不足，以提供良好的大规模数据分析能力为己任，力图为决策提供有效的技术支持。和传统数据库相比，数据仓库在总体特征、面向用户、存储内容等方面，都有着重大的差异（如下表）。</p>
-<img src="https://pic2.zhimg.com/80/v2-a0874931c5b236e904ff335547bf88ad_1440w.webp" alt="img" style="zoom: 33%;">
-
-<h3 id="原始数据层"><a href="#原始数据层" class="headerlink" title="原始数据层"></a>原始数据层</h3><blockquote>
-<p>ODS(Operational Data Store)</p>
-<ol>
-<li>保持数据原貌，不做任何修改</li>
-<li>压缩采用 LZO，压缩比是 100g 数据压缩完 10g 左右。</li>
-<li>创建分区表</li>
-</ol>
-</blockquote>
-<h3 id="明细数据层"><a href="#明细数据层" class="headerlink" title="明细数据层"></a>明细数据层</h3><blockquote>
-<p>DWD</p>
-<p>1.数据清洗<br>（1）空值去除<br>（2）过滤核心字段无意义的数据，比如订单表中订单 id 为 null，支付表中支付 id 为空<br>（3）将用户行为宽表和业务表进行数据一致性处理</p>
-<p>2.清洗的手段<br>Sql、mr、rdd、kettle、Python等等</p>
-<p>3.清洗掉多少数据算合理<br>1 万条数据清洗掉 1 条。</p>
-<p>4.脱敏<br>对手机号、身份证号等敏感数据脱敏</p>
-<p>5.维度退化<br>对业务数据传过来的表进行维度退化和降维。（商品一级二级三级、省市县、年月日）</p>
-<p>6.LZO压缩</p>
-<p>7.列式存储 parquet</p>
-</blockquote>
-<h3 id="服务数据层"><a href="#服务数据层" class="headerlink" title="服务数据层"></a>服务数据层</h3><blockquote>
-<p>DWS</p>
-<ol>
-<li><p>DWS 层有 3-5 张宽表（处理 100-200 个指标 70%以上的需求）</p>
-<p>  具体宽表名称：用户行为宽表，用户购买商品明细行为宽表，商品宽表，购物车宽表，物流宽表、登录注册、售后等。</p>
-</li>
-<li><p>哪个宽表最宽？大概有多少个字段？<br>最宽的是用户行为宽表。大概有 60-100 个字段</p>
-</li>
-<li><p>具体用户行为宽表字段名称<br>评论、打赏、收藏、关注–商品、关注–人、点赞、分享、好价爆料、文章发布、活跃、签到、补签卡、幸运屋、礼品、金币、电商点击、gmv</p>
-</li>
-</ol>
-</blockquote>
-<h3 id="主题数据层"><a href="#主题数据层" class="headerlink" title="主题数据层"></a>主题数据层</h3><blockquote>
-<p>DWT</p>
-<p>分析过的指标<br>日活、月活、周活、留存、留存率、新增（日、周、年）、转化率、流失、回流、七天内连续 3 天登录（点赞、收藏、评价、购买、加购、下单、活动）、连续 3 周（月）登录、GMV、复购率、复购率排行、点赞、评论、收藏、领优惠价人数、使用优惠价、沉默、值不值得买、退款人数、退款率 topn 热门商品</p>
-<p>留转 G 复活指标<br>（1）活跃<br>日活：100 万 ；月活：是日活的 2-3 倍 300 万<br>总注册的用户多少？1000 万-3000 万之间<br>（2）GMV<br>GMV：每天 10 万订单 （50 – 100 元） 500 万-1000 万<br>10%-20% 100 万-200 万<br>（3）复购率<br>某日常商品复购；（手纸、面膜、牙膏）10%-20%<br>电脑、显示器、手表 1%<br>（4）转化率<br>商品详情 &#x3D;》 加购物车 &#x3D;》下单 &#x3D;》 支付<br>5%-10% 60-70% 90%-95%<br>（5）留存率<br>1&#x2F;2&#x2F;3、周留存、月留存<br>搞活动： 10-20%</p>
-</blockquote>
-<h3 id="应用数据层"><a href="#应用数据层" class="headerlink" title="应用数据层"></a>应用数据层</h3><blockquote>
-<ol>
-<li><p>如何分析用户活跃？<br> 在启动日志中统计不同设备 id 出现次数。</p>
-</li>
-<li><p>如何分析用户新增?<br> 用活跃用户表 left join 用户新增表，用户新增表中 mid 为空的即为用户新增。</p>
-</li>
-<li><p>如何分析用户 1 天留存？<br> 留存用户&#x3D;前一天新增 join 今天活跃<br> 用户留存率&#x3D;留存用户&#x2F;前一天新增</p>
-</li>
-<li><p>如何分析沉默用户？<br> (登录时间为 7 天前,且只出现过一次)<br> 按照设备 id 对日活表分组，登录次数为 1，且是在一周前登录。</p>
-</li>
-<li><p>如何分析本周回流用户？<br> 本周活跃 left join 本周新增 left join 上周活跃，且本周新增 id 和上周活跃 id 都为 null。</p>
-</li>
-<li><p>如何分析流失用户？<br> (登录时间为 7 天前)<br> 按照设备 id 对日活表分组，且七天内没有登录过。</p>
-</li>
-<li><p>如何分析最近连续 3 周活跃用户数？<br> 按照设备 id 对周活进行分组，统计次数大于 3 次。</p>
-</li>
-<li><p>如何分析最近七天内连续三天活跃用户数？<br> 1）查询出最近 7 天的活跃用户，并对用户活跃日期进行排名<br> 2）计算用户活跃日期及排名之间的差值<br> 3）对同用户及差值分组，统计差值个数<br> 4）将差值相同个数大于等于 3 的数据取出，然后去重，即为连续 3 天及以上活跃的用户<br> 7天连续收藏、点赞、购买、加购、付款、浏览、商品点击、退货、1 个月连续 7 天、连续两周</p>
-</li>
-</ol>
-</blockquote>
-<h1 id="数仓建模"><a href="#数仓建模" class="headerlink" title="数仓建模"></a>数仓建模</h1><h2 id="常用建模工具"><a href="#常用建模工具" class="headerlink" title="常用建模工具"></a>常用建模工具</h2><blockquote>
-<p>PowerDesigner&#x2F;SQLYog&#x2F;EZDML</p>
-</blockquote>
-<h2 id="ODS层"><a href="#ODS层" class="headerlink" title="ODS层"></a>ODS层</h2><blockquote>
-<ol>
-<li>保持数据原貌不做任何修改，起到备份数据的作用。</li>
-<li>数据采用压缩，减少磁盘存储空间（例如：原始数据 100G，可以压缩到 10G 左右）</li>
-<li>创建分区表，防止后续的全表扫描</li>
-</ol>
-</blockquote>
-<h2 id="DWD层"><a href="#DWD层" class="headerlink" title="DWD层"></a>DWD层</h2><blockquote>
-<p>DWD 层需构建维度模型，一般采用星型模型，呈现的状态一般为星座模型。维度建模一般按照以下四个步骤：</p>
-<p>选择业务过程→声明粒度→确认维度→确认事实</p>
-<p>（1）选择业务过程</p>
-<p>在业务系统中，如果业务表过多，挑选我们感兴趣的业务线，比如下单业务，支付业务，退款业务，物流业务，一条业务线对应一张事实表。如果小公司业务表比较少，建议选择所有业务线。</p>
-<p>（2）声明粒度</p>
-<p>数据粒度指数据仓库的数据中保存数据的细化程度或综合程度的级别。<br>声明粒度意味着精确定义事实表中的一行数据表示什么，应该尽可能选择最小粒度，以此来应各种各样的需求。<br>典型的粒度声明如下：</p>
-<p>订单当中的每个商品项作为下单事实表中的一行，粒度为每次<br>每周的订单次数作为一行，粒度为每周。<br>每月的订单次数作为一行，粒度为每月。<br>注意：如果在 DWD 层粒度就是每周或者每月，那么后续就没有办法统计细粒度的指标了。所有建议采用最小粒度。<br>（3）确定维度</p>
-<p>维度的主要作用是描述业务是事实，主要表示的是“谁，何处，何时”等信息。例如：<br>时间维度、用户维度、地区维度等常见维度。</p>
-<p>（4）确定事实</p>
-<p>此处的“事实”一词，指的是业务中的度量值，例如订单金额、下单次数等。<br>在 DWD 层，以业务过程为建模驱动，基于每个具体业务过程的特点，构建最细粒度的明细层事实表。事实表可做适当的宽表化处理。</p>
-<p>根据维度建模中的星型模型思想，将维度进行退化。例如：地区表和省份表退化为地区维度表，商品表、品类表、spu 表、商品三级分类、商品二级分类、商品一级分类表退化为商品维度表，活动信息表和活动规则表退化为活动维度表。至此，数仓的维度建模已经完毕，DWS、DWT 和 ADS 和维度建模已经没有关系了。DWS 和 DWT 都是建宽表，宽表都是按照主题去建。主题相当于观察问题的角度，对应着维度表。</p>
-</blockquote>
-<h2 id="DWS层"><a href="#DWS层" class="headerlink" title="DWS层"></a>DWS层</h2><blockquote>
-<p>DWS 层统计各个主题对象的当天行为，服务于 DWT 层的主题宽表。DWS层的宽表字段，是站在不同维度的视角去看事实表，重点关注事实表的度量值，通过与之关联的事实表，获得不同的事实表的度量值。</p>
-</blockquote>
-<h2 id="DWT层"><a href="#DWT层" class="headerlink" title="DWT层"></a>DWT层</h2><blockquote>
-<p>以分析的主题对象为建模驱动，基于上层的应用和产品的指标需求，构建主题对象的全量宽表。<br>DWT 层主题宽表都记录什么字段？<br>每个维度关联的不同事实表度量值以及首次、末次时间、累积至今的度量值、累积某个时间段的度量值。</p>
-</blockquote>
-<h2 id="ADS层"><a href="#ADS层" class="headerlink" title="ADS层"></a>ADS层</h2><blockquote>
-<p>分别对设备主题、会员主题、商品主题和营销主题进行指标分析，其中营销主题是用户主题和商品主题的跨主题分析案例</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E5%BA%8F%E5%88%97%E5%8C%96.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2842,6 +2302,122 @@ a1.channels.c1.byteCapacity &#x3D; 800000<span aria-hidden="true" class="line-nu
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/cs.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/cs.html" class="post-title-link" itemprop="url">UUID</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-15 20:17:08" itemprop="dateModified" datetime="2024-04-15T20:17:08+08:00">2024-04-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="唯一ID由来"><a href="#唯一ID由来" class="headerlink" title="唯一ID由来"></a>唯一ID由来</h1><blockquote>
+<p>分布式系统中，需要对大量的数据和消息进行唯一标识，如金融行业产品系统中，数据日益增长，对数据进行分库分表后，需要用唯一ID来标识一条数据，数据库的自增ID已经不能满足，此时就需要一个全局唯一ID标识。</p>
+</blockquote>
+<h2 id="唯一ID特点"><a href="#唯一ID特点" class="headerlink" title="唯一ID特点"></a>唯一ID特点</h2><blockquote>
+<ol>
+<li>全局唯一：全局唯一，不会出现重复项。</li>
+<li>趋势递增：B+树的索引下进行递增，保证写入性能</li>
+<li>单调递增：下一个id肯定大于上一个id</li>
+<li>信息安全：ID无规则、不规则</li>
+</ol>
+</blockquote>
+<h2 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h2><ul>
+<li>数据库自增ID</li>
+</ul>
+<blockquote>
+<p>数据库中一般给主键设置自增。</p>
+<p>优点：简单，由数据库自己操作完成，id是单调自增</p>
+<p>缺点：主从切换的时候不一致，容易导致重复发号</p>
+</blockquote>
+<ul>
+<li>UUID</li>
+</ul>
+<blockquote>
+<p>由32个16进制数字组成，形式为8-4-4-4-12的32个字符。</p>
+<p>优点：性能高，本地生成，无网络消耗。</p>
+<p>缺点：存储占用空间大，基于MAC地址生成的UUID存在信息安全问题。</p>
+</blockquote>
+<ul>
+<li>Redis唯一ID</li>
+</ul>
+<blockquote>
+<p>Redis是单线程的，可以依据redis的原子操作incr和incrby实现。</p>
+<p>优点：数字ID天然排序，对分页和排序的结果有帮助。</p>
+</blockquote>
+<ul>
+<li>zookeeper唯一ID</li>
+</ul>
+<blockquote>
+<p>zookeeper通过其znode数据版本生成序列号，可以生成32位和64位数据版本号，客户端可以使用这个版本号作为唯一序列号</p>
+</blockquote>
+<ul>
+<li>snowflake算法</li>
+</ul>
+<blockquote>
+<p>由64个二进制数字组成一般分为1-41-10-12,snowflake方案的QPS约为409.6w&#x2F;s</p>
+<p>第一部分：表示正数</p>
+<p>第二部分：41表示毫秒时间</p>
+<p>第三部分：工作机器ID，5位表示数据中心，5位表示机器id</p>
+<p>第四部分：12位的序列号，每毫秒可生成4096个id</p>
+<p>优点：毫秒在高位，自增序列号在低位，整体是递增趋势</p>
+<p>缺点：依赖时间，如果时间回拨，会导致发号重复或者不可用状态</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/docker.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2949,122 +2525,6 @@ systemctl <span class="token builtin class-name">enable</span> <span class="toke
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">0</span> <span class="token number">2</span> * * * /path/to/docker_system_prune.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>保存并退出 <code>crontab</code> 编辑器。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/cs.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/cs.html" class="post-title-link" itemprop="url">UUID</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:17:08" itemprop="dateModified" datetime="2024-04-15T20:17:08+08:00">2024-04-15</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="唯一ID由来"><a href="#唯一ID由来" class="headerlink" title="唯一ID由来"></a>唯一ID由来</h1><blockquote>
-<p>分布式系统中，需要对大量的数据和消息进行唯一标识，如金融行业产品系统中，数据日益增长，对数据进行分库分表后，需要用唯一ID来标识一条数据，数据库的自增ID已经不能满足，此时就需要一个全局唯一ID标识。</p>
-</blockquote>
-<h2 id="唯一ID特点"><a href="#唯一ID特点" class="headerlink" title="唯一ID特点"></a>唯一ID特点</h2><blockquote>
-<ol>
-<li>全局唯一：全局唯一，不会出现重复项。</li>
-<li>趋势递增：B+树的索引下进行递增，保证写入性能</li>
-<li>单调递增：下一个id肯定大于上一个id</li>
-<li>信息安全：ID无规则、不规则</li>
-</ol>
-</blockquote>
-<h2 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h2><ul>
-<li>数据库自增ID</li>
-</ul>
-<blockquote>
-<p>数据库中一般给主键设置自增。</p>
-<p>优点：简单，由数据库自己操作完成，id是单调自增</p>
-<p>缺点：主从切换的时候不一致，容易导致重复发号</p>
-</blockquote>
-<ul>
-<li>UUID</li>
-</ul>
-<blockquote>
-<p>由32个16进制数字组成，形式为8-4-4-4-12的32个字符。</p>
-<p>优点：性能高，本地生成，无网络消耗。</p>
-<p>缺点：存储占用空间大，基于MAC地址生成的UUID存在信息安全问题。</p>
-</blockquote>
-<ul>
-<li>Redis唯一ID</li>
-</ul>
-<blockquote>
-<p>Redis是单线程的，可以依据redis的原子操作incr和incrby实现。</p>
-<p>优点：数字ID天然排序，对分页和排序的结果有帮助。</p>
-</blockquote>
-<ul>
-<li>zookeeper唯一ID</li>
-</ul>
-<blockquote>
-<p>zookeeper通过其znode数据版本生成序列号，可以生成32位和64位数据版本号，客户端可以使用这个版本号作为唯一序列号</p>
-</blockquote>
-<ul>
-<li>snowflake算法</li>
-</ul>
-<blockquote>
-<p>由64个二进制数字组成一般分为1-41-10-12,snowflake方案的QPS约为409.6w&#x2F;s</p>
-<p>第一部分：表示正数</p>
-<p>第二部分：41表示毫秒时间</p>
-<p>第三部分：工作机器ID，5位表示数据中心，5位表示机器id</p>
-<p>第四部分：12位的序列号，每毫秒可生成4096个id</p>
-<p>优点：毫秒在高位，自增序列号在低位，整体是递增趋势</p>
-<p>缺点：依赖时间，如果时间回拨，会导致发号重复或者不可用状态</p>
-</blockquote>
 
       
     </div>
@@ -3294,6 +2754,546 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Java%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B.html" class="post-title-link" itemprop="url">java异步编程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-15 20:20:51" itemprop="dateModified" datetime="2024-04-15T20:20:51+08:00">2024-04-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="认识异步编程"><a href="#认识异步编程" class="headerlink" title="认识异步编程"></a>认识异步编程</h1><h2 id="异步编程概念与作用"><a href="#异步编程概念与作用" class="headerlink" title="异步编程概念与作用"></a>异步编程概念与作用</h2><p>同步编程：每个线程同时只能发送一个请求，并同步等待返还，为提高性能，引入多个线程来实现并行处理。</p>
+<p>异步编程：是一种程序并行运行的手段，可以让程序中的一个工作单元与主程序线程分开独立运行，并在工作单元结束后，通知主程序线程它的运行结果或失败原因。</p>
+<p>作用：</p>
+<ol>
+<li>提高程序的性能和响应能力。</li>
+<li>提高线程的利用率。</li>
+</ol>
+<h2 id="异步编程场景"><a href="#异步编程场景" class="headerlink" title="异步编程场景"></a>异步编程场景</h2><ol>
+<li>日志的异步打印</li>
+<li>Spring框架中@Async注解</li>
+<li>异步RPC调用（Netty、Dubbo）</li>
+<li>Servlet、Webflux</li>
+</ol>
+<h1 id="显式使用线程和线程池实现异步编程"><a href="#显式使用线程和线程池实现异步编程" class="headerlink" title="显式使用线程和线程池实现异步编程"></a>显式使用线程和线程池实现异步编程</h1><h2 id="显式使用线程实现异步编程"><a href="#显式使用线程实现异步编程" class="headerlink" title="显式使用线程实现异步编程"></a>显式使用线程实现异步编程</h2><blockquote>
+<p>实现异步编程方式：</p>
+<ol>
+<li>实现Runnable接口的run方法，传递Runnable接口的实现类作为创建Thread的参数，启动线程</li>
+<li>实现Thread类，重新run方法</li>
+</ol>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//实现1</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
+            <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span class="token string">"threadA"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        thread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        thread<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"执行时间为："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token comment">//实现2</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token string">"ThreadA"</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        thread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        thread<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"执行时间："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p><strong>注意：</strong></p>
+<ol>
+<li><p><code>thread.join()</code>方法会阻塞其他线程</p>
+</li>
+<li><p>java中线程有Deamon和非Deamon之分，默认我们创建的都是非Deamon线程，如果要创建Deamon要进行SetDeamon(true),当jvm中不存在非Deamon线程则会推出虚拟机。</p>
+</li>
+<li><p>守护线程不一定完成执行取决于用户线程，设置守护线程要在start前设置，java普通运行的是两个线程，一个是主线程，一个是GC线程，GC线程是守护线程。</p>
+</li>
+</ol>
+</blockquote>
+<p>缺点：</p>
+<ol>
+<li>线程的创建与销毁时有开销的–》线程池</li>
+<li>没有限制线程的个数，使用不当会导致系统进程用尽–》线程池</li>
+<li>异步任务执行完后没有返回值–》Future</li>
+</ol>
+<h2 id="显式使用线程池实现异步编程"><a href="#显式使用线程池实现异步编程" class="headerlink" title="显式使用线程池实现异步编程"></a>显式使用线程池实现异步编程</h2><h3 id="如何显式使用线程池实现异步编程"><a href="#如何显式使用线程池实现异步编程" class="headerlink" title="如何显式使用线程池实现异步编程"></a>如何显式使用线程池实现异步编程</h3><blockquote>
+<p>使用线程池实现线程复用，当需要执行异步任务的时候，直接把任务投递到线程池进行异步进行</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">   <span class="token comment">/**
+    * 创建线程池
+    * @return
+    */</span>
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token class-name">ExecutorService</span> <span class="token function">threadPoolExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+       <span class="token keyword">int</span> availableProcessors <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">availableProcessors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token keyword">return</span>  <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span>availableProcessors<span class="token punctuation">,</span>
+               availableProcessors<span class="token operator">*</span><span class="token number">2</span><span class="token punctuation">,</span>
+               <span class="token number">1</span><span class="token punctuation">,</span>
+               <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MINUTES<span class="token punctuation">,</span>
+               <span class="token keyword">new</span> <span class="token class-name">LinkedBlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+               <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor<span class="token punctuation">.</span>CallerRunsPolicy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token punctuation">&#125;</span>
+
+   <span class="token comment">/**
+    * 提交异步任务到线程池执行
+    * @param args
+    * @throws InterruptedException
+    */</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
+       <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">ThreadPoolExample</span><span class="token punctuation">.</span><span class="token function">threadPoolExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
+           <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"耗时："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">&#125;</span>
+<span class="token comment">/**
+* 有返回值的异步执行，但是get方法会阻塞其他线程
+*/</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
+       <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> submit <span class="token operator">=</span> <span class="token class-name">ThreadPoolExample</span><span class="token punctuation">.</span><span class="token function">threadPoolExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">submit</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>submit<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"耗时："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="线程池ThreadpoolExecutor原理剖析"><a href="#线程池ThreadpoolExecutor原理剖析" class="headerlink" title="线程池ThreadpoolExecutor原理剖析"></a>线程池ThreadpoolExecutor原理剖析</h3><ol>
+<li>概述</li>
+</ol>
+<blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token operator">></span><span class="token comment">// 高三位标记线程池的状态，低29位表示线程的个数</span>
+<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">AtomicInteger</span> ctl <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AtomicInteger</span><span class="token punctuation">(</span><span class="token function">ctlOf</span><span class="token punctuation">(</span>RUNNING<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token operator">></span><span class="token comment">// 线程个数的掩码数</span>
+<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> COUNT_BITS <span class="token operator">=</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span>SIZE <span class="token operator">-</span> <span class="token number">3</span><span class="token punctuation">;</span>
+<span class="token operator">></span><span class="token comment">// 线程的最大个数</span>
+<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> CAPACITY   <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+<span class="token operator">></span><span class="token comment">// runState is stored in the high-order bits</span>
+<span class="token operator">></span><span class="token comment">// 接受新任务并处理阻塞队列里面的任务</span>
+<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> RUNNING    <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
+<span class="token operator">></span><span class="token comment">// 拒绝新任务但是处理阻塞队列里的任务</span>
+<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> SHUTDOWN   <span class="token operator">=</span>  <span class="token number">0</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
+<span class="token operator">></span><span class="token comment">// 拒绝新任务，抛弃阻塞队列里的任务，同时中断正在处理的任务</span>
+<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> STOP       <span class="token operator">=</span>  <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
+<span class="token operator">></span><span class="token comment">// 所有任务都执行完了，包括阻塞队列里面的任务，当前线程池活动线程数为0，将调用terminated方法</span>
+<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> TIDYING    <span class="token operator">=</span>  <span class="token number">2</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
+<span class="token operator">></span><span class="token comment">// 终止状态</span>
+<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> TERMINATED <span class="token operator">=</span>  <span class="token number">3</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
+<span class="token operator">></span><span class="token comment">// 返回运行状态</span>
+<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">runStateOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> c<span class="token punctuation">)</span>     <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> c <span class="token operator">&amp;</span> <span class="token operator">~</span>CAPACITY<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+<span class="token operator">></span><span class="token comment">// 返回线程个数</span>
+<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">workerCountOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> c<span class="token punctuation">)</span>  <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> c <span class="token operator">&amp;</span> CAPACITY<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+<span class="token operator">></span><span class="token comment">// 计算ctl新值</span>
+<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">ctlOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> rs<span class="token punctuation">,</span> <span class="token keyword">int</span> wc<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> rs <span class="token operator">|</span> wc<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</blockquote>
+<p>线程池的参数配置</p>
+<p>corePoolSize: 线程池核心线程个数</p>
+<p>workQueue: 用于保存等待执行的任务阻塞队列（有界队列、无界队列、同步队列、优先级队列）</p>
+<p>maximunPoolSize: 线程池的最大线程数量</p>
+<p>threadFactory: 创建线程的工厂类</p>
+<p>defaultHandler: 饱和策略（当队列达到maximunPoolSize后采取的策略）</p>
+<p>keepAliveTime: 存活时间，当前线程数量&gt;核心线程数量，且处于空闲状态，闲置连接能存活的最大时间</p>
+<ol start="2">
+<li>提交任务到线程池原理解析</li>
+</ol>
+<blockquote>
+<p>ThreadPoolExecutor提交任务到线程池中的方法</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>任务类型</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>void execute(Runnable command)</td>
+<td>Runnable类型的任务</td>
+<td>void</td>
+</tr>
+<tr>
+<td><T> Future<T> submit(Callable<T> task);</T></T></T></td>
+<td>Runnable类型的任务</td>
+<td>执行结果</td>
+</tr>
+<tr>
+<td><T> Future<T> submit(Runnable task, T result);</T></T></td>
+<td>Runnable类型的任务以及result内容</td>
+<td>result</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>线程池中任务执行原理</li>
+</ol>
+<blockquote>
+<p>当用户提交任务到线程池后，在线程池没有执行拒绝策略的情况下，用户线程会马上返回，而提交的任务要么切换到worker线程执行，要么放入阻塞队列里面由worker线程来执行。</p>
+</blockquote>
+<ol start="4">
+<li>线程池的关闭</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>shutdown()</td>
+<td>设置为shutdown状态，线程池不会接收新的任务，但是队列里面的任务还是要执行的</td>
+<td>void</td>
+</tr>
+<tr>
+<td>shutdownNow()</td>
+<td>设置为stop状态，线程池不会接收新的任务，并且会丢弃工作队列里面的任务</td>
+<td>被丢弃的任务列表</td>
+</tr>
+</tbody></table>
+<ol start="5">
+<li>线程池的拒绝策略</li>
+</ol>
+<blockquote>
+<p>拒绝策略执行的触发条件：线程池中线程的个数达到maxpoolsize,对于新投递的任务进行拒绝策略的执行。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>拒绝策略</th>
+<th>策略内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CallerRunsPolicy()</td>
+<td>使用调用线程执行新提交的任务</td>
+</tr>
+<tr>
+<td>AbortPolicy()</td>
+<td>抛弃新增任务，抛出RejectedExecutionException</td>
+</tr>
+<tr>
+<td>DiscardOldestPolicy（）</td>
+<td>抛弃队列里面最老的任务，并把新任务添加到队列里面</td>
+</tr>
+<tr>
+<td>DiscardPolicy()</td>
+<td>抛弃新增任务</td>
+</tr>
+</tbody></table>
+<h1 id="基于JDK中的Future实现异步编程"><a href="#基于JDK中的Future实现异步编程" class="headerlink" title="基于JDK中的Future实现异步编程"></a>基于JDK中的Future实现异步编程</h1><p>3.1 jdk中的future</p>
+<blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token operator">></span><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">V</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
+<span class="token comment">//取消任务，如果任务正在执行，mayInterruptIfRunning设置为true打断，否则不中断</span>
+   <span class="token keyword">boolean</span> <span class="token function">cancel</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> mayInterruptIfRunning<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token comment">//如何任务在执行前被取消返回true,否则返回false</span>
+   <span class="token keyword">boolean</span> <span class="token function">isCancelled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token comment">//判断任务是否已经完成</span>
+   <span class="token keyword">boolean</span> <span class="token function">isDone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token comment">// 等待异步任务执行完，返回结果</span>
+   
+   <span class="token class-name">V</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">,</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">;</span>
+
+   <span class="token comment">//到达超时时间后，返回，不会一直阻塞调用线程</span>
+   
+   <span class="token class-name">V</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span> unit<span class="token punctuation">)</span>
+       <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">,</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">,</span> <span class="token class-name">TimeoutException</span><span class="token punctuation">;</span>
+<span class="token operator">></span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</blockquote>
+<p>3.2.1 FutureTask概述</p>
+<blockquote>
+<p>1.FutureTask只有当任务结束才能获取返回值。</p>
+<p>2.返回值只能通过get方法获取，调用get会阻塞</p>
+<p>3.任务一旦运行完成不能被重启，除非运行过程中使用了runAndReset方法</p>
+</blockquote>
+<p>3.2.2 FutureTask类图结构</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/GithubAction.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/GithubAction.html" class="post-title-link" itemprop="url">Github</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-15 20:18:32" itemprop="dateModified" datetime="2024-04-15T20:18:32+08:00">2024-04-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="git的通信协议"><a href="#git的通信协议" class="headerlink" title="git的通信协议"></a>git的通信协议</h1><h2 id="ssh协议"><a href="#ssh协议" class="headerlink" title="ssh协议"></a>ssh协议</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone git@github.com:BJPotter/BJPotter.github.io.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="https协议"><a href="#https协议" class="headerlink" title="https协议"></a>https协议</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/BJPotter/BJPotter.github.io.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+<h2 id="gitHub-Cli协议"><a href="#gitHub-Cli协议" class="headerlink" title="gitHub Cli协议"></a>gitHub Cli协议</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gh repo clone BJPotter/BJPotter.github.io<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+<h1 id="gitHub配置SSH-Key"><a href="#gitHub配置SSH-Key" class="headerlink" title="gitHub配置SSH Key"></a>gitHub配置SSH Key</h1><h2 id="设置git的用户名和邮箱"><a href="#设置git的用户名和邮箱" class="headerlink" title="设置git的用户名和邮箱"></a>设置git的用户名和邮箱</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在Git客户端执行</span>
+<span class="token function">git</span> config --global user.name <span class="token string">"这里输入你在GitHub的账户名"</span>
+<span class="token function">git</span> config --global user.email <span class="token string">"这里输入你在GitHub的注册邮箱名"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="生成SSH-Key"><a href="#生成SSH-Key" class="headerlink" title="生成SSH Key"></a>生成<strong>SSH Key</strong></h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> ~/.ssh
+ssh-keygen -t rsa -C <span class="token string">"这里输入你在 GitHub 的注册邮箱"</span>
+<span class="token function">cat</span> id_rsa.pub<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="gitHub配置公钥"><a href="#gitHub配置公钥" class="headerlink" title="gitHub配置公钥"></a>gitHub配置公钥</h2><blockquote>
+<p>在github中点击头像，依次点击Settings &gt; SSH and GPG Keys &gt; New SSH Key</p>
+<p>把客户端的公钥复制到里面，并给title起一个名字保存即可</p>
+</blockquote>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ssh</span> -T git@github.com
+<span class="token comment"># 返回 You've successfully authenticated则成功 </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h1 id="https免密配置"><a href="#https免密配置" class="headerlink" title="https免密配置"></a>https免密配置</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 输入一次账号密码后第二次就会记住账号密码。</span>
+<span class="token function">git</span> config --global credential.helper store<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+
+<h1 id="Actions"><a href="#Actions" class="headerlink" title="Actions"></a>Actions</h1><h2 id="什么是Actions"><a href="#什么是Actions" class="headerlink" title="什么是Actions"></a>什么是Actions</h2><blockquote>
+<p>github action是一种持续集成和持续交付的（CI&#x2F;CD）平台，可用于自动执行生成、测试和部署管道。在github创建的仓库中，Actions是可以自定义的一些列的操作，如：提交代码后触发自动化编译打包和部署到远程服务器上，官方所说的定义是：在仓库中自动化、自定义操作执行软件开发工作流程，目前有很多现成的Actions可以直接拿来使用，也可以进行自定义创建到自己工作流程中。</p>
+</blockquote>
+<h2 id="Actions可以做什么"><a href="#Actions可以做什么" class="headerlink" title="Actions可以做什么"></a>Actions可以做什么</h2><blockquote>
+<p>Actions通常用来两个方面</p>
+<ol>
+<li>自动化ci&#x2F;cd,触发事件后自动化编译打包部署。</li>
+<li>自动添加标签，当有人提issues的时候可以自动化的添加标签</li>
+</ol>
+</blockquote>
+<h2 id="Actions组件"><a href="#Actions组件" class="headerlink" title="Actions组件"></a>Actions组件</h2><blockquote>
+<p>可以把Github Actions 工作流程配置为在存储库发生事件触发。</p>
+<p>example: 拉取请求或者推送请求的时候触发工作流程[工作流程理解为jobs]</p>
+<p>一个工作流程包含一个作业或者多个作业，这些作业可以按照顺序执行，也可以并发执行，每个作业都会在自己虚拟机中进行，或者在容器中进行，这个运行的进程可以理解为运行了一个runner,每个作业可能会有多个步骤，这个步骤运行自定义的脚本或者运行操作。</p>
+</blockquote>
+<img src="/images/action.png" style="zoom:50%;">
+
+<h3 id="Workflows（工作流）"><a href="#Workflows（工作流）" class="headerlink" title="Workflows（工作流）"></a><strong>Workflows（工作流）</strong></h3><blockquote>
+<p>工作流是一个可配置的自动化的程序。创建一个工作流，你需要定义一个 YAML 文件，当你的仓库触发某个事件的时候，工作流就会运行，当然也可以手动触发，或者定义一个时间表。</p>
+</blockquote>
+<h3 id="事件（Events）"><a href="#事件（Events）" class="headerlink" title="事件（Events）"></a><strong>事件（Events）</strong></h3><blockquote>
+<p>事件是指仓库触发运行工作流的具体的行为，比如创建一个 pull request，新建一个 issue、或者推送一个 commit。你也可以使用时间表触发一个工作流，或者通过请求一个 REST API，再或者手动触发。</p>
+</blockquote>
+<h3 id="任务（Jobs）"><a href="#任务（Jobs）" class="headerlink" title="任务（Jobs）"></a><strong>任务（Jobs）</strong></h3><blockquote>
+<p>任务是在同一个运行器上执行的一组步骤（steps）。一个步骤（steps）要么是一个shell 脚本（script）要么是一个动作（action）。步骤会顺序执行，并彼此独立。因为每一个步骤都在同一个运行器上被执行，所以你可以从一个步骤（step）传递数据到另一个步骤（step）。</p>
+</blockquote>
+<h3 id="动作（Actions）"><a href="#动作（Actions）" class="headerlink" title="动作（Actions）"></a><strong>动作（Actions）</strong></h3><blockquote>
+<p>动作是 GitHub Actions 平台的一个自定义的应用，它会执行一个复杂但是需要频繁重复的作业。使用动作可以减少重复代码。比如一个 action 可以实现从 GitHub 拉取你的 git 仓库，为你的构建环境创建合适的工具链等。</p>
+</blockquote>
+<h3 id="运行器（Runners）"><a href="#运行器（Runners）" class="headerlink" title="运行器（Runners）"></a><strong>运行器（Runners）</strong></h3><blockquote>
+<p>一个运行器是一个可以运行工作流的服务。每一个运行器一次只运行一个单独的任务。GitHub 提供 Ubuntu Linux，Microsoft Windows 和 macOS 运行器，每一个工作流都运行在一个独立新建的虚拟机中。</p>
+</blockquote>
+<h2 id="工作流参数"><a href="#工作流参数" class="headerlink" title="工作流参数"></a><strong>工作流参数</strong></h2><p>工作流程是一个可配置的自动化过程，它将运行一个或多个作业。 工作流程由签入到存储库的 YAML 文件定义，并在存储库中的事件触发时运行，也可以手动触发，或按定义的时间表触发。文件位于仓库的根目录下的<code>.github/workflows</code></p>
+<h3 id="触发工作流程"><a href="#触发工作流程" class="headerlink" title="触发工作流程"></a>触发工作流程</h3><ol>
+<li><p>工作流程存储库发生事件</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># 单个事件触发</span>
+<span class="token key atrule">on</span><span class="token punctuation">:</span> push
+<span class="token comment"># 多个事件触发</span>
+<span class="token key atrule">on</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>push<span class="token punctuation">,</span> fork<span class="token punctuation">]</span>
+<span class="token comment"># 限定master分支发生push事件触发</span>
+<span class="token key atrule">on</span><span class="token punctuation">:</span>
+  <span class="token key atrule">push</span><span class="token punctuation">:</span>
+    <span class="token key atrule">branches</span><span class="token punctuation">:</span>    
+      <span class="token punctuation">-</span> master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>预定时间</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># 示例在每天 5:30 和 17:30 UTC 触发工作流程</span>
+<span class="token key atrule">on</span><span class="token punctuation">:</span>
+  <span class="token key atrule">schedule</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">cron</span><span class="token punctuation">:</span>  <span class="token string">'30 5,17 * * *'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
+<h3 id="使用作业"><a href="#使用作业" class="headerlink" title="使用作业"></a>使用作业</h3><ol>
+<li>创建jobs</li>
+</ol>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># workflow主体是jobs字段，表示要执行的一项或者多项任务jobs.&lt;job_id>.name job_id：名称自定义 name：任务的说明</span>
+<span class="token key atrule">jobs</span><span class="token punctuation">:</span>
+  <span class="token comment">#作业id</span>
+  <span class="token key atrule">my_first_job</span><span class="token punctuation">:</span>
+  	<span class="token comment">#作业名称</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> My first job
+  <span class="token key atrule">my_second_job</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> My second job
+<span class="token comment"># jobs.&lt;job_id>.needs needs字段指定当前任务的依赖关系，即运行顺序，这个 workflow 的运行顺序依次为：job1、job2、job3</span>
+<span class="token key atrule">jobs</span><span class="token punctuation">:</span>
+  <span class="token key atrule">job1</span><span class="token punctuation">:</span>
+  <span class="token key atrule">job2</span><span class="token punctuation">:</span>
+    <span class="token key atrule">needs</span><span class="token punctuation">:</span> job1
+  <span class="token key atrule">job3</span><span class="token punctuation">:</span>
+    <span class="token key atrule">needs</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>job1<span class="token punctuation">,</span> job2<span class="token punctuation">]</span>    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="2">
+<li>选择运行器</li>
+</ol>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># jobs.&lt;job_id>.runs-on runs-on字段指定运行所需要的虚拟机环境。它是必填字段，目前可以使用的虚拟机如下</span>
+<span class="token key atrule">runs-on</span><span class="token punctuation">:</span> ubuntu<span class="token punctuation">-</span>latest<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<img src="/images/runner.png" style="zoom:50%;">
+
+<blockquote>
+<p>以上是常见的运行器，就是用哪个虚拟机</p>
+</blockquote>
+<ol start="3">
+<li>运行步骤</li>
+</ol>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"># jobs.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>job_id</span><span class="token punctuation">></span></span>.steps
+# steps字段指定每个 Job 的运行步骤，可以包含一个或多个步骤。每个步骤都可以指定以下三个字段。
+# 步骤名称。
+jobs.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>job_id</span><span class="token punctuation">></span></span>.steps.name
+# 该步骤运行的命令或者 action
+jobs.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>job_id</span><span class="token punctuation">></span></span>.steps.run
+# 该步骤所需的环境变量
+jobs.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>job_id</span><span class="token punctuation">></span></span>.steps.env<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="maven打jar包示例"><a href="#maven打jar包示例" class="headerlink" title="maven打jar包示例"></a>maven打jar包示例</h3><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"># .github/workflows/maven.yml 
+name: Java CI with Maven
+on:
+  push:
+    branches: [ "master" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 8
+      uses: actions/setup-java@v3
+      with:
+        java-version: '8'
+        distribution: 'temurin'
+        cache: maven
+    - name: Build with Maven
+      run: mvn -B clean package
+    # Optional: Uploads the JAR file as an artifact
+    - name: Upload JAR
+      uses: actions/upload-artifact@v2
+      with:
+        name: DataHub
+        path: target/*.jar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -3363,7 +3363,7 @@ Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">64</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
