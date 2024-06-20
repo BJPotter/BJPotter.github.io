@@ -165,330 +165,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Java%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B.html" class="post-title-link" itemprop="url">java异步编程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:20:51" itemprop="dateModified" datetime="2024-04-15T20:20:51+08:00">2024-04-15</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="认识异步编程"><a href="#认识异步编程" class="headerlink" title="认识异步编程"></a>认识异步编程</h1><h2 id="异步编程概念与作用"><a href="#异步编程概念与作用" class="headerlink" title="异步编程概念与作用"></a>异步编程概念与作用</h2><p>同步编程：每个线程同时只能发送一个请求，并同步等待返还，为提高性能，引入多个线程来实现并行处理。</p>
-<p>异步编程：是一种程序并行运行的手段，可以让程序中的一个工作单元与主程序线程分开独立运行，并在工作单元结束后，通知主程序线程它的运行结果或失败原因。</p>
-<p>作用：</p>
-<ol>
-<li>提高程序的性能和响应能力。</li>
-<li>提高线程的利用率。</li>
-</ol>
-<h2 id="异步编程场景"><a href="#异步编程场景" class="headerlink" title="异步编程场景"></a>异步编程场景</h2><ol>
-<li>日志的异步打印</li>
-<li>Spring框架中@Async注解</li>
-<li>异步RPC调用（Netty、Dubbo）</li>
-<li>Servlet、Webflux</li>
-</ol>
-<h1 id="显式使用线程和线程池实现异步编程"><a href="#显式使用线程和线程池实现异步编程" class="headerlink" title="显式使用线程和线程池实现异步编程"></a>显式使用线程和线程池实现异步编程</h1><h2 id="显式使用线程实现异步编程"><a href="#显式使用线程实现异步编程" class="headerlink" title="显式使用线程实现异步编程"></a>显式使用线程实现异步编程</h2><blockquote>
-<p>实现异步编程方式：</p>
-<ol>
-<li>实现Runnable接口的run方法，传递Runnable接口的实现类作为创建Thread的参数，启动线程</li>
-<li>实现Thread类，重新run方法</li>
-</ol>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//实现1</span>
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
-            <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span class="token string">"threadA"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        thread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        thread<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"执行时间为："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token comment">//实现2</span>
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token string">"ThreadA"</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-            <span class="token annotation punctuation">@Override</span>
-            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-        thread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        thread<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"执行时间："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<blockquote>
-<p><strong>注意：</strong></p>
-<ol>
-<li><p><code>thread.join()</code>方法会阻塞其他线程</p>
-</li>
-<li><p>java中线程有Deamon和非Deamon之分，默认我们创建的都是非Deamon线程，如果要创建Deamon要进行SetDeamon(true),当jvm中不存在非Deamon线程则会推出虚拟机。</p>
-</li>
-<li><p>守护线程不一定完成执行取决于用户线程，设置守护线程要在start前设置，java普通运行的是两个线程，一个是主线程，一个是GC线程，GC线程是守护线程。</p>
-</li>
-</ol>
-</blockquote>
-<p>缺点：</p>
-<ol>
-<li>线程的创建与销毁时有开销的–》线程池</li>
-<li>没有限制线程的个数，使用不当会导致系统进程用尽–》线程池</li>
-<li>异步任务执行完后没有返回值–》Future</li>
-</ol>
-<h2 id="显式使用线程池实现异步编程"><a href="#显式使用线程池实现异步编程" class="headerlink" title="显式使用线程池实现异步编程"></a>显式使用线程池实现异步编程</h2><h3 id="如何显式使用线程池实现异步编程"><a href="#如何显式使用线程池实现异步编程" class="headerlink" title="如何显式使用线程池实现异步编程"></a>如何显式使用线程池实现异步编程</h3><blockquote>
-<p>使用线程池实现线程复用，当需要执行异步任务的时候，直接把任务投递到线程池进行异步进行</p>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">   <span class="token comment">/**
-    * 创建线程池
-    * @return
-    */</span>
-   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token class-name">ExecutorService</span> <span class="token function">threadPoolExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-       <span class="token keyword">int</span> availableProcessors <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">availableProcessors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token keyword">return</span>  <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span>availableProcessors<span class="token punctuation">,</span>
-               availableProcessors<span class="token operator">*</span><span class="token number">2</span><span class="token punctuation">,</span>
-               <span class="token number">1</span><span class="token punctuation">,</span>
-               <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MINUTES<span class="token punctuation">,</span>
-               <span class="token keyword">new</span> <span class="token class-name">LinkedBlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-               <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor<span class="token punctuation">.</span>CallerRunsPolicy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-   <span class="token punctuation">&#125;</span>
-
-   <span class="token comment">/**
-    * 提交异步任务到线程池执行
-    * @param args
-    * @throws InterruptedException
-    */</span>
-   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
-       <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">ThreadPoolExample</span><span class="token punctuation">.</span><span class="token function">threadPoolExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
-           <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"耗时："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-   <span class="token punctuation">&#125;</span>
-<span class="token comment">/**
-* 有返回值的异步执行，但是get方法会阻塞其他线程
-*/</span>
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
-       <span class="token keyword">long</span> start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> submit <span class="token operator">=</span> <span class="token class-name">ThreadPoolExample</span><span class="token punctuation">.</span><span class="token function">threadPoolExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">submit</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token function">doSomethingA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>submit<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token function">doSomethingB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"耗时："</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-   <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="线程池ThreadpoolExecutor原理剖析"><a href="#线程池ThreadpoolExecutor原理剖析" class="headerlink" title="线程池ThreadpoolExecutor原理剖析"></a>线程池ThreadpoolExecutor原理剖析</h3><ol>
-<li>概述</li>
-</ol>
-<blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token operator">></span><span class="token comment">// 高三位标记线程池的状态，低29位表示线程的个数</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">AtomicInteger</span> ctl <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AtomicInteger</span><span class="token punctuation">(</span><span class="token function">ctlOf</span><span class="token punctuation">(</span>RUNNING<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 线程个数的掩码数</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> COUNT_BITS <span class="token operator">=</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span>SIZE <span class="token operator">-</span> <span class="token number">3</span><span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 线程的最大个数</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> CAPACITY   <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
-
-<span class="token operator">></span><span class="token comment">// runState is stored in the high-order bits</span>
-<span class="token operator">></span><span class="token comment">// 接受新任务并处理阻塞队列里面的任务</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> RUNNING    <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 拒绝新任务但是处理阻塞队列里的任务</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> SHUTDOWN   <span class="token operator">=</span>  <span class="token number">0</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 拒绝新任务，抛弃阻塞队列里的任务，同时中断正在处理的任务</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> STOP       <span class="token operator">=</span>  <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 所有任务都执行完了，包括阻塞队列里面的任务，当前线程池活动线程数为0，将调用terminated方法</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> TIDYING    <span class="token operator">=</span>  <span class="token number">2</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 终止状态</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> TERMINATED <span class="token operator">=</span>  <span class="token number">3</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token comment">// 返回运行状态</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">runStateOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> c<span class="token punctuation">)</span>     <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> c <span class="token operator">&amp;</span> <span class="token operator">~</span>CAPACITY<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
-<span class="token operator">></span><span class="token comment">// 返回线程个数</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">workerCountOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> c<span class="token punctuation">)</span>  <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> c <span class="token operator">&amp;</span> CAPACITY<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
-<span class="token operator">></span><span class="token comment">// 计算ctl新值</span>
-<span class="token operator">></span><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">ctlOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> rs<span class="token punctuation">,</span> <span class="token keyword">int</span> wc<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> rs <span class="token operator">|</span> wc<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</blockquote>
-<p>线程池的参数配置</p>
-<p>corePoolSize: 线程池核心线程个数</p>
-<p>workQueue: 用于保存等待执行的任务阻塞队列（有界队列、无界队列、同步队列、优先级队列）</p>
-<p>maximunPoolSize: 线程池的最大线程数量</p>
-<p>threadFactory: 创建线程的工厂类</p>
-<p>defaultHandler: 饱和策略（当队列达到maximunPoolSize后采取的策略）</p>
-<p>keepAliveTime: 存活时间，当前线程数量&gt;核心线程数量，且处于空闲状态，闲置连接能存活的最大时间</p>
-<ol start="2">
-<li>提交任务到线程池原理解析</li>
-</ol>
-<blockquote>
-<p>ThreadPoolExecutor提交任务到线程池中的方法</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>任务类型</th>
-<th>返回值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>void execute(Runnable command)</td>
-<td>Runnable类型的任务</td>
-<td>void</td>
-</tr>
-<tr>
-<td><T> Future<T> submit(Callable<T> task);</T></T></T></td>
-<td>Runnable类型的任务</td>
-<td>执行结果</td>
-</tr>
-<tr>
-<td><T> Future<T> submit(Runnable task, T result);</T></T></td>
-<td>Runnable类型的任务以及result内容</td>
-<td>result</td>
-</tr>
-</tbody></table>
-<ol start="3">
-<li>线程池中任务执行原理</li>
-</ol>
-<blockquote>
-<p>当用户提交任务到线程池后，在线程池没有执行拒绝策略的情况下，用户线程会马上返回，而提交的任务要么切换到worker线程执行，要么放入阻塞队列里面由worker线程来执行。</p>
-</blockquote>
-<ol start="4">
-<li>线程池的关闭</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>作用</th>
-<th>返回值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>shutdown()</td>
-<td>设置为shutdown状态，线程池不会接收新的任务，但是队列里面的任务还是要执行的</td>
-<td>void</td>
-</tr>
-<tr>
-<td>shutdownNow()</td>
-<td>设置为stop状态，线程池不会接收新的任务，并且会丢弃工作队列里面的任务</td>
-<td>被丢弃的任务列表</td>
-</tr>
-</tbody></table>
-<ol start="5">
-<li>线程池的拒绝策略</li>
-</ol>
-<blockquote>
-<p>拒绝策略执行的触发条件：线程池中线程的个数达到maxpoolsize,对于新投递的任务进行拒绝策略的执行。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>拒绝策略</th>
-<th>策略内容</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>CallerRunsPolicy()</td>
-<td>使用调用线程执行新提交的任务</td>
-</tr>
-<tr>
-<td>AbortPolicy()</td>
-<td>抛弃新增任务，抛出RejectedExecutionException</td>
-</tr>
-<tr>
-<td>DiscardOldestPolicy（）</td>
-<td>抛弃队列里面最老的任务，并把新任务添加到队列里面</td>
-</tr>
-<tr>
-<td>DiscardPolicy()</td>
-<td>抛弃新增任务</td>
-</tr>
-</tbody></table>
-<h1 id="基于JDK中的Future实现异步编程"><a href="#基于JDK中的Future实现异步编程" class="headerlink" title="基于JDK中的Future实现异步编程"></a>基于JDK中的Future实现异步编程</h1><p>3.1 jdk中的future</p>
-<blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token operator">></span><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">V</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
-<span class="token comment">//取消任务，如果任务正在执行，mayInterruptIfRunning设置为true打断，否则不中断</span>
-   <span class="token keyword">boolean</span> <span class="token function">cancel</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> mayInterruptIfRunning<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-   <span class="token comment">//如何任务在执行前被取消返回true,否则返回false</span>
-   <span class="token keyword">boolean</span> <span class="token function">isCancelled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-   <span class="token comment">//判断任务是否已经完成</span>
-   <span class="token keyword">boolean</span> <span class="token function">isDone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-   <span class="token comment">// 等待异步任务执行完，返回结果</span>
-   
-   <span class="token class-name">V</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">,</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">;</span>
-
-   <span class="token comment">//到达超时时间后，返回，不会一直阻塞调用线程</span>
-   
-   <span class="token class-name">V</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span> unit<span class="token punctuation">)</span>
-       <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">,</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">,</span> <span class="token class-name">TimeoutException</span><span class="token punctuation">;</span>
-<span class="token operator">></span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</blockquote>
-<p>3.2.1 FutureTask概述</p>
-<blockquote>
-<p>1.FutureTask只有当任务结束才能获取返回值。</p>
-<p>2.返回值只能通过get方法获取，调用get会阻塞</p>
-<p>3.任务一旦运行完成不能被重启，除非运行过程中使用了runAndReset方法</p>
-</blockquote>
-<p>3.2.2 FutureTask类图结构</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/GithubAction.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -705,7 +381,7 @@ jobs:
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/FTP%E5%92%8CSFTP.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -719,7 +395,7 @@ jobs:
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html" class="post-title-link" itemprop="url">Java内存模型</a>
+            <a href="/post/FTP%E5%92%8CSFTP.html" class="post-title-link" itemprop="url">SFTP实践</a>
         </h2>
 
         <div class="post-meta">
@@ -736,7 +412,7 @@ jobs:
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:19:19" itemprop="dateModified" datetime="2024-04-15T20:19:19+08:00">2024-04-15</time>
+                <time title="修改时间：2024-04-15 20:17:27" itemprop="dateModified" datetime="2024-04-15T20:17:27+08:00">2024-04-15</time>
               </span>
 
           
@@ -750,46 +426,60 @@ jobs:
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><ol>
-<li><p>处理器的内存模型</p>
-<p>CPU的发展在摩尔定律的指导下以18个月的速度翻一倍的速度在发展，内存和硬盘的发展远远落后于CPU，为了解决这个问题CPU厂商设计的了高速缓存解决I&#x2F;O速度和CPU运行速度不匹配问题。</p>
-</li>
-<li><p>高速缓存</p>
-</li>
-</ol>
-<p>​    高速缓存位于CPU和内存之间，当程序进行运算的时候，会将数据从内存中复制一份到高速缓存中，当cpu运算的时候直接从高速缓存里面拿数据，运算完后将数据向高速缓存写入，再将高速缓存刷新到内存中。</p>
-<ol start="3">
-<li><p>缓存的一致性协议</p>
-<p>缓存一致性问题：多核CPU中，每个CPU拥有属于自己的高速缓存，但是内存只有一块，无法保证多个CPU处理相关数据后，更新回主内存的数据以谁为准呢？</p>
-<p>解决方案：</p>
-</li>
-</ol>
-<p>​	1）通过在总线上加锁</p>
-<p>​	CPU和内存的通信是通过总线进行的，在总线上加锁，阻塞其他CPU对内存的访问，保证缓存不一致问题，但是阻塞其他CPU访问内存，导致效率低下。</p>
-<p>​	2）通过缓存一致性协议</p>
-<p>​	MESI协议保证内存中的共享变量的副本是一致的，当cpu写入数据的时候，发现操作变量为共享变量（在其他cpu中也存在该共享变量），会发送信号，通知其他的cpu将这个变量设置为无效状态，当其他cpu读取这个数据时候，发现这个变量是无效的，他会从内存中重新读取。</p>
-<ol start="4">
-<li>CPU乱序执行优化</li>
-</ol>
-<p>​	为了让处理器内部的运算单元能够被充分利用，处理器会对输入的代码进行乱序执行（out-of-order execution）优化处理器会在计算之后，将乱序执行的结构重组，保证结果和顺序执行是一致的，但是不保证程序中各个语句执行顺序和输入顺序一致。（JAVA虚拟机的即时编译器也有类似的指令重排序优化）</p>
-<ol start="5">
-<li><p>处理器内存模型的几种类型</p>
-<p>顺序一致性内存模型：</p>
-<ul>
-<li>一个线程中的所有操作必须按照程序的顺序执行</li>
-<li>所有线程都只能看到一个单一的操作执行顺序，在顺序执行的一致性内存模型，每个操作都必须原子执行且立即对所有线程可见。</li>
-</ul>
-</li>
-</ol>
-<h1 id="JAVA内存模型"><a href="#JAVA内存模型" class="headerlink" title="JAVA内存模型"></a>JAVA内存模型</h1><p>​	不同架构的物理机器可以拥有不一样的内存模型，java的宗旨是一次编译，到处运行，为了实现该目标，java虚拟机规范定义了java内存模型（JAVA Memory Model,JMM）</p>
-<ol>
-<li>主内存</li>
-</ol>
-<p>​	java的内存模型规定了所有变量（实例字段、静态字段、构成数组对象的元素）都存储在主内存中。</p>
-<ol start="2">
-<li>工作内存</li>
-</ol>
-<p>​	每条线程还有自己的工作内存（类比高速缓存区）工作内存中保存了被该线程使用的变量的主内存副本拷贝，线程对变量的所有操作都是在工作内存中完成的。</p>
+          <h1 id="SFTP"><a href="#SFTP" class="headerlink" title="SFTP"></a>SFTP</h1><h2 id="SFTP介绍"><a href="#SFTP介绍" class="headerlink" title="SFTP介绍"></a>SFTP介绍</h2><p> sftp是Secure File Transfer Protocol的缩写，安全文件传送协议。可以为传输文件提供一种安全的网络的加密方法。SFTP 为 SSH的其中一部分，是一种传输档案至 Blogger 伺服器的安全方式。其实在SSH软件包中，已经包含了一个叫作SFTP(Secure File Transfer Protocol)的安全文件信息传输子系统，SFTP本身没有单独的守护进程，它必须使用sshd守护进程（端口号默认是22）来完成相应的连接和答复操作，所以从某种意义上来说，SFTP并不像一个服务器程序，而更像是一个客户端程序。SFTP同样是使用加密传输认证信息和传输的数据，所以，使用SFTP是非常安全的。但是，由于这种传输方式使用了加密&#x2F;解密技术，所以传输效率比普通的FTP要低得多。</p>
+<h2 id="SFTP安装"><a href="#SFTP安装" class="headerlink" title="SFTP安装"></a>SFTP安装</h2><h3 id="检查openssh版本"><a href="#检查openssh版本" class="headerlink" title="检查openssh版本"></a>检查openssh版本</h3><blockquote>
+<p>使用系统自带的internal-sftp搭建sftp，因为需要用到chroot，所以openssh 版本不能低于4.8p1</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># ssh -V</span>
+OpenSSH_7.4p1, OpenSSL <span class="token number">1.0</span>.2k-fips  <span class="token number">26</span> Jan <span class="token number">2017</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="创建用户组"><a href="#创建用户组" class="headerlink" title="创建用户组"></a>创建用户组</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># groupadd sftp</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="添加用户到sftp用户组"><a href="#添加用户到sftp用户组" class="headerlink" title="添加用户到sftp用户组"></a>添加用户到sftp用户组</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># useradd -g sftp -s /sbin/nologin tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="修改sftp用户的密码"><a href="#修改sftp用户的密码" class="headerlink" title="修改sftp用户的密码"></a>修改sftp用户的密码</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># passwd tom</span>
+更改用户 tom 的密码 。
+新的 密码：
+无效的密码： 密码少于 <span class="token number">8</span> 个字符
+重新输入新的 密码：
+passwd：所有的身份验证令牌已经成功更新。
+密码设置为: <span class="token function">cat</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="创建SFTP目录"><a href="#创建SFTP目录" class="headerlink" title="创建SFTP目录"></a>创建SFTP目录</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/</span>
+<span class="token comment"># 创建该用户能用的目录</span>
+<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="修改sshd-config的配置文件"><a href="#修改sshd-config的配置文件" class="headerlink" title="修改sshd_config的配置文件"></a>修改sshd_config的配置文件</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># vim /etc/ssh/sshd_config</span>
+<span class="token comment">#Subsystem      sftp    /usr/libexec/openssh/sftp-server 需要注释掉</span>
+<span class="token comment"># 添加以下配置</span>
+Subsystem <span class="token function">sftp</span> internal-sftp
+Match Group <span class="token function">sftp</span>
+ChrootDirectory /sftp/%u
+ForceCommand internal-sftp
+AllowTcpForwarding no
+X11Forwarding no<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="设定Chroot权限"><a href="#设定Chroot权限" class="headerlink" title="设定Chroot权限"></a>设定Chroot权限</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown root:sftp /sftp</span>
+<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown root:sftp /sftp/tom</span>
+<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp</span>
+<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp/tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="设置用户对应的权限"><a href="#设置用户对应的权限" class="headerlink" title="设置用户对应的权限"></a>设置用户对应的权限</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/tom/files</span>
+<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown tom /sftp/tom/files</span>
+<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp/tom/files</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="重启sshd"><a href="#重启sshd" class="headerlink" title="重启sshd"></a>重启sshd</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># systemctl restart sshd</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="连接测试"><a href="#连接测试" class="headerlink" title="连接测试"></a>连接测试</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># sftp tom@127.0.0.1</span>
+tom@127.0.0.1's password:
+Connected to <span class="token number">127.0</span>.0.1.
+sftp<span class="token operator">></span>
+sftp<span class="token operator">></span> <span class="token builtin class-name">exit</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+
+
 
       
     </div>
@@ -951,7 +641,7 @@ X-Frame-Options: SAMEORIGIN<span aria-hidden="true" class="line-numbers-rows"><s
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/FTP%E5%92%8CSFTP.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Build%20tools.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -965,7 +655,7 @@ X-Frame-Options: SAMEORIGIN<span aria-hidden="true" class="line-numbers-rows"><s
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/FTP%E5%92%8CSFTP.html" class="post-title-link" itemprop="url">SFTP实践</a>
+            <a href="/post/Build%20tools.html" class="post-title-link" itemprop="url">Build Tools</a>
         </h2>
 
         <div class="post-meta">
@@ -982,7 +672,7 @@ X-Frame-Options: SAMEORIGIN<span aria-hidden="true" class="line-numbers-rows"><s
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:17:27" itemprop="dateModified" datetime="2024-04-15T20:17:27+08:00">2024-04-15</time>
+                <time title="修改时间：2024-04-15 20:15:36" itemprop="dateModified" datetime="2024-04-15T20:15:36+08:00">2024-04-15</time>
               </span>
 
           
@@ -996,61 +686,7 @@ X-Frame-Options: SAMEORIGIN<span aria-hidden="true" class="line-numbers-rows"><s
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="SFTP"><a href="#SFTP" class="headerlink" title="SFTP"></a>SFTP</h1><h2 id="SFTP介绍"><a href="#SFTP介绍" class="headerlink" title="SFTP介绍"></a>SFTP介绍</h2><p> sftp是Secure File Transfer Protocol的缩写，安全文件传送协议。可以为传输文件提供一种安全的网络的加密方法。SFTP 为 SSH的其中一部分，是一种传输档案至 Blogger 伺服器的安全方式。其实在SSH软件包中，已经包含了一个叫作SFTP(Secure File Transfer Protocol)的安全文件信息传输子系统，SFTP本身没有单独的守护进程，它必须使用sshd守护进程（端口号默认是22）来完成相应的连接和答复操作，所以从某种意义上来说，SFTP并不像一个服务器程序，而更像是一个客户端程序。SFTP同样是使用加密传输认证信息和传输的数据，所以，使用SFTP是非常安全的。但是，由于这种传输方式使用了加密&#x2F;解密技术，所以传输效率比普通的FTP要低得多。</p>
-<h2 id="SFTP安装"><a href="#SFTP安装" class="headerlink" title="SFTP安装"></a>SFTP安装</h2><h3 id="检查openssh版本"><a href="#检查openssh版本" class="headerlink" title="检查openssh版本"></a>检查openssh版本</h3><blockquote>
-<p>使用系统自带的internal-sftp搭建sftp，因为需要用到chroot，所以openssh 版本不能低于4.8p1</p>
-</blockquote>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># ssh -V</span>
-OpenSSH_7.4p1, OpenSSL <span class="token number">1.0</span>.2k-fips  <span class="token number">26</span> Jan <span class="token number">2017</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h3 id="创建用户组"><a href="#创建用户组" class="headerlink" title="创建用户组"></a>创建用户组</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># groupadd sftp</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="添加用户到sftp用户组"><a href="#添加用户到sftp用户组" class="headerlink" title="添加用户到sftp用户组"></a>添加用户到sftp用户组</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># useradd -g sftp -s /sbin/nologin tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="修改sftp用户的密码"><a href="#修改sftp用户的密码" class="headerlink" title="修改sftp用户的密码"></a>修改sftp用户的密码</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># passwd tom</span>
-更改用户 tom 的密码 。
-新的 密码：
-无效的密码： 密码少于 <span class="token number">8</span> 个字符
-重新输入新的 密码：
-passwd：所有的身份验证令牌已经成功更新。
-密码设置为: <span class="token function">cat</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="创建SFTP目录"><a href="#创建SFTP目录" class="headerlink" title="创建SFTP目录"></a>创建SFTP目录</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/</span>
-<span class="token comment"># 创建该用户能用的目录</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="修改sshd-config的配置文件"><a href="#修改sshd-config的配置文件" class="headerlink" title="修改sshd_config的配置文件"></a>修改sshd_config的配置文件</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># vim /etc/ssh/sshd_config</span>
-<span class="token comment">#Subsystem      sftp    /usr/libexec/openssh/sftp-server 需要注释掉</span>
-<span class="token comment"># 添加以下配置</span>
-Subsystem <span class="token function">sftp</span> internal-sftp
-Match Group <span class="token function">sftp</span>
-ChrootDirectory /sftp/%u
-ForceCommand internal-sftp
-AllowTcpForwarding no
-X11Forwarding no<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="设定Chroot权限"><a href="#设定Chroot权限" class="headerlink" title="设定Chroot权限"></a>设定Chroot权限</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown root:sftp /sftp</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown root:sftp /sftp/tom</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp/tom</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="设置用户对应的权限"><a href="#设置用户对应的权限" class="headerlink" title="设置用户对应的权限"></a>设置用户对应的权限</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># mkdir -p /sftp/tom/files</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chown tom /sftp/tom/files</span>
-<span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># chmod 755 /sftp/tom/files</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="重启sshd"><a href="#重启sshd" class="headerlink" title="重启sshd"></a>重启sshd</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># systemctl restart sshd</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="连接测试"><a href="#连接测试" class="headerlink" title="连接测试"></a>连接测试</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@slave1 ~<span class="token punctuation">]</span><span class="token comment"># sftp tom@127.0.0.1</span>
-tom@127.0.0.1's password:
-Connected to <span class="token number">127.0</span>.0.1.
-sftp<span class="token operator">></span>
-sftp<span class="token operator">></span> <span class="token builtin class-name">exit</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-
-
-
+          <h1 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h1><h1 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h1><h1 id="Ant"><a href="#Ant" class="headerlink" title="Ant"></a>Ant</h1>
       
     </div>
 
@@ -1215,70 +851,6 @@ dbMapping:
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Build%20tools.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/Build%20tools.html" class="post-title-link" itemprop="url">Build Tools</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-01 21:31:44" itemprop="dateCreated datePublished" datetime="2024-04-01T21:31:44+08:00">2024-04-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-15 20:15:36" itemprop="dateModified" datetime="2024-04-15T20:15:36+08:00">2024-04-15</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h1><h1 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h1><h1 id="Ant"><a href="#Ant" class="headerlink" title="Ant"></a>Ant</h1>
       
     </div>
 
@@ -3105,6 +2677,150 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/SQL%20Tutorial.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/SQL%20Tutorial.html" class="post-title-link" itemprop="url">Sql Tutourial</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-18 00:00:00" itemprop="dateCreated datePublished" datetime="2022-06-18T00:00:00+08:00">2022-06-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-06-20 22:46:24" itemprop="dateModified" datetime="2024-06-20T22:46:24+08:00">2024-06-20</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>重新学习如何使用SQL</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/SQL%20Tutorial.html">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1.html" class="post-title-link" itemprop="url">负载均衡</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-02-03 00:00:00" itemprop="dateCreated datePublished" datetime="2022-02-03T00:00:00+08:00">2022-02-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-15 19:59:34" itemprop="dateModified" datetime="2024-04-15T19:59:34+08:00">2024-04-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>学习什么是负载均衡以及8种负载均衡算法</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1.html">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -3174,7 +2890,7 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-count">63</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
