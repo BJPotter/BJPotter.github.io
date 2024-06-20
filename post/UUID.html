@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"bjpotter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="基础概念 处理器的内存模型 CPU的发展在摩尔定律的指导下以18个月的速度翻一倍的速度在发展，内存和硬盘的发展远远落后于CPU，为了解决这个问题CPU厂商设计的了高速缓存解决I&#x2F;O速度和CPU运行速度不匹配问题。  高速缓存   ​    高速缓存位于CPU和内存之间，当程序进行运算的时候，会将数据从内存中复制一份到高速缓存中，当cpu运算的时候直接从高速缓存里面拿数据，运算完后将数据向">
+  <meta name="description" content="唯一ID由来 分布式系统中，需要对大量的数据和消息进行唯一标识，如金融行业产品系统中，数据日益增长，对数据进行分库分表后，需要用唯一ID来标识一条数据，数据库的自增ID已经不能满足，此时就需要一个全局唯一ID标识。  唯一ID特点  全局唯一：全局唯一，不会出现重复项。 趋势递增：B+树的索引下进行递增，保证写入性能 单调递增：下一个id肯定大于上一个id 信息安全：ID无规则、不规则   实现方">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java内存模型">
-<meta property="og:url" content="https://bjpotter.github.io/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html">
+<meta property="og:title" content="UUID">
+<meta property="og:url" content="https://bjpotter.github.io/post/UUID.html">
 <meta property="og:site_name" content="Potter&#39;s 个人博客">
-<meta property="og:description" content="基础概念 处理器的内存模型 CPU的发展在摩尔定律的指导下以18个月的速度翻一倍的速度在发展，内存和硬盘的发展远远落后于CPU，为了解决这个问题CPU厂商设计的了高速缓存解决I&#x2F;O速度和CPU运行速度不匹配问题。  高速缓存   ​    高速缓存位于CPU和内存之间，当程序进行运算的时候，会将数据从内存中复制一份到高速缓存中，当cpu运算的时候直接从高速缓存里面拿数据，运算完后将数据向">
+<meta property="og:description" content="唯一ID由来 分布式系统中，需要对大量的数据和消息进行唯一标识，如金融行业产品系统中，数据日益增长，对数据进行分库分表后，需要用唯一ID来标识一条数据，数据库的自增ID已经不能满足，此时就需要一个全局唯一ID标识。  唯一ID特点  全局唯一：全局唯一，不会出现重复项。 趋势递增：B+树的索引下进行递增，保证写入性能 单调递增：下一个id肯定大于上一个id 信息安全：ID无规则、不规则   实现方">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-04-16T01:01:59.964Z">
-<meta property="article:modified_time" content="2024-04-16T01:01:59.964Z">
+<meta property="article:published_time" content="2024-06-20T01:01:16.871Z">
+<meta property="article:modified_time" content="2024-06-20T01:01:16.878Z">
 <meta property="article:author" content="potter">
-<meta property="article:tag" content="java">
+<meta property="article:tag" content="系统设计">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://bjpotter.github.io/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html">
+<link rel="canonical" href="https://bjpotter.github.io/post/UUID.html">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>Java内存模型 | Potter's 个人博客</title>
+  <title>UUID | Potter's 个人博客</title>
   
 
 
@@ -171,7 +171,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/UUID.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -184,7 +184,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Java内存模型
+          UUID
         </h1>
 
         <div class="post-meta">
@@ -194,7 +194,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
+              <time title="创建时间：2024-06-20 09:01:16" itemprop="dateCreated datePublished" datetime="2024-06-20T09:01:16+08:00">2024-06-20</time>
             </span>
 
           
@@ -208,46 +208,58 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><ol>
-<li><p>处理器的内存模型</p>
-<p>CPU的发展在摩尔定律的指导下以18个月的速度翻一倍的速度在发展，内存和硬盘的发展远远落后于CPU，为了解决这个问题CPU厂商设计的了高速缓存解决I&#x2F;O速度和CPU运行速度不匹配问题。</p>
-</li>
-<li><p>高速缓存</p>
-</li>
-</ol>
-<p>​    高速缓存位于CPU和内存之间，当程序进行运算的时候，会将数据从内存中复制一份到高速缓存中，当cpu运算的时候直接从高速缓存里面拿数据，运算完后将数据向高速缓存写入，再将高速缓存刷新到内存中。</p>
-<ol start="3">
-<li><p>缓存的一致性协议</p>
-<p>缓存一致性问题：多核CPU中，每个CPU拥有属于自己的高速缓存，但是内存只有一块，无法保证多个CPU处理相关数据后，更新回主内存的数据以谁为准呢？</p>
-<p>解决方案：</p>
-</li>
-</ol>
-<p>​	1）通过在总线上加锁</p>
-<p>​	CPU和内存的通信是通过总线进行的，在总线上加锁，阻塞其他CPU对内存的访问，保证缓存不一致问题，但是阻塞其他CPU访问内存，导致效率低下。</p>
-<p>​	2）通过缓存一致性协议</p>
-<p>​	MESI协议保证内存中的共享变量的副本是一致的，当cpu写入数据的时候，发现操作变量为共享变量（在其他cpu中也存在该共享变量），会发送信号，通知其他的cpu将这个变量设置为无效状态，当其他cpu读取这个数据时候，发现这个变量是无效的，他会从内存中重新读取。</p>
-<ol start="4">
-<li>CPU乱序执行优化</li>
-</ol>
-<p>​	为了让处理器内部的运算单元能够被充分利用，处理器会对输入的代码进行乱序执行（out-of-order execution）优化处理器会在计算之后，将乱序执行的结构重组，保证结果和顺序执行是一致的，但是不保证程序中各个语句执行顺序和输入顺序一致。（JAVA虚拟机的即时编译器也有类似的指令重排序优化）</p>
-<ol start="5">
-<li><p>处理器内存模型的几种类型</p>
-<p>顺序一致性内存模型：</p>
-<ul>
-<li>一个线程中的所有操作必须按照程序的顺序执行</li>
-<li>所有线程都只能看到一个单一的操作执行顺序，在顺序执行的一致性内存模型，每个操作都必须原子执行且立即对所有线程可见。</li>
-</ul>
-</li>
-</ol>
-<h1 id="JAVA内存模型"><a href="#JAVA内存模型" class="headerlink" title="JAVA内存模型"></a>JAVA内存模型</h1><p>​	不同架构的物理机器可以拥有不一样的内存模型，java的宗旨是一次编译，到处运行，为了实现该目标，java虚拟机规范定义了java内存模型（JAVA Memory Model,JMM）</p>
+        <h1 id="唯一ID由来"><a href="#唯一ID由来" class="headerlink" title="唯一ID由来"></a>唯一ID由来</h1><blockquote>
+<p>分布式系统中，需要对大量的数据和消息进行唯一标识，如金融行业产品系统中，数据日益增长，对数据进行分库分表后，需要用唯一ID来标识一条数据，数据库的自增ID已经不能满足，此时就需要一个全局唯一ID标识。</p>
+</blockquote>
+<h2 id="唯一ID特点"><a href="#唯一ID特点" class="headerlink" title="唯一ID特点"></a>唯一ID特点</h2><blockquote>
 <ol>
-<li>主内存</li>
+<li>全局唯一：全局唯一，不会出现重复项。</li>
+<li>趋势递增：B+树的索引下进行递增，保证写入性能</li>
+<li>单调递增：下一个id肯定大于上一个id</li>
+<li>信息安全：ID无规则、不规则</li>
 </ol>
-<p>​	java的内存模型规定了所有变量（实例字段、静态字段、构成数组对象的元素）都存储在主内存中。</p>
-<ol start="2">
-<li>工作内存</li>
-</ol>
-<p>​	每条线程还有自己的工作内存（类比高速缓存区）工作内存中保存了被该线程使用的变量的主内存副本拷贝，线程对变量的所有操作都是在工作内存中完成的。</p>
+</blockquote>
+<h2 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h2><ul>
+<li>数据库自增ID</li>
+</ul>
+<blockquote>
+<p>数据库中一般给主键设置自增。</p>
+<p>优点：简单，由数据库自己操作完成，id是单调自增</p>
+<p>缺点：主从切换的时候不一致，容易导致重复发号</p>
+</blockquote>
+<ul>
+<li>UUID</li>
+</ul>
+<blockquote>
+<p>由32个16进制数字组成，形式为8-4-4-4-12的32个字符。</p>
+<p>优点：性能高，本地生成，无网络消耗。</p>
+<p>缺点：存储占用空间大，基于MAC地址生成的UUID存在信息安全问题。</p>
+</blockquote>
+<ul>
+<li>Redis唯一ID</li>
+</ul>
+<blockquote>
+<p>Redis是单线程的，可以依据redis的原子操作incr和incrby实现。</p>
+<p>优点：数字ID天然排序，对分页和排序的结果有帮助。</p>
+</blockquote>
+<ul>
+<li>zookeeper唯一ID</li>
+</ul>
+<blockquote>
+<p>zookeeper通过其znode数据版本生成序列号，可以生成32位和64位数据版本号，客户端可以使用这个版本号作为唯一序列号</p>
+</blockquote>
+<ul>
+<li>snowflake算法</li>
+</ul>
+<blockquote>
+<p>由64个二进制数字组成一般分为1-41-10-12,snowflake方案的QPS约为409.6w&#x2F;s</p>
+<p>第一部分：表示正数</p>
+<p>第二部分：41表示毫秒时间</p>
+<p>第三部分：工作机器ID，5位表示数据中心，5位表示机器id</p>
+<p>第四部分：12位的序列号，每毫秒可生成4096个id</p>
+<p>优点：毫秒在高位，自增序列号在低位，整体是递增趋势</p>
+<p>缺点：依赖时间，如果时间回拨，会导致发号重复或者不可用状态</p>
+</blockquote>
 
     </div>
 
@@ -257,7 +269,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/java/" rel="tag"># java</a>
+              <a href="/tags/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" rel="tag"># 系统设计</a>
           </div>
 
         
@@ -266,12 +278,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/post/Java%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B.html" rel="prev" title="java异步编程">
-      <i class="fa fa-chevron-left"></i> java异步编程
+    <a href="/post/DataStructure.html" rel="prev" title="数据结构和算法">
+      <i class="fa fa-chevron-left"></i> 数据结构和算法
     </a></div>
       <div class="post-nav-item">
-    <a href="/post/Linux.html" rel="next" title="Linux">
-      Linux <i class="fa fa-chevron-right"></i>
+    <a href="/post/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.html" rel="next" title="操作系统">
+      操作系统 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -331,7 +343,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">基础概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JAVA%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">JAVA内存模型</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%94%AF%E4%B8%80ID%E7%94%B1%E6%9D%A5"><span class="nav-number">1.</span> <span class="nav-text">唯一ID由来</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%94%AF%E4%B8%80ID%E7%89%B9%E7%82%B9"><span class="nav-number">1.1.</span> <span class="nav-text">唯一ID特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88"><span class="nav-number">1.2.</span> <span class="nav-text">实现方案</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -345,14 +357,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-count">63</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">34</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
