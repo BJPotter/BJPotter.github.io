@@ -1857,7 +1857,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-26 18:04:48" itemprop="dateModified" datetime="2024-06-26T18:04:48+08:00">2024-06-26</time>
+                <time title="修改时间：2024-06-27 11:23:55" itemprop="dateModified" datetime="2024-06-27T11:23:55+08:00">2024-06-27</time>
               </span>
 
           
@@ -1871,17 +1871,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><h2 id="Kafka简介"><a href="#Kafka简介" class="headerlink" title="Kafka简介"></a>Kafka简介</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><ol>
-<li><strong>Kafka</strong>：Apache Kafka是一个分布式流处理平台，主要用于构建实时数据管道和流应用。它最初由LinkedIn开发，并于2011年开源。</li>
-<li><strong>消息系统</strong>：Kafka是一种消息系统，支持发布-订阅模型，允许生产者（Producer）发布消息，消费者（Consumer）订阅消息。</li>
-</ol>
-<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><ol>
-<li><strong>日志收集</strong>：Kafka可以作为日志收集系统的核心组件，收集和存储来自不同服务和应用的日志数据。</li>
-<li><strong>实时数据分析</strong>：Kafka可以与实时数据处理框架（如Apache Spark、Apache Flink）集成，进行实时数据分析和处理。</li>
-<li><strong>事件驱动架构</strong>：Kafka可以用于构建事件驱动架构，支持微服务之间的异步通信和事件流处理。</li>
-<li><strong>数据管道</strong>：Kafka可以作为数据管道的核心组件，连接不同的数据源和数据目标，实现数据的实时传输和处理。</li>
-</ol>
-<h2 id="消息系统基础"><a href="#消息系统基础" class="headerlink" title="消息系统基础"></a>消息系统基础</h2><h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><p>消息队列是一种通信机制，允许不同系统或组件之间通过消息进行异步通信。消息队列的主要功能包括：</p>
+          <h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><h2 id="消息系统基础"><a href="#消息系统基础" class="headerlink" title="消息系统基础"></a>消息系统基础</h2><h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><p>消息队列是一种通信机制，允许不同系统或组件之间通过消息进行异步通信。消息队列的主要功能包括：</p>
 <ol>
 <li><strong>解耦</strong>：发送方和接收方不需要直接通信，发送方将消息放入队列，接收方从队列中读取消息。</li>
 <li><strong>缓冲</strong>：消息队列可以暂时存储消息，平衡消息生产和消费的速率差异。</li>
@@ -1903,7 +1893,17 @@
 <li><strong>重复处理</strong>：为了防止消息丢失，消息系统可能会多次传递同一消息，接收方需要具备幂等性（Idempotency）来处理重复消息。</li>
 <li><strong>顺序保证</strong>：消息系统需要保证消息的顺序性，特别是在分区和并行处理的情况下。Kafka通过分区内的顺序性和消费者组来实现顺序保证。</li>
 </ol>
-<h1 id="Kafka核心概念"><a href="#Kafka核心概念" class="headerlink" title="Kafka核心概念"></a>Kafka核心概念</h1><h2 id="Broker"><a href="#Broker" class="headerlink" title="Broker"></a><strong>Broker</strong></h2><ul>
+<h2 id="Kafka基础"><a href="#Kafka基础" class="headerlink" title="Kafka基础"></a>Kafka基础</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ol>
+<li><strong>Kafka</strong>：Apache Kafka是一个分布式流处理平台，主要用于构建实时数据管道和流应用。它最初由LinkedIn开发，并于2011年开源。</li>
+<li><strong>消息系统</strong>：Kafka是一种消息系统，支持发布-订阅模型，允许生产者（Producer）发布消息，消费者（Consumer）订阅消息。</li>
+</ol>
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><ol>
+<li><strong>日志收集</strong>：Kafka可以作为日志收集系统的核心组件，收集和存储来自不同服务和应用的日志数据。</li>
+<li><strong>实时数据分析</strong>：Kafka可以与实时数据处理框架（如Apache Spark、Apache Flink）集成，进行实时数据分析和处理。</li>
+<li><strong>事件驱动架构</strong>：Kafka可以用于构建事件驱动架构，支持微服务之间的异步通信和事件流处理。</li>
+<li><strong>数据管道</strong>：Kafka可以作为数据管道的核心组件，连接不同的数据源和数据目标，实现数据的实时传输和处理。</li>
+</ol>
+<h3 id="Kafka核心概念"><a href="#Kafka核心概念" class="headerlink" title="Kafka核心概念"></a>Kafka核心概念</h3><h4 id="Broker"><a href="#Broker" class="headerlink" title="Broker"></a><strong>Broker</strong></h4><ul>
 <li><strong>定义</strong>：Broker是Kafka的消息代理服务器，负责接收、存储和转发消息。</li>
 <li><strong>功能</strong>：<ul>
 <li><strong>消息存储</strong>：Broker将接收到的消息持久化到磁盘，并按照Topic和Partition进行存储。</li>
@@ -1913,7 +1913,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="Topic"><a href="#Topic" class="headerlink" title="Topic"></a><strong>Topic</strong></h2><ul>
+<h4 id="Topic"><a href="#Topic" class="headerlink" title="Topic"></a><strong>Topic</strong></h4><ul>
 <li><strong>定义</strong>：Topic是Kafka中消息的分类单元，用于将消息进行逻辑上的组织。</li>
 <li><strong>功能</strong>：<ul>
 <li><strong>消息分类</strong>：不同类型的消息可以发送到不同的Topic中，方便管理和消费。</li>
@@ -1922,7 +1922,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="Partition"><a href="#Partition" class="headerlink" title="Partition"></a><strong>Partition</strong></h2><ul>
+<h4 id="Partition"><a href="#Partition" class="headerlink" title="Partition"></a><strong>Partition</strong></h4><ul>
 <li><strong>定义</strong>：Partition是Topic的子集，是Kafka中消息存储的基本单元。</li>
 <li><strong>功能</strong>：<ul>
 <li><strong>并行处理</strong>：通过将Topic划分为多个Partition，可以实现消息的并行生产和消费，提高系统吞吐量。</li>
@@ -1931,7 +1931,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="Producer"><a href="#Producer" class="headerlink" title="Producer"></a><strong>Producer</strong></h2><ul>
+<h4 id="Producer"><a href="#Producer" class="headerlink" title="Producer"></a><strong>Producer</strong></h4><ul>
 <li><strong>定义</strong>：Producer是消息生产者，负责向Kafka发送消息。</li>
 <li><strong>功能</strong>：<ul>
 <li><strong>消息发送</strong>：Producer将消息发送到指定的Topic和Partition。</li>
@@ -1940,7 +1940,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a><strong>Consumer</strong></h2><ul>
+<h4 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a><strong>Consumer</strong></h4><ul>
 <li><strong>定义</strong>：Consumer是消息消费者，负责从Kafka读取消息。</li>
 <li><strong>功能</strong>：<ul>
 <li><strong>消息消费</strong>：Consumer从指定的Topic和Partition中读取消息进行处理。</li>
@@ -1949,7 +1949,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="Consumer-Group"><a href="#Consumer-Group" class="headerlink" title="Consumer Group"></a><strong>Consumer Group</strong></h2><ul>
+<h4 id="Consumer-Group"><a href="#Consumer-Group" class="headerlink" title="Consumer Group"></a><strong>Consumer Group</strong></h4><ul>
 <li><strong>定义</strong>：Consumer Group是多个Consumer组成的一个组，协同消费一个Topic。</li>
 <li><strong>功能</strong>：<ul>
 <li><strong>负载均衡</strong>：同一个Consumer Group内的多个Consumer可以分担Topic的Partition，实现负载均衡。</li>
@@ -1958,7 +1958,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="Offset"><a href="#Offset" class="headerlink" title="Offset"></a><strong>Offset</strong></h2><ul>
+<h4 id="Offset"><a href="#Offset" class="headerlink" title="Offset"></a><strong>Offset</strong></h4><ul>
 <li><strong>定义</strong>：Offset是消息在Partition中的位置，用于记录消费进度。</li>
 <li><strong>功能</strong>：<ul>
 <li><strong>消费进度管理</strong>：每个Consumer在消费消息时会记录当前的Offset，以便在故障恢复或重新启动时从正确的位置继续消费。</li>
@@ -1968,9 +1968,9 @@
 </ul>
 </li>
 </ul>
-<h1 id="Kafka集群架构"><a href="#Kafka集群架构" class="headerlink" title="Kafka集群架构"></a>Kafka集群架构</h1><img src="https://telegraph-image-2ni.pages.dev/file/84e5a00bf500afc2cc817.jpg" style="zoom: 67%;">
+<h1 id="Kafka集群"><a href="#Kafka集群" class="headerlink" title="Kafka集群"></a>Kafka集群</h1><img src="https://telegraph-image-2ni.pages.dev/file/84e5a00bf500afc2cc817.jpg" style="zoom: 67%;">
 
-<h2 id="分布式架构"><a href="#分布式架构" class="headerlink" title="分布式架构"></a>分布式架构</h2><h3 id="ZooKeeper集群"><a href="#ZooKeeper集群" class="headerlink" title="ZooKeeper集群"></a>ZooKeeper集群</h3><p>ZooKeeper是一个分布式协调服务，用于管理Kafka集群的元数据和协调任务。</p>
+<h2 id="分布式集群架构"><a href="#分布式集群架构" class="headerlink" title="分布式集群架构"></a>分布式集群架构</h2><h3 id="ZooKeeper集群"><a href="#ZooKeeper集群" class="headerlink" title="ZooKeeper集群"></a>ZooKeeper集群</h3><p>ZooKeeper是一个分布式协调服务，用于管理Kafka集群的元数据和协调任务。</p>
 <p><strong>功能：</strong></p>
 <p><strong>1.元数据管理</strong>：存储Kafka集群的元数据，包括Broker信息、Topic和分区信息、Leader选举等。</p>
 <p><strong>2.Leader选举</strong>：负责管理分区Leader的选举过程，确保在Leader故障时能够快速选举出新的Leader。</p>
@@ -1980,7 +1980,7 @@
 <p><strong>1.发送消息</strong>：将消息发送到指定的Topic。</p>
 <p><strong>2.指定Key</strong>：可以为消息指定Key，确保具有相同Key的消息被发送到同一个分区。</p>
 <p><strong>3.启用幂等生产者</strong>：确保消息只被写入一次，避免重复消息的出现。</p>
-<h3 id="Kafka集群"><a href="#Kafka集群" class="headerlink" title="Kafka集群"></a>Kafka集群</h3><p>Kafka集群由多个Kafka Broker组成，每个Broker是一个独立的Kafka服务器实例。</p>
+<h3 id="Kafka集群-1"><a href="#Kafka集群-1" class="headerlink" title="Kafka集群"></a>Kafka集群</h3><p>Kafka集群由多个Kafka Broker组成，每个Broker是一个独立的Kafka服务器实例。</p>
 <p><strong>功能：</strong></p>
 <p><strong>1.负载均衡</strong>：通过多个Broker分担负载，Kafka集群可以处理大量的并发消息。</p>
 <p><strong>2.高可用性</strong>：即使某个Broker发生故障，集群中的其他Broker仍然可以继续工作，确保系统的高可用性。</p>
@@ -2008,13 +2008,11 @@
 <li><p><strong>同步复制</strong>：Producer将消息发送到Leader，Leader将消息写入本地存储后，异步地将消息复制到ISR中的Follower副本。</p>
 </li>
 <li><p><strong>确认机制</strong>：Producer可以配置消息发送的确认机制（acks），以确保消息成功发送到Broker。</p>
-</li>
-<li><p><strong>acks&#x3D;0</strong>：Producer不等待任何确认，即发送即忘（fire-and-forget）。</p>
 <ul>
+<li><strong>acks&#x3D;0</strong>：Producer不等待任何确认，即发送即忘（fire-and-forget）。</li>
 <li><strong>acks&#x3D;1</strong>：Producer等待Leader确认消息已写入本地存储。</li>
+<li><strong>acks&#x3D;all</strong>：Producer等待Leader和所有ISR中的Follower确认消息已写入本地存储，确保最高的可靠性。</li>
 </ul>
-</li>
-<li><p><strong>acks&#x3D;all</strong>：Producer等待Leader和所有ISR中的Follower确认消息已写入本地存储，确保最高的可靠性。</p>
 </li>
 </ul>
 <h4 id="数据一致性"><a href="#数据一致性" class="headerlink" title="数据一致性"></a>数据一致性</h4><ul>
