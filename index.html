@@ -385,7 +385,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-27 21:47:17" itemprop="dateModified" datetime="2024-06-27T21:47:17+08:00">2024-06-27</time>
+                <time title="修改时间：2024-06-27 22:59:47" itemprop="dateModified" datetime="2024-06-27T22:59:47+08:00">2024-06-27</time>
               </span>
 
           
@@ -744,26 +744,22 @@ bin&#x2F;kafka-topics.sh --describe --topic my-topic --bootstrap-server localhos
 <p><strong>3.管理偏移量</strong>：消费者需要手动管理每个分区的偏移量，确保消息按照顺序进行处理。</p>
 <h2 id="高可用性"><a href="#高可用性" class="headerlink" title="高可用性"></a>高可用性</h2><h3 id="副本机制"><a href="#副本机制" class="headerlink" title="副本机制"></a>副本机制</h3><h4 id="Leader"><a href="#Leader" class="headerlink" title="Leader"></a>Leader</h4><p>每个分区（Partition）都有一个Leader副本，Leader负责处理所有的读写请求，Leader将接收到的消息同步到Follower副本，以确保数据的一致性。</p>
 <h4 id="Follower"><a href="#Follower" class="headerlink" title="Follower"></a>Follower</h4><p>每个分区有多个Follower副本，Follower定期从Leader拉取数据，作为备份，当leader发生故障，follower可以被选举为新的leader确保分区的高可用。</p>
+<h4 id="ISR（In-Sync-Replicas）"><a href="#ISR（In-Sync-Replicas）" class="headerlink" title="ISR（In-Sync Replicas）"></a><code>ISR</code>（In-Sync Replicas）</h4><p><code>ISR</code>：In-Sync Replicas，指的是与Leader保持同步的Follower副本集合，<code>ISR</code>中的副本被认为是最新的，可以参与Leader选举，保证数据的一致性。</p>
+<p><strong>同步机制过程</strong></p>
+<ul>
+<li>Follower 副本会定期主动从 Leader 副本拉取数据,并将数据写入本地存储。</li>
+<li>只有当 Follower 成功拉取并写入数据后,才会被认为是同步的,加入<code>ISR</code>集合。</li>
+<li>Kafka 会动态调整<code>ISR</code>集合,当 Follower 无法及时同步数据时,会将其从<code>ISR</code>中移除。当 Follower 恢复并重新同步数据后,Kafka 会将其重新加入<code>ISR</code>。</li>
+</ul>
 <h4 id="Leader选举过程"><a href="#Leader选举过程" class="headerlink" title="Leader选举过程"></a>Leader选举过程</h4><p><strong>1.故障检测</strong>：Kafka通过<code>Zookeeper</code>监控Leader的状态，当检测到Leader故障时，触发Leader选举过程。</p>
 <p><strong>2.选举机制</strong>：Kafka从<code>ISR</code>（In-Sync Replicas）中选举一个新的Leader，<code>ISR</code>是指与Leader保持同步的Follower副本集合。</p>
 <p><strong>3.<code>Leader</code>切换</strong>：新的Leader选举完成后，Kafka更新元数据，通知所有Producer和Consumer新的Leader信息。</p>
-<h3 id="ISR（In-Sync-Replicas）"><a href="#ISR（In-Sync-Replicas）" class="headerlink" title="ISR（In-Sync Replicas）"></a><code>ISR</code>（In-Sync Replicas）</h3><p><code>ISR</code>：In-Sync Replicas，指的是与Leader保持同步的Follower副本集合，<code>ISR</code>中的副本被认为是最新的，可以参与Leader选举。</p>
-<h4 id="机制"><a href="#机制" class="headerlink" title="机制"></a>机制</h4><ul>
-<li><strong>同步机制</strong>：Follower副本定期从Leader拉取数据，并将数据写入本地存储，只有当Follower成功拉取并写入数据后，才会被认为是同步的。</li>
-<li><strong>动态调整</strong>：<code>ISR</code>集合是动态调整的。当Follower副本无法及时同步数据（例如由于网络延迟或故障），Kafka会将其从<code>ISR</code>中移除。一旦Follower恢复并重新同步数据，Kafka会将其重新加入<code>ISR</code>。</li>
-</ul>
-<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><ul>
-<li><strong>高可用性</strong>：<code>ISR</code>确保了Kafka在Leader故障时能够快速选举出新的Leader，保证分区的高可用性。</li>
-<li><strong>数据一致性</strong>：通过维护<code>ISR</code>，Kafka确保只有最新的副本参与Leader选举，保证数据的一致性。</li>
-</ul>
 <h3 id="数据复制和一致性"><a href="#数据复制和一致性" class="headerlink" title="数据复制和一致性"></a>数据复制和一致性</h3><h4 id="数据复制"><a href="#数据复制" class="headerlink" title="数据复制"></a>数据复制</h4><ul>
-<li><p><strong>同步复制</strong>：Producer将消息发送到Leader，Leader将消息写入本地存储后，异步地将消息复制到<code>ISR</code>中的Follower副本。</p>
-</li>
-<li><p><strong>确认机制</strong>：Producer可以配置消息发送的确认机制（acks），以确保消息成功发送到Broker。</p>
-<ul>
-<li><strong>acks&#x3D;0</strong>：<code>Producer</code>不等待任何确认，即发送即忘（fire-and-forget）。</li>
-<li><strong>acks&#x3D;1</strong>：<code>Producer</code>等待Leader确认消息已写入本地存储。</li>
-<li><strong>acks&#x3D;all</strong>：<code>Producer</code>等待Leader和所有<code>ISR</code>中的Follower确认消息已写入本地存储，确保最高的可靠性。</li>
+<li>生产者将消息发送到 Leader 副本,Leader 副本将消息写入本地存储后,异步地将消息复制到<code>ISR</code>中的 Follower 副本。</li>
+<li>生产者可以配置消息发送的确认机制(<code>acks</code>)来控制可靠性:<ul>
+<li><code>acks=0</code>: 生产者不等待任何确认,即发送即忘。</li>
+<li><code>acks=1</code>: 生产者等待 Leader 确认消息已写入本地存储。</li>
+<li><code>acks=all</code>: 生产者等待 Leader 和所有<code>ISR</code>中的 Follower 确认消息已写入本地存储,确保最高的可靠性。</li>
 </ul>
 </li>
 </ul>
@@ -773,13 +769,13 @@ bin&#x2F;kafka-topics.sh --describe --topic my-topic --bootstrap-server localhos
 </ul>
 <h3 id="高可用性配置"><a href="#高可用性配置" class="headerlink" title="高可用性配置"></a>高可用性配置</h3><h4 id="副本因子（Replication-Factor）"><a href="#副本因子（Replication-Factor）" class="headerlink" title="副本因子（Replication Factor）"></a>副本因子（Replication Factor）</h4><ul>
 <li><strong>定义</strong>：副本因子是指每个分区的副本数量，包括一个Leader和多个Follower。副本因子越高，数据冗余和高可用性越强。</li>
-<li><strong>配置</strong>：在创建Topic时，可以配置副本因子。推荐的副本因子至少为3，以确保在单节点故障时仍能保证数据的高可用性。</li>
+<li><strong>配置</strong>：在创建Topic时，可以配置副本因子。推荐设置为 3 以上，以确保在单节点故障时仍能保证数据的高可用性。</li>
 </ul>
 <h4 id="最小ISR（min-insync-replicas）"><a href="#最小ISR（min-insync-replicas）" class="headerlink" title="最小ISR（min.insync.replicas）"></a>最小<code>ISR（min.insync.replicas）</code></h4><ul>
-<li><strong>定义</strong>：最小<code>ISR</code>是指Producer在<code>acks=all</code>配置下，消息写入成功所需的最小ISR数量。</li>
+<li><strong>定义</strong>：最小<code>ISR</code>是指Producer在<code>acks=all</code>配置下，消息写入成功所需的最小<code>ISR</code>数量。</li>
 <li><strong>作用</strong>：通过配置最小<code>ISR</code>，可以控制消息写入的可靠性，确保在一定数量的副本确认后才认为消息写入成功。</li>
 </ul>
-<h2 id="数据持久化"><a href="#数据持久化" class="headerlink" title="数据持久化"></a>数据持久化</h2><p>Kafka通过将消息写入磁盘中的日志实现持久化。每个分区（Partition）对应一个日志文件（Log），由多个日志段（Log Segment）组成。日志采用顺序追加的方式，保证消息有序，并实现高效IO。通过分段管理和段文件轮转，Kafka增强了可靠性，并通过索引机制实现快速查找。</p>
+<h2 id="数据持久化"><a href="#数据持久化" class="headerlink" title="数据持久化"></a>数据持久化</h2><p>Kafka通过将消息写入磁盘中的日志实现持久化。每个分区（Partition）对应一个日志文件（Log），每个日志文件由多个日志段（Log Segment）组成。日志采用顺序追加的方式，保证消息有序，并实现高效IO，通过分段管理和段文件轮转，Kafka增强了可靠性，并通过索引机制实现快速查找。</p>
 <h3 id="日志文件（Log）"><a href="#日志文件（Log）" class="headerlink" title="日志文件（Log）"></a>日志文件（Log）</h3><p>每个分区有一个日志文件，用于存储消息。日志文件按顺序追加消息，保证消息的顺序性。</p>
 <h3 id="日志段（Log-Segment）"><a href="#日志段（Log-Segment）" class="headerlink" title="日志段（Log Segment）"></a>日志段（Log Segment）</h3><p>日志段是日志文件的子集，用于分割和管理消息存储，每个日志段有固定的大小或时间间隔，每个日志段由一个数据文件（.log）和两个索引文件（.index和.timeindex）组成。</p>
 <ul>
@@ -972,7 +968,8 @@ bin&#x2F;kafka-topics.sh --describe --topic my-topic --bootstrap-server localhos
 <h3 id="副本机制的配置"><a href="#副本机制的配置" class="headerlink" title="副本机制的配置"></a>副本机制的配置</h3><pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment"># 在Kafka的配置文件`server.properties`中，配置副本相关的参数</span>
 <span class="token key attr-name">default.replication.factor</span><span class="token punctuation">=</span><span class="token value attr-value">3  # 默认副本因子</span>
 <span class="token key attr-name">min.insync.replicas</span><span class="token punctuation">=</span><span class="token value attr-value">2  # 最小同步副本数</span>
-<span class="token key attr-name">unclean.leader.election.enable</span><span class="token punctuation">=</span><span class="token value attr-value">false  # 禁用不干净的Leader选举</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment"># 当 unclean.leader.election.enable=false 时,Kafka 会严格限制 Leader 选举只能从 ISR 集合中选举,这样可以保证新 Leader 的数据完整性,但代价是可能会导致分区长时间无法选举出 Leader,从而无法提供服务。通常在追求数据可靠性较高的场景下,建议将此参数设置为 false。但如果可以接受少量数据丢失,为了提高可用性,也可以将其设置为 true。</span>
+<span class="token key attr-name">unclean.leader.election.enable</span><span class="token punctuation">=</span><span class="token value attr-value">false  # 禁用不干净的Leader选举</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="如何保证数据不丢失"><a href="#如何保证数据不丢失" class="headerlink" title="如何保证数据不丢失"></a>如何保证数据不丢失</h2><h3 id="问题发生点"><a href="#问题发生点" class="headerlink" title="问题发生点"></a>问题发生点</h3><ul>
 <li><strong>Leader副本故障</strong>：如果没有足够的同步副本，可能会导致数据丢失。</li>
