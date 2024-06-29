@@ -3224,342 +3224,6 @@ commit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/SpringCloud%E7%90%86%E8%AE%BA.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/SpringCloud%E7%90%86%E8%AE%BA.html" class="post-title-link" itemprop="url">SpringCloud理论</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-05-18 21:27:34 / 修改时间：21:31:04" itemprop="dateCreated datePublished" datetime="2024-05-18T21:27:34+08:00">2024-05-18</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Spring-Cloud简介"><a href="#Spring-Cloud简介" class="headerlink" title="Spring Cloud简介"></a>Spring Cloud简介</h1><h2 id="什么是Spring-Cloud？"><a href="#什么是Spring-Cloud？" class="headerlink" title="什么是Spring Cloud？"></a>什么是Spring Cloud？</h2><p>Spring Cloud是一个基于Spring Boot的开发工具集，旨在简化分布式系统的开发。它提供了一系列开箱即用的微服务架构解决方案，包括配置管理、服务发现、负载均衡、断路器、智能路由、微代理、控制总线、全局锁、分布式会话和集群状态管理。</p>
-<h2 id="Spring-Cloud的主要特性有哪些？"><a href="#Spring-Cloud的主要特性有哪些？" class="headerlink" title="Spring Cloud的主要特性有哪些？"></a>Spring Cloud的主要特性有哪些？</h2><ul>
-<li><strong>服务注册与发现</strong>：通过Eureka、Consul、Zookeeper实现服务注册与发现。</li>
-<li><strong>负载均衡</strong>：通过Ribbon、Feign实现客户端负载均衡。</li>
-<li><strong>断路器</strong>：通过Hystrix实现断路器模式。</li>
-<li><strong>分布式配置</strong>：通过Spring Cloud Config实现集中化配置管理。</li>
-<li><strong>服务网关</strong>：通过Zuul、Spring Cloud Gateway实现API网关服务。</li>
-<li><strong>消息驱动</strong>：通过Spring Cloud Stream实现消息驱动的微服务。</li>
-<li><strong>分布式追踪</strong>：通过Spring Cloud Sleuth、Zipkin实现分布式追踪。</li>
-</ul>
-<h1 id="Spring-Cloud的核心概念"><a href="#Spring-Cloud的核心概念" class="headerlink" title="Spring Cloud的核心概念"></a>Spring Cloud的核心概念</h1><h2 id="什么是微服务架构？"><a href="#什么是微服务架构？" class="headerlink" title="什么是微服务架构？"></a>什么是微服务架构？</h2><p>微服务架构是一种将单一应用程序拆分为多个小型、独立部署的服务的架构模式。每个服务都可以独立开发、部署和扩展，各服务通过轻量级的通信机制（如HTTP、消息队列）进行交互。</p>
-<h2 id="什么是服务注册与发现？"><a href="#什么是服务注册与发现？" class="headerlink" title="什么是服务注册与发现？"></a>什么是服务注册与发现？</h2><p>服务注册与发现是微服务架构中的核心组件。服务注册中心维护着所有可用服务的注册信息，服务实例启动时会将自身注册到服务注册中心，客户端在调用服务时通过服务注册中心发现可用的服务实例。</p>
-<h2 id="什么是断路器模式？"><a href="#什么是断路器模式？" class="headerlink" title="什么是断路器模式？"></a>什么是断路器模式？</h2><p>断路器模式用于防止服务之间的故障传播和级联失败。当对某个服务的调用失败次数达到阈值时，断路器会打开，直接返回失败响应，避免继续调用失败的服务。Hystrix是Spring Cloud中实现断路器模式的组件。</p>
-<h2 id="什么是API网关？"><a href="#什么是API网关？" class="headerlink" title="什么是API网关？"></a>什么是API网关？</h2><p>API网关是所有客户端请求的唯一入口，负责请求路由、协议转换、权限校验、流量控制等功能。Zuul和Spring Cloud Gateway是Spring Cloud提供的API网关解决方案。</p>
-<h1 id="Spring-Cloud的常用组件"><a href="#Spring-Cloud的常用组件" class="headerlink" title="Spring Cloud的常用组件"></a>Spring Cloud的常用组件</h1><h2 id="Eureka"><a href="#Eureka" class="headerlink" title="Eureka"></a>Eureka</h2><h3 id="什么是Eureka？"><a href="#什么是Eureka？" class="headerlink" title="什么是Eureka？"></a>什么是Eureka？</h3><p>Eureka是Netflix开源的一个服务注册和发现组件。它分为Eureka Server和Eureka Client两部分。Eureka Server用于服务注册和管理，Eureka Client用于向Eureka Server注册服务和发现服务。</p>
-<h3 id="Eureka的主要特性有哪些？"><a href="#Eureka的主要特性有哪些？" class="headerlink" title="Eureka的主要特性有哪些？"></a>Eureka的主要特性有哪些？</h3><ul>
-<li><strong>高可用性</strong>：Eureka Server可以集群部署，保证高可用性。</li>
-<li><strong>自我保护机制</strong>：在网络分区情况下，Eureka Server不会立即剔除无法连接的服务实例，避免误判。</li>
-<li><strong>租约续约机制</strong>：Eureka Client会定期向Eureka Server发送心跳以续约租约，保证服务注册信息的有效性。</li>
-</ul>
-<h3 id="如何配置Eureka？"><a href="#如何配置Eureka？" class="headerlink" title="如何配置Eureka？"></a>如何配置Eureka？</h3><p>在Spring Boot应用中引入Eureka Server依赖：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.cloud<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-cloud-starter-netflix-eureka-server<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在启动类中添加<code>@EnableEurekaServer</code>注解：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
-<span class="token annotation punctuation">@EnableEurekaServer</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">EurekaServerApplication</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">EurekaServerApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在<code>application.yml</code>配置文件中配置Eureka Server：</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">server</span><span class="token punctuation">:</span>
-  <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">8761</span>
-
-<span class="token key atrule">eureka</span><span class="token punctuation">:</span>
-  <span class="token key atrule">client</span><span class="token punctuation">:</span>
-    <span class="token key atrule">register-with-eureka</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-    <span class="token key atrule">fetch-registry</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-  <span class="token key atrule">server</span><span class="token punctuation">:</span>
-    <span class="token key atrule">wait-time-in-ms-when-sync-empty</span><span class="token punctuation">:</span> <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在Spring Boot应用中引入Eureka Client依赖：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.cloud<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-cloud-starter-netflix-eureka-client<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在启动类中添加<code>@EnableEurekaClient</code>注解：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
-<span class="token annotation punctuation">@EnableEurekaClient</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">EurekaClientApplication</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">EurekaClientApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在<code>application.yml</code>配置文件中配置Eureka Client：</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">eureka</span><span class="token punctuation">:</span>
-  <span class="token key atrule">client</span><span class="token punctuation">:</span>
-    <span class="token key atrule">service-url</span><span class="token punctuation">:</span>
-      <span class="token key atrule">defaultZone</span><span class="token punctuation">:</span> http<span class="token punctuation">:</span>//localhost<span class="token punctuation">:</span>8761/eureka/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="Ribbon"><a href="#Ribbon" class="headerlink" title="Ribbon"></a>Ribbon</h2><h3 id="什么是Ribbon？"><a href="#什么是Ribbon？" class="headerlink" title="什么是Ribbon？"></a>什么是Ribbon？</h3><p>Ribbon是一个客户端负载均衡器，提供多种负载均衡策略（如轮询、随机、加权等），并与Eureka集成实现服务发现和调用。</p>
-<h3 id="如何配置Ribbon？"><a href="#如何配置Ribbon？" class="headerlink" title="如何配置Ribbon？"></a>如何配置Ribbon？</h3><p>在Spring Boot应用中引入Ribbon依赖：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.cloud<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-cloud-starter-netflix-ribbon<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在<code>application.yml</code>配置文件中配置Ribbon：</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">ribbon</span><span class="token punctuation">:</span>
-  <span class="token key atrule">eureka</span><span class="token punctuation">:</span>
-    <span class="token key atrule">enabled</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-  <span class="token key atrule">NFLoadBalancerRuleClassName</span><span class="token punctuation">:</span> com.netflix.loadbalancer.RoundRobinRule<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="Feign"><a href="#Feign" class="headerlink" title="Feign"></a>Feign</h2><h3 id="什么是Feign？"><a href="#什么是Feign？" class="headerlink" title="什么是Feign？"></a>什么是Feign？</h3><p>Feign是一个声明式HTTP客户端，它通过注解定义接口，自动生成实现类，用于简化HTTP客户端的调用。Feign与Ribbon、Eureka集成，实现负载均衡和服务调用。</p>
-<h3 id="如何使用Feign？"><a href="#如何使用Feign？" class="headerlink" title="如何使用Feign？"></a>如何使用Feign？</h3><p>在Spring Boot应用中引入Feign依赖：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.cloud<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-cloud-starter-openfeign<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在启动类中添加<code>@EnableFeignClients</code>注解：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
-<span class="token annotation punctuation">@EnableFeignClients</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">FeignApplication</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">FeignApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>定义Feign客户端接口：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@FeignClient</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"service-name"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">MyFeignClient</span> <span class="token punctuation">&#123;</span>
-    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/endpoint"</span><span class="token punctuation">)</span>
-    <span class="token class-name">String</span> <span class="token function">callEndpoint</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在服务中注入并使用Feign客户端：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyController</span> <span class="token punctuation">&#123;</span>
-    <span class="token annotation punctuation">@Autowired</span>
-    <span class="token keyword">private</span> <span class="token class-name">MyFeignClient</span> myFeignClient<span class="token punctuation">;</span>
-
-    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/call"</span><span class="token punctuation">)</span>
-    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> myFeignClient<span class="token punctuation">.</span><span class="token function">callEndpoint</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="Hystrix"><a href="#Hystrix" class="headerlink" title="Hystrix"></a>Hystrix</h2><h3 id="什么是Hystrix？"><a href="#什么是Hystrix？" class="headerlink" title="什么是Hystrix？"></a>什么是Hystrix？</h3><p>Hystrix是Netflix开源的一个用于实现断路器模式的库。它能够在微服务之间调用失败时进行隔离，防止故障扩散，并提供Fallback机制保证服务的高可用性。</p>
-<h3 id="如何使用Hystrix？"><a href="#如何使用Hystrix？" class="headerlink" title="如何使用Hystrix？"></a>如何使用Hystrix？</h3><p>在Spring Boot应用中引入Hystrix依赖：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.cloud<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-cloud-starter-netflix-hystrix<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在启动类中添加<code>@EnableHystrix</code>注解：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
-<span class="token annotation punctuation">@EnableHystrix</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HystrixApplication</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">HystrixApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在需要使用断路器的方法上添加<code>@HystrixCommand</code>注解，并配置Fallback方法：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Service</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyService</span> <span class="token punctuation">&#123;</span>
-    <span class="token annotation punctuation">@HystrixCommand</span><span class="token punctuation">(</span>fallbackMethod <span class="token operator">=</span> <span class="token string">"fallbackMethod"</span><span class="token punctuation">)</span>
-    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">callService</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token comment">// 调用远程服务</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">fallbackMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> <span class="token string">"Fallback response"</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="Spring-Cloud-Config"><a href="#Spring-Cloud-Config" class="headerlink" title="Spring Cloud Config"></a>Spring Cloud Config</h2><h3 id="什么是Spring-Cloud-Config？"><a href="#什么是Spring-Cloud-Config？" class="headerlink" title="什么是Spring Cloud Config？"></a>什么是Spring Cloud Config？</h3><p>Spring Cloud Config提供了一个集中化的配置管理解决方案，通过Config Server将配置存储在远程仓库中（如Git），客户端从Config Server拉取配置，支持配置的动态更新。</p>
-<h3 id="如何配置Spring-Cloud-Config-Server？"><a href="#如何配置Spring-Cloud-Config-Server？" class="headerlink" title="如何配置Spring Cloud Config Server？"></a>如何配置Spring Cloud Config Server？</h3><p>在Spring Boot应用中引入Config Server依赖：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.cloud<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-cloud-config-server<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在启动类中添加<code>@EnableConfigServer</code>注解：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
-<span class="token annotation punctuation">@EnableConfigServer</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ConfigServerApplication</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">ConfigServerApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在<code>application.yml</code>配置文件中配置Config Server：</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">server</span><span class="token punctuation">:</span>
-  <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">8888</span>
-
-<span class="token key atrule">spring</span><span class="token punctuation">:</span>
-  <span class="token key atrule">cloud</span><span class="token punctuation">:</span>
-    <span class="token key atrule">config</span><span class="token punctuation">:</span>
-      <span class="token key atrule">server</span><span class="token punctuation">:</span>
-        <span class="token key atrule">git</span><span class="token punctuation">:</span>
-          <span class="token key atrule">uri</span><span class="token punctuation">:</span> https<span class="token punctuation">:</span>//github.com/myrepo/config<span class="token punctuation">-</span>repo<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="如何配置Spring-Cloud-Config-Client？"><a href="#如何配置Spring-Cloud-Config-Client？" class="headerlink" title="如何配置Spring Cloud Config Client？"></a>如何配置Spring Cloud Config Client？</h3><p>在Spring Boot应用中引入Config Client依赖：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.cloud<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-cloud-starter-config<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在<code>bootstrap.yml</code>配置文件中配置Config Client：</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">spring</span><span class="token punctuation">:</span>
-  <span class="token key atrule">cloud</span><span class="token punctuation">:</span>
-    <span class="token key atrule">config</span><span class="token punctuation">:</span>
-      <span class="token key atrule">uri</span><span class="token punctuation">:</span> http<span class="token punctuation">:</span>//localhost<span class="token punctuation">:</span><span class="token number">8888</span>
-  <span class="token key atrule">application</span><span class="token punctuation">:</span>
-    <span class="token key atrule">name</span><span class="token punctuation">:</span> myapp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="Zuul"><a href="#Zuul" class="headerlink" title="Zuul"></a>Zuul</h2><h3 id="什么是Zu"><a href="#什么是Zu" class="headerlink" title="什么是Zu"></a>什么是Zu</h3><p>ul？<br>Zuul是Netflix开源的API网关，负责请求路由、负载均衡、认证授权、服务聚合等功能，是微服务架构中的一个重要组件。</p>
-<h3 id="如何使用Zuul？"><a href="#如何使用Zuul？" class="headerlink" title="如何使用Zuul？"></a>如何使用Zuul？</h3><p>在Spring Boot应用中引入Zuul依赖：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.cloud<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-cloud-starter-netflix-zuul<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在启动类中添加<code>@EnableZuulProxy</code>注解：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
-<span class="token annotation punctuation">@EnableZuulProxy</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ZuulApplication</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">ZuulApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在<code>application.yml</code>配置文件中配置Zuul路由：</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">zuul</span><span class="token punctuation">:</span>
-  <span class="token key atrule">routes</span><span class="token punctuation">:</span>
-    <span class="token key atrule">service-name</span><span class="token punctuation">:</span>
-      <span class="token key atrule">path</span><span class="token punctuation">:</span> /service/<span class="token important">**</span>
-      <span class="token key atrule">url</span><span class="token punctuation">:</span> http<span class="token punctuation">:</span>//localhost<span class="token punctuation">:</span><span class="token number">8081</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="Spring-Cloud-Gateway"><a href="#Spring-Cloud-Gateway" class="headerlink" title="Spring Cloud Gateway"></a>Spring Cloud Gateway</h2><h3 id="什么是Spring-Cloud-Gateway？"><a href="#什么是Spring-Cloud-Gateway？" class="headerlink" title="什么是Spring Cloud Gateway？"></a>什么是Spring Cloud Gateway？</h3><p>Spring Cloud Gateway是Spring官方的API网关解决方案，旨在提供一种简单、有效和统一的API网关路由管理方式，作为Zuul的替代品。</p>
-<h3 id="如何使用Spring-Cloud-Gateway？"><a href="#如何使用Spring-Cloud-Gateway？" class="headerlink" title="如何使用Spring Cloud Gateway？"></a>如何使用Spring Cloud Gateway？</h3><p>在Spring Boot应用中引入Spring Cloud Gateway依赖：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.cloud<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-cloud-starter-gateway<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在启动类中添加<code>@EnableGateway</code>注解：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@SpringBootApplication</span>
-<span class="token annotation punctuation">@EnableGateway</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GatewayApplication</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">SpringApplication</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">GatewayApplication</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在<code>application.yml</code>配置文件中配置Gateway路由：</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">spring</span><span class="token punctuation">:</span>
-  <span class="token key atrule">cloud</span><span class="token punctuation">:</span>
-    <span class="token key atrule">gateway</span><span class="token punctuation">:</span>
-      <span class="token key atrule">routes</span><span class="token punctuation">:</span>
-      <span class="token punctuation">-</span> <span class="token key atrule">id</span><span class="token punctuation">:</span> service<span class="token punctuation">-</span>route
-        <span class="token key atrule">uri</span><span class="token punctuation">:</span> http<span class="token punctuation">:</span>//localhost<span class="token punctuation">:</span><span class="token number">8081</span>
-        <span class="token key atrule">predicates</span><span class="token punctuation">:</span>
-        <span class="token punctuation">-</span> Path=/service/<span class="token important">**</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="Spring-Cloud的高级特性"><a href="#Spring-Cloud的高级特性" class="headerlink" title="Spring Cloud的高级特性"></a>Spring Cloud的高级特性</h1><h2 id="什么是分布式配置中心？"><a href="#什么是分布式配置中心？" class="headerlink" title="什么是分布式配置中心？"></a>什么是分布式配置中心？</h2><p>分布式配置中心用于集中管理和动态更新分布式系统中的配置。Spring Cloud Config就是一个典型的分布式配置中心，实现了集中化配置管理和动态配置刷新。</p>
-<h2 id="什么是服务熔断？"><a href="#什么是服务熔断？" class="headerlink" title="什么是服务熔断？"></a>什么是服务熔断？</h2><p>服务熔断是指在服务调用失败或延迟过高时，自动中断后续请求，保护系统避免因连锁故障导致的整体崩溃。Hystrix通过断路器模式实现服务熔断。</p>
-<h2 id="什么是服务降级？"><a href="#什么是服务降级？" class="headerlink" title="什么是服务降级？"></a>什么是服务降级？</h2><p>服务降级是指在服务不可用时，提供备用的响应或处理逻辑，保证系统的高可用性。Hystrix通过Fallback机制实现服务降级。</p>
-<h2 id="什么是服务限流？"><a href="#什么是服务限流？" class="headerlink" title="什么是服务限流？"></a>什么是服务限流？</h2><p>服务限流是指限制服务的调用频率，防止系统因过载而崩溃。常用的限流策略包括令牌桶、漏桶算法等，Spring Cloud Gateway支持通过自定义过滤器实现服务限流。</p>
-<h2 id="什么是分布式追踪？"><a href="#什么是分布式追踪？" class="headerlink" title="什么是分布式追踪？"></a>什么是分布式追踪？</h2><p>分布式追踪用于跟踪微服务系统中跨服务的请求链路，帮助开发人员分析系统的性能瓶颈和故障点。Spring Cloud Sleuth和Zipkin是常用的分布式追踪解决方案。</p>
-<h1 id="Spring-Cloud的测试"><a href="#Spring-Cloud的测试" class="headerlink" title="Spring Cloud的测试"></a>Spring Cloud的测试</h1><h2 id="如何测试Spring-Cloud服务？"><a href="#如何测试Spring-Cloud服务？" class="headerlink" title="如何测试Spring Cloud服务？"></a>如何测试Spring Cloud服务？</h2><p>可以使用Spring Boot的测试框架，如JUnit、MockMvc、RestTemplate等，结合Spring Cloud提供的模拟服务注册中心（如Eureka Server）的功能，进行集成测试和功能测试。</p>
-<h2 id="如何进行契约测试？"><a href="#如何进行契约测试？" class="headerlink" title="如何进行契约测试？"></a>如何进行契约测试？</h2><p>契约测试用于验证服务提供方和服务调用方之间的契约，确保服务接口的正确性。Spring Cloud Contract提供了契约测试的支持，通过定义契约文件生成测试用例，验证服务的输入输出。</p>
-<h2 id="如何进行性能测试？"><a href="#如何进行性能测试？" class="headerlink" title="如何进行性能测试？"></a>如何进行性能测试？</h2><p>性能测试用于验证系统在高负载下的表现，常用的工具有JMeter、Gatling等。可以通过模拟高并发请求，检测系统的响应时间、吞吐量和资源占用情况，识别性能瓶颈并优化。</p>
-<h1 id="Spring-Cloud的部署"><a href="#Spring-Cloud的部署" class="headerlink" title="Spring Cloud的部署"></a>Spring Cloud的部署</h1><h2 id="如何打包Spring-Cloud应用？"><a href="#如何打包Spring-Cloud应用？" class="headerlink" title="如何打包Spring Cloud应用？"></a>如何打包Spring Cloud应用？</h2><p>Spring Cloud应用可以打包成可执行的JAR文件，通过Maven或Gradle插件将应用及其依赖打包在一起。例如，使用Maven：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>build</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugins</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugins</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>build</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>然后执行<code>mvn package</code>命令生成JAR文件。</p>
-<h2 id="如何部署Spring-Cloud应用到Docker？"><a href="#如何部署Spring-Cloud应用到Docker？" class="headerlink" title="如何部署Spring Cloud应用到Docker？"></a>如何部署Spring Cloud应用到Docker？</h2><p>可以通过Dockerfile创建Docker镜像并运行Spring Cloud应用。示例如下：</p>
-<pre class="line-numbers language-docker" data-language="docker"><code class="language-docker"><span class="token instruction"><span class="token keyword">FROM</span> openjdk:11-jre</span>
-<span class="token instruction"><span class="token keyword">COPY</span> target/myapp.jar /app.jar</span>
-<span class="token instruction"><span class="token keyword">ENTRYPOINT</span> [<span class="token string">"java"</span>, <span class="token string">"-jar"</span>, <span class="token string">"/app.jar"</span>]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>然后使用Docker命令生成镜像并运行容器：</p>
-<pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">docker build -t myapp .
-docker run -p 8080:8080 myapp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h2 id="如何部署Spring-Cloud应用到Kubernetes？"><a href="#如何部署Spring-Cloud应用到Kubernetes？" class="headerlink" title="如何部署Spring Cloud应用到Kubernetes？"></a>如何部署Spring Cloud应用到Kubernetes？</h2><p>可以通过Kubernetes的Pod、Deployment和Service等资源，将Spring Cloud应用部署到Kubernetes集群中。创建Kubernetes部署文件：</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
-<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
-<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
-  <span class="token key atrule">name</span><span class="token punctuation">:</span> myapp
-<span class="token key atrule">spec</span><span class="token punctuation">:</span>
-  <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">3</span>
-  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
-    <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
-      <span class="token key atrule">app</span><span class="token punctuation">:</span> myapp
-  <span class="token key atrule">template</span><span class="token punctuation">:</span>
-    <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
-      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
-        <span class="token key atrule">app</span><span class="token punctuation">:</span> myapp
-    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
-      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
-      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> myapp
-        <span class="token key atrule">image</span><span class="token punctuation">:</span> myapp<span class="token punctuation">:</span>latest
-        <span class="token key atrule">ports</span><span class="token punctuation">:</span>
-        <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">8080</span>
-<span class="token punctuation">---</span>
-<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
-<span class="token key atrule">kind</span><span class="token punctuation">:</span> Service
-<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
-  <span class="token key atrule">name</span><span class="token punctuation">:</span> myapp
-<span class="token key atrule">spec</span><span class="token punctuation">:</span>
-  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
-    <span class="token key atrule">app</span><span class="token punctuation">:</span> myapp
-  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
-  <span class="token punctuation">-</span> <span class="token key atrule">protocol</span><span class="token punctuation">:</span> TCP
-    <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">80</span>
-    <span class="token key atrule">targetPort</span><span class="token punctuation">:</span> <span class="token number">8080</span>
-  <span class="token key atrule">type</span><span class="token punctuation">:</span> LoadBalancer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>然后使用<code>kubectl</code>命令部署到Kubernetes集群：</p>
-<pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">kubectl apply -f deployment.yml<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/SpringBoot%E7%90%86%E8%AE%BA.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -4994,6 +4658,71 @@ cmd -<span class="token operator">></span> <span class="token variable"><span cl
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1.html" class="post-title-link" itemprop="url">9中数据通信/流动模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-05-17 22:17:42" itemprop="dateCreated datePublished" datetime="2024-05-17T22:17:42+08:00">2024-05-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>该篇博客描述点对点、API 网关、发布-订阅、请求-响应、事件溯源、ETL、批处理、流处理、编排的工作原理</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1.html">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -5063,7 +4792,7 @@ cmd -<span class="token operator">></span> <span class="token variable"><span cl
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-count">61</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
