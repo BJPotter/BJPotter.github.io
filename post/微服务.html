@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://bjpotter.github.io/images/单体和微服务的区别.drawio.svg">
 <meta property="article:published_time" content="2024-06-28T12:14:07.750Z">
-<meta property="article:modified_time" content="2024-06-29T16:41:07.946Z">
+<meta property="article:modified_time" content="2024-06-30T02:21:18.685Z">
 <meta property="article:author" content="potter">
 <meta property="article:tag" content="微服务">
 <meta name="twitter:card" content="summary">
@@ -203,7 +203,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-06-30 00:41:07" itemprop="dateModified" datetime="2024-06-30T00:41:07+08:00">2024-06-30</time>
+                <time title="修改时间：2024-06-30 10:21:18" itemprop="dateModified" datetime="2024-06-30T10:21:18+08:00">2024-06-30</time>
               </span>
 
           
@@ -437,6 +437,46 @@
 
 
 <h1 id="服务注册与发现"><a href="#服务注册与发现" class="headerlink" title="服务注册与发现"></a>服务注册与发现</h1><h2 id="服务注册中心"><a href="#服务注册中心" class="headerlink" title="服务注册中心"></a>服务注册中心</h2><p>服务注册中心是一种机制，用于管理和发现分布式系统中的服务实例。服务注册中心记录了所有可用的服务实例信息，并允许客户端通过查询注册中心来找到所需的服务。常用的服务注册中心包括 Eureka、Consul 和 Nacos。</p>
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><table>
+<thead>
+<tr>
+<th>技术选型</th>
+<th>主要能力</th>
+<th>区别</th>
+<th>当前使用情况</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Eureka</strong></td>
+<td>- 服务注册与发现 - 健康检查 - 自我保护机制</td>
+<td>- Netflix开源项目 - 适用于Spring Cloud生态</td>
+<td>仍在主流使用，但Spring Cloud官方推荐使用Spring Cloud Kubernetes或Spring Cloud Consul</td>
+</tr>
+<tr>
+<td><strong>Consul</strong></td>
+<td>- 服务注册与发现 - 健康检查 - Key&#x2F;Value存储 - 多数据中心支持</td>
+<td>- HashiCorp开源项目 - 支持多数据中心和分布式一致性</td>
+<td>主流使用，尤其在需要多数据中心支持的场景</td>
+</tr>
+<tr>
+<td><strong>Etcd</strong></td>
+<td>- 服务注册与发现 - 分布式键值存储 - 强一致性</td>
+<td>- CoreOS开源项目 - 轻量级 - 高性能</td>
+<td>主流使用，特别是在Kubernetes中作为数据存储</td>
+</tr>
+<tr>
+<td><strong>Kubernetes Service</strong></td>
+<td>- 服务注册与发现 - 自动负载均衡 - 健康检查</td>
+<td>- Kubernetes原生支持 - 无需额外组件</td>
+<td>主流使用，特别是在Kubernetes生态中</td>
+</tr>
+<tr>
+<td><strong>Nacos</strong></td>
+<td>- 服务注册与发现 - 配置管理 - 动态DNS服务</td>
+<td>- 阿里巴巴开源项目 - 支持AP和CP模式切换</td>
+<td>主流使用，尤其在中国和阿里云生态中</td>
+</tr>
+</tbody></table>
 <h2 id="技术原理"><a href="#技术原理" class="headerlink" title="技术原理"></a>技术原理</h2><ol>
 <li><strong>服务注册</strong>：服务实例在启动时向注册中心注册自己的信息（例如，IP地址、端口、服务名称等）。</li>
 <li><strong>服务心跳</strong>：服务实例定期向注册中心发送心跳信号，表示自己仍然可用。</li>
@@ -535,6 +575,52 @@
 </ol>
 <h2 id="客户端负载均衡"><a href="#客户端负载均衡" class="headerlink" title="客户端负载均衡"></a>客户端负载均衡</h2><p><strong>客户端负载均衡</strong>是指在客户端选择服务器来处理请求。Spring Cloud loadbalancer是一个客户端负载均衡器。</p>
 <h2 id="服务端负载均衡"><a href="#服务端负载均衡" class="headerlink" title="服务端负载均衡"></a>服务端负载均衡</h2><p><strong>服务端负载均衡</strong>是指在服务器端选择具体的服务器来处理请求。Nginx 是一个常用的服务端负载均衡器。</p>
+<h2 id="技术选型-1"><a href="#技术选型-1" class="headerlink" title="技术选型"></a>技术选型</h2><table>
+<thead>
+<tr>
+<th>技术选型</th>
+<th>主要能力</th>
+<th>区别</th>
+<th>当前使用情况</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Nginx</strong></td>
+<td>- HTTP&#x2F;HTTPS负载均衡 - 反向代理 - 健康检查 - 高可用性</td>
+<td>- 开源项目 - 配置灵活，支持多种负载均衡算法</td>
+<td>主流使用，广泛应用于各种场景</td>
+</tr>
+<tr>
+<td><strong>HAProxy</strong></td>
+<td>- TCP&#x2F;HTTP负载均衡 - 反向代理 - 健康检查 - 高性能</td>
+<td>- 开源项目 - 高性能，适用于高并发场景</td>
+<td>主流使用，特别是在高性能需求场景</td>
+</tr>
+<tr>
+<td><strong>Envoy</strong></td>
+<td>- L4&#x2F;L7负载均衡 - 服务网格 - 动态配置 - 健康检查</td>
+<td>- CNCF开源项目 - 原生支持服务网格</td>
+<td>主流使用，特别是在服务网格架构中</td>
+</tr>
+<tr>
+<td><strong>Traefik</strong></td>
+<td>- HTTP&#x2F;HTTPS负载均衡 - 动态配置 - 支持多种后端 - 健康检查</td>
+<td>- 开源项目 - 原生支持Docker和Kubernetes</td>
+<td>主流使用，特别是在容器化环境中</td>
+</tr>
+<tr>
+<td><strong>Ribbon</strong></td>
+<td>- 客户端负载均衡 - 支持多种负载均衡算法 - 与Eureka集成</td>
+<td>- Netflix开源项目 - 适用于Spring Cloud生态</td>
+<td>主流使用，但Spring Cloud官方推荐使用Spring Cloud LoadBalancer作为替代</td>
+</tr>
+<tr>
+<td><strong>LoadBalancer</strong></td>
+<td>- 泛指负载均衡器 - 分配流量 - 提高可用性和性能</td>
+<td>- 包含多种实现，如Nginx、HAProxy、Envoy等</td>
+<td>主流使用，具体实现视场景而定</td>
+</tr>
+</tbody></table>
 <h2 id="技术原理-1"><a href="#技术原理-1" class="headerlink" title="技术原理"></a>技术原理</h2><p>负载均衡通过将请求分发到多个服务器来提升系统性能和可靠性。负载均衡器（无论是客户端还是服务端）都需要管理服务器列表并根据特定算法选择服务器处理请求。</p>
 <h2 id="实例代码-1"><a href="#实例代码-1" class="headerlink" title="实例代码"></a>实例代码</h2><h3 id="使用Spring-Cloud-loadbalancer实现客户端负载均衡"><a href="#使用Spring-Cloud-loadbalancer实现客户端负载均衡" class="headerlink" title="使用Spring Cloud loadbalancer实现客户端负载均衡"></a>使用Spring Cloud loadbalancer实现客户端负载均衡</h3><p><strong>1.创建一个Spring Boot项目</strong></p>
 <p>在<code>pom.xml</code>文件中添加依赖：</p>
@@ -645,6 +731,46 @@ sudo apt install nginx<span aria-hidden="true" class="line-numbers-rows"><span><
 <li><strong>Zuul</strong>：Netflix开源的API网关解决方案，提供动态路由、监控、弹性、安全等功能。</li>
 <li><strong>Spring Cloud Gateway</strong>：Spring官方推出的API网关解决方案，基于Spring 5、Spring Boot 2和Project Reactor，具有高效的异步非阻塞处理能力。</li>
 </ol>
+<h2 id="技术选型-2"><a href="#技术选型-2" class="headerlink" title="技术选型"></a>技术选型</h2><table>
+<thead>
+<tr>
+<th>技术选型</th>
+<th>主要能力</th>
+<th>区别</th>
+<th>当前使用情况</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Zuul</strong></td>
+<td>- 路由 - 过滤器 - 负载均衡 - 安全性</td>
+<td>- Netflix开源项目 - 适用于Spring Cloud生态</td>
+<td>主流使用，但Spring Cloud官方推荐使用Spring Cloud Gateway作为替代</td>
+</tr>
+<tr>
+<td><strong>Spring Cloud Gateway</strong></td>
+<td>- 路由 - 过滤器 - 负载均衡 - 安全性</td>
+<td>- Spring Cloud官方项目 - 与Spring生态深度集成</td>
+<td>主流使用，特别是在Spring Cloud生态中</td>
+</tr>
+<tr>
+<td><strong>Kong</strong></td>
+<td>- 路由 - 插件架构 - 负载均衡 - API管理</td>
+<td>- 开源项目 - 基于Nginx和OpenResty</td>
+<td>主流使用，特别是在API管理和扩展性需求高的场景</td>
+</tr>
+<tr>
+<td><strong>Traefik</strong></td>
+<td>- 路由 - 动态配置 - 负载均衡 - 支持多种后端</td>
+<td>- 开源项目 - 原生支持Docker和Kubernetes</td>
+<td>主流使用，特别是在容器化环境中</td>
+</tr>
+<tr>
+<td><strong>Envoy</strong></td>
+<td>- 路由 - 负载均衡 - 服务网格 - 动态配置</td>
+<td>- CNCF开源项目 - 原生支持服务网格</td>
+<td>主流使用，特别是在服务网格架构中</td>
+</tr>
+</tbody></table>
 <h2 id="什么是服务限流？"><a href="#什么是服务限流？" class="headerlink" title="什么是服务限流？"></a>什么是服务限流？</h2><p>服务限流是一种控制系统中请求流量的方法，旨在保护服务免受突发流量的影响，防止系统过载和崩溃。限流通常在微服务架构中用于保障服务的稳定性和可靠性。</p>
 <h3 id="服务限流的概念"><a href="#服务限流的概念" class="headerlink" title="服务限流的概念"></a>服务限流的概念</h3><p>Spring Cloud Gateway通过<code>RequestRateLimiter</code>过滤器支持基于Redis的令牌桶限流。</p>
 <ol>
@@ -727,6 +853,46 @@ sudo apt install nginx<span aria-hidden="true" class="line-numbers-rows"><span><
 
 <h1 id="配置中心"><a href="#配置中心" class="headerlink" title="配置中心"></a>配置中心</h1><h2 id="集中化配置管理"><a href="#集中化配置管理" class="headerlink" title="集中化配置管理"></a>集中化配置管理</h2><p>集中化配置管理是指将应用程序的所有配置统一管理和存储，通常在一个中心化的配置服务器中。这样可以方便地管理、修改和分发配置文件。</p>
 <h2 id="动态配置更新"><a href="#动态配置更新" class="headerlink" title="动态配置更新"></a>动态配置更新</h2><p>动态配置更新是指当配置文件发生变化时，应用程序可以实时获取新的配置并应用，无需重启服务。Spring Cloud Config 提供了这一功能，结合 Spring Cloud Bus 可以实现配置的实时更新。</p>
+<h2 id="技术选型-3"><a href="#技术选型-3" class="headerlink" title="技术选型"></a>技术选型</h2><table>
+<thead>
+<tr>
+<th>技术选型</th>
+<th>主要能力</th>
+<th>区别</th>
+<th>当前使用情况</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Spring Cloud Config</strong></td>
+<td>- 集中配置管理 - 动态更新 - 加密&#x2F;解密支持</td>
+<td>- Spring Cloud官方项目 - 与Spring生态深度集成</td>
+<td>主流使用，特别是在Spring Cloud生态中</td>
+</tr>
+<tr>
+<td><strong>Consul</strong></td>
+<td>- 配置管理 - 服务注册与发现 - 健康检查</td>
+<td>- HashiCorp开源项目 - 支持多数据中心和分布式一致性</td>
+<td>主流使用，尤其在需要多数据中心支持的场景</td>
+</tr>
+<tr>
+<td><strong>Etcd</strong></td>
+<td>- 分布式键值存储 - 配置管理 - 强一致性</td>
+<td>- CoreOS开源项目 - 轻量级 - 高性能</td>
+<td>主流使用，特别是在Kubernetes中作为数据存储</td>
+</tr>
+<tr>
+<td><strong>Nacos</strong></td>
+<td>- 配置管理 - 服务注册与发现 - 动态DNS服务</td>
+<td>- 阿里巴巴开源项目 - 支持AP和CP模式切换</td>
+<td>主流使用，尤其在中国和阿里云生态中</td>
+</tr>
+<tr>
+<td><strong>Zookeeper</strong></td>
+<td>- 配置管理 - 服务注册与发现 - 分布式锁</td>
+<td>- Apache开源项目 - 强一致性保证 - 高可用性</td>
+<td>仍在使用，但由于其复杂性和运维成本，有些场景下被Consul和Etcd替代</td>
+</tr>
+</tbody></table>
 <h2 id="技术原理-3"><a href="#技术原理-3" class="headerlink" title="技术原理"></a>技术原理</h2><p>Spring Cloud Config 提供了服务器端和客户端组件，用于集中化配置管理和动态配置更新。</p>
 <ol>
 <li><strong>Spring Cloud Config Server</strong>：提供配置管理服务，集中存储配置文件，支持从多种存储介质读取配置，如 Git、SVN、本地文件等。</li>
@@ -867,6 +1033,46 @@ sudo apt install nginx<span aria-hidden="true" class="line-numbers-rows"><span><
 <h3 id="什么是服务降级？"><a href="#什么是服务降级？" class="headerlink" title="什么是服务降级？"></a>什么是服务降级？</h3><p>服务降级是指在服务不可用时，提供备用的响应或处理逻辑，保证系统的高可用性。Hystrix通过Fallback机制实现服务降级。</p>
 <h2 id="重试机制"><a href="#重试机制" class="headerlink" title="重试机制"></a>重试机制</h2><p>重试机制用于在请求失败时自动重试，以增加成功的可能性。它可以处理网络波动或临时故障，提升系统的健壮性和可靠性。</p>
 <h2 id="超时控制"><a href="#超时控制" class="headerlink" title="超时控制"></a>超时控制</h2><p>超时控制是指设置请求的最大响应时间，在超过预设时间后，系统会终止请求并返回适当的响应或执行后续处理。这可以防止资源被长时间占用，提高系统的响应性和用户体验。</p>
+<h2 id="技术选型-4"><a href="#技术选型-4" class="headerlink" title="技术选型"></a>技术选型</h2><table>
+<thead>
+<tr>
+<th>技术选型</th>
+<th>主要能力</th>
+<th>区别</th>
+<th>当前使用情况</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Hystrix</strong></td>
+<td>- 断路器模式 - 线程隔离 - 限流 - 回退机制</td>
+<td>- Netflix开源项目 - 适用于Spring Cloud生态</td>
+<td>逐渐被淘汰，Spring Cloud官方推荐使用Resilience4j作为替代</td>
+</tr>
+<tr>
+<td><strong>Resilience4j</strong></td>
+<td>- 断路器模式 - 限流 - 重试 - 缓存 - 线程隔离</td>
+<td>- 轻量级库 - 与Spring Boot和Spring Cloud深度集成</td>
+<td>主流使用，特别是在Spring Cloud生态中</td>
+</tr>
+<tr>
+<td><strong>Sentinel</strong></td>
+<td>- 流量控制 - 熔断降级 - 系统负载保护 - 热点参数限流</td>
+<td>- 阿里巴巴开源项目 - 支持多种流量控制策略</td>
+<td>主流使用，尤其在中国和阿里云生态中</td>
+</tr>
+<tr>
+<td><strong>Istio</strong></td>
+<td>- 服务网格 - 断路器 - 重试 - 超时 - 流量控制</td>
+<td>- CNCF开源项目 - 原生支持服务网格</td>
+<td>主流使用，特别是在服务网格架构中</td>
+</tr>
+<tr>
+<td><strong>Spring Retry</strong></td>
+<td>- 重试机制 - 回退机制 - 统计和监控</td>
+<td>- Spring项目 - 与Spring生态深度集成</td>
+<td>主流使用，特别是在Spring生态中</td>
+</tr>
+</tbody></table>
 <h2 id="技术原理-4"><a href="#技术原理-4" class="headerlink" title="技术原理"></a>技术原理</h2><p>断路器模式、重试机制和超时控制都是通过一系列策略和配置来实现容错和故障处理。</p>
 <ol>
 <li><strong>断路器模式</strong>：在 Hystrix 或 Resilience4j 中，断路器会监控对特定服务的调用情况，当错误率超过阈值或请求超时时，断路器会打开，之后的请求将快速失败，而不是继续执行耗时的操作。</li>
@@ -949,6 +1155,46 @@ sudo apt install nginx<span aria-hidden="true" class="line-numbers-rows"><span><
 <h1 id="服务监控与追踪"><a href="#服务监控与追踪" class="headerlink" title="服务监控与追踪"></a>服务监控与追踪</h1><h2 id="分布式日志"><a href="#分布式日志" class="headerlink" title="分布式日志"></a>分布式日志</h2><p>分布式日志指的是多个服务实例产生的日志被集中存储和管理的过程，通常用于故障排查、性能优化和安全审计等目的。</p>
 <h2 id="链路追踪"><a href="#链路追踪" class="headerlink" title="链路追踪"></a>链路追踪</h2><p>链路追踪是一种技术，用于监控和诊断分布式系统中请求的调用路径和性能数据。它能够跟踪服务间的调用关系，帮助定位延迟和故障根因。</p>
 <h2 id="性能监控"><a href="#性能监控" class="headerlink" title="性能监控"></a>性能监控</h2><p>性能监控是指收集、分析和展示系统的运行时数据，帮助识别性能瓶颈和优化机会。</p>
+<h2 id="技术选型-5"><a href="#技术选型-5" class="headerlink" title="技术选型"></a>技术选型</h2><table>
+<thead>
+<tr>
+<th>技术选型</th>
+<th>主要能力</th>
+<th>区别</th>
+<th>当前使用情况</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Prometheus</strong></td>
+<td>- 时间序列数据存储 - 多维数据模型 - 强大的查询语言 - 可视化与告警</td>
+<td>- CNCF开源项目 - 与Kubernetes深度集成</td>
+<td>主流使用，特别是在Kubernetes生态中</td>
+</tr>
+<tr>
+<td><strong>Grafana</strong></td>
+<td>- 数据可视化 - 支持多种数据源 - 灵活的仪表盘 - 告警管理</td>
+<td>- 开源项目 - 通常与Prometheus结合使用</td>
+<td>主流使用，广泛应用于各种场景</td>
+</tr>
+<tr>
+<td><strong>Elasticsearch, Logstash, Kibana (ELK Stack)</strong></td>
+<td>- 日志收集与分析 - 数据存储与检索 - 数据可视化 - 实时监控</td>
+<td>- 开源项目 - 灵活性高，适用于大规模日志分析</td>
+<td>主流使用，特别是在日志管理和分析场景</td>
+</tr>
+<tr>
+<td><strong>Jaeger</strong></td>
+<td>- 分布式追踪 - 上下文传播 - 性能监控 - 根因分析</td>
+<td>- CNCF开源项目 - 与OpenTracing标准兼容</td>
+<td>主流使用，特别是在微服务架构中</td>
+</tr>
+<tr>
+<td><strong>Zipkin</strong></td>
+<td>- 分布式追踪 - 上下文传播 - 性能监控 - 根因分析</td>
+<td>- 开源项目 - 与Spring Cloud Sleuth深度集成</td>
+<td>主流使用，特别是在Spring Cloud生态中</td>
+</tr>
+</tbody></table>
 <h2 id="技术原理-5"><a href="#技术原理-5" class="headerlink" title="技术原理"></a>技术原理</h2><p>这些技术主要通过在应用程序中添加代理、中间件或库来实现监控和追踪，例如通过注入特定的组件或配置来收集和传输相关数据。</p>
 <h3 id="分布式日志和链路追踪的原理"><a href="#分布式日志和链路追踪的原理" class="headerlink" title="分布式日志和链路追踪的原理"></a>分布式日志和链路追踪的原理</h3><ol>
 <li><strong>分布式日志</strong>：通过在应用程序中使用适当的日志框架（如Logback、Log4j等）配置，将日志发送到中心化的日志存储或分析平台（如ELK Stack、Splunk等），从而实现集中化日志管理和分析。</li>
@@ -1082,105 +1328,21 @@ sudo apt install nginx<span aria-hidden="true" class="line-numbers-rows"><span><
 <li>启动应用程序</li>
 </ol>
 <p>运行 Spring Boot 应用程序，并访问 <code>/hello</code> 路径，应该会跳转到 OAuth2 认证页面进行登录授权。</p>
-<h1 id="微服务设计模式与最佳实践"><a href="#微服务设计模式与最佳实践" class="headerlink" title="微服务设计模式与最佳实践"></a>微服务设计模式与最佳实践</h1><h2 id="服务拆分策略"><a href="#服务拆分策略" class="headerlink" title="服务拆分策略"></a>服务拆分策略</h2><p>服务拆分是设计微服务架构时的关键步骤，可以根据业务功能、团队自治、数据隔离等因素来制定合理的拆分策略。</p>
-<h2 id="数据一致性"><a href="#数据一致性" class="headerlink" title="数据一致性"></a>数据一致性</h2><p>数据一致性是分布式系统中的重要问题，涉及到 CAP 理论和最终一致性模型，需要权衡系统的可用性、分区容忍性和数据一致性。</p>
-<h2 id="事务管理"><a href="#事务管理" class="headerlink" title="事务管理"></a>事务管理</h2><p>分布式事务管理需要考虑到跨服务的事务一致性问题，Saga 模式是一种有效的解决方案，适合长时间运行和跨服务的事务处理。</p>
-<h2 id="技术原理-7"><a href="#技术原理-7" class="headerlink" title="技术原理"></a>技术原理</h2><h2 id="服务拆分策略-1"><a href="#服务拆分策略-1" class="headerlink" title="服务拆分策略"></a>服务拆分策略</h2><p>合理的服务拆分策略可以基于以下几个方面来设计：</p>
+<h1 id="微服务设计模式"><a href="#微服务设计模式" class="headerlink" title="微服务设计模式"></a>微服务设计模式</h1><h2 id="服务拆分策略"><a href="#服务拆分策略" class="headerlink" title="服务拆分策略"></a>服务拆分策略</h2><p>合理的服务拆分策略可以基于以下几个方面来设计：</p>
 <ul>
 <li><strong>业务功能拆分</strong>：根据不同的业务功能将服务划分为独立的服务单元，例如用户服务、订单服务、支付服务等。</li>
 <li><strong>团队自治</strong>：每个服务由专门的团队负责，确保服务的独立部署和演进，提高开发效率和服务质量。</li>
 <li><strong>数据隔离</strong>：避免跨服务的数据耦合，通过数据复制、异步更新等手段实现数据隔离和服务解耦。</li>
 </ul>
-<h2 id="数据一致性-1"><a href="#数据一致性-1" class="headerlink" title="数据一致性"></a>数据一致性</h2><p>在分布式系统中，数据一致性可以根据 CAP 理论进行权衡：</p>
+<h2 id="数据一致性"><a href="#数据一致性" class="headerlink" title="数据一致性"></a>数据一致性</h2><p>在分布式系统中，数据一致性可以根据 CAP 理论进行权衡：</p>
 <ul>
 <li><strong>CAP 理论</strong>：指出在分布式系统中，一致性（Consistency）、可用性（Availability）、分区容忍性（Partition tolerance）三者不可兼得，需要根据业务需求进行权衡。</li>
 <li><strong>最终一致性</strong>：是一种弱一致性模型，允许系统在一段时间内存在数据不一致的状态，但最终会达到一致状态。</li>
 </ul>
-<h2 id="事务管理-1"><a href="#事务管理-1" class="headerlink" title="事务管理"></a>事务管理</h2><p>分布式事务管理需要解决跨服务的事务一致性问题：</p>
+<h2 id="事务管理"><a href="#事务管理" class="headerlink" title="事务管理"></a>事务管理</h2><p>分布式事务管理需要解决跨服务的事务一致性问题：</p>
 <ul>
 <li><strong>Saga 模式</strong>：Saga 是一种用于分布式事务管理的设计模式，通过将大事务拆分为多个小事务，并保证每个小事务的操作是可逆的，来实现分布式事务的一致性。</li>
 </ul>
-<h2 id="实例代码-7"><a href="#实例代码-7" class="headerlink" title="实例代码"></a>实例代码</h2><h3 id="设计一个电商系统，展示服务拆分、Saga-模式实现分布式事务"><a href="#设计一个电商系统，展示服务拆分、Saga-模式实现分布式事务" class="headerlink" title="设计一个电商系统，展示服务拆分、Saga 模式实现分布式事务"></a>设计一个电商系统，展示服务拆分、Saga 模式实现分布式事务</h3><p>在设计电商系统时，我们可以考虑以下几个服务：</p>
-<ol>
-<li><strong>用户服务</strong>：负责管理用户信息、身份验证和权限管理。</li>
-<li><strong>订单服务</strong>：处理订单的创建、支付、取消等操作。</li>
-<li><strong>库存服务</strong>：管理商品库存和库存状态的更新。</li>
-<li><strong>支付服务</strong>：处理支付请求，调用第三方支付平台进行支付操作。</li>
-</ol>
-<p>以下是简单的示例代码，展示如何使用 Saga 模式实现分布式事务：</p>
-<ol>
-<li>定义 Saga 模式中的事务步骤</li>
-</ol>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">OrderSagaService</span> <span class="token punctuation">&#123;</span>
-    <span class="token annotation punctuation">@StartSaga</span>
-    <span class="token keyword">void</span> <span class="token function">createOrderSaga</span><span class="token punctuation">(</span><span class="token class-name">OrderDTO</span> orderDTO<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token annotation punctuation">@SagaStep</span><span class="token punctuation">(</span>compensationMethod <span class="token operator">=</span> <span class="token string">"cancelOrder"</span><span class="token punctuation">)</span>
-    <span class="token keyword">void</span> <span class="token function">reserveProduct</span><span class="token punctuation">(</span><span class="token class-name">OrderDTO</span> orderDTO<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token annotation punctuation">@SagaStep</span><span class="token punctuation">(</span>compensationMethod <span class="token operator">=</span> <span class="token string">"releaseProduct"</span><span class="token punctuation">)</span>
-    <span class="token keyword">void</span> <span class="token function">confirmOrder</span><span class="token punctuation">(</span><span class="token class-name">OrderDTO</span> orderDTO<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token annotation punctuation">@EndSaga</span>
-    <span class="token keyword">void</span> <span class="token function">cancelOrder</span><span class="token punctuation">(</span><span class="token class-name">OrderDTO</span> orderDTO<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token keyword">void</span> <span class="token function">releaseProduct</span><span class="token punctuation">(</span><span class="token class-name">OrderDTO</span> orderDTO<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="2">
-<li>实现 Saga 模式的业务逻辑</li>
-</ol>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Service</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">OrderSagaServiceImpl</span> <span class="token keyword">implements</span> <span class="token class-name">OrderSagaService</span> <span class="token punctuation">&#123;</span>
-
-    <span class="token annotation punctuation">@Autowired</span>
-    <span class="token keyword">private</span> <span class="token class-name">OrderService</span> orderService<span class="token punctuation">;</span>
-
-    <span class="token annotation punctuation">@Autowired</span>
-    <span class="token keyword">private</span> <span class="token class-name">ProductService</span> productService<span class="token punctuation">;</span>
-
-    <span class="token annotation punctuation">@Autowired</span>
-    <span class="token keyword">private</span> <span class="token class-name">PaymentService</span> paymentService<span class="token punctuation">;</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">createOrderSaga</span><span class="token punctuation">(</span><span class="token class-name">OrderDTO</span> orderDTO<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token comment">// 第一步：预留商品库存</span>
-        <span class="token function">reserveProduct</span><span class="token punctuation">(</span>orderDTO<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">reserveProduct</span><span class="token punctuation">(</span><span class="token class-name">OrderDTO</span> orderDTO<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token comment">// 调用库存服务，预留商品库存</span>
-        productService<span class="token punctuation">.</span><span class="token function">reserveStock</span><span class="token punctuation">(</span>orderDTO<span class="token punctuation">.</span><span class="token function">getProductId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> orderDTO<span class="token punctuation">.</span><span class="token function">getQuantity</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// 下一步：确认订单</span>
-        <span class="token function">confirmOrder</span><span class="token punctuation">(</span>orderDTO<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">confirmOrder</span><span class="token punctuation">(</span><span class="token class-name">OrderDTO</span> orderDTO<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token comment">// 创建订单</span>
-        orderService<span class="token punctuation">.</span><span class="token function">createOrder</span><span class="token punctuation">(</span>orderDTO<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// 模拟支付成功，调用支付服务</span>
-        paymentService<span class="token punctuation">.</span><span class="token function">processPayment</span><span class="token punctuation">(</span>orderDTO<span class="token punctuation">.</span><span class="token function">getOrderId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> orderDTO<span class="token punctuation">.</span><span class="token function">getAmount</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">cancelOrder</span><span class="token punctuation">(</span><span class="token class-name">OrderDTO</span> orderDTO<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token comment">// 如果确认订单失败或支付失败，调用此方法进行补偿操作</span>
-        <span class="token function">releaseProduct</span><span class="token punctuation">(</span>orderDTO<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">releaseProduct</span><span class="token punctuation">(</span><span class="token class-name">OrderDTO</span> orderDTO<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token comment">// 如果确认订单后支付失败，释放预留的商品库存</span>
-        productService<span class="token punctuation">.</span><span class="token function">releaseStock</span><span class="token punctuation">(</span>orderDTO<span class="token punctuation">.</span><span class="token function">getProductId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> orderDTO<span class="token punctuation">.</span><span class="token function">getQuantity</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="3">
-<li>使用 Saga 模式的事务管理</li>
-</ol>
-<p>在 Spring Boot 应用中，需要配置 Saga 相关的依赖和配置，确保 Saga 的事务步骤能够正确执行和补偿。</p>
 
     </div>
 
@@ -1261,7 +1423,7 @@ sudo apt install nginx<span aria-hidden="true" class="line-numbers-rows"><span><
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">微服务基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.</span> <span class="nav-text">微服务架构定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.2.</span> <span class="nav-text">为什么使用微服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">1.3.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E5%8D%95%E4%BD%93%E6%9E%B6%E6%9E%84%E5%AF%B9%E6%AF%94"><span class="nav-number">1.4.</span> <span class="nav-text">与单体架构对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB"><span class="nav-number">1.4.1.</span> <span class="nav-text">区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1-DDD"><span class="nav-number">1.5.</span> <span class="nav-text">领域驱动设计 (DDD)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.5.1.</span> <span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DDD%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">1.5.2.</span> <span class="nav-text">DDD与微服务的关系</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="nav-number">2.</span> <span class="nav-text">服务间通信</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#REST-API"><span class="nav-number">2.1.</span> <span class="nav-text">REST API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC"><span class="nav-number">2.2.</span> <span class="nav-text">RPC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">2.3.</span> <span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenFeign"><span class="nav-number">2.4.</span> <span class="nav-text">OpenFeign</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96"><span class="nav-number">2.4.1.</span> <span class="nav-text">添加依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E7%94%A8Feign%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">2.4.2.</span> <span class="nav-text">启用Feign客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89Feign%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.4.3.</span> <span class="nav-text">定义Feign客户端接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E6%9C%8D%E5%8A%A1%E4%B8%AD%E4%BD%BF%E7%94%A8Feign%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">2.4.4.</span> <span class="nav-text">在服务中使用Feign客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.4.5.</span> <span class="nav-text">订单服务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E4%B8%8E%E5%8F%91%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">服务注册与发现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-number">3.1.</span> <span class="nav-text">服务注册中心</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86"><span class="nav-number">3.2.</span> <span class="nav-text">技术原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="nav-number">3.2.1.</span> <span class="nav-text">实例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Eureka-Server"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">Eureka Server</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Eureka-Client"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">Eureka Client</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">4.</span> <span class="nav-text">负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">负载均衡算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">4.2.</span> <span class="nav-text">客户端负载均衡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">4.3.</span> <span class="nav-text">服务端负载均衡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86-1"><span class="nav-number">4.4.</span> <span class="nav-text">技术原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81-1"><span class="nav-number">4.5.</span> <span class="nav-text">实例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Spring-Cloud-loadbalancer%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">4.5.1.</span> <span class="nav-text">使用Spring Cloud loadbalancer实现客户端负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Nginx%E5%AE%9E%E7%8E%B0%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">4.5.1.1.</span> <span class="nav-text">使用Nginx实现服务端负载均衡</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#API%E7%BD%91%E5%85%B3"><span class="nav-number">5.</span> <span class="nav-text">API网关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API%E7%BD%91%E5%85%B3%E5%8A%9F%E8%83%BD"><span class="nav-number">5.1.</span> <span class="nav-text">API网关功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%BD%91%E5%85%B3%E6%8A%80%E6%9C%AF"><span class="nav-number">5.2.</span> <span class="nav-text">常用网关技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%8D%E5%8A%A1%E9%99%90%E6%B5%81%EF%BC%9F"><span class="nav-number">5.3.</span> <span class="nav-text">什么是服务限流？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E9%99%90%E6%B5%81%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">5.3.1.</span> <span class="nav-text">服务限流的概念</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86-2"><span class="nav-number">5.4.</span> <span class="nav-text">技术原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81-2"><span class="nav-number">5.5.</span> <span class="nav-text">实例代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83"><span class="nav-number">6.</span> <span class="nav-text">配置中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E4%B8%AD%E5%8C%96%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-number">6.1.</span> <span class="nav-text">集中化配置管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%85%8D%E7%BD%AE%E6%9B%B4%E6%96%B0"><span class="nav-number">6.2.</span> <span class="nav-text">动态配置更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86-3"><span class="nav-number">6.3.</span> <span class="nav-text">技术原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81-3"><span class="nav-number">6.4.</span> <span class="nav-text">实例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Cloud-Config-Server"><span class="nav-number">6.4.1.</span> <span class="nav-text">Spring Cloud Config Server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Cloud-Config-Client"><span class="nav-number">6.4.2.</span> <span class="nav-text">Spring Cloud Config Client</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%85%8D%E7%BD%AE%E6%9B%B4%E6%96%B0-1"><span class="nav-number">6.4.3.</span> <span class="nav-text">动态配置更新</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%AE%B9%E9%94%99"><span class="nav-number">7.</span> <span class="nav-text">服务容错</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%AD%E8%B7%AF%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">7.1.</span> <span class="nav-text">断路器模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%8D%E5%8A%A1%E7%86%94%E6%96%AD%EF%BC%9F"><span class="nav-number">7.1.1.</span> <span class="nav-text">什么是服务熔断？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%8D%E5%8A%A1%E9%99%8D%E7%BA%A7%EF%BC%9F"><span class="nav-number">7.1.2.</span> <span class="nav-text">什么是服务降级？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6"><span class="nav-number">7.2.</span> <span class="nav-text">重试机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B6%85%E6%97%B6%E6%8E%A7%E5%88%B6"><span class="nav-number">7.3.</span> <span class="nav-text">超时控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86-4"><span class="nav-number">7.4.</span> <span class="nav-text">技术原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81-4"><span class="nav-number">7.5.</span> <span class="nav-text">实例代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%9B%91%E6%8E%A7%E4%B8%8E%E8%BF%BD%E8%B8%AA"><span class="nav-number">8.</span> <span class="nav-text">服务监控与追踪</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97"><span class="nav-number">8.1.</span> <span class="nav-text">分布式日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA"><span class="nav-number">8.2.</span> <span class="nav-text">链路追踪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="nav-number">8.3.</span> <span class="nav-text">性能监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86-5"><span class="nav-number">8.4.</span> <span class="nav-text">技术原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97%E5%92%8C%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">8.4.1.</span> <span class="nav-text">分布式日志和链路追踪的原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">8.4.2.</span> <span class="nav-text">性能监控的原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81-5"><span class="nav-number">8.5.</span> <span class="nav-text">实例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Spring-Cloud-Sleuth-%E5%92%8C-Zipkin-%E5%AE%9E%E7%8E%B0%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA"><span class="nav-number">8.5.1.</span> <span class="nav-text">使用 Spring Cloud Sleuth 和 Zipkin 实现链路追踪</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Prometheus-%E5%92%8C-Grafana-%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="nav-number">8.5.2.</span> <span class="nav-text">使用 Prometheus 和 Grafana 进行性能监控</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%89%E5%85%A8"><span class="nav-number">9.</span> <span class="nav-text">微服务安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A4%E8%AF%81%E4%B8%8E%E6%8E%88%E6%9D%83"><span class="nav-number">9.1.</span> <span class="nav-text">认证与授权</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API%E5%AE%89%E5%85%A8"><span class="nav-number">9.2.</span> <span class="nav-text">API安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86-6"><span class="nav-number">9.3.</span> <span class="nav-text">技术原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81-6"><span class="nav-number">9.4.</span> <span class="nav-text">实例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Spring-Security-%E5%92%8C-OAuth2-%E5%AE%9E%E7%8E%B0%E8%AE%A4%E8%AF%81%E4%B8%8E%E6%8E%88%E6%9D%83"><span class="nav-number">9.4.1.</span> <span class="nav-text">使用 Spring Security 和 OAuth2 实现认证与授权</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">10.</span> <span class="nav-text">微服务设计模式与最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E7%AD%96%E7%95%A5"><span class="nav-number">10.1.</span> <span class="nav-text">服务拆分策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">10.2.</span> <span class="nav-text">数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="nav-number">10.3.</span> <span class="nav-text">事务管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86-7"><span class="nav-number">10.4.</span> <span class="nav-text">技术原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E7%AD%96%E7%95%A5-1"><span class="nav-number">10.5.</span> <span class="nav-text">服务拆分策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7-1"><span class="nav-number">10.6.</span> <span class="nav-text">数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86-1"><span class="nav-number">10.7.</span> <span class="nav-text">事务管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81-7"><span class="nav-number">10.8.</span> <span class="nav-text">实例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E7%94%B5%E5%95%86%E7%B3%BB%E7%BB%9F%EF%BC%8C%E5%B1%95%E7%A4%BA%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E3%80%81Saga-%E6%A8%A1%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="nav-number">10.8.1.</span> <span class="nav-text">设计一个电商系统，展示服务拆分、Saga 模式实现分布式事务</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">微服务基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.</span> <span class="nav-text">微服务架构定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.2.</span> <span class="nav-text">为什么使用微服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">1.3.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E5%8D%95%E4%BD%93%E6%9E%B6%E6%9E%84%E5%AF%B9%E6%AF%94"><span class="nav-number">1.4.</span> <span class="nav-text">与单体架构对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB"><span class="nav-number">1.4.1.</span> <span class="nav-text">区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1-DDD"><span class="nav-number">1.5.</span> <span class="nav-text">领域驱动设计 (DDD)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.5.1.</span> <span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DDD%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">1.5.2.</span> <span class="nav-text">DDD与微服务的关系</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="nav-number">2.</span> <span class="nav-text">服务间通信</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#REST-API"><span class="nav-number">2.1.</span> <span class="nav-text">REST API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC"><span class="nav-number">2.2.</span> <span class="nav-text">RPC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">2.3.</span> <span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenFeign"><span class="nav-number">2.4.</span> <span class="nav-text">OpenFeign</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96"><span class="nav-number">2.4.1.</span> <span class="nav-text">添加依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E7%94%A8Feign%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">2.4.2.</span> <span class="nav-text">启用Feign客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89Feign%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.4.3.</span> <span class="nav-text">定义Feign客户端接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E6%9C%8D%E5%8A%A1%E4%B8%AD%E4%BD%BF%E7%94%A8Feign%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">2.4.4.</span> <span class="nav-text">在服务中使用Feign客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A2%E5%8D%95%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.4.5.</span> <span class="nav-text">订单服务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E4%B8%8E%E5%8F%91%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">服务注册与发现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-number">3.1.</span> <span class="nav-text">服务注册中心</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B"><span class="nav-number">3.2.</span> <span class="nav-text">技术选型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86"><span class="nav-number">3.3.</span> <span class="nav-text">技术原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="nav-number">3.3.1.</span> <span class="nav-text">实例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Eureka-Server"><span class="nav-number">3.3.1.1.</span> <span class="nav-text">Eureka Server</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Eureka-Client"><span class="nav-number">3.3.1.2.</span> <span class="nav-text">Eureka Client</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">4.</span> <span class="nav-text">负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">负载均衡算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">4.2.</span> <span class="nav-text">客户端负载均衡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">4.3.</span> <span class="nav-text">服务端负载均衡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B-1"><span class="nav-number">4.4.</span> <span class="nav-text">技术选型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86-1"><span class="nav-number">4.5.</span> <span class="nav-text">技术原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81-1"><span class="nav-number">4.6.</span> <span class="nav-text">实例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Spring-Cloud-loadbalancer%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">4.6.1.</span> <span class="nav-text">使用Spring Cloud loadbalancer实现客户端负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Nginx%E5%AE%9E%E7%8E%B0%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">4.6.1.1.</span> <span class="nav-text">使用Nginx实现服务端负载均衡</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#API%E7%BD%91%E5%85%B3"><span class="nav-number">5.</span> <span class="nav-text">API网关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API%E7%BD%91%E5%85%B3%E5%8A%9F%E8%83%BD"><span class="nav-number">5.1.</span> <span class="nav-text">API网关功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%BD%91%E5%85%B3%E6%8A%80%E6%9C%AF"><span class="nav-number">5.2.</span> <span class="nav-text">常用网关技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B-2"><span class="nav-number">5.3.</span> <span class="nav-text">技术选型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%8D%E5%8A%A1%E9%99%90%E6%B5%81%EF%BC%9F"><span class="nav-number">5.4.</span> <span class="nav-text">什么是服务限流？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E9%99%90%E6%B5%81%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">5.4.1.</span> <span class="nav-text">服务限流的概念</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86-2"><span class="nav-number">5.5.</span> <span class="nav-text">技术原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81-2"><span class="nav-number">5.6.</span> <span class="nav-text">实例代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83"><span class="nav-number">6.</span> <span class="nav-text">配置中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E4%B8%AD%E5%8C%96%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-number">6.1.</span> <span class="nav-text">集中化配置管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%85%8D%E7%BD%AE%E6%9B%B4%E6%96%B0"><span class="nav-number">6.2.</span> <span class="nav-text">动态配置更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B-3"><span class="nav-number">6.3.</span> <span class="nav-text">技术选型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86-3"><span class="nav-number">6.4.</span> <span class="nav-text">技术原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81-3"><span class="nav-number">6.5.</span> <span class="nav-text">实例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Cloud-Config-Server"><span class="nav-number">6.5.1.</span> <span class="nav-text">Spring Cloud Config Server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Cloud-Config-Client"><span class="nav-number">6.5.2.</span> <span class="nav-text">Spring Cloud Config Client</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%85%8D%E7%BD%AE%E6%9B%B4%E6%96%B0-1"><span class="nav-number">6.5.3.</span> <span class="nav-text">动态配置更新</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%AE%B9%E9%94%99"><span class="nav-number">7.</span> <span class="nav-text">服务容错</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%AD%E8%B7%AF%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">7.1.</span> <span class="nav-text">断路器模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%8D%E5%8A%A1%E7%86%94%E6%96%AD%EF%BC%9F"><span class="nav-number">7.1.1.</span> <span class="nav-text">什么是服务熔断？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%8D%E5%8A%A1%E9%99%8D%E7%BA%A7%EF%BC%9F"><span class="nav-number">7.1.2.</span> <span class="nav-text">什么是服务降级？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6"><span class="nav-number">7.2.</span> <span class="nav-text">重试机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B6%85%E6%97%B6%E6%8E%A7%E5%88%B6"><span class="nav-number">7.3.</span> <span class="nav-text">超时控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B-4"><span class="nav-number">7.4.</span> <span class="nav-text">技术选型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86-4"><span class="nav-number">7.5.</span> <span class="nav-text">技术原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81-4"><span class="nav-number">7.6.</span> <span class="nav-text">实例代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%9B%91%E6%8E%A7%E4%B8%8E%E8%BF%BD%E8%B8%AA"><span class="nav-number">8.</span> <span class="nav-text">服务监控与追踪</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97"><span class="nav-number">8.1.</span> <span class="nav-text">分布式日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA"><span class="nav-number">8.2.</span> <span class="nav-text">链路追踪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="nav-number">8.3.</span> <span class="nav-text">性能监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B-5"><span class="nav-number">8.4.</span> <span class="nav-text">技术选型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86-5"><span class="nav-number">8.5.</span> <span class="nav-text">技术原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97%E5%92%8C%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">8.5.1.</span> <span class="nav-text">分布式日志和链路追踪的原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">8.5.2.</span> <span class="nav-text">性能监控的原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81-5"><span class="nav-number">8.6.</span> <span class="nav-text">实例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Spring-Cloud-Sleuth-%E5%92%8C-Zipkin-%E5%AE%9E%E7%8E%B0%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA"><span class="nav-number">8.6.1.</span> <span class="nav-text">使用 Spring Cloud Sleuth 和 Zipkin 实现链路追踪</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Prometheus-%E5%92%8C-Grafana-%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="nav-number">8.6.2.</span> <span class="nav-text">使用 Prometheus 和 Grafana 进行性能监控</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%89%E5%85%A8"><span class="nav-number">9.</span> <span class="nav-text">微服务安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A4%E8%AF%81%E4%B8%8E%E6%8E%88%E6%9D%83"><span class="nav-number">9.1.</span> <span class="nav-text">认证与授权</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API%E5%AE%89%E5%85%A8"><span class="nav-number">9.2.</span> <span class="nav-text">API安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86-6"><span class="nav-number">9.3.</span> <span class="nav-text">技术原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81-6"><span class="nav-number">9.4.</span> <span class="nav-text">实例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Spring-Security-%E5%92%8C-OAuth2-%E5%AE%9E%E7%8E%B0%E8%AE%A4%E8%AF%81%E4%B8%8E%E6%8E%88%E6%9D%83"><span class="nav-number">9.4.1.</span> <span class="nav-text">使用 Spring Security 和 OAuth2 实现认证与授权</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">10.</span> <span class="nav-text">微服务设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E7%AD%96%E7%95%A5"><span class="nav-number">10.1.</span> <span class="nav-text">服务拆分策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">10.2.</span> <span class="nav-text">数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="nav-number">10.3.</span> <span class="nav-text">事务管理</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
