@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"bjpotter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="JVM基础JVM的主要组成部分及其作用 类加载器（ClassLoader）：负责加载Java类文件，将其转化为JVM能够识别的Class对象。 运行时数据区（Runtime Data Area）：JVM在执行Java程序时会使用到的数据区，包括方法区、堆、虚拟机栈、本地方法栈和程序计数器。 执行引擎（Execution Engine）：负责执行字节码，包括解释器、即时编译器（JIT）和垃圾回收器等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java基础-JVM">
+<meta property="og:url" content="https://bjpotter.github.io/post/java-5-JVM.html">
+<meta property="og:site_name" content="Potter&#39;s 个人博客">
+<meta property="og:description" content="JVM基础JVM的主要组成部分及其作用 类加载器（ClassLoader）：负责加载Java类文件，将其转化为JVM能够识别的Class对象。 运行时数据区（Runtime Data Area）：JVM在执行Java程序时会使用到的数据区，包括方法区、堆、虚拟机栈、本地方法栈和程序计数器。 执行引擎（Execution Engine）：负责执行字节码，包括解释器、即时编译器（JIT）和垃圾回收器等">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://telegraph-image-2ni.pages.dev/file/2dded58d88ad824bb04c3.png">
+<meta property="og:image" content="https://telegraph-image-2ni.pages.dev/file/e1208860284124c277d23.png">
+<meta property="article:published_time" content="2024-05-28T10:11:46.332Z">
+<meta property="article:modified_time" content="2024-07-01T07:46:28.742Z">
+<meta property="article:author" content="potter">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://telegraph-image-2ni.pages.dev/file/2dded58d88ad824bb04c3.png">
+
+<link rel="canonical" href="https://bjpotter.github.io/post/java-5-JVM.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>java基础-JVM | Potter's 个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Potter's 个人博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java-5-JVM.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          java基础-JVM
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-05-28 18:11:46" itemprop="dateCreated datePublished" datetime="2024-05-28T18:11:46+08:00">2024-05-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-01 15:46:28" itemprop="dateModified" datetime="2024-07-01T15:46:28+08:00">2024-07-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="JVM基础"><a href="#JVM基础" class="headerlink" title="JVM基础"></a>JVM基础</h1><h2 id="JVM的主要组成部分及其作用"><a href="#JVM的主要组成部分及其作用" class="headerlink" title="JVM的主要组成部分及其作用"></a>JVM的主要组成部分及其作用</h2><ol>
+<li><strong>类加载器（ClassLoader）</strong>：负责加载Java类文件，将其转化为JVM能够识别的Class对象。</li>
+<li><strong>运行时数据区（Runtime Data Area）</strong>：JVM在执行Java程序时会使用到的数据区，包括方法区、堆、虚拟机栈、本地方法栈和程序计数器。</li>
+<li><strong>执行引擎（Execution Engine）</strong>：负责执行字节码，包括解释器、即时编译器（JIT）和垃圾回收器等。</li>
+<li><strong>本地接口（Native Interface）</strong>：JNI（Java Native Interface）允许Java代码与其他编程语言（如C&#x2F;C++）编写的代码进行交互。</li>
+</ol>
+<h2 id="JVM运行时数据区"><a href="#JVM运行时数据区" class="headerlink" title="JVM运行时数据区"></a>JVM运行时数据区</h2><ol>
+<li><strong>方法区（Method Area）</strong>：存储已被虚拟机加载的类信息、常量、静态变量和即时编译后的代码等数据。</li>
+<li><strong>堆（Heap）</strong>：存放对象实例和数组，是GC主要管理的区域。</li>
+<li><strong>虚拟机栈（Java Virtual Machine Stack）</strong>：存放每个线程的栈帧（方法调用过程中的局部变量表、操作数栈、方法返回地址等）。</li>
+<li><strong>本地方法栈（Native Method Stack）</strong>：为本地方法服务，与虚拟机栈类似。</li>
+<li><strong>程序计数器（Program Counter Register）</strong>：当前线程执行的字节码的行号指示器。</li>
+</ol>
+<h2 id="深拷贝和浅拷贝"><a href="#深拷贝和浅拷贝" class="headerlink" title="深拷贝和浅拷贝"></a>深拷贝和浅拷贝</h2><ul>
+<li><strong>浅拷贝</strong>：复制对象时只复制对象的引用，不复制对象本身。</li>
+<li><strong>深拷贝</strong>：复制对象时，除了复制对象的引用，还复制对象本身及其包含的所有对象。</li>
+</ul>
+<h2 id="堆和栈的区别"><a href="#堆和栈的区别" class="headerlink" title="堆和栈的区别"></a>堆和栈的区别</h2><ul>
+<li><strong>堆</strong>：用于存储对象实例，线程共享，生命周期较长，由GC管理。</li>
+<li><strong>栈</strong>：用于存储局部变量、方法调用等，线程私有，生命周期较短，方法执行完自动释放。</li>
+</ul>
+<h2 id="队列和栈是什么？有什么区别？"><a href="#队列和栈是什么？有什么区别？" class="headerlink" title="队列和栈是什么？有什么区别？"></a>队列和栈是什么？有什么区别？</h2><ul>
+<li><strong>队列（Queue）</strong>：FIFO（先进先出）数据结构，元素从尾部插入，从头部删除。</li>
+<li><strong>栈（Stack）</strong>：LIFO（后进先出）数据结构，元素从顶部插入和删除。</li>
+</ul>
+<h1 id="HotSpot虚拟机对象探秘"><a href="#HotSpot虚拟机对象探秘" class="headerlink" title="HotSpot虚拟机对象探秘"></a>HotSpot虚拟机对象探秘</h1><h2 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h2><ul>
+<li><strong>类加载检查</strong>：检查类是否已加载，未加载则加载类。</li>
+<li><strong>分配内存</strong>：在堆中为对象分配内存，使用指针碰撞或空闲列表。</li>
+<li><strong>初始化</strong>：对分配的内存进行零值初始化。</li>
+<li><strong>设置对象头</strong>：初始化对象的元数据信息。</li>
+<li><strong>执行构造方法</strong>：调用<init>方法进行初始化。</init></li>
+</ul>
+<h2 id="为对象分配内存"><a href="#为对象分配内存" class="headerlink" title="为对象分配内存"></a>为对象分配内存</h2><ul>
+<li><strong>指针碰撞</strong>：适用于内存规整的堆，通过移动指针分配内存。</li>
+<li><strong>空闲列表</strong>：适用于内存不规整的堆，通过维护空闲列表分配内存。</li>
+</ul>
+<h2 id="处理并发安全问题"><a href="#处理并发安全问题" class="headerlink" title="处理并发安全问题"></a>处理并发安全问题</h2><ul>
+<li><strong>CAS</strong>：通过乐观锁的方式解决并发问题。</li>
+<li><strong>TLAB</strong>：每个线程分配一个本地缓冲区（Thread Local Allocation Buffer）进行内存分配。</li>
+</ul>
+<h2 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h2><ul>
+<li><strong>句柄访问</strong>：对象引用存储的是句柄地址，句柄中包含对象实例数据和类型数据的指针。</li>
+<li><strong>直接指针</strong>：对象引用存储的是对象实例的直接地址。</li>
+</ul>
+<h1 id="内存溢出异常"><a href="#内存溢出异常" class="headerlink" title="内存溢出异常"></a>内存溢出异常</h1><h2 id="Java会存在内存泄漏吗？请简单描述"><a href="#Java会存在内存泄漏吗？请简单描述" class="headerlink" title="Java会存在内存泄漏吗？请简单描述"></a>Java会存在内存泄漏吗？请简单描述</h2><p>Java中也会存在内存泄漏，例如，长生命周期对象持有短生命周期对象的引用，导致短生命周期对象无法被GC回收。</p>
+<h1 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h1><h2 id="简述Java垃圾回收机制"><a href="#简述Java垃圾回收机制" class="headerlink" title="简述Java垃圾回收机制"></a>简述Java垃圾回收机制</h2><p>Java的垃圾回收机制通过GC自动回收不再使用的对象，主要算法包括标记-清除、复制和标记-整理等。</p>
+<h2 id="GC是什么？为什么要GC"><a href="#GC是什么？为什么要GC" class="headerlink" title="GC是什么？为什么要GC"></a>GC是什么？为什么要GC</h2><p>GC（Garbage Collection）是垃圾回收的缩写，自动管理内存，防止内存泄漏，提高程序稳定性和性能。</p>
+<h2 id="垃圾回收的优点和原理。并考虑2种回收机制"><a href="#垃圾回收的优点和原理。并考虑2种回收机制" class="headerlink" title="垃圾回收的优点和原理。并考虑2种回收机制"></a>垃圾回收的优点和原理。并考虑2种回收机制</h2><ul>
+<li><strong>优点</strong>：自动内存管理，减少内存泄漏，提高开发效率。</li>
+<li><strong>标记-清除</strong>：标记所有存活对象，清除未标记的对象。</li>
+<li><strong>复制</strong>：将存活对象复制到新空间，清除旧空间。</li>
+</ul>
+<h2 id="垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？"><a href="#垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？" class="headerlink" title="垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？"></a>垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？</h2><p>垃圾回收器通过跟踪对象的引用链，回收不可达的对象。垃圾回收器不能马上回收内存，可通过<code>System.gc()</code>或<code>Runtime.getRuntime().gc()</code>主动通知进行垃圾回收。</p>
+<h2 id="Java中都有哪些引用类型？"><a href="#Java中都有哪些引用类型？" class="headerlink" title="Java中都有哪些引用类型？"></a>Java中都有哪些引用类型？</h2><ul>
+<li><strong>强引用</strong>：不会被GC回收。</li>
+<li><strong>软引用</strong>：内存不足时会被回收。</li>
+<li><strong>弱引用</strong>：在GC时会被回收。</li>
+<li><strong>虚引用</strong>：无法通过引用访问对象，仅用于监控对象的回收。</li>
+</ul>
+<h2 id="怎么判断对象是否可以被回收？"><a href="#怎么判断对象是否可以被回收？" class="headerlink" title="怎么判断对象是否可以被回收？"></a>怎么判断对象是否可以被回收？</h2><p>通过引用计数或可达性分析算法判断对象是否可达，不可达的对象可以被回收。</p>
+<h2 id="在Java中，对象什么时候可以被垃圾回收？"><a href="#在Java中，对象什么时候可以被垃圾回收？" class="headerlink" title="在Java中，对象什么时候可以被垃圾回收？"></a>在Java中，对象什么时候可以被垃圾回收？</h2><p>当对象没有任何强引用时，可以被垃圾回收。</p>
+<h2 id="JVM中的永久代中会发生垃圾回收吗？"><a href="#JVM中的永久代中会发生垃圾回收吗？" class="headerlink" title="JVM中的永久代中会发生垃圾回收吗？"></a>JVM中的永久代中会发生垃圾回收吗？</h2><p>在JDK 8之前，永久代中会发生垃圾回收，但频率较低。JDK 8以后，永久代被移除，替代为元空间（Metaspace）。</p>
+<h2 id="说一下JVM有哪些垃圾回收算法？"><a href="#说一下JVM有哪些垃圾回收算法？" class="headerlink" title="说一下JVM有哪些垃圾回收算法？"></a>说一下JVM有哪些垃圾回收算法？</h2><ul>
+<li><strong>标记-清除算法</strong>：标记存活对象，清除未标记对象。</li>
+<li><strong>复制算法</strong>：将存活对象复制到新空间，清除旧空间。</li>
+<li><strong>标记-整理算法</strong>：标记存活对象，将存活对象移动到一端，清除剩余空间。</li>
+<li><strong>分代收集算法</strong>：将堆分为新生代和老年代，分别使用不同的垃圾回收算法。</li>
+</ul>
+<h2 id="说一下JVM有哪些垃圾回收器？"><a href="#说一下JVM有哪些垃圾回收器？" class="headerlink" title="说一下JVM有哪些垃圾回收器？"></a>说一下JVM有哪些垃圾回收器？</h2><ul>
+<li><strong>Serial收集器</strong>：单线程收集，适用于单CPU环境。</li>
+<li><strong>Parallel收集器</strong>：多线程收集，适用于多CPU环境。</li>
+<li><strong>CMS收集器</strong>：低停顿时间的并发收集器，适用于低停顿需求的应用。</li>
+<li><strong>G1收集器</strong>：面向服务端应用，适用于大内存、多CPU环境。</li>
+</ul>
+<h2 id="详细介绍一下CMS垃圾回收器？"><a href="#详细介绍一下CMS垃圾回收器？" class="headerlink" title="详细介绍一下CMS垃圾回收器？"></a>详细介绍一下CMS垃圾回收器？</h2><ul>
+<li><strong>初始标记</strong>：标记GC Roots可达的对象，短暂停顿。</li>
+<li><strong>并发标记</strong>：标记所有可达对象，不停顿。</li>
+<li><strong>重新标记</strong>：修正并发标记期间的变动，短暂停顿。</li>
+<li><strong>并发清除</strong>：清除不可达对象，不停顿。</li>
+</ul>
+<h2 id="新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？"><a href="#新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？" class="headerlink" title="新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？"></a>新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？</h2><ul>
+<li><strong>新生代垃圾回收器</strong>：Serial、ParNew、Parallel Scavenge。特点是频繁回收、停顿时间短。</li>
+<li><strong>老年代垃圾回收器</strong>：Serial Old、CMS、Parallel Old。特点是回收频率低、停顿时间长。</li>
+</ul>
+<h2 id="简述分代垃圾回收器是怎么工作的？"><a href="#简述分代垃圾回收器是怎么工作的？" class="headerlink" title="简述分代垃圾回收器是怎么工作的？"></a>简述分代垃圾回收器是怎么工作的？</h2><p>分代垃圾回收器将堆划分为新生代和老年代。新生代对象生命周期短，频繁回收；老年代对象生命周期长，较少回收。回收时，新生代使用复制算法，老年代使用标记-整理或CMS。</p>
+<h1 id="内存分配策略"><a href="#内存分配策略" class="headerlink" title="内存分配策略"></a>内存分配策略</h1><h2 id="简述java内存分配与回收策略以及Minor-GC和Major-GC"><a href="#简述java内存分配与回收策略以及Minor-GC和Major-GC" class="headerlink" title="简述java内存分配与回收策略以及Minor GC和Major GC"></a>简述java内存分配与回收策略以及Minor GC和Major GC</h2><ul>
+<li><strong>内存分配</strong>：对象优先在Eden区分配，大对象直接进入老年代，长期存活对象进入老年代。</li>
+<li><strong>Minor GC</strong>：针对新生代的垃圾回收，频繁但耗时短。</li>
+<li><strong>Major GC</strong>：针对老年代的垃圾回收，频率低但耗时长。</li>
+</ul>
+<h2 id="对象优先在Eden区分配"><a href="#对象优先在Eden区分配" class="headerlink" title="对象优先在Eden区分配"></a>对象优先在Eden区分配</h2><p>大多数新创建的对象在Eden区分配，当Eden区满时触发Minor GC，将存活对象移到Survivor区。</p>
+<h2 id="大对象直接进入老年代"><a href="#大对象直接进入老年代" class="headerlink" title="大对象直接进入老年代"></a>大对象直接进入老年代</h2><p>避免在新生代频繁复制大对象，减少内存复制开销。</p>
+<h2 id="长期存活对象将进入老年代"><a href="#长期存活对象将进入老年代" class="headerlink" title="长期存活对象将进入老年代"></a>长期存活对象将进入老年代</h2><p>对象在Survivor区经历多次GC后，晋升到老年代。</p>
+<h1 id="虚拟机类加载机制"><a href="#虚拟机类加载机制" class="headerlink" title="虚拟机类加载机制"></a>虚拟机类加载机制</h1><blockquote>
+<p>Java类加载机制是Java虚拟机（JVM）的核心组成部分之一，负责在运行时加载、链接和初始化类。通俗的来讲就是每个.java文件经过javac编译工具编译后生成.class文件，类加载机制就是把这些.class文件中的二进制读到内存中，并对数据进行链接（验证、准备、解析）和初始化，初始化完成后，会在方法区保存一份该类的元数据，同时在堆中创建一个与之对应的<code>Class</code>对象，该<code>Class</code>对象包含了该类的相关信息。</p>
+</blockquote>
+<h2 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h2><p>加载（Loading）-&gt; 验证（Verification）-&gt; 准备（Preparation）-&gt; 解析（Resolution）-&gt; 初始化（Initialization）-&gt; 使用（Usage）-&gt; 卸载（unloading）</p>
+<p>1.加载指将字节码文件加载到JVM</p>
+<p>2.验证指是否符合JVM虚拟机的规范</p>
+<p>3.准备指给静态变量分配内存空间，并设置置默认初始值</p>
+<p>4.解析指将类的符号引用转换为直接引用，让虚拟机可以找到对应的内存地址</p>
+<p>5.初始化指对静态代码块和静态变量进行初始化操作</p>
+<p>6.使用指可以被程序其他的类调用或者说直接引用</p>
+<p>7.卸载指在java虚拟机中，如果某个类不再使用，那就认为这个类是无用的，可以被卸载。</p>
+<h2 id="类什么时候会加载"><a href="#类什么时候会加载" class="headerlink" title="类什么时候会加载"></a>类什么时候会加载</h2><p>1.创建类的实例：当程序中使用<code>new</code>关键字创建类的实例时，对应的类会被加载。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">MyClass</span> obj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>2.<strong>访问类的静态变量或静态方法</strong>：当程序中访问类的静态变量或静态方法时，对应的类也会被加载。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">MyClass</span><span class="token punctuation">.</span><span class="token function">staticMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>3.<strong>通过反射动态加载类</strong>：通过Java的反射机制，可以在运行时动态加载类。例如：**</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"com.example.MyClass"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>4.<strong>启动应用程序时的入口类加载</strong>：当启动Java应用程序时，会指定一个入口类，该入口类会被加载并执行<code>main()</code>方法。这也会触发入口类所依赖的其他类的加载。</p>
+<p>5.<strong>继承</strong>：当一个类继承了另一个类时，子类的加载会导致父类也被加载，除非父类已经被加载过。</p>
+<p>6.<strong>实现接口</strong>：当一个类实现了某个接口时，接口中定义的常量会被加载。</p>
+<h2 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h2><img src="https://telegraph-image-2ni.pages.dev/file/2dded58d88ad824bb04c3.png" style="zoom:33%;">
+
+<p>类的加载过程有五个阶段，其中验证、准备、解析这个子阶段属于链接阶段。下面详细说下，类的加载过程的每个阶段</p>
+<p>1.<strong>加载</strong>：将类的字节码被加载到JVM中。包括从文件系统或者网络中读取.class文件，并将其转换为内存中的二进制数据。在加载阶段，还会为类创建一个<code>java.lang.Class</code>对象。</p>
+<p>2.<strong>验证</strong>：确保类的字节码符合JVM规范，不会导致安全问题或运行时异常。</p>
+<p>3.<strong>准备</strong>：为类的静态变量分配内存空间，并设置默认初始值。</p>
+<p>4.<strong>解析</strong>：将类中的符号引用转换为直接引用，使得虚拟机能够找到对应的内存地址。</p>
+<p>5.<strong>初始化</strong>：在初始化阶段，执行类的静态初始化器（static initializer）和静态变量初始化。静态初始化器是类中的静态代码块，用于初始化类的静态成员变量或执行其他静态初始化操作。</p>
+<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><blockquote>
+<p>在<strong>加载</strong>阶段，类加载器通过类的全限定名，获取该类字节流数据。</p>
+</blockquote>
+<p>1.<strong>启动类加载器（Bootstrap Class Loader）：</strong>负责加载jre\lib 目录下的jar，由C++实现，不是ClassLoader子类。</p>
+<p>2.<strong>拓展类加载器（Extension Class Loader）：</strong>负责加载Java平台中扩展功能的一些jar包，包括jre\lib\ext 目录中 jar包。由Java代码实现。</p>
+<p>3.<strong>应用程序类加载器（Application Class Loader）：</strong>我们自己开发的应用程序，就是由它进行加载的，负责加载ClassPath路径下所有jar包。</p>
+<p>4.<strong>自定义类加载器（Custom Class Loader）</strong>：可以加载任何类，包括Java标准库中的类、第三方库中的类以及自己编写的类。其加载范围和方式可以根据需求进行灵活定制。</p>
+<img src="https://telegraph-image-2ni.pages.dev/file/e1208860284124c277d23.png" style="zoom: 50%;">
+
+
+
+
+
+<h2 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h2><blockquote>
+<p>简单说就是爹能干的，儿子肯定不干，就是任何一个类加载器在接到一个类的加载请求时，都会先让其父类进行加载，只有父类无法加载（或者没有父类）的情况下，才尝试自己加载。</p>
+</blockquote>
+<ol>
+<li><strong>安全性（Security）</strong>：双亲委派模型可以确保Java核心类库不会被替换或篡改，从而提高了Java程序的安全性。由于Java核心类库由启动类加载器加载，且无法被覆盖，因此不容易受到恶意攻击。</li>
+<li><strong>避免类的重复加载（Avoidance of Duplicate Loading）</strong>：双亲委派模型可以避免同一个类被不同的类加载器加载多次，从而节省了内存空间并减少了资源浪费。</li>
+<li><strong>统一标准（Standardization）</strong>：双亲委派模型提供了一个统一的类加载机制，使得Java应用程序具有一致的行为。无论是在Java虚拟机的实现上，还是在开发Java应用程序时，都能够遵循同样的加载规则，减少了不必要的复杂性和混乱。</li>
+<li><strong>类的隔离性（Isolation）</strong>：双亲委派模型通过委派链的方式实现了类的隔离，每个类加载器只负责加载自己能够访问到的类，从而有效地隔离了不同模块或组件的类，防止了类之间的相互干扰和冲突。</li>
+<li><strong>性能优化（Performance Optimization）</strong>：双亲委派模型在加载类时会先检查父类加载器是否已经加载过该类，如果已经加载过，则直接返回已加载的类，从而减少了重复加载和搜索的时间，提高了加载性能。</li>
+</ol>
+<h2 id="自定义类加载器"><a href="#自定义类加载器" class="headerlink" title="自定义类加载器"></a>自定义类加载器</h2><p>自定义类加载器的好处：</p>
+<ol>
+<li><strong>动态更新（Dynamic Updating）</strong>：自定义类加载器可以实现动态更新类的功能。例如，当应用程序运行时，可以检测到新的类文件并加载，从而实现热部署或动态扩展应用程序的功能。</li>
+<li><strong>类的加密解密（Class Encryption and Decryption）</strong>：自定义类加载器可以在加载类文件时进行解密操作，从而保护类文件的安全性。通过在加载过程中实现解密逻辑，可以防止类文件被恶意篡改或者盗用。</li>
+<li><strong>加载非标准文件格式（Loading Non-Standard File Formats）</strong>：自定义类加载器可以加载非标准的类文件格式，例如从数据库、网络或者自定义的存储介质中加载类文件。</li>
+<li><strong>从特定位置加载类（Loading Classes from Specific Locations）</strong>：自定义类加载器可以从特定的位置加载类文件，例如从特定的目录、JAR文件或者远程服务器加载类文件。</li>
+<li><strong>实现类加载策略（Implementing Class Loading Strategies）</strong>：自定义类加载器可以根据特定的策略加载类文件，例如按需加载、按版本加载或者按条件加载。</li>
+<li><strong>解决类加载冲突（Resolving Class Loading Conflicts）</strong>：自定义类加载器可以解决类加载冲突问题，例如当多个模块中存在相同类名但不同版本的类文件时，可以使用自定义类加载器实现类隔离和版本管理。</li>
+<li><strong>实现类加载的权限控制（Implementing Class Loading Permissions）</strong>：自定义类加载器可以实现对类加载的权限控制，例如根据用户身份或者访问权限加载不同的类文件。</li>
+<li><strong>实现类的热替换（Implementing Class Hot Swapping）</strong>：自定义类加载器可以实现类的热替换功能，即在运行时替换正在使用的类，而不需要重启应用程序。</li>
+</ol>
+<blockquote>
+<p>下面我们使用自定义的类加载器加载指定的类，并通过反射调用类的方法。</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CustomClassLoader</span> <span class="token keyword">extends</span> <span class="token class-name">ClassLoader</span><span class="token punctuation">&#123;</span>
+    <span class="token comment">// 定义加载类的路径</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> classPath<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">CustomClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">CustomClassLoader</span><span class="token punctuation">(</span><span class="token class-name">String</span> classPath<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>classPath <span class="token operator">=</span> classPath<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> <span class="token function">findClass</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ClassNotFoundException</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 读取指定路径下的类文件的二进制数据</span>
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data <span class="token operator">=</span> <span class="token function">loadClassData</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 调用defineClass方法将二进制数据转换为Class对象</span>
+            <span class="token keyword">return</span> <span class="token function">defineClass</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> data<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> data<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">ClassNotFoundException</span><span class="token punctuation">(</span><span class="token string">"Class "</span> <span class="token operator">+</span> name <span class="token operator">+</span> <span class="token string">" not found."</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment">// 加载类文件的二进制数据</span>
+    <span class="token keyword">private</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">loadClassData</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> fileName <span class="token operator">=</span> classPath <span class="token operator">+</span> <span class="token class-name">File</span><span class="token punctuation">.</span>separatorChar <span class="token operator">+</span> name<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token char">'.'</span><span class="token punctuation">,</span> <span class="token class-name">File</span><span class="token punctuation">.</span>separatorChar<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">".class"</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">InputStream</span> inputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>fileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+             <span class="token class-name">ByteArrayOutputStream</span> outputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">int</span> len<span class="token punctuation">;</span>
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> buffer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token number">4096</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>len <span class="token operator">=</span> inputStream<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                outputStream<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">return</span> outputStream<span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 自定义类加载器实例化</span>
+        <span class="token class-name">CustomClassLoader</span> classLoader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CustomClassLoader</span><span class="token punctuation">(</span><span class="token string">"D:\\Project\\JAVA\\src\\com.example.CustomClassLoader.class"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 使用自定义类加载器加载指定类</span>
+        <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> clazz <span class="token operator">=</span> classLoader<span class="token punctuation">.</span><span class="token function">loadClass</span><span class="token punctuation">(</span><span class="token string">"com.example.CustomClassLoader"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 创建实例</span>
+        <span class="token class-name">Object</span> instance <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 调用方法</span>
+        <span class="token class-name">Method</span> method <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"sayHello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>instance<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"say hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="类加载器的作用域"><a href="#类加载器的作用域" class="headerlink" title="类加载器的作用域"></a>类加载器的作用域</h2><blockquote>
+<p>类加载器的作用域（Scope）指的是类加载器加载类的可见范围和生命周期管理。类加载器的作用域决定了类的可见性、类的隔离性以及类的生命周期。</p>
+</blockquote>
+<ol>
+<li><strong>可见性（Visibility）</strong>：每个类加载器实例都有自己的加载路径和类加载命名空间，它只能看到自己加载的类和其父类加载器加载的类。因此，类加载器的可见性决定了哪些类对于特定的类加载器是可见的。</li>
+<li><strong>隔离性（Isolation）</strong>：类加载器的隔离性确保了每个类加载器实例加载的类相互之间是隔离的，即同一个类在不同的类加载器实例中被加载时，会被认为是不同的类。这种隔离性保护了应用程序的安全性和稳定性，防止不同模块或组件之间的类产生冲突和干扰。</li>
+<li><strong>生命周期管理（Lifecycle Management）</strong>：类加载器的生命周期管理包括类加载器的创建、使用和销毁。在Java应用程序中，类加载器的生命周期通常与应用程序的生命周期相对应。例如，在应用程序启动时创建类加载器实例，在应用程序结束时销毁类加载器实例。</li>
+</ol>
+<h1 id="JVM调优"><a href="#JVM调优" class="headerlink" title="JVM调优"></a>JVM调优</h1><h2 id="说一下JVM调优的工具？"><a href="#说一下JVM调优的工具？" class="headerlink" title="说一下JVM调优的工具？"></a>说一下JVM调优的工具？</h2><p>常用的JVM调优工具包括：</p>
+<ul>
+<li><strong>jstat</strong>：监控JVM内存和垃圾回收情况。</li>
+<li><strong>jmap</strong>：生成堆转储快照，分析内存使用情况。</li>
+<li><strong>jstack</strong>：生成线程快照，分析线程状态。</li>
+<li><strong>VisualVM</strong>：图形化界面监控JVM性能。</li>
+</ul>
+<h2 id="常用的JVM调优的参数都有哪些？"><a href="#常用的JVM调优的参数都有哪些？" class="headerlink" title="常用的JVM调优的参数都有哪些？"></a>常用的JVM调优的参数都有哪些？</h2><ul>
+<li><strong>-Xms</strong>：设置初始堆大小。</li>
+<li><strong>-Xmx</strong>：设置最大堆大小。</li>
+<li><strong>-Xmn</strong>：设置新生代大小。</li>
+<li><strong>-XX:PermSize</strong>：设置初始永久代大小（JDK 8前）。</li>
+<li><strong>-XX:MaxPermSize</strong>：设置最大永久代大小（JDK 8前）。</li>
+<li><strong>-XX:MetaspaceSize</strong>：设置初始元空间大小（JDK 8后）。</li>
+<li><strong>-XX:MaxMetaspaceSize</strong>：设置最大元空间大小（JDK 8后）。</li>
+<li><strong>-XX:+UseG1GC</strong>：使用G1垃圾回收器。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/post/SpringMVC%E7%90%86%E8%AE%BA.html" rel="prev" title="SpringMvc理论">
+      <i class="fa fa-chevron-left"></i> SpringMvc理论
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/post/JWT%E5%AE%9E%E8%B7%B5.html" rel="next" title="基于SpringBoot+SpringSecurity+JWT认证实践">
+      基于SpringBoot+SpringSecurity+JWT认证实践 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">JVM基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM%E7%9A%84%E4%B8%BB%E8%A6%81%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86%E5%8F%8A%E5%85%B6%E4%BD%9C%E7%94%A8"><span class="nav-number">1.1.</span> <span class="nav-text">JVM的主要组成部分及其作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA"><span class="nav-number">1.2.</span> <span class="nav-text">JVM运行时数据区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D"><span class="nav-number">1.3.</span> <span class="nav-text">深拷贝和浅拷贝</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.4.</span> <span class="nav-text">堆和栈的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%9F%E5%88%97%E5%92%8C%E6%A0%88%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">1.5.</span> <span class="nav-text">队列和栈是什么？有什么区别？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HotSpot%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AF%B9%E8%B1%A1%E6%8E%A2%E7%A7%98"><span class="nav-number">2.</span> <span class="nav-text">HotSpot虚拟机对象探秘</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-number">2.1.</span> <span class="nav-text">对象的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98"><span class="nav-number">2.2.</span> <span class="nav-text">为对象分配内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="nav-number">2.3.</span> <span class="nav-text">处理并发安全问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D"><span class="nav-number">2.4.</span> <span class="nav-text">对象的访问定位</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA%E5%BC%82%E5%B8%B8"><span class="nav-number">3.</span> <span class="nav-text">内存溢出异常</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java%E4%BC%9A%E5%AD%98%E5%9C%A8%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E5%90%97%EF%BC%9F%E8%AF%B7%E7%AE%80%E5%8D%95%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.1.</span> <span class="nav-text">Java会存在内存泄漏吗？请简单描述</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">垃圾收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E8%BF%B0Java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6"><span class="nav-number">4.1.</span> <span class="nav-text">简述Java垃圾回收机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81GC"><span class="nav-number">4.2.</span> <span class="nav-text">GC是什么？为什么要GC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%9A%84%E4%BC%98%E7%82%B9%E5%92%8C%E5%8E%9F%E7%90%86%E3%80%82%E5%B9%B6%E8%80%83%E8%99%912%E7%A7%8D%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6"><span class="nav-number">4.3.</span> <span class="nav-text">垃圾回收的优点和原理。并考虑2种回收机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E5%8F%AF%E4%BB%A5%E9%A9%AC%E4%B8%8A%E5%9B%9E%E6%94%B6%E5%86%85%E5%AD%98%E5%90%97%EF%BC%9F%E6%9C%89%E4%BB%80%E4%B9%88%E5%8A%9E%E6%B3%95%E4%B8%BB%E5%8A%A8%E9%80%9A%E7%9F%A5%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BF%9B%E8%A1%8C%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%EF%BC%9F"><span class="nav-number">4.4.</span> <span class="nav-text">垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java%E4%B8%AD%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%EF%BC%9F"><span class="nav-number">4.5.</span> <span class="nav-text">Java中都有哪些引用类型？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E5%8F%AF%E4%BB%A5%E8%A2%AB%E5%9B%9E%E6%94%B6%EF%BC%9F"><span class="nav-number">4.6.</span> <span class="nav-text">怎么判断对象是否可以被回收？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8Java%E4%B8%AD%EF%BC%8C%E5%AF%B9%E8%B1%A1%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%8F%AF%E4%BB%A5%E8%A2%AB%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%EF%BC%9F"><span class="nav-number">4.7.</span> <span class="nav-text">在Java中，对象什么时候可以被垃圾回收？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM%E4%B8%AD%E7%9A%84%E6%B0%B8%E4%B9%85%E4%BB%A3%E4%B8%AD%E4%BC%9A%E5%8F%91%E7%94%9F%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%90%97%EF%BC%9F"><span class="nav-number">4.8.</span> <span class="nav-text">JVM中的永久代中会发生垃圾回收吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E4%B8%80%E4%B8%8BJVM%E6%9C%89%E5%93%AA%E4%BA%9B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95%EF%BC%9F"><span class="nav-number">4.9.</span> <span class="nav-text">说一下JVM有哪些垃圾回收算法？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E4%B8%80%E4%B8%8BJVM%E6%9C%89%E5%93%AA%E4%BA%9B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%EF%BC%9F"><span class="nav-number">4.10.</span> <span class="nav-text">说一下JVM有哪些垃圾回收器？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8BCMS%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%EF%BC%9F"><span class="nav-number">4.11.</span> <span class="nav-text">详细介绍一下CMS垃圾回收器？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%94%9F%E4%BB%A3%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E5%92%8C%E8%80%81%E5%B9%B4%E4%BB%A3%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">4.12.</span> <span class="nav-text">新生代垃圾回收器和老年代垃圾回收器都有哪些？有什么区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E8%BF%B0%E5%88%86%E4%BB%A3%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%98%AF%E6%80%8E%E4%B9%88%E5%B7%A5%E4%BD%9C%E7%9A%84%EF%BC%9F"><span class="nav-number">4.13.</span> <span class="nav-text">简述分代垃圾回收器是怎么工作的？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="nav-number">5.</span> <span class="nav-text">内存分配策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E8%BF%B0java%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6%E7%AD%96%E7%95%A5%E4%BB%A5%E5%8F%8AMinor-GC%E5%92%8CMajor-GC"><span class="nav-number">5.1.</span> <span class="nav-text">简述java内存分配与回收策略以及Minor GC和Major GC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E4%BC%98%E5%85%88%E5%9C%A8Eden%E5%8C%BA%E5%88%86%E9%85%8D"><span class="nav-number">5.2.</span> <span class="nav-text">对象优先在Eden区分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E5%AF%B9%E8%B1%A1%E7%9B%B4%E6%8E%A5%E8%BF%9B%E5%85%A5%E8%80%81%E5%B9%B4%E4%BB%A3"><span class="nav-number">5.3.</span> <span class="nav-text">大对象直接进入老年代</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%BF%E6%9C%9F%E5%AD%98%E6%B4%BB%E5%AF%B9%E8%B1%A1%E5%B0%86%E8%BF%9B%E5%85%A5%E8%80%81%E5%B9%B4%E4%BB%A3"><span class="nav-number">5.4.</span> <span class="nav-text">长期存活对象将进入老年代</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6"><span class="nav-number">6.</span> <span class="nav-text">虚拟机类加载机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">6.1.</span> <span class="nav-text">类的生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BC%9A%E5%8A%A0%E8%BD%BD"><span class="nav-number">6.2.</span> <span class="nav-text">类什么时候会加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B"><span class="nav-number">6.3.</span> <span class="nav-text">类的加载过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">6.4.</span> <span class="nav-text">类加载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B"><span class="nav-number">6.5.</span> <span class="nav-text">双亲委派模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">6.6.</span> <span class="nav-text">自定义类加载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">6.7.</span> <span class="nav-text">类加载器的作用域</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM%E8%B0%83%E4%BC%98"><span class="nav-number">7.</span> <span class="nav-text">JVM调优</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E4%B8%80%E4%B8%8BJVM%E8%B0%83%E4%BC%98%E7%9A%84%E5%B7%A5%E5%85%B7%EF%BC%9F"><span class="nav-number">7.1.</span> <span class="nav-text">说一下JVM调优的工具？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84JVM%E8%B0%83%E4%BC%98%E7%9A%84%E5%8F%82%E6%95%B0%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">7.2.</span> <span class="nav-text">常用的JVM调优的参数都有哪些？</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">potter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/BJPotter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;BJPotter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/liuzhi0531@gmail.com" title="E-Mail → liuzhi0531@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">potter</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

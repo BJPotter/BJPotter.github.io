@@ -165,1102 +165,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/webhook.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/webhook.html" class="post-title-link" itemprop="url">webhook</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Webhook基础"><a href="#Webhook基础" class="headerlink" title="Webhook基础"></a><strong>Webhook基础</strong></h1><blockquote>
-<p>Webhook是一种通过HTTP协议将实时数据传输到指定URL的机制。与传统API不同，它不需要客户端主动轮询服务器以获取更新，而是由服务器主动向客户端推送数据。这种设计使得Webhook非常适合用于实时通知、事件驱动的应用和集成不同系统之间的数据。</p>
-</blockquote>
-<h2 id="WebHook与传统API的区别"><a href="#WebHook与传统API的区别" class="headerlink" title="WebHook与传统API的区别"></a><strong>WebHook与传统API的区别</strong></h2><ul>
-<li><strong>触发方式</strong>：传统API是由客户端主动发起请求来获取数据或执行操作，而Webhook是由服务端主动向客户端推送数据。</li>
-<li><strong>实时性</strong>：Webhook可以实现实时通知，当事件发生时立即推送数据给客户端，而传统API则需要客户端定期轮询或手动发起请求来获取数据，可能存在一定的延迟。</li>
-<li><strong>节省资源</strong>：使用Webhook可以减少无效请求和服务器负载，因为只有在事件发生时才会触发数据传输，而传统API可能会频繁发送不必要的请求。</li>
-<li><strong>适用场景</strong>：Webhook适用于需要实时数据更新和事件驱动的场景，例如实时通知、即时聊天等，而传统API更适用于按需获取数据或执行操作的场景。</li>
-</ul>
-<img src="https://telegraph-image-2ni.pages.dev/file/4f4a8d0b71e6f3f828444.png" style="zoom:50%;">
-
-<h2 id="Webhook的工作原理"><a href="#Webhook的工作原理" class="headerlink" title="Webhook的工作原理"></a>Webhook的工作原理</h2><ol>
-<li><strong>注册Webhook</strong>：在目标服务上，客户端需要注册一个Webhook，通常是通过提供一个URL来告知目标服务在发生特定事件时向该URL发送数据。</li>
-<li><strong>事件触发</strong>：当目标服务上发生了注册的事件，比如数据更新、状态更改等，服务会触发Webhook，即向注册的URL发送HTTP请求。</li>
-<li><strong>HTTP请求</strong>：服务向注册的URL发送HTTP请求，通常是一个POST请求。这个请求会包含一些元数据，比如事件类型、发生时间等，以及相关的数据，比如更新的数据内容。这些数据通常以JSON格式或其他常见的数据格式进行传输。</li>
-<li><strong>客户端接收请求</strong>：客户端（Webhook的接收端）接收到这个HTTP请求后，需要解析其中的数据。这可以通过读取请求体中的内容来完成。客户端应该验证请求的来源和完整性，以确保安全性。</li>
-<li><strong>处理数据</strong>：一旦客户端解析了请求中的数据，它可以根据需要进行进一步的处理。这可能涉及将数据存储到数据库中、更新应用程序的状态、发送通知给用户等等。</li>
-<li><strong>响应</strong>：处理完数据后，客户端需要向目标服务发送一个响应，通常是一个HTTP状态码。这个响应可以告知目标服务数据是否已经成功接收和处理。通常情况下，目标服务不会对这个响应做出太多的处理，但一些服务可能会根据响应来判断是否继续尝试发送数据。</li>
-<li><strong>错误处理</strong>：在整个过程中，客户端需要注意处理可能出现的错误，比如网络连接问题、数据格式错误等。一些常见的错误处理方式包括记录错误日志、发送警报通知等。</li>
-</ol>
-<h1 id="Java实现WebHook"><a href="#Java实现WebHook" class="headerlink" title="Java实现WebHook"></a><strong>Java实现WebHook</strong></h1><h2 id="WebHookClient"><a href="#WebHookClient" class="headerlink" title="WebHookClient"></a>WebHookClient</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpExchange</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpHandler</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>net<span class="token punctuation">.</span>httpserver<span class="token punctuation">.</span></span><span class="token class-name">HttpServer</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">InputStream</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">OutputStream</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">InetSocketAddress</span></span><span class="token punctuation">;</span>
-
-<span class="token comment">/**
- * Author: Zhi Liu
- * Date: 2024/2/7 14:09
- * Contact: liuzhi0531@gmail.com
- * Desc: webhook客户端测试类
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WebhookClient</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">int</span> port <span class="token operator">=</span> <span class="token number">8000</span><span class="token punctuation">;</span> <span class="token comment">// 定义服务器端口号</span>
-        <span class="token class-name">HttpServer</span> server <span class="token operator">=</span> <span class="token class-name">HttpServer</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InetSocketAddress</span><span class="token punctuation">(</span>port<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 创建HTTP服务器实例</span>
-        server<span class="token punctuation">.</span><span class="token function">createContext</span><span class="token punctuation">(</span><span class="token string">"/webhook"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">WebhookHandler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 设置请求处理程序</span>
-        server<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 启动服务器</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Webhook 服务器已启动，监听端口 "</span> <span class="token operator">+</span> port<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">WebhookHandler</span> <span class="token keyword">implements</span> <span class="token class-name">HttpHandler</span> <span class="token punctuation">&#123;</span>
-        <span class="token annotation punctuation">@Override</span>
-        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handle</span><span class="token punctuation">(</span><span class="token class-name">HttpExchange</span> exchange<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"POST"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>exchange<span class="token punctuation">.</span><span class="token function">getRequestMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                <span class="token class-name">InputStream</span> requestBody <span class="token operator">=</span> exchange<span class="token punctuation">.</span><span class="token function">getRequestBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 获取请求体</span>
-                <span class="token comment">// 读取请求体中的数据</span>
-                <span class="token class-name">StringBuilder</span> requestData <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token keyword">int</span> byteRead<span class="token punctuation">;</span>
-                <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>byteRead <span class="token operator">=</span> requestBody<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                    requestData<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span> byteRead<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token punctuation">&#125;</span>
-                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"收到Webhook请求：\n"</span> <span class="token operator">+</span> requestData<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-                <span class="token comment">// 响应webhook服务端</span>
-                <span class="token class-name">String</span> response <span class="token operator">=</span> <span class="token string">"Webhook 请求已收到"</span><span class="token punctuation">;</span>
-                exchange<span class="token punctuation">.</span><span class="token function">sendResponseHeaders</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">,</span> response<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token class-name">OutputStream</span> responseBody <span class="token operator">=</span> exchange<span class="token punctuation">.</span><span class="token function">getResponseBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                responseBody<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                responseBody<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-                <span class="token comment">// 如果不是POST请求，返回405 Method Not Allowed</span>
-                exchange<span class="token punctuation">.</span><span class="token function">sendResponseHeaders</span><span class="token punctuation">(</span><span class="token number">405</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="WebHookServer"><a href="#WebHookServer" class="headerlink" title="WebHookServer"></a>WebHookServer</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">BufferedReader</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">InputStreamReader</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">OutputStream</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">HttpURLConnection</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">URL</span></span><span class="token punctuation">;</span>
-
-<span class="token comment">/**
- * Author: Zhi Liu
- * Date: 2024/2/7 14:15
- * Contact: liuzhi0531@gmail.com
- * Desc:
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WebhookServer</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">String</span> url <span class="token operator">=</span> <span class="token string">"http://localhost:8000/webhook"</span><span class="token punctuation">;</span>
-        <span class="token class-name">String</span> postData <span class="token operator">=</span> <span class="token string">"&#123;hello,world&#125;"</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-            <span class="token function">sendPostRequest</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> postData<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">sendPostRequest</span><span class="token punctuation">(</span><span class="token class-name">String</span> url<span class="token punctuation">,</span> <span class="token class-name">String</span> postData<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">URL</span> urlObj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">URL</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">HttpURLConnection</span> connection <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">HttpURLConnection</span><span class="token punctuation">)</span> urlObj<span class="token punctuation">.</span><span class="token function">openConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 设置请求方法为POST</span>
-        connection<span class="token punctuation">.</span><span class="token function">setRequestMethod</span><span class="token punctuation">(</span><span class="token string">"POST"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 设置请求头部信息</span>
-        connection<span class="token punctuation">.</span><span class="token function">setRequestProperty</span><span class="token punctuation">(</span><span class="token string">"Content-Type"</span><span class="token punctuation">,</span> <span class="token string">"application/json"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 允许向服务器输出内容</span>
-        connection<span class="token punctuation">.</span><span class="token function">setDoOutput</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 写入请求数据</span>
-        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">OutputStream</span> outputStream <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">getOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> postDataBytes <span class="token operator">=</span> postData<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            outputStream<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>postDataBytes<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            outputStream<span class="token punctuation">.</span><span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-
-        <span class="token comment">// 获取客户端的响应状态码</span>
-        <span class="token keyword">int</span> responseCode <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">getResponseCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Response Code: "</span> <span class="token operator">+</span> responseCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 读取响应内容</span>
-        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">BufferedReader</span> reader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span>connection<span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token class-name">StringBuilder</span> response <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token class-name">String</span> line<span class="token punctuation">;</span>
-            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>line <span class="token operator">=</span> reader<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                response<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Response Content: "</span> <span class="token operator">+</span> response<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token comment">// 关闭连接</span>
-        connection<span class="token punctuation">.</span><span class="token function">disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<ol>
-<li><p><strong>阅读相关文档</strong>：</p>
-<ul>
-<li>查阅Webhook服务提供商的文档，了解如何创建和管理Webhook。</li>
-<li>阅读关于HTTP请求和响应的文档，以便了解如何处理Webhook请求和发送响应。</li>
-</ul>
-</li>
-<li><p><strong>编写代码</strong>：</p>
-<ul>
-<li>编写一个简单的Webhook接收端，用于接收来自外部服务的HTTP请求。</li>
-<li>编写处理Webhook请求的代码，例如解析请求、处理数据、执行逻辑等。</li>
-</ul>
-</li>
-<li><p><strong>测试和调试</strong>：</p>
-<ul>
-<li>使用工具（例如Postman）测试Webhook端点，确保它能够正确处理来自外部服务的请求。</li>
-<li>调试代码，解决可能出现的问题和错误。</li>
-</ul>
-</li>
-<li><p><strong>进阶学习</strong>：</p>
-<ul>
-<li>学习如何实现安全性和可靠性，例如使用HTTPS、认证、重试机制等。</li>
-<li>探索如何处理各种类型的Webhook事件，例如GitHub的push事件、Stripe的支付通知等。</li>
-</ul>
-</li>
-<li><p><strong>实践项目</strong>：</p>
-<ul>
-<li>开发一个实际的项目，其中包括使用Webhook与其他服务进行集成。</li>
-<li>参与开源项目，贡献Webhook相关的代码或解决问题。</li>
-</ul>
-</li>
-<li><p><strong>不断更新知识</strong>：</p>
-<ul>
-<li>持续关注Webhook领域的新发展和最佳实践。</li>
-<li>参加相关的线上或线下培训课程，与其他开发者交流经验。</li>
-</ul>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%BA%8C-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%BA%8C-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1.html" class="post-title-link" itemprop="url">java基础-面向对象</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="什么是面向对象"><a href="#什么是面向对象" class="headerlink" title="什么是面向对象"></a>什么是面向对象</h1><p>面向对象编程，OOP（Object Oriented Programming）它是一种编程思想，把数据和行为封装成一个对象，以模拟现实世界的实体和交互。</p>
-<h1 id="如何区分面向对象和面向过程"><a href="#如何区分面向对象和面向过程" class="headerlink" title="如何区分面向对象和面向过程"></a>如何区分面向对象和面向过程</h1><ul>
-<li>面向过程：将问题看作一系列步骤，通过一个个方法执行解决问题，重点在于算法和流程控制。</li>
-<li>面向对象：将问题拆分成一系列对象，这些对象有自己的属性和方法，通过对象间方法调用解决问题，重点在于封装、继承和多态，以及对象之间的关系。</li>
-</ul>
-<h1 id="对象实例和对象引用的区别"><a href="#对象实例和对象引用的区别" class="headerlink" title="对象实例和对象引用的区别"></a>对象实例和对象引用的区别</h1><ul>
-<li>对象实例：在程序运行时new关键字创建的对象，存储在堆内存中，具有属性和方法。</li>
-<li>对象引用：指向对象实例的变量，存储在栈中，它存储的是对象实例内存地址。</li>
-</ul>
-<blockquote>
-<p>一般说的对象相等指的是对象实例相等，指的是两个对象实例在内存中的内容是一致的，引用相等指的两个或多个引用指向同一个对象实例，比较的是内存地址。</p>
-<ul>
-<li>一个对象引用可以指向0个或者1个对象实例</li>
-<li>一个对象实例可以被多个对象引用指向</li>
-</ul>
-</blockquote>
-<h1 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h1><blockquote>
-<p>构造方法（Constructor）是一种特殊类型的方法，用于在创建对象实例时初始化对象的状态。构造方法的名称必须与类名相同，并且没有返回类型（甚至不是void），因为它们不返回任何值。</p>
-<p>如果一个类没有明确定义构造方法，编译器会自动生成一个默认的无参构造方法，该构造方法仅仅执行了一些默认的初始化操作。但是，如果你显式地定义了构造方法，编译器就不会再生成默认构造方法，所以需要注意是否需要手动提供无参构造方法。</p>
-</blockquote>
-<ol>
-<li><strong>初始化对象</strong>：构造方法用于初始化新创建的对象实例的状态。它们通常会对对象的属性进行初始化，以确保对象在创建后处于一种合适的初始状态。</li>
-<li><strong>与类名相同</strong>：构造方法的名称必须与类名完全相同，包括大小写。这是为了告诉编译器这个方法是一个构造方法。</li>
-<li><strong>没有返回类型</strong>：构造方法没有返回类型，甚至不是void。这是因为构造方法的目的不是返回值，而是初始化对象实例。</li>
-<li><strong>可以重载</strong>：一个类可以有多个构造方法，它们可以根据参数列表的不同进行重载。这使得我们可以根据不同的需求来创建对象实例。</li>
-</ol>
-<h1 id="重写与重载"><a href="#重写与重载" class="headerlink" title="重写与重载"></a>重写与重载</h1><p>重写（Override）：子类重写父类的方法，但是方法的名称、参数列表、返回类型和父类保持一致，只改变方法体的内容，实现多态性。</p>
-<p>重载（Overload）：同一个类中定义多个有相同名称但参数列表（参数的个数、顺序、类型）不同的方法，可以根据不同的参数列表调用不同的方法。</p>
-<h1 id="面向对象的特性"><a href="#面向对象的特性" class="headerlink" title="面向对象的特性"></a>面向对象的特性</h1><h2 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h2><blockquote>
-<p>封装是把对象的属性和方法封装成一个类，通过封装可以把一个对象的属性隐藏在对象内部，对外提供公共的接口（方法）来操作内部数据，以保护数据安全，防止外部直接修改。</p>
-</blockquote>
-<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><blockquote>
-<p>继承是在已存在的类的基础上创建子类，子类可以实现自己的属性和方法，也可以用父类的功能，但不能选择性地继承父类。通过使用继承，可以快速地创建新的类，可以提高代码的重用。</p>
-</blockquote>
-<ol>
-<li>子类拥有父类对象所有的属性和方法（包括私有属性和私有方法），但是父类中的私有属性和方法子类是无法访问，<strong>只是拥有</strong>。</li>
-<li>子类可以拥有自己属性和方法，即子类可以对父类进行扩展。</li>
-<li>子类可以用自己的方式实现父类的方法。（以后介绍）。</li>
-</ol>
-<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><blockquote>
-<p>多态是指对象在不同情况下可以以不同的形态呈现出来，体现在方法的重写上，子类重写父类的方法，父类的引用指向子类的实例并且调用子类重写的方法。</p>
-</blockquote>
-<p>Java实现多态有三个必要条件：继承、重写、向上转型。</p>
-<p>继承：在多态中必须存在有继承关系的子类和父类。</p>
-<p>重写：子类对父类中某些方法进行重新定义，在调用这些方法时就会调用子类的方法。</p>
-<p>向上转型：是指子类对象可以赋值给父类引用变量，会调用子类的重写的方法。</p>
-<h1 id="接口和抽象类的区别"><a href="#接口和抽象类的区别" class="headerlink" title="接口和抽象类的区别"></a>接口和抽象类的区别</h1><blockquote>
-<p>接口：通过interface关键字来表明这是接口，定义了一组抽象方法，没有具体的实现，方法默认是public abstract修饰、变量默认为public static final修饰</p>
-<p>抽象类：通过abstract关键字来表明这是接口，既可以包含抽象方法也可以包含非抽象方法，可以有构造函数，也可以有成员变量，作为一个基类，提供通用功能的实现，但直接不能被实例化。</p>
-</blockquote>
-<p>相同点：</p>
-<ol>
-<li><strong>抽象性</strong>：接口和抽象类都是抽象的，不能直接实例化。</li>
-<li><strong>模板性</strong>：接口和抽象类都可以作为其他类的模板或基类，提供通用的行为规范或实现。</li>
-<li><strong>多态性</strong>：接口和抽象类都支持多态性，即同一方法调用可能会有不同的实现，具体取决于对象的类型。</li>
-<li><strong>扩展性</strong>：接口和抽象类都可以被子类实现或继承，并且可以通过添加新的方法或修改现有的方法来扩展功能。</li>
-</ol>
-<p>区别：</p>
-<ol>
-<li>方法：<ul>
-<li><strong>接口</strong>：只有抽象方法，但不包含方法的具体实现。</li>
-<li><strong>抽象类</strong>：可以有抽象方法，也可以有非抽象方法</li>
-</ul>
-</li>
-<li>构造函数：<ul>
-<li>抽象类可以有构造函数，而接口不能有构造函数。</li>
-</ul>
-</li>
-<li>继承：<ul>
-<li><strong>接口</strong>：多实现</li>
-<li><strong>抽象类</strong>：单继承，继承具有传递性。</li>
-</ul>
-</li>
-<li>变量：<ul>
-<li><strong>接口</strong>：变量默认是public static final的</li>
-<li><strong>抽象类</strong>：可以定义实例变量，可以是各种访问修饰符。</li>
-</ul>
-</li>
-<li>使用场景：<ul>
-<li><strong>接口</strong>：如果不同的类需要具有相似但不同的行为，可以考虑使用接口来实现。</li>
-<li><strong>抽象类</strong>：如果多个类有相似的行为，可以将这些行为提取到一个抽象类中，并让这些类继承该抽象类来实现代码复用。</li>
-</ul>
-</li>
-</ol>
-<h1 id="深拷贝、浅拷贝、引用拷贝"><a href="#深拷贝、浅拷贝、引用拷贝" class="headerlink" title="深拷贝、浅拷贝、引用拷贝"></a>深拷贝、浅拷贝、引用拷贝</h1><p>深拷贝和浅拷贝都是指对对象的拷贝，例如一个对象如果有两种类型的属性，基本数据类型和引用数据类型</p>
-<p>浅拷贝（<strong>Shallow Copy</strong>）就是指会拷贝基本数据类型的值，以及引用数据类型的引用，不会拷贝引用数据类型指向的对象，浅拷贝出来的对象内部的引用数据类型指向原来对象，通过clone()方法可以实现</p>
-<p>深拷贝（<strong>Deep Copy</strong>）即会拷贝基本数据类型的值，也会拷贝引用数据类型指向的对象，是完全都复制了一份，通过递归复制或者序列化和反序列化实现。</p>
-<p>引用拷贝（<strong>Reference Copy</strong>）就是两个不同的引用指向同一个对象。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%B8%80-%E5%B8%B8%E8%AF%86.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%B8%80-%E5%B8%B8%E8%AF%86.html" class="post-title-link" itemprop="url">java基础-常识</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="java语言的特点"><a href="#java语言的特点" class="headerlink" title="java语言的特点"></a>java语言的特点</h1><blockquote>
-<p>java语言简单易学，跨平台，面向对象，支持多线程和网络编程，自动垃圾回收安全稳定。</p>
-</blockquote>
-<h1 id="SE和EE和ME的区别"><a href="#SE和EE和ME的区别" class="headerlink" title="SE和EE和ME的区别"></a>SE和EE和ME的区别</h1><blockquote>
-<p>Java SE（Standard Edition）是用于开发桌面、服务器和嵌入式设备的标准版Java平台；</p>
-<p>Java EE（Enterprise Edition）是用于构建企业级应用程序的扩展版Java平台；</p>
-<p>Java ME（Micro Edition）是用于开发嵌入式设备和移动设备上的应用程序的微型版Java平台。</p>
-</blockquote>
-<h1 id="JVM和JDK和JRE"><a href="#JVM和JDK和JRE" class="headerlink" title="JVM和JDK和JRE"></a>JVM和JDK和JRE</h1><img src="https://telegraph-image-2ni.pages.dev/file/320e0df0b2e3f5989a10b.png" style="zoom: 50%;">
-
-<p>总结：</p>
-<ol>
-<li>JDK &#x3D; JRE + java开发者工具</li>
-<li>JRE &#x3D; JVM + java基础类库</li>
-</ol>
-<blockquote>
-<p>常用java开发者工具：javac(编译器)、javadoc（文档注释工具）、jdb（调试器）、jconsole（基于 JMX 的可视化监控⼯具）、javap（反编译工具）等</p>
-<p>常用java基础类库：java.lang包（包装类、字符串、异常）、java.util包（集合）、java.io包（文件）、java.math包（数学）、java.net包（网络编程）</p>
-</blockquote>
-<h1 id="什么是字节码，字节码的好处？"><a href="#什么是字节码，字节码的好处？" class="headerlink" title="什么是字节码，字节码的好处？"></a>什么是字节码，字节码的好处？</h1><blockquote>
-<p>javac编译器将.java源代码编译成.class文件，这个class文件叫字节码，字节码在JVM上运行，write once run anywhere，提高了程序的执行效率和可移植性。</p>
-</blockquote>
-<h1 id="为什么说-Java-语言“编译与解释并存"><a href="#为什么说-Java-语言“编译与解释并存" class="headerlink" title="为什么说 Java 语言“编译与解释并存"></a>为什么说 Java 语言“编译与解释并存</h1><p>Java程序要经过先编译，后解释两个步骤，由javac进行编译，生成字节码（<code>.class</code> 文件），字节码必须由 Java 解释器来解释执行。</p>
-<h1 id="java和c-的区别"><a href="#java和c-的区别" class="headerlink" title="java和c++的区别"></a>java和c++的区别</h1><ol>
-<li><p>Java没有指针，程序内存更加安全</p>
-</li>
-<li><p>java单继承，c++可以多继承</p>
-</li>
-<li><p>java有自动垃圾回收机制</p>
-</li>
-</ol>
-<h1 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h1><img src="https://telegraph-image-2ni.pages.dev/file/8e39fd729ba83918652d7.png" style="zoom: 50%;">
-
-<h1 id="标识符和关键字的区别"><a href="#标识符和关键字的区别" class="headerlink" title="标识符和关键字的区别"></a>标识符和关键字的区别</h1><p>类名、变量名、方法名这些名字是标识符，关键字就是被赋予特殊含义的标识符。</p>
-<h1 id="自增自减运算符"><a href="#自增自减运算符" class="headerlink" title="自增自减运算符"></a>自增自减运算符</h1><p>符号在前就先加&#x2F;减，符号在后就后加&#x2F;减</p>
-<h1 id="位运算符"><a href="#位运算符" class="headerlink" title="位运算符"></a>位运算符</h1><ol>
-<li>按位与</li>
-</ol>
-<blockquote>
-<p>对两个操作数的每一位执行逻辑与操作，只有当两个操作数对应位都为1时，结果位才为1，否则为0。</p>
-</blockquote>
-<ol start="2">
-<li>按位或</li>
-</ol>
-<blockquote>
-<p>对两个操作数的每一位执行逻辑或操作，只要两个操作数对应位中有一个为1，结果位就为1，否则为0。</p>
-</blockquote>
-<ol start="3">
-<li>按位异或</li>
-</ol>
-<blockquote>
-<p>对两个操作数的每一位执行逻辑异或操作，当两个操作数对应位不相同时结果位为1，相同时结果位为0。</p>
-</blockquote>
-<ol start="4">
-<li>按位非</li>
-</ol>
-<blockquote>
-<p>对操作数的每个位执行逻辑非操作，即0变为1，1变为0。</p>
-</blockquote>
-<ol start="5">
-<li>左移</li>
-</ol>
-<blockquote>
-<p>将操作数的所有位向左移动指定的位数，右侧空出的位用0填充。<code>x &lt;&lt; 1</code>,相当于 x 乘以 2</p>
-</blockquote>
-<ol start="6">
-<li>带符号右移</li>
-</ol>
-<blockquote>
-<p>将操作数的所有位向右移动指定的位数，左侧空出的位用原来的最高位填充。对于有符号整数，符号位会保持不变。<code>x &gt;&gt; 1</code>,相当于 x 除以 2。</p>
-</blockquote>
-<ol start="7">
-<li>无符号右移</li>
-</ol>
-<blockquote>
-<p>将操作数的所有位向右移动指定的位数，左侧空出的位用0填充。对于无符号整数，符号位也会移动。<code>x &gt;&gt;&gt; 1</code>,相当于 x 除以 2。</p>
-</blockquote>
-<p><strong>注意：</strong>当两个相同的数做按位与和按位或操作时，结果都将是这个相同的数本身。当两个相同的数进行按位异或操作时，结果是0；而当一个数进行按位非操作时，结果是该数的每个位取反。</p>
-<h1 id="continue、break、return的区别"><a href="#continue、break、return的区别" class="headerlink" title="continue、break、return的区别"></a>continue、break、return的区别</h1><p>continue:结束本次循环，继续执行下次循环</p>
-<p>break：结束循环</p>
-<p>return: 结束运行程序</p>
-<h1 id="原码和反码和补码"><a href="#原码和反码和补码" class="headerlink" title="原码和反码和补码"></a>原码和反码和补码</h1><blockquote>
-<p>数字是以补码的形式存在计算机中</p>
-</blockquote>
-<p><strong>原码</strong>：数字二进制位的最高位为符号位，0为正数，1为负数，其余位表示数字的值。</p>
-<p><strong>反码</strong>：正数的反码和原码是一致的，负数的反码是除符号位其余位取反。</p>
-<p><strong>补码</strong>：正数的补码和原码是一致的，负数的补码是在反码的基础上加1。</p>
-<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><blockquote>
-<p><strong>基本数据类型</strong></p>
-<p>整型 byte short int long</p>
-<p>浮点型 float double</p>
-<p>字符型 char</p>
-<p>布尔型 boolean</p>
-<p><strong>引用数据类型</strong></p>
-<p>类（数组）</p>
-<p>数组</p>
-<p>接口</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>基本数据类型</th>
-<th>字节数</th>
-<th>位数</th>
-<th>默认值</th>
-<th>取值范围</th>
-<th>包装类</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>byte</td>
-<td>1</td>
-<td>1*8</td>
-<td>0</td>
-<td>-2^(8-1)   到  2^(8-1)-1</td>
-<td>Byte</td>
-</tr>
-<tr>
-<td>short</td>
-<td>2</td>
-<td>2*8</td>
-<td>0</td>
-<td>-2^(16-1)   到  2^(16-1)-1</td>
-<td>Short</td>
-</tr>
-<tr>
-<td>int</td>
-<td>4</td>
-<td>4*8</td>
-<td>0</td>
-<td>-2^(32-1)   到  2^(32-1)-1</td>
-<td>Integer</td>
-</tr>
-<tr>
-<td>long</td>
-<td>8</td>
-<td>8*8</td>
-<td>0L</td>
-<td>-2^(64-1)   到  2^(64-1)-1</td>
-<td>Long</td>
-</tr>
-<tr>
-<td>char</td>
-<td>2</td>
-<td>2*8</td>
-<td>‘u0000’</td>
-<td>0  到  2^(16-1)-1</td>
-<td>Character</td>
-</tr>
-<tr>
-<td>float</td>
-<td>4</td>
-<td>4*8</td>
-<td>0f</td>
-<td>2的-149次方 到 2的128次方-1</td>
-<td>Float</td>
-</tr>
-<tr>
-<td>double</td>
-<td>8</td>
-<td>8*8</td>
-<td>0d</td>
-<td>2的-1074次方 到 2的1024次方-1</td>
-<td>Double</td>
-</tr>
-<tr>
-<td>boolean</td>
-<td></td>
-<td>1</td>
-<td>false</td>
-<td>true、flase</td>
-<td>Boolean</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p>浮点数在计算机中的存储分为三部分分别是符号位（区分正负数，0是整数）、指数（幂次确定整数的范围）、小数（小数位确定了精度）</p>
-<p>比如float类型是32位，是<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%8D%95%E7%B2%BE%E5%BA%A6%E6%B5%AE%E7%82%B9&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:221485161%7D">单精度浮点</a>表示法：符号位（sign）占用1位，用来表示正负数，指数位（<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=exponent&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:221485161%7D">exponent</a>）占用8位，用来表示指数，小数位（fraction）占用23位，用来表示小数，不足位数补0。</p>
-<p>而double类型是64位，是<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%8F%8C%E7%B2%BE%E5%BA%A6%E6%B5%AE%E7%82%B9%E8%A1%A8%E7%A4%BA%E6%B3%95&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:221485161%7D">双精度浮点表示法</a>：符号位占用1位，指数位占用11位，小数位占用52位。</p>
-</blockquote>
-<p>可以看到，像 <code>byte</code>、<code>short</code>、<code>int</code>、<code>long</code>能表示的最大正数都减 1 了。这是为什么呢？</p>
-<blockquote>
-<p>对于 Java 中的整数类型（如 byte、short、int、long），其二进制表示中最高位是符号位，0 表示正数，1 表示负数。因此，如果要表示最大的正数，需要将除了最高位之外的所有位都设为 1。但是由于最高位已经被用于表示符号，所以在表示正数时，最大值需要减去一个单位，以确保不会溢出变成负数。</p>
-</blockquote>
-<h1 id="基本类型和包装类型的区别"><a href="#基本类型和包装类型的区别" class="headerlink" title="基本类型和包装类型的区别"></a>基本类型和包装类型的区别</h1><p>用途：方法参数和变量类型一般用包装类型，很少用基本类型</p>
-<p>存储方式：基本类型的成员变量存储在堆上，局部变量存储在栈上，包装类型都在堆上</p>
-<p>占用空间：基本数据类型占用的空间小</p>
-<p>默认值：包装类型的默认值是null,基本类型的有自己默认值，不是null</p>
-<p>比较方式：包装类型使用 &#x3D;&#x3D; 比较的是内存地址，基本类型 &#x3D;&#x3D; 比较的是大小</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">Integer</span> a <span class="token operator">=</span> <span class="token number">33</span><span class="token punctuation">;</span>
-        <span class="token class-name">Integer</span> b <span class="token operator">=</span> <span class="token number">33</span><span class="token punctuation">;</span>
-        <span class="token class-name">Integer</span> c <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span><span class="token number">33</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">Integer</span> d <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span><span class="token number">33</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    	<span class="token comment">//包装类的缓存机制，两个引用都指向33</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a <span class="token operator">==</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a <span class="token operator">==</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>c <span class="token operator">==</span> d<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>**总结：包装类的equals()重写过，比较值全部使用 equals 方法比较,比较内存地址用&#x3D;&#x3D;**。</p>
-<h2 id="自动拆箱和装箱"><a href="#自动拆箱和装箱" class="headerlink" title="自动拆箱和装箱"></a>自动拆箱和装箱</h2><blockquote>
-<ul>
-<li><strong>装箱</strong>：将基本类型用它们对应的引用类型包装起来；</li>
-<li><strong>拆箱</strong>：将包装类型转换为基本数据类型；</li>
-</ul>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Integer</span> i <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>  <span class="token comment">//装箱 等价于 Integer i = Integer.valueOf(10)</span>
-<span class="token keyword">int</span> n <span class="token operator">=</span> i<span class="token punctuation">;</span>   <span class="token comment">//拆箱 等价于 int n = i.intValue();</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h2 id="浮点运算，精度丢失问题"><a href="#浮点运算，精度丢失问题" class="headerlink" title="浮点运算，精度丢失问题"></a>浮点运算，精度丢失问题</h2><blockquote>
-<p>计算机是二进制的，而且计算机在表示一个数字时，宽度是有限的，无限循环的小数存储在计算机时，只能被截断，所以就会导致小数精度发生损失的情况。这也就是解释了为什么浮点数没有办法用二进制精确表示。</p>
-<p>如何解决：<code>BigDecimal</code> 可以实现对浮点数的运算，不会造成精度丢失。通常情况下，大部分需要浮点数精确运算结果的业务场景（比如涉及到钱的场景）都是通过 <code>BigDecimal</code> 来做的。</p>
-</blockquote>
-<h2 id="超过long整型的数据应该如何表示"><a href="#超过long整型的数据应该如何表示" class="headerlink" title="超过long整型的数据应该如何表示"></a>超过long整型的数据应该如何表示</h2><p><strong>注意：超过long以后会从导致溢出，会从最小值开始算</strong></p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// 超过范围会变成最小值开始计算</span>
- <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">long</span> l <span class="token operator">=</span> <span class="token class-name">Long</span><span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>l <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// -9223372036854775808</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>l <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">==</span> <span class="token class-name">Long</span><span class="token punctuation">.</span>MIN_VALUE<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// true</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>l <span class="token operator">+</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//-9223372036854775709</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>l <span class="token operator">+</span> <span class="token number">100</span> <span class="token operator">==</span> <span class="token class-name">Long</span><span class="token punctuation">.</span>MIN_VALUE<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// false</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>l <span class="token operator">+</span> <span class="token number">10000</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//-9223372036854765809</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>l <span class="token operator">+</span> <span class="token number">10000</span> <span class="token operator">==</span> <span class="token class-name">Long</span><span class="token punctuation">.</span>MIN_VALUE<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// false</span>
-    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>解决方案：</strong></p>
-<ol>
-<li><p>从字符串创建一个BigInteger对象：</p>
-<p><code>BigInteger bigInt1 = new BigInteger(&quot;9999999999999999999999999999999&quot;);</code></p>
-</li>
-<li><p>使用长整型或者其他类型转换为BigInteger:</p>
-<p><code>long longValue = Long.MAX_VALUE;</code></p>
-<p><code>BigInteger bigInt2 = BigInteger.valueOf(longValue).add(BigInteger.ONE);</code></p>
-<p><code>BigInteger result = bigInt1.add(bigInt2);</code></p>
-</li>
-</ol>
-<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><h2 id="成员变量和局部变量的区别"><a href="#成员变量和局部变量的区别" class="headerlink" title="成员变量和局部变量的区别"></a>成员变量和局部变量的区别</h2><p><strong>访问修饰符：</strong>成员变量可以被 <code>public</code>,<code>private</code>,<code>static</code> 等修饰符所修饰，而局部变量不能被访问控制修饰符及 <code>static</code> 所修饰；但是，成员变量和局部变量都能被 <code>final</code> 所修饰。</p>
-<p><strong>作用域：</strong>成员变量的作用域是整个类，局部变量作用域是方法中</p>
-<p><strong>存储方式</strong>：成员变量在堆内存中随对象消失而消失，局部变量在栈内存中随方法执行结束消失</p>
-<p><strong>默认值</strong>：成员变量如果没有被赋初始值，则会自动以类型的默认值而赋值（一种情况例外:被 <code>final</code> 修饰的成员变量也必须显式地赋值），而局部变量则不会自动赋值，在使用之前显式地初始化。</p>
-<h2 id="静态变量的作用"><a href="#静态变量的作用" class="headerlink" title="静态变量的作用"></a>静态变量的作用</h2><p>静态变量也就是被 <code>static</code> 关键字修饰的变量。它可以被类的所有实例共享，无论一个类创建了多少个对象，它们都共享同一份静态变量。也就是说，静态变量只会被分配一次内存，即使创建多个对象，这样可以节省内存。</p>
-<h2 id="字符型和字符串变量的区别"><a href="#字符型和字符串变量的区别" class="headerlink" title="字符型和字符串变量的区别"></a>字符型和字符串变量的区别</h2><p><strong>形式</strong> : 字符常量是单引号引起的一个字符，字符串常量是双引号引起的 0 个或若干个字符。</p>
-<p><strong>含义</strong> : 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算; 字符串常量代表一个地址值(该字符串在内存中存放位置)。</p>
-<p><strong>占内存大小</strong>：字符常量只占 2 个字节; 字符串常量占若干个字节。</p>
-<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="静态方法可以调用非静态方法吗"><a href="#静态方法可以调用非静态方法吗" class="headerlink" title="静态方法可以调用非静态方法吗"></a>静态方法可以调用非静态方法吗</h2><p>静态方法是属于类的，在类加载的时候就会分配内存，可以通过类名直接访问。而非静态成员属于实例对象，只有在对象实例化之后才存在，需要通过类的实例对象去访问。</p>
-<p>在类的非静态成员不存在的时候静态方法就已经存在了，此时调用在内存中还不存在的非静态成员，属于非法操作。</p>
-<h2 id="静态方法和实例方法的区别"><a href="#静态方法和实例方法的区别" class="headerlink" title="静态方法和实例方法的区别"></a>静态方法和实例方法的区别</h2><p>调用方式：静态方法，直接类名.静态方法名，实例方法，必须先创建对象，对象.实例方法</p>
-<p>访问限制：静态方法只可以访问静态变量或者静态方法，不能访问实例变量和实例方法，实例方法没有这个限制</p>
-<h1 id="可变长参数"><a href="#可变长参数" class="headerlink" title="可变长参数"></a>可变长参数</h1><p>Java 支持定义可变长参数，所谓可变长参数就是允许在调用方法时传入不定长度的参数。就比如下面的这个 <code>printVariable</code> 方法就可以接受 0 个或者多个参数。可变参数只能作为函数的最后一个参数，但其前面可以有也可以没有任何其他参数。<strong>遇到方法重载的情况会优先匹配固定参数</strong></p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">method1</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   <span class="token comment">//......</span>
-<span class="token punctuation">&#125;</span>
-<span class="token comment">//或者</span>
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">method2</span><span class="token punctuation">(</span><span class="token class-name">String</span> arg1<span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   <span class="token comment">//......</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="形参和实参"><a href="#形参和实参" class="headerlink" title="形参和实参"></a>形参和实参</h1><p>形参：是一个形式参数，主要定义在方法中，用来接收实参，没有确定的值。</p>
-<p>实参：是一个实际的参数，用来传递给方法的参数，有确定的值。</p>
-<h1 id="值传递和引用传递"><a href="#值传递和引用传递" class="headerlink" title="值传递和引用传递"></a>值传递和引用传递</h1><p>值传递：传递的是实参值的拷贝，会创建一个副本。</p>
-<p>引用传递：传递的引用对象在内存中的地址，不会创建副本，对形参的修改会影响实参。</p>
-<blockquote>
-<p>Java 中只有值传递，是没有引用传递的。</p>
-<ul>
-<li>如果参数是基本类型的话，很简单，传递的就是基本类型的字面量值的拷贝，会创建副本。</li>
-<li>如果参数是引用类型，传递的就是实参所引用的对象在堆中地址值的拷贝，同样也会创建副本</li>
-</ul>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%B8%89-%E5%B8%B8%E7%94%A8%E7%B1%BB.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%B8%89-%E5%B8%B8%E7%94%A8%E7%B1%BB.html" class="post-title-link" itemprop="url">Java基础-常用类</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Object类"><a href="#Object类" class="headerlink" title="Object类"></a>Object类</h1><h2 id="Object类的方法"><a href="#Object类的方法" class="headerlink" title="Object类的方法"></a>Object类的方法</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
- * native 方法，用于返回当前运行时对象的 Class 对象，使用了 final 关键字修饰，故不允许子类重写。
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token comment">/**
- * native 方法，用于返回对象的哈希码，主要使用在哈希表中，比如 JDK 中的HashMap。
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">native</span> <span class="token keyword">int</span> <span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token comment">/**
- * 用于比较 2 个对象的内存地址是否相等，String 类对该方法进行了重写以用于比较字符串的值是否相等。
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> obj<span class="token punctuation">)</span>
-<span class="token comment">/**
- * native 方法，用于创建并返回当前对象的一份拷贝。
- */</span>
-<span class="token keyword">protected</span> <span class="token keyword">native</span> <span class="token class-name">Object</span> <span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">CloneNotSupportedException</span>
-<span class="token comment">/**
- * 返回类的名字实例的哈希码的 16 进制的字符串。建议 Object 所有的子类都重写这个方法。
- */</span>
-<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token comment">/**
- * native 方法，并且不能重写。唤醒一个在此对象监视器上等待的线程(监视器相当于就是锁的概念)。如果有多个线程在等待只会任意唤醒一个。
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">notify</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token comment">/**
- * native 方法，并且不能重写。跟 notify 一样，唯一的区别就是会唤醒在此对象监视器上等待的所有线程，而不是一个线程。
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">notifyAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token comment">/**
- * native方法，并且不能重写。暂停线程的执行。注意：sleep 方法没有释放锁，而 wait 方法释放了锁 ，timeout 是等待时间。
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span>
-<span class="token comment">/**
- * 多了 nanos 参数，这个参数表示额外时间（以纳秒为单位，范围是 0-999999）。 所以超时的时间还需要加上 nanos 纳秒。。
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">,</span> <span class="token keyword">int</span> nanos<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span>
-<span class="token comment">/**
- * 跟之前的2个wait方法一样，只不过该方法一直等待，没有超时时间这个概念
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span>
-<span class="token comment">/**
- * 实例被垃圾回收器回收的时候触发的操作
- */</span>
-<span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">finalize</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Throwable</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h2 id="x3D-x3D-和-equals的区别"><a href="#x3D-x3D-和-equals的区别" class="headerlink" title="&#x3D;&#x3D; 和 equals的区别"></a>&#x3D;&#x3D; 和 equals的区别</h2><ol>
-<li><code>==</code>对于基本类型和引用类型是不同的<ul>
-<li>基本数据类型：<code>==</code>比较的是值</li>
-<li>引用数据类型：<code>==</code>比较的是内存地址</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<p>java只有值传递，没有引用传递，基本数据类型传递的是值，引用数据类型传递的是对象的内存地址</p>
-</blockquote>
-<ol start="2">
-<li>equals是object类的一个方法，所有类都有equals方法，默认调用的是<code>==</code>进行比较两个对象是否相等。</li>
-</ol>
-<blockquote>
-<p><code>equals()</code>方法有两种用法，一种是没有重写equals方法，默认比较两个对象内存地址是否相等，一种是重写了equals方法，比较的是对象的值是否相等。</p>
-<p>如：Object类的equals()方法和String的equals()方法</p>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//Object类的equals()方法</span>
-<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> obj<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> obj<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token comment">//String的equals()方法</span>
-<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> anObject<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> anObject<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>anObject <span class="token keyword">instanceof</span> <span class="token class-name">String</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">String</span> anotherString <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span>anObject<span class="token punctuation">;</span>
-        <span class="token keyword">int</span> n <span class="token operator">=</span> value<span class="token punctuation">.</span>length<span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">==</span> anotherString<span class="token punctuation">.</span>value<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">char</span> v1<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> value<span class="token punctuation">;</span>
-            <span class="token keyword">char</span> v2<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> anotherString<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
-            <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-            <span class="token keyword">while</span> <span class="token punctuation">(</span>n<span class="token operator">--</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                <span class="token keyword">if</span> <span class="token punctuation">(</span>v1<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">!=</span> v2<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
-                    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
-                i<span class="token operator">++</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-            <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="hashcode的作用"><a href="#hashcode的作用" class="headerlink" title="hashcode的作用"></a>hashcode的作用</h2><blockquote>
-<p><code>hashcode（）</code>的作用是获取hash码（int 整数）也称散列码，这个hash码的作用是确定对象在hash表的位置,所有类都有这个函数</p>
-<p><code>public native int hashCode();</code></p>
-</blockquote>
-<h2 id="为什么要有hashcode，hashset是如何检查重复的"><a href="#为什么要有hashcode，hashset是如何检查重复的" class="headerlink" title="为什么要有hashcode，hashset是如何检查重复的"></a>为什么要有hashcode，hashset是如何检查重复的</h2><blockquote>
-<p>提高执行效率，以hashset如何检查重复说明，怎么提高效率的，当把对象加入到hashset的时候，hashset会首先根据对象的hashcode值来判断加入的位置下标，如果下标位置没值就直接插入了，有值的话再调用equals方法判断两个对象是否相等，如果相等就不会让其加入，如果不相等就会重新散列到新的位置，这样做的好处是减少了equals执行次数，提高了执行效率。</p>
-</blockquote>
-<p>总结：</p>
-<p>如果两个对象的<code>hashCode</code> 值相等，那这两个对象不一定相等（哈希碰撞）。</p>
-<p>如果两个对象的<code>hashCode</code> 值相等并且<code>equals()</code>方法也返回 <code>true</code>，我们才认为这两个对象相等。</p>
-<p>如果两个对象的<code>hashCode</code> 值不相等，我们就可以直接认为这两个对象不相等。</p>
-<h2 id="为什么重写equals必须重写hashcode"><a href="#为什么重写equals必须重写hashcode" class="headerlink" title="为什么重写equals必须重写hashcode"></a>为什么重写equals必须重写hashcode</h2><blockquote>
-<p>Java API规范要求：</p>
-<p>Object类中hashCode()方法的文档明确规定，如果两个对象通过equals()方法认为是相等的，那么它们必须产生相同的哈希码。这意味着当你自定义了对象的相等性规则（通过重写equals()方法），也应该相应地重写hashCode()方法以保持一致性。</p>
-<p>每个对象都有hashcode方法，可能会产生hash冲突，导致两个不同的对象，返回相同的hash码。</p>
-<p>如果equals（）方法判断两个对象相等，那么两个对象的hashcode肯定是相等的，如果重写equals（）方法，没有重写hashcode可能会导致，两个对象equals相等，hashcode不相同，不符合Java API规范。</p>
-</blockquote>
-<p>总结：</p>
-<ul>
-<li><code>equals</code> 方法判断两个对象是相等的，那这两个对象的 <code>hashCode</code> 值也要相等。</li>
-<li>两个对象有相同的 <code>hashCode</code> 值，他们也不一定是相等的（哈希碰撞）。</li>
-</ul>
-<h1 id="String类"><a href="#String类" class="headerlink" title="String类"></a>String类</h1><h2 id="String属于基本数据类型吗？"><a href="#String属于基本数据类型吗？" class="headerlink" title="String属于基本数据类型吗？"></a>String属于基本数据类型吗？</h2><blockquote>
-<p>String是一个字符串对象，属于引用数据类型，不属于基本数据类型</p>
-</blockquote>
-<h2 id="String常用的方法"><a href="#String常用的方法" class="headerlink" title="String常用的方法"></a>String常用的方法</h2><h3 id="获取类"><a href="#获取类" class="headerlink" title="获取类"></a>获取类</h3><p><code>int length() 获取字符串长度</code></p>
-<p><code>char charAt(int) 获取指定索引的字符</code> </p>
-<p><code>int indexOf(String) 获取指定字符串的索引</code></p>
-<p><code>int lastIndexOf(String) 获取指定字符串的最后一次的索引</code></p>
-<p><code>String substring(int) 获取从指定坐标到最后的字符串</code> </p>
-<p><code>String substring(int,int) 获取[int,int)的指定字符串</code></p>
-<p><code>String concat(String) 获取拼接后的字符串</code></p>
-<h3 id="判断类"><a href="#判断类" class="headerlink" title="判断类"></a>判断类</h3><p><code>boolean equals(String) 判断两个字符串内容是否相同 </code> </p>
-<p><code>boolean equalsIgnoreCase(String) 忽略大小写，判断两个字符串内容是否相同</code></p>
-<p><code>boolean contains(String) 判断字符串是否包含指定字符串</code></p>
-<p><code>boolean startsWith(String) 判断字符串是否以指定字符串开始</code></p>
-<p><code>boolean endsWith(String) 判断字符串是否以指定字符串结尾</code></p>
-<p><code>boolean isEmpty() 判断字符串是否为空</code></p>
-<h3 id="数组类"><a href="#数组类" class="headerlink" title="数组类"></a>数组类</h3><p><code>byte[] getBytes() 字符串转为字节数组</code></p>
-<p><code>char[] toCharArray() 字符串转为字符数组</code></p>
-<p><code>String[] split(String) 将字符串按照指定字符串切割成字符串数组</code></p>
-<h3 id="转换类"><a href="#转换类" class="headerlink" title="转换类"></a>转换类</h3><p><code>String toUpperCase() 字符串转大写</code></p>
-<p><code>String toLowerCase() 字符串转小写</code></p>
-<p><code>String replace(String,String) 字符串替换，匹配方式：非正则表达式匹配。它会按照字面意义去查找和替换目标字符串，不解析任何特殊字符作为正则表达式元字符。</code></p>
-<p><code>String replaceAll(String,String) 字符串全部替换，支持正则，匹配方式：正则表达式匹配。它可以识别并使用正则表达式的各种特殊字符和模式来匹配复杂的情况。</code></p>
-<p><code>String repalceFirst(String,String) 字符串指替换第一次</code></p>
-<p><code>String trim() 字符串将开头和结尾的空格剔除</code> </p>
-<h2 id="String、StringBuffer、StringBuilder的区别"><a href="#String、StringBuffer、StringBuilder的区别" class="headerlink" title="String、StringBuffer、StringBuilder的区别"></a>String、StringBuffer、StringBuilder的区别</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">String</span> <span class="token keyword">implements</span> <span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span>Serializable</span><span class="token punctuation">,</span> <span class="token class-name">Comparable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span><span class="token punctuation">,</span> <span class="token class-name">CharSequence</span> <span class="token punctuation">&#123;</span> <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">char</span> value<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
-<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">StringBuffer</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractStringBuilder</span> <span class="token keyword">implements</span> <span class="token class-name">Serializable</span><span class="token punctuation">,</span> <span class="token class-name">CharSequence</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
-<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">StringBuilder</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractStringBuilder</span> <span class="token keyword">implements</span> <span class="token class-name">Serializable</span><span class="token punctuation">,</span> <span class="token class-name">CharSequence</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="可变性"><a href="#可变性" class="headerlink" title="可变性"></a>可变性</h3><p>String是不可变的，StringBuffer和StringBuilder是可变，这个可变指的是否对原对象内容是否变更</p>
-<blockquote>
-<p>String类中使用final修饰的字符数组存储字符串，是不可变的，StringBuffer和StringBuilder都继承了AbstractStringBuilder，内部通过char[] value;存储，所以说它们是可变的。</p>
-<p>final关键字修饰的类不能被继承，修饰的方法不能被重写，修饰的变量是基本数据类型则值不能改变，修饰的变量是引用类型则不能再指向其他对象。</p>
-</blockquote>
-<h3 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h3><p><code>String</code> 中的对象是不可变的，也就可以理解为常量，线程安全。<code>AbstractStringBuilder</code> 是 <code>StringBuilder</code> 与 <code>StringBuffer</code> 的公共父类，定义了一些字符串的基本操作，如 <code>expandCapacity</code>、<code>append</code>、<code>insert</code>、<code>indexOf</code> 等公共方法。<code>StringBuffer</code> 对方法加了同步锁或者对调用的方法加了同步锁，所以是线程安全的。<code>StringBuilder</code> 并没有对方法进行加同步锁，所以是非线程安全的。</p>
-<h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><p>每次对 <code>String</code> 类型进行改变的时候，都会生成一个新的 <code>String</code> 对象，然后将指针指向新的 <code>String</code> 对象。<code>StringBuffer</code> 每次都会对 <code>StringBuffer</code> 对象本身进行操作，而不是生成新的对象并改变对象引用。相同情况下使用 <code>StringBuilder</code> 相比使用 <code>StringBuffer</code> 没有使用synchronized锁，性能有所提升，但多线程环境下存在安全风险。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
-<li>操作少量的数据: 适用 <code>String</code></li>
-<li>单线程操作字符串缓冲区下操作大量数据: 适用 <code>StringBuilder</code></li>
-<li>多线程操作字符串缓冲区下操作大量数据: 适用 <code>StringBuffer</code></li>
-</ol>
-<h2 id="字符串拼接用-还是StringBuilder"><a href="#字符串拼接用-还是StringBuilder" class="headerlink" title="字符串拼接用+还是StringBuilder"></a>字符串拼接用+还是StringBuilder</h2><blockquote>
-<p>字符串的+或者+&#x3D;运算符，实质是生成一个StringBuilder对象，拼接后调用toString()方法后再生成一个字符串对象。如果频繁操作还是建议使用<code>StringBuilder</code> 对象进行字符串拼接。</p>
-</blockquote>
-<h2 id="字符串常量池"><a href="#字符串常量池" class="headerlink" title="字符串常量池"></a>字符串常量池</h2><blockquote>
-<p>在Java中，字符串常量池是一个特殊的内存区域（位于方法区），用于存储字符串字面量（也称为字符串常量）。当创建一个字符串对象时，如果它的值来源于字面量或者已经存在于字符串常量池中的字符串对象，则不会创建新的对象，而是直接引用池中的已存在对象，这样可以减少内存消耗并提升性能。</p>
-</blockquote>
-<h3 id="关于创建对象的个数，考虑以下几种场景："><a href="#关于创建对象的个数，考虑以下几种场景：" class="headerlink" title="关于创建对象的个数，考虑以下几种场景："></a>关于创建对象的个数，考虑以下几种场景：</h3><ol>
-<li>使用字面量创建字符串：String s1 &#x3D; “abc”; String s2 &#x3D; “abc”;<br>java在这种情况下，尽管有两个引用s1和s2，但在内存中只会有一个字符串对象”abc”存储在字符串常量池中。因为编译器会确保相同内容的字符串字面量只创建一次对象。</li>
-<li>使用new关键字创建字符串：String s3 &#x3D; new String(“abc”);<br>java使用new关键字创建字符串时，会在堆内存中创建一个新的字符串对象，即使”abc”已经存在于字符串常量池中也是如此。因此，这里会有两个对象，一个是常量池中的”abc”，另一个是在堆上新建的”abc”对象。</li>
-<li>使用intern()方法：String s4 &#x3D; new String(“abc”).intern();<br>java的intern()方法会尝试将当前字符串对象添加到字符串常量池中，如果常量池已有该字符串，则返回池中该字符串的引用。所以，如果上述代码运行时，常量池没有”abc”，则会将新建的”abc”对象的引用复制到常量池，并使s4指向常量池中的”abc”；如果有，则直接返回池中已有的”abc”引用，此时堆上的新对象可能会被垃圾回收。</li>
-</ol>
-<h1 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h1><blockquote>
-<p>异常是在程序执行过程中遇到的一种意外情况或错误，它会干扰正常的程序执行流程。</p>
-</blockquote>
-<h2 id="异常的类型"><a href="#异常的类型" class="headerlink" title="异常的类型"></a>异常的类型</h2><blockquote>
-<p>异常的父类是Throwable有两个⼦类Exception和Error。</p>
-<p>Error是程序⽆法处理的错误，⼀旦出现这个错误，虚拟机将被迫停⽌运⾏。</p>
-<p>Exception不会导致程序停⽌，⼜分为两个部分RunTimeException运⾏时异常和CheckedException检查异常</p>
-<p>RunTimeException常常发⽣在程序运⾏过程中，会导致程序当前线程执⾏失败。CheckedException常常发⽣在程序编译过程中，会导致程序编译不通过。</p>
-</blockquote>
-<img src="https://telegraph-image-2ni.pages.dev/file/f5fc08365d6eedc7d186d.png" alt="img" style="zoom:50%;">
-
-<h2 id="Throwable类的常用方法"><a href="#Throwable类的常用方法" class="headerlink" title="Throwable类的常用方法"></a>Throwable类的常用方法</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//返回异常发生时的简要描述</span>
-<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> detailMessage<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token comment">//返回异常发生时的详细信息</span>
-<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">String</span> s <span class="token operator">=</span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">String</span> message <span class="token operator">=</span> <span class="token function">getLocalizedMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token punctuation">(</span>message <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token punctuation">(</span>s <span class="token operator">+</span> <span class="token string">": "</span> <span class="token operator">+</span> message<span class="token punctuation">)</span> <span class="token operator">:</span> s<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token comment">//在控制台上打印 Throwable 对象封装的异常信息</span>
-<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><blockquote>
-<p>当出现异常我们要捕获并处理异常，或者抛出异常两种方式</p>
-</blockquote>
-<p><strong>1.抛出异常</strong></p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span>
-<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span> <span class="token keyword">throw</span>  <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"异常了"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p><strong>2.捕获并处理</strong></p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//使用try-catch代码块捕获并处理异常</span>
-<span class="token keyword">public</span>  <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-       <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-           <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">0</span><span class="token punctuation">;</span>
-       <span class="token punctuation">&#125;</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-           <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"0不能做除数"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-           e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token comment">//也可以使用try-catch-finally finally代码块中一般出现异常也会执行，常用来进行资源的关闭</span>
-<span class="token comment">//使用try-with-source替代try-catch-finally代码更简短，更清晰，会自动进行资源的关闭</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><blockquote>
-<p>泛型（Generics）是Java中一种参数化类型的概念，它允许在定义类、接口和方法时使用类型参数。通过泛型，可以使类、接口和方法在定义时不指定具体的数据类型，而是在实例化或调用时再指定具体的类型。</p>
-<p>使用泛型的主要目的是提高代码的灵活性、可重用性和安全性，同时减少重复代码的编写。泛型可以在编译时进行类型检查，避免在运行时出现类型转换错误，提高了代码的安全性。</p>
-</blockquote>
-<h2 id="泛型的使用方式"><a href="#泛型的使用方式" class="headerlink" title="泛型的使用方式"></a>泛型的使用方式</h2><p><strong>泛型类</strong>：使用泛型参数化的类，可以在定义时指定类型参数。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">MyClass</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// 泛型类中的方法或成员变量可以使用泛型类型参数T</span>
-    <span class="token keyword">private</span> <span class="token class-name">T</span> value<span class="token punctuation">;</span>
-
-    <span class="token keyword">public</span> <span class="token class-name">T</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> value<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token class-name">T</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> value<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>泛型接口</strong>：使用泛型参数化的接口，可以在实现时指定类型参数。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">interface</span> <span class="token class-name">MyInterface</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
-    <span class="token class-name">T</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token class-name">T</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>泛型方法</strong>：在方法定义中使用泛型参数，可以在调用时指定具体的类型参数。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Utils</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token class-name">T</span> <span class="token function">getLastElement</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> list<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token keyword">return</span> list<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="项目中哪些使用泛型"><a href="#项目中哪些使用泛型" class="headerlink" title="项目中哪些使用泛型"></a>项目中哪些使用泛型</h2><p>1.前后端返回的统一接口CommonResult</p>
-<p>2.自定义的excel处理类ExcelUtil动态的指定的类型导出数据</p>
-<p>3.集合类，例如，<code>ArrayList&lt;String&gt;</code>表示一个只能存储字符串类型的ArrayList。</p>
-<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><h2 id="什么是反射（Reflection）"><a href="#什么是反射（Reflection）" class="headerlink" title="什么是反射（Reflection）"></a>什么是反射（Reflection）</h2><blockquote>
-<p>允许在运行时动态地检查类、获取类的信息（如字段、方法、构造函数等），以及调用类的方法、访问或修改类的属性等。</p>
-</blockquote>
-<h2 id="反射可以做什么"><a href="#反射可以做什么" class="headerlink" title="反射可以做什么"></a>反射可以做什么</h2><ol>
-<li><strong>获取类的信息</strong>：可以获取类的名称、包名、父类、实现的接口等信息。</li>
-<li><strong>获取类的字段（Field）信息</strong>：可以获取类中定义的字段的名称、类型、修饰符等信息。</li>
-<li><strong>获取类的方法（Method）信息</strong>：可以获取类中定义的方法的名称、参数类型、返回类型、修饰符等信息。</li>
-<li><strong>获取类的构造函数信息</strong>：可以获取类中定义的构造函数的参数类型、修饰符等信息。</li>
-<li><strong>动态调用方法</strong>：可以在运行时动态地调用类的方法，传递参数并获取返回值。</li>
-<li><strong>动态创建对象</strong>：可以在运行时动态地创建类的对象，并对对象进行操作。</li>
-</ol>
-<h2 id="反射的使用场景"><a href="#反射的使用场景" class="headerlink" title="反射的使用场景"></a>反射的使用场景</h2><ol>
-<li><strong>框架和库</strong>：许多Java框架和库，如Spring框架、Hibernate ORM框架等，都广泛使用了反射。框架需要在运行时动态地加载和操作类，以实现诸如依赖注入、AOP（面向切面编程）、ORM（对象关系映射）等功能。</li>
-<li><strong>动态代理</strong>：反射可以用来创建动态代理对象，实现动态地在运行时生成代理类并拦截方法调用，用于实现诸如远程调用、事务管理等功能。</li>
-<li><strong>序列化和反序列化</strong>：Java中的序列化和反序列化机制通常使用了反射来动态地读取和写入对象的字段信息，以实现对象的序列化和反序列化。</li>
-<li><strong>单元测试</strong>：在单元测试中，反射可以用来访问私有方法、私有字段等，以便进行单元测试。</li>
-<li><strong>注解处理器</strong>：反射可以用来解析和处理注解，例如编写自定义的注解处理器，根据注解来生成代码或进行其他操作。</li>
-<li><strong>工具类</strong>：一些工具类或开发工具（如IDE）可能会使用反射来获取和操作类的信息，以实现一些功能，例如自动生成代码、代码检查、代码重构等。</li>
-<li><strong>动态加载类</strong>：反射可以用来动态加载类和资源文件，例如通过ClassLoader动态加载类、读取配置文件等。</li>
-</ol>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//下面为jdk动态代理，通过反射实现的</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DebugInvocationHandler</span> <span class="token keyword">implements</span> <span class="token class-name">InvocationHandler</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">/**
-     * 代理类中的真实对象
-     */</span>
-    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Object</span> target<span class="token punctuation">;</span>
-
-    <span class="token keyword">public</span> <span class="token class-name">DebugInvocationHandler</span><span class="token punctuation">(</span><span class="token class-name">Object</span> target<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>target <span class="token operator">=</span> target<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">invoke</span><span class="token punctuation">(</span><span class="token class-name">Object</span> proxy<span class="token punctuation">,</span> <span class="token class-name">Method</span> method<span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InvocationTargetException</span><span class="token punctuation">,</span> <span class="token class-name">IllegalAccessException</span> <span class="token punctuation">&#123;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"before method "</span> <span class="token operator">+</span> method<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">Object</span> result <span class="token operator">=</span> method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>target<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"after method "</span> <span class="token operator">+</span> method<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h1><h2 id="什么是注解"><a href="#什么是注解" class="headerlink" title="什么是注解"></a>什么是注解</h2><blockquote>
-<p><code>Annotation</code> （注解） 是 Java5 开始引入的新特性，可以看作是一种特殊的注释，主要用于修饰类、方法或者变量，提供某些信息供程序在编译或者运行时使用。</p>
-<p>注解本质是一个继承了<code>Annotation</code> 的特殊接口：</p>
-</blockquote>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Target</span><span class="token punctuation">(</span><span class="token class-name">ElementType</span><span class="token punctuation">.</span>METHOD<span class="token punctuation">)</span>
-<span class="token annotation punctuation">@Retention</span><span class="token punctuation">(</span><span class="token class-name">RetentionPolicy</span><span class="token punctuation">.</span>SOURCE<span class="token punctuation">)</span>
-<span class="token keyword">public</span> <span class="token annotation punctuation">@interface</span> <span class="token class-name">Override</span> <span class="token punctuation">&#123;</span>
-<span class="token punctuation">&#125;</span>
-相当于
-<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Override</span> <span class="token keyword">extends</span> <span class="token class-name">Annotation</span><span class="token punctuation">&#123;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<blockquote>
-<p>JDK 提供了很多内置的注解（比如 <code>@Override</code>、<code>@Deprecated</code>），同时，我们还可以自定义注解。</p>
-</blockquote>
-<h2 id="注解解析的方式"><a href="#注解解析的方式" class="headerlink" title="注解解析的方式"></a>注解解析的方式</h2><blockquote>
-<p>注解只有被解析之后才会生效，常见的解析方法有两种：</p>
-</blockquote>
-<ul>
-<li><strong>编译期直接扫描</strong>：编译器在编译 Java 代码的时候扫描对应的注解并处理，比如某个方法使用<code>@Override</code> 注解，编译器在编译的时候就会检测当前的方法是否重写了父类对应的方法。</li>
-<li><strong>运行期通过反射处理</strong>：像框架中自带的注解(比如 Spring 框架的 <code>@Value</code>、<code>@Component</code>)都是通过反射来进行处理的。</li>
-</ul>
-<h2 id="注解的使用场景"><a href="#注解的使用场景" class="headerlink" title="注解的使用场景"></a>注解的使用场景</h2><ol>
-<li><strong>代码说明和文档生成</strong>：可以使用注解来添加说明、作者、版本等信息，帮助理解和使用代码，也可以通过注解生成文档。</li>
-<li><strong>编译时检查</strong>：可以使用注解进行编译时的静态检查，例如 <code>@Override</code> 注解用于检查是否正确覆盖了父类的方法。</li>
-<li><strong>运行时处理</strong>：可以使用注解在运行时进行处理，例如依赖注入、AOP（面向切面编程）、配置解析等。</li>
-<li><strong>代码生成</strong>：可以使用注解来生成代码或配置文件，例如使用注解来配置ORM框架。</li>
-<li><strong>元数据处理</strong>：可以使用注解获取和处理类、方法、字段等的元数据信息，例如自定义注解处理器。</li>
-</ol>
-<h1 id="SPI"><a href="#SPI" class="headerlink" title="SPI"></a>SPI</h1><blockquote>
-<p>SPI 即 Service Provider Interface ，字面意思就是：“服务提供者的接口”，我的理解是：专门提供给服务提供者或者扩展框架功能的开发者去使用的一个接口。</p>
-<p>SPI 将服务接口和具体的服务实现分离开来，将服务调用方和服务实现者解耦，能够提升程序的扩展性、可维护性。修改或者替换服务实现并不需要修改调用方。</p>
-<p>很多框架都使用了 Java 的 SPI 机制，比如：Spring 框架、数据库加载驱动、日志接口、以及 Dubbo 的扩展实现等等。</p>
-</blockquote>
-<h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><blockquote>
-<p>序列化是指将对象转换为字节流的过程，以便将其存储到文件中、通过网络传输或在内存中进行传递。序列化的主要目的是将对象的状态保存下来，以便在需要时可以重新创建对象或者传输对象数据。</p>
-<p>在Java中，序列化是通过实现Serializable接口来实现的。Serializable接口是一个标记接口，没有任何方法，它只是用于指示Java虚拟机这个类可以被序列化。当一个类实现了Serializable接口后，它的对象就可以被序列化成字节流，从而可以进行持久化存储或网络传输。</p>
-</blockquote>
-<p>简单来说：</p>
-<ul>
-<li><strong>序列化</strong>：将数据结构或对象转换成二进制字节流的过程</li>
-<li><strong>反序列化</strong>：将在序列化过程中所生成的二进制字节流转换成数据结构或者对象的过程</li>
-</ul>
-<p>下面是序列化和反序列化常见应用场景：</p>
-<ul>
-<li>对象在进行网络传输（比如远程方法调用 RPC 的时候）之前需要先被序列化，接收到序列化的对象之后需要再进行反序列化；</li>
-<li>将对象存储到文件之前需要进行序列化，将对象从文件中读取出来需要进行反序列化；</li>
-<li>将对象存储到数据库（如 Redis）之前需要用到序列化，将对象从缓存数据库中读取出来需要反序列化；</li>
-<li>将对象存储到内存之前需要进行序列化，从内存中读取出来之后需要进行反序列化。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/flume.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2653,6 +1557,612 @@ dbMapping:
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Build%20tools.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Build%20tools.html" class="post-title-link" itemprop="url">Build Tools</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h1><h1 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h1><h1 id="Ant"><a href="#Ant" class="headerlink" title="Ant"></a>Ant</h1>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/Api.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/Api.html" class="post-title-link" itemprop="url">Api</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-16 09:01:59" itemprop="dateCreated datePublished" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="REST"><a href="#REST" class="headerlink" title="REST"></a>REST</h1><h2 id="什么是-RESTful-API？"><a href="#什么是-RESTful-API？" class="headerlink" title="什么是 RESTful API？"></a>什么是 RESTful API？</h2><blockquote>
+<p>Restful是指不通计算机系统之间按照Rest风格进行应用程序的通信</p>
+</blockquote>
+<h2 id="什么是-API？"><a href="#什么是-API？" class="headerlink" title="什么是 API？"></a>什么是 API？</h2><blockquote>
+<p>开发人员公开或创建 API，以便他们的应用程序可以以编程方式与其他应用程序进行通信</p>
+<p><strong>客户端：</strong> 客户端是要访问 Web 上信息的用户。客户端可以是使用 API 的个人或软件系统。例如，开发人员可以编写从天气系统访问天气数据的程序。或者，您可以在浏览器上直接访问天气网站访问相同的数据。</p>
+<p><strong>资源：</strong>资源是不同的应用程序向其客户端提供的信息。资源可以是图像、视频、文本、数字或任何类型的数据。向客户端提供资源的设备也称为服务器。企业使用 API 分享资源，既能提供 Web 服务，还能确保安全、可控，身份验证。</p>
+</blockquote>
+<h2 id="什么是-REST？"><a href="#什么是-REST？" class="headerlink" title="什么是 REST？"></a>什么是 REST？</h2><p>表征状态传输 (REST) 是一种软件架构，决定了 API 的工作条件。REST 最初作为管理复杂网络（例如互联网）上的通信的指南而建立。您可以使用基于 REST 的架构为高性能和可靠的大规模通信提供支持。您可以轻松应用和修改此种架构，为任何 API 系统带来可见性和跨平台可能性。</p>
+<p>API 开发人员可以使用多种不同的架构设计 API。遵循 REST 架构风格的 API 称为 REST API。实施 REST 架构的 Web 服务称为 RESTful Web 服务。术语 RESTful API 通常指 RESTful Web API。但是，术语 REST API 和 RESTful API 可以互换使用。</p>
+<p>以下是 REST 架构风格的一些原则：</p>
+<h3 id="统一接口"><a href="#统一接口" class="headerlink" title="统一接口"></a>统一接口</h3><p>统一接口是一切 RESTful Web 服务设计的基础。其表示服务器以标准格式传输信息。格式化的资源在 REST 中称为表征。此格式可以与服务器应用程序上资源的内部表征不同。例如，服务器可以将数据存储为文本，但以 HTML 表征格式发送该数据。</p>
+<p>统一接口强制实施四个架构约束：</p>
+<ol>
+<li>请求应确定资源。它们通过使用统一的资源标识符实现此功能。</li>
+<li>客户端包含资源表征中的足够信息以修改或删除资源（如需要）。服务器通过发送进一步描述资源的元数据以符合这一条件。</li>
+<li>客户端接收有关如何进一步处理表征的信息。服务器通过发送自描述信息实现此功能，该信息包含了有关客户端如何以最佳方式使用这些信息的元数据。</li>
+<li>客户端接收有关其完成任务需要的所有其他相关资源的信息。服务器通过在表征中发送超链接实现此功能，以便客户端可以动态发现更多资源。</li>
+</ol>
+<h3 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h3><p>在 REST 架构中，无状态指一种服务器独立于所有之前的请求完成每个客户端请求的通信方法。客户端可以以任意顺序请求资源，每个请求为无状态或与独立于其他请求。此 REST API 设计约束意味着服务器每次可以完全识别和满足请求。 </p>
+<h3 id="层次化系统"><a href="#层次化系统" class="headerlink" title="层次化系统"></a>层次化系统</h3><p>在层次化系统架构中，客户端可以连接到客户端和服务器之间的其他授权中间方，其仍将接收来自服务器的响应。服务器也可以将请求传递到其他服务器。您可以将 RESTful Web 服务设计为在包含多个层级（例如安全、应用程序和业务逻辑）的数个服务器上运行，从而共同满足客户端请求。这些层级对客户端仍不可见。</p>
+<h3 id="高速缓存能力"><a href="#高速缓存能力" class="headerlink" title="高速缓存能力"></a>高速缓存能力</h3><p>RESTful Web 服务支持缓存，缓存是指将一些响应存储在客户端或中间方上以提高服务器响应时间的流程。例如，假设您访问某个网站，该网站的每个页面都包含通用的页眉和页脚图像。每次您访问新的网站页面时，服务器必须重新发送相同的图像。为了避免出现这种情况，客户端在首次响应后会缓存或存储这些图像，之后直接使用缓存中的图像。RESTful Web 服务通过使用自行定义为可缓存或不可缓存的 API 响应来控制缓存。</p>
+<h3 id="按需编码"><a href="#按需编码" class="headerlink" title="按需编码"></a>按需编码</h3><p>在 REST 架构风格中，服务器可以通过将软件编程代码传输到客户端暂时扩展或自定义客户端功能。例如，当您在任何网站上填写注册表单时，浏览器会立即高亮您填写内容的任何错误，例如不正确的电话号码。正是由于服务器发送的代码，浏览器才可以实现这个功能。</p>
+<h2 id="RESTful-API-有哪些优势？"><a href="#RESTful-API-有哪些优势？" class="headerlink" title="RESTful API 有哪些优势？"></a>RESTful API 有哪些优势？</h2><p>RESTful API 有以下优势：</p>
+<h3 id="可扩展性"><a href="#可扩展性" class="headerlink" title="可扩展性"></a>可扩展性</h3><p>采用了 REST API 的系统可以高效扩展，因为 REST 优化了客户端-服务器交互。无状态可减轻服务器负载，因为服务器不必保留过去的客户端请求信息。管理良好的缓存可部分或完全消除某些客户端-服务器交互。所有这些功能都支持可扩展性，并且不会导致通信瓶颈进而降低性能。</p>
+<h3 id="灵活性"><a href="#灵活性" class="headerlink" title="灵活性"></a>灵活性</h3><p>RESTful Web 服务支持客户端-服务器完全分离。该服务简化并分离了多种服务器组件，以便可以独立改进每个部分。平台或技术在服务器应用程序端更改，不会影响客户端应用程序。分层应用程序功能可进一步提升灵活性。例如，开发人员可以更改数据库层，而无需重新编写应用程序逻辑。</p>
+<h3 id="独立性"><a href="#独立性" class="headerlink" title="独立性"></a>独立性</h3><p>REST API 与所使用的技术相互独立。您可以在不影响 API 设计的情况下以多种编程语言编写客户端和服务器应用程序。您也可以在不影响通信的情况下更改任何一端的基础技术。</p>
+<h2 id="RESTful-API-如何工作？"><a href="#RESTful-API-如何工作？" class="headerlink" title="RESTful API 如何工作？"></a>RESTful API 如何工作？</h2><p>RESTful API 的基本功能与浏览互联网一样。客户端在请求资源时使用 API 与服务器建立联系。API 开发人员在服务器应用程序 API 文档中说明了客户端应如何使用 REST API。以下是调用任何 REST API 的通用步骤：</p>
+<ol>
+<li>客户端向服务器发送请求。客户端遵循 API 文档以服务器可识别的方式设置请求格式。</li>
+<li>服务器对客户端进行身份验证，并确认客户端有权发送该请求。</li>
+<li>服务器接收请求并对其进行内部处理。</li>
+<li>服务器向客户端返回响应。响应包含通知客户端请求是否成功的信息。响应也包括客户端请求的任何信息。</li>
+</ol>
+<p>REST API 请求和响应详细信息略有不同，具体取决于 API 开发人员如何设计 API。</p>
+<h2 id="RESTful-API-客户端请求包含哪些内容？"><a href="#RESTful-API-客户端请求包含哪些内容？" class="headerlink" title="RESTful API 客户端请求包含哪些内容？"></a>RESTful API 客户端请求包含哪些内容？</h2><p>RESTful API 要求请求包含以下主要组件：</p>
+<h3 id="唯一的资源标识符"><a href="#唯一的资源标识符" class="headerlink" title="唯一的资源标识符"></a>唯一的资源标识符</h3><p>服务器通过唯一的资源标识符识别每个资源。对于 REST 服务，服务器通常使用统一资源定位符 (URL) 执行资源识别。URL 指定资源的路径。URL 类似于您访问任何网页时在浏览器中输入的网站地址。URL 也称为请求端点，并向服务器清晰指明客户端请求的内容。</p>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>开发人员通常使用超文本传输协议 (HTTP) 实施 RESTful API。HTTP 方法通知服务器需要对资源执行什么操作。以下为四种常见的 HTTP 方法：</p>
+<p><em><strong>GET</strong></em></p>
+<p>客户端使用 GET 访问位于服务器上指定 URL 上的资源。它们可以缓存 GET 请求，并在 RESTful API 请求中发送参数以指示服务器在发送之前筛选数据。</p>
+<p><em><strong>POST</strong></em></p>
+<p>客户端使用 POST 向服务器发送数据。它们将数据表征包含到了请求中。多次发送相同的 POST 请求会造成多次创建相同资源的不良影响。</p>
+<p><em><strong>PUT</strong></em></p>
+<p>客户端使用 PUT 更新服务器上的现有资源。与 POST 不同，在 RESTful Web 服务中多次发送相同的 PUT 请求具有相同的效果。</p>
+<p><em><strong>DELETE</strong></em></p>
+<p>客户端使用 DELETE 请求删除资源。DELETE 请求可以更改服务器状态。但是，如果用户没有合适的身份验证，则请求失败。</p>
+<h3 id="HTTP-头"><a href="#HTTP-头" class="headerlink" title="HTTP 头"></a>HTTP 头</h3><p>请求头是客户端和服务器之间交换的元数据。例如，请求头表示请求和响应的格式，提供有关请求状态的信息等等。</p>
+<p><em><strong>数据</strong></em></p>
+<p>REST API 请求可能包含 POST、PUT 和其他 HTTP 方法成功运行所需的数据。</p>
+<p><em><strong>参数</strong></em></p>
+<p>RESTful API 请求可以包含参数，这些参数向服务器提供更多有关需采取行动的详细信息。以下为一些不同类型的参数：</p>
+<ul>
+<li>指定 URL 详细信息的路径参数。</li>
+<li>请求有关资源的更多信息的查询参数。</li>
+<li>对客户端进行快速身份验证的 Cookie 参数。</li>
+</ul>
+<h2 id="什么是-RESTful-API-身份验证方法？"><a href="#什么是-RESTful-API-身份验证方法？" class="headerlink" title="什么是 RESTful API 身份验证方法？"></a>什么是 RESTful API 身份验证方法？</h2><p>RESTful Web 服务必须首先对请求进行身份验证，然后才能发送响应。身份验证是指验证身份的流程。例如，您可以出示身份证或驾驶证证明您的身份。同理，RESTful 服务客户端必须向服务器证明其身份才能确立信任。</p>
+<p>RESTful API 包含四种常见身份验证方法：</p>
+<h3 id="HTTP-身份验证"><a href="#HTTP-身份验证" class="headerlink" title="HTTP 身份验证"></a>HTTP 身份验证</h3><p>HTTP 定义您实施 REST API 时可直接使用的一些身份验证方案。以下为这些方案的其中两种：</p>
+<p><em><strong>基本身份验证</strong></em></p>
+<p>在基本身份验证中，客户端在请求头中发送用户名和密码。其使用 base64 编码，该编码技术将对组转化为一套 64 个字符进行安全传输。</p>
+<p><em><strong>不记名身份验证</strong></em></p>
+<p>术语不记名身份验证指向不记名令牌授予访问控制的流程。不记名令牌通常是服务器在响应登录请求时生成的加密字符串。客户端在请求头中发送令牌以访问资源。</p>
+<h3 id="API-密钥"><a href="#API-密钥" class="headerlink" title="API 密钥"></a>API 密钥</h3><p>API 密钥是 REST API 身份验证的另一个选项。在此方案中，服务器向首次通信的客户端分配生成的唯一值。无论客户端何时尝试访问资源，其使用唯一的 API 密钥进行验证。API 密钥的安全性较低，因为客户端必须传输密钥，其易受网络盗窃的攻击。</p>
+<h3 id="OAuth"><a href="#OAuth" class="headerlink" title="OAuth"></a>OAuth</h3><p>OAuth 结合密码和令牌实现对任何系统的高度安全登录访问。服务器首先请求密码，然后再额外请求令牌以完成授权流程。其可以随时查看令牌，也可以在特定范围和长度的一段时间内查看令牌。</p>
+<h2 id="RESTful-API-服务器响应包含哪些内容？"><a href="#RESTful-API-服务器响应包含哪些内容？" class="headerlink" title="RESTful API 服务器响应包含哪些内容？"></a>RESTful API 服务器响应包含哪些内容？</h2><p>REST 原则要求服务器响应包含以下主要组件：</p>
+<h3 id="状态行"><a href="#状态行" class="headerlink" title="状态行"></a>状态行</h3><p>状态行包含三位数字状态代码表示请求成功或请求出现故障。例如，2XX 代码表示成功，但 4XX 和 5XX 代码表示错误。3XX 代码表示 URL 重定向。</p>
+<p>以下为一些常见的状态代码：</p>
+<ul>
+<li>200：通用成功响应</li>
+<li>201：POST 方法成功响应</li>
+<li>400：服务器无法处理的不正确请求</li>
+<li>404：未找到资源</li>
+</ul>
+<h3 id="信息正文"><a href="#信息正文" class="headerlink" title="信息正文"></a>信息正文</h3><p>响应正文包含资源表征。服务器根据请求头包含的内容选择合适的表征格式。客户端可以以 XML 或 JSON 格式请求信息，这些格式定义如何以纯文本方式编写数据。例如，如果客户端请求名为 John 的人员的姓名和年龄，则服务器返回如下 JSON 表征：</p>
+<p>‘{“name”:”John”, “age”:30}’</p>
+<h3 id="头"><a href="#头" class="headerlink" title="头"></a>头</h3><p>响应也包含有关响应的头或元数据。它们提供有关响应的更多背景内容，包含服务器、编码、日期和内容类型等信息。</p>
+<h1 id="JSON-APIs"><a href="#JSON-APIs" class="headerlink" title="JSON APIs"></a>JSON APIs</h1><h2 id="资源（Resources）"><a href="#资源（Resources）" class="headerlink" title="资源（Resources）"></a><strong>资源（Resources）</strong></h2><p>资源是 API 暴露的核心实体，通常代表系统中的业务对象（如文章、用户、评论等）。每个资源都有一个唯一的标识符（ID）和类型。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">jsonCopy code<span class="token punctuation">&#123;</span>
+  <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"articles"</span><span class="token punctuation">,</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"1"</span><span class="token punctuation">,</span>
+    <span class="token property">"attributes"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"Introduction to JSON API"</span><span class="token punctuation">,</span>
+      <span class="token property">"content"</span><span class="token operator">:</span> <span class="token string">"..."</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="关系（Relationships）"><a href="#关系（Relationships）" class="headerlink" title="关系（Relationships）"></a><strong>关系（Relationships）</strong></h2><p>资源之间可以有关系。例如，一篇文章可以有多个评论，评论与文章之间形成了关系。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">jsonCopy code<span class="token punctuation">&#123;</span>
+  <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"articles"</span><span class="token punctuation">,</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"1"</span><span class="token punctuation">,</span>
+    <span class="token property">"relationships"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token property">"comments"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+          <span class="token punctuation">&#123;</span> <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"comments"</span><span class="token punctuation">,</span> <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"1"</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+          <span class="token punctuation">&#123;</span> <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"comments"</span><span class="token punctuation">,</span> <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"2"</span> <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">]</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="端点（Endpoints）"><a href="#端点（Endpoints）" class="headerlink" title="端点（Endpoints）"></a><strong>端点（Endpoints）</strong></h2><p>JSON API 使用一致的端点命名方式。例如，获取所有文章的请求可能是 <code>GET /articles</code>。</p>
+<h2 id="包含（Inclusion）"><a href="#包含（Inclusion）" class="headerlink" title="包含（Inclusion）"></a><strong>包含（Inclusion）</strong></h2><p>允许客户端在一次请求中包含与主资源相关联的其他资源。这可以减少多次请求的需求。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">jsonCopy code<span class="token punctuation">&#123;</span>
+  <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"articles"</span><span class="token punctuation">,</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"1"</span><span class="token punctuation">,</span>
+    <span class="token property">"relationships"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token property">"author"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"authors"</span><span class="token punctuation">,</span> <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"42"</span> <span class="token punctuation">&#125;</span> <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token property">"included"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"authors"</span><span class="token punctuation">,</span>
+      <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"42"</span><span class="token punctuation">,</span>
+      <span class="token property">"attributes"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"John Doe"</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="分页（Pagination）"><a href="#分页（Pagination）" class="headerlink" title="分页（Pagination）"></a><strong>分页（Pagination）</strong></h2><p>JSON API 支持对结果集的分页，以避免一次性返回大量数据。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">jsonCopy code<span class="token punctuation">&#123;</span>
+  <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token comment">// ... (当前页的资源)</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"meta"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"pagination"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token property">"total-pages"</span><span class="token operator">:</span> <span class="token number">5</span><span class="token punctuation">,</span>
+      <span class="token property">"current-page"</span><span class="token operator">:</span> <span class="token number">1</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="排序（Sorting）"><a href="#排序（Sorting）" class="headerlink" title="排序（Sorting）"></a><strong>排序（Sorting）</strong></h2><p>客户端可以指定返回结果的排序方式。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">jsonCopy code
+GET /articles?sort=title<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="过滤（Filtering）"><a href="#过滤（Filtering）" class="headerlink" title="过滤（Filtering）"></a><strong>过滤（Filtering）</strong></h2><p>客户端可以指定一些条件，以限制返回结果。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">jsonCopy code
+GET /articles?filter<span class="token punctuation">[</span>author<span class="token punctuation">]</span>=<span class="token number">42</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="错误处理（Error-Handling）"><a href="#错误处理（Error-Handling）" class="headerlink" title="错误处理（Error Handling）"></a><strong>错误处理（Error Handling）</strong></h2><p>定义了一套标准的错误格式和处理机制，使得错误信息一致且易于理解。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">jsonCopy code<span class="token punctuation">&#123;</span>
+  <span class="token property">"errors"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span> <span class="token property">"status"</span><span class="token operator">:</span> <span class="token string">"404"</span><span class="token punctuation">,</span> <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"Not Found"</span><span class="token punctuation">,</span> <span class="token property">"detail"</span><span class="token operator">:</span> <span class="token string">"Resource not found."</span> <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="SOAP"><a href="#SOAP" class="headerlink" title="SOAP"></a>SOAP</h1><ol>
+<li><p><strong>协议：</strong> SOAP 是一种协议，规定了消息的格式和交互方式。它通常在 HTTP 或 SMTP 等传输协议上运行。</p>
+</li>
+<li><p><strong>消息格式：</strong> SOAP 消息是用 XML 构建的。一个典型的 SOAP 消息包括 <code>&lt;Envelope&gt;</code> 元素，其中包含 <code>&lt;Header&gt;</code> 和 <code>&lt;Body&gt;</code> 元素，分别用于包含头部信息和主体信息。</p>
+<pre class="line-numbers language-none"><code class="language-none">xmlCopy code&lt;soap:Envelope xmlns:soap&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2003&#x2F;05&#x2F;soap-envelope&quot; xmlns:m&#x3D;&quot;http:&#x2F;&#x2F;www.example.org&quot;&gt;
+  &lt;soap:Header&gt;
+    &lt;!-- 头部信息 --&gt;
+  &lt;&#x2F;soap:Header&gt;
+  &lt;soap:Body&gt;
+    &lt;!-- 主体信息 --&gt;
+  &lt;&#x2F;soap:Body&gt;
+&lt;&#x2F;soap:Envelope&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p><strong>基于 XML-RPC：</strong> SOAP 被认为是 XML-RPC 的进一步发展，提供了更多的功能和灵活性。</p>
+</li>
+<li><p><strong>协议中立：</strong> 由于它可以在多种传输协议上运行，SOAP 是协议中立的。它可以在 HTTP、SMTP、JMS（Java Message Service）等协议上使用。</p>
+</li>
+<li><p><strong>支持 Web Services：</strong> SOAP 在 Web Services 中得到广泛应用。Web Services 是一种通过网络进行通信的技术，它使用标准的 Web 协议（如 HTTP、SOAP）来实现跨平台的应用集成。</p>
+</li>
+<li><p><strong>安全性：</strong> SOAP 提供了一些机制来确保消息的安全性，例如可以使用 HTTPS 来加密传输的数据，还可以通过 WS-Security 等标准来实现消息级的安全。</p>
+</li>
+<li><p><strong>复杂性：</strong> 与 REST 相比，SOAP 的消息格式相对较为复杂，因为它使用 XML，而且在一些简单的使用场景下可能显得繁琐。</p>
+</li>
+</ol>
+<h1 id="gRPC"><a href="#gRPC" class="headerlink" title="gRPC"></a>gRPC</h1><p>gRPC（gRPC Remote Procedure Call）是一个高性能、开源的 RPC（Remote Procedure Call）框架，由 Google 开发。它使用 HTTP&#x2F;2 协议进行通信，并支持多种编程语言。gRPC 的目标是使跨网络的服务调用更加简单和高效。</p>
+<p>以下是 gRPC 的一些关键特点：</p>
+<ol>
+<li><strong>IDL（Interface Definition Language）：</strong> 使用 Protobuf（Protocol Buffers）作为接口定义语言。IDL 描述了服务的方法、参数和返回值的数据结构。</li>
+<li><strong>多语言支持：</strong> gRPC 提供了多种语言的支持，包括但不限于 C++, Java, Python, Go, Ruby, C#, Node.js。</li>
+<li><strong>HTTP&#x2F;2：</strong> 使用基于二进制的 HTTP&#x2F;2 协议进行通信，以提高性能和效率。HTTP&#x2F;2 支持多路复用、头部压缩、流控制等特性。</li>
+<li><strong>双向流：</strong> gRPC 支持双向流通信，允许客户端和服务端可以同时发送多个消息。</li>
+<li><strong>代码生成：</strong> 使用 Protobuf 作为IDL，并通过代码生成工具生成客户端和服务端的代码。这简化了开发人员的工作，同时提供了强类型的 API。</li>
+<li><strong>支持拦截器：</strong> gRPC 支持在客户端和服务端使用拦截器，以便在请求和响应的处理链中执行逻辑。</li>
+<li><strong>多种服务调用类型：</strong> 支持四种服务调用类型，即单一请求-单一响应、单一请求-流响应、流请求-单一响应、流请求-流响应。</li>
+<li><strong>支持服务发现：</strong> gRPC 支持使用服务发现机制，使得服务能够注册和发现其他服务的位置。</li>
+<li><strong>可插拔：</strong> gRPC 的核心库是高度可插拔的，允许开发者根据需要选择适合的组件。</li>
+</ol>
+<h1 id="GraphQL"><a href="#GraphQL" class="headerlink" title="GraphQL"></a>GraphQL</h1><p>GraphQL（Graph Query Language）是一种由 Facebook 开发的查询语言和服务端运行时环境，用于 API 的查询和数据操纵。GraphQL 提供了一种更高效、强大且灵活的替代方式，相比于传统的 REST API，它更加精确地满足客户端的数据需求。</p>
+<p>以下是 GraphQL 的一些关键特点和概念：</p>
+<ol>
+<li><strong>强大的查询语言：</strong> GraphQL 允许客户端按照其需要的方式定义查询，而不是由服务端决定返回的数据结构。客户端能够精确地指定所需的字段和关联关系。</li>
+<li><strong>单一入口点：</strong> 所有的 GraphQL 查询都通过单一的入口点（通常是 <code>/graphql</code> 端点）进行。这个入口点能够处理客户端发起的各种查询。</li>
+<li><strong>精确定义的数据：</strong> GraphQL 的查询由客户端定义，服务端返回的数据与查询结构一一对应。这消除了过度获取或缺少数据的问题，称为”过度获取”（Over-fetching）和”欠获取”（Under-fetching）。</li>
+<li><strong>实时数据：</strong> 支持实时数据传输，使得服务端能够主动向客户端推送更新。</li>
+<li><strong>类型系统：</strong> GraphQL 使用类型系统来定义 API 中的对象和操作。服务端通过类型系统告诉客户端可以请求哪些数据，并在响应中提供相应的数据。</li>
+<li><strong>关联关系：</strong> 客户端能够一次性请求多个相关联的数据，减少了多次请求的需要。</li>
+<li><strong>自省：</strong> GraphQL 具有自省能力，客户端能够通过查询获取有关 API 结构的信息，包括可用的查询、变更和类型等。</li>
+<li><strong>扩展性：</strong> 允许服务端添加新的功能和字段，而不会破坏现有的查询。客户端可以选择是否使用新添加的功能。</li>
+</ol>
+<h1 id="Hateoas"><a href="#Hateoas" class="headerlink" title="Hateoas"></a>Hateoas</h1><p>HATEOAS，全称是“Hypermedia as the Engine of Application State”，中文翻译为“超媒体作为应用状态的引擎”，是一种 REST 架构风格的设计原则。</p>
+<p>HATEOAS 的核心思想是将应用程序的状态以及与应用程序交互的方式嵌入到 API 的响应中。在传统的 RESTful API 中，客户端需要提前了解 API 的结构，并且需要硬编码与 API 交互的方式。而 HATEOAS 的目标是通过在 API 的响应中提供相关的链接，使得客户端能够通过发现而非预先知道如何与 API 交互。</p>
+<p>关键特点和概念包括：</p>
+<ol>
+<li><strong>超媒体链接：</strong> API 的响应中包含了与当前资源相关的链接，这些链接可以指向其他资源或描述可执行的操作。</li>
+<li><strong>动态发现：</strong> 客户端不需要提前知道如何构造请求，而是通过解析 API 返回的超媒体链接来动态地发现可用的资源和操作。</li>
+<li><strong>资源状态：</strong> 客户端可以通过 API 提供的链接获取当前资源的状态，并了解可执行的下一步操作。</li>
+<li><strong>自描述性：</strong> API 提供了足够的信息，使得客户端能够理解如何使用 API，而无需依赖外部文档。</li>
+</ol>
+<p>HATEOAS 的设计理念强调了 API 的自描述性和灵活性，减少了客户端与服务端之间的紧耦合，提高了系统的可扩展性。实现 HATEOAS 的 API 可以更容易地适应变化，因为客户端只需要遵循 API 返回的链接，而不是依赖于硬编码的信息。</p>
+<p>虽然 HATEOAS 是 RESTful 架构的一个重要原则，但在实际应用中，并不是所有的 RESTful API 都严格遵循 HATEOAS。其复杂性和在某些场景下的适用性取决于具体的应用需求。</p>
+<h1 id="Open-api-spec"><a href="#Open-api-spec" class="headerlink" title="Open api spec"></a>Open api spec</h1><p>OpenAPI Specification（OpenAPI规范）是一种用于描述和定义 RESTful API 的开放标准。它以先前称为Swagger规范的形式开始，并在进入 Linux 基金会后更名为 OpenAPI。OpenAPI Specification 使用 JSON 或 YAML 格式，提供了一种清晰且易于理解的方式，用于描述 API 的结构、端点、参数、请求-响应规范以及其他相关信息。</p>
+<p>关键特点和组成部分包括：</p>
+<ol>
+<li><strong>API 文档定义：</strong> OpenAPI Specification 用于编写 API 文档，其中包括 API 的路径、操作、参数、请求和响应示例等。</li>
+<li><strong>端点和操作：</strong> 定义了 API 的不同端点（路径）以及每个端点上支持的操作（HTTP 方法）。</li>
+<li><strong>请求和响应：</strong> 详细说明了每个操作的请求和响应的结构，包括参数、头部、响应码等。</li>
+<li><strong>数据模型：</strong> 定义了在 API 中使用的数据模型，包括对象的属性、数据类型等。</li>
+<li><strong>安全性定义：</strong> 描述了 API 的安全性要求，例如身份验证、授权等。</li>
+<li><strong>标签和注释：</strong> 支持标签和注释，使得 API 文档更易读和更易于理解。</li>
+</ol>
+<p>使用 OpenAPI Specification 的好处包括：</p>
+<ul>
+<li><strong>文档自动生成：</strong> 可以利用 OpenAPI Specification 自动生成 API 文档，减少了手动文档编写的工作量。</li>
+<li><strong>客户端代码生成：</strong> 支持通过规范生成客户端代码，使得客户端更容易与 API 进行交互。</li>
+<li><strong>工具和生态系统：</strong> OpenAPI Specification 已经成为广泛采用的标准，有许多工具和库支持该规范，从而帮助开发者更轻松地构建和维护 API。</li>
+</ul>
+<h1 id="Authentication"><a href="#Authentication" class="headerlink" title="Authentication"></a>Authentication</h1><h2 id="JWT-Authentication"><a href="#JWT-Authentication" class="headerlink" title="JWT Authentication"></a>JWT Authentication</h2><p>JWT（JSON Web Token）是一种用于进行信息传递的开放标准（RFC 7519）。它通常用于在服务之间传递声明式信息，以便进行身份验证和授权。JWT 由三部分组成，这三部分通过点号（.）连接在一起：</p>
+<ol>
+<li><strong>Header（头部）：</strong> 包含了令牌的元数据，例如算法和令牌类型。</li>
+<li><strong>Payload（载荷）：</strong> 包含了声明，即关于实体（通常是用户）和其他数据的信息。有三种类型的声明：注册声明、公共声明和私有声明。</li>
+<li><strong>Signature（签名）：</strong> 用于验证令牌的真实性，防止被篡改。</li>
+</ol>
+<p>JWT 的基本工作流程如下：</p>
+<ol>
+<li><strong>认证：</strong> 用户提供用户名和密码进行身份验证。</li>
+<li><strong>颁发 Token：</strong> 服务器使用私钥生成 JWT，并将其返回给客户端。</li>
+<li><strong>存储 Token：</strong> 客户端通常将 JWT 存储在本地，例如在浏览器的 localStorage 中。</li>
+<li><strong>请求时发送 Token：</strong> 客户端在每个请求的 Authorization 头中发送 JWT。</li>
+<li><strong>验证和授权：</strong> 服务器验证 JWT 的签名，检查权限，并提供响应。</li>
+</ol>
+<p>JWT 的优势和用途包括：</p>
+<ul>
+<li><strong>跨域身份验证：</strong> 由于 JWT 可以在不同域之间传递，并且不需要在用户和服务器之间存储状态，因此非常适合用于跨域身份验证。</li>
+<li><strong>简化身份验证流程：</strong> JWT 简化了身份验证流程，因为它不需要在服务器上保存会话状态。</li>
+<li><strong>声明性信息：</strong> JWT 载荷可以包含任何类型的声明，使其成为携带用户角色、权限和其他信息的有效工具。</li>
+</ul>
+<p>需要注意的是，为了确保 JWT 的安全性，应该使用 HTTPS 协议来传输 JWT，并在服务器端使用适当的密钥进行签名和验证。此外，避免在 JWT 中存储敏感信息，因为 JWT 的内容可以被 Base64 解码。</p>
+<h2 id="Token-based-Authentication"><a href="#Token-based-Authentication" class="headerlink" title="Token based Authentication"></a>Token based Authentication</h2><p>Token-based authentication是一种身份验证方式，它通过使用令牌来验证用户身份。通常情况下，用户在登录成功后，系统会为其颁发一个令牌，该令牌包含了一些信息，用于标识用户和授予访问权限。这个令牌随后在每个请求中被发送，用于验证用户的身份和权限。</p>
+<p>基于令牌的身份验证的主要特点包括：</p>
+<ol>
+<li><strong>状态无关：</strong> 与传统的基于会话的身份验证方式不同，基于令牌的身份验证是状态无关的。服务器不需要在后端存储用户的会话信息。令牌本身包含了必要的用户信息，因此服务器可以独立验证用户的身份。</li>
+<li><strong>分布式系统：</strong> 适用于分布式系统和跨域应用程序。令牌可以在不同的服务之间传递，使得身份验证在不同服务之间更加灵活。</li>
+<li><strong>无状态：</strong> 服务器不需要在后端存储任何会话状态。每个请求都包含了足够的信息，以便服务器验证用户身份和权限。</li>
+<li><strong>安全性：</strong> 通过使用安全的令牌生成和验证机制，可以增加系统的安全性。例如，使用JWT（JSON Web Token）或其他加密算法可以保护令牌的传输和存储。</li>
+</ol>
+<p>Token-based身份验证通常涉及以下步骤：</p>
+<ul>
+<li><strong>用户登录：</strong> 用户提供凭据（通常是用户名和密码）进行身份验证。</li>
+<li><strong>颁发令牌：</strong> 服务器验证用户身份后，颁发一个令牌给用户。这个令牌可能包含用户的一些信息，如用户ID、角色和过期时间。</li>
+<li><strong>令牌存储：</strong> 客户端通常会将令牌存储在安全的位置，如浏览器的本地存储或内存中。</li>
+<li><strong>请求时发送令牌：</strong> 客户端在每个请求的头部或其他安全方式中发送令牌。</li>
+<li><strong>验证和授权：</strong> 服务器接收到令牌后，验证其签名和有效性，并根据令牌中的信息授权用户的访问。</li>
+</ul>
+<p>基于令牌的身份验证是现代应用程序中常见的一种方式，特别是在移动应用和前后端分离的Web应用中。</p>
+<h2 id="Session-based-Authentication"><a href="#Session-based-Authentication" class="headerlink" title="Session based Authentication"></a>Session based Authentication</h2><p>Session-based authentication是一种身份验证方式，它使用会话来跟踪和验证用户的身份。这种方式通常基于浏览器的会话机制，用户在登录成功后，服务器会为其创建一个会话，并分配一个唯一的会话标识（通常是一个会话ID）。该标识存储在用户的浏览器中，通常以cookie的形式保存。</p>
+<p>主要特点和步骤包括：</p>
+<ol>
+<li><strong>会话创建：</strong> 用户在登录成功后，服务器创建一个会话，生成一个唯一的会话ID，并将其发送到用户的浏览器，存储在cookie中。</li>
+<li><strong>会话存储：</strong> 用户的会话信息通常存储在服务器端，包括用户的身份信息、权限等。这可以存储在内存中、数据库中或其他持久化存储中。</li>
+<li><strong>请求时发送会话ID：</strong> 用户的浏览器在每个后续请求中都会将会话ID作为cookie发送到服务器。服务器使用这个ID来识别用户，并检查其会话状态。</li>
+<li><strong>验证和授权：</strong> 服务器接收到会话ID后，验证其有效性并检查用户的权限。如果会话有效且用户有相应权限，服务器会允许请求。</li>
+<li><strong>会话超时：</strong> 为了安全性，会话通常会设置过期时间。如果用户在一段时间内没有活动，会话可能会超时，需要重新登录。</li>
+<li><strong>注销：</strong> 用户可以选择主动注销，或者服务器可以在一定条件下自动注销用户的会话。</li>
+</ol>
+<p>Session-based authentication适用于传统的Web应用，通过服务器端存储会话信息，可以实现更多的控制和安全性。然而，它也带来了一些挑战，如需要在服务器端维护会话状态、难以扩展到分布式环境等。</p>
+<h2 id="Basic-Authentication"><a href="#Basic-Authentication" class="headerlink" title="Basic Authentication"></a>Basic Authentication</h2><p>Basic Authentication（基本身份验证）是一种简单的身份验证机制，通常用于HTTP协议。它是一种基于用户名和密码的验证方式，其工作原理如下：</p>
+<ol>
+<li><p><strong>请求时携带认证信息：</strong> 客户端在请求时，将用户名和密码按照一定的格式（Base64编码）加密，并放在请求的<code>Authorization</code>头中发送给服务器。</p>
+<p>例如，HTTP请求头中的基本认证信息可能如下所示：</p>
+<pre class="line-numbers language-none"><code class="language-none">makefileCopy code
+Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ&#x3D;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>其中，<code>dXNlcm5hbWU6cGFzc3dvcmQ=</code> 是将用户名和密码编码后的Base64字符串。</p>
+</li>
+<li><p><strong>服务器验证认证信息：</strong> 服务器接收到请求后，解码<code>Authorization</code>头中的认证信息，获取用户名和密码。</p>
+</li>
+<li><p><strong>验证用户名和密码：</strong> 服务器验证解码后的用户名和密码，如果匹配则允许访问，否则返回未授权（401 Unauthorized）的响应。</p>
+</li>
+</ol>
+<p>Basic Authentication的优点是简单易实现，适用于简单的身份验证场景。然而，它的安全性较低，因为用户名和密码是以明文的形式在网络上传输的，容易受到窃听攻击。</p>
+<p>由于安全性的限制，通常建议在使用Basic Authentication时，要结合使用HTTPS协议，以加密通信，提高安全性。另外，对于更高级的身份验证需求，例如使用令牌（Token）等方式可能更为安全和灵活。</p>
+<h2 id="OAuth-Open-Authorization"><a href="#OAuth-Open-Authorization" class="headerlink" title="OAuth - Open Authorization"></a>OAuth - Open Authorization</h2><p>OAuth（Open Authorization）是一种开放的授权协议，用于授权第三方应用程序访问资源所有者（用户）在另一服务提供者上存储的资源，而无需将资源所有者的凭据（例如用户名和密码）传递给第三方应用程序。</p>
+<p>OAuth的主要设计目标是在让用户安全地授权第三方应用程序访问其资源的同时，避免将用户的用户名和密码传递给第三方应用。OAuth协议涉及四个主要角色：</p>
+<ol>
+<li><strong>资源所有者（Resource Owner）：</strong> 即用户，是拥有资源（如照片、文件）的实体，能够对资源进行授权的实体。</li>
+<li><strong>客户端（Client）：</strong> 第三方应用程序，请求访问资源的应用。</li>
+<li><strong>授权服务器（Authorization Server）：</strong> 负责验证资源所有者身份并颁发访问令牌（Access Token）的服务器。</li>
+<li><strong>资源服务器（Resource Server）：</strong> 存储资源的服务器，受到访问令牌的保护，负责对请求进行认证和授权，并返回受保护的资源。</li>
+</ol>
+<p>OAuth协议中定义了不同的授权流程，其中最常见的是授权码授权流程（Authorization Code Grant），包括以下步骤：</p>
+<ol>
+<li><strong>客户端请求授权：</strong> 客户端向授权服务器请求授权，并提供回调地址。</li>
+<li><strong>用户授权：</strong> 资源所有者登录授权服务器，同意授权请求，授权服务器返回授权码。</li>
+<li><strong>授权码换取令牌：</strong> 客户端使用授权码向授权服务器请求访问令牌。</li>
+<li><strong>使用令牌访问资源：</strong> 客户端使用访问令牌向资源服务器请求访问受保护的资源。</li>
+</ol>
+<p>OAuth协议的优势在于用户只需提供一次用户名和密码给授权服务器，而不直接提供给第三方应用。此外，通过使用访问令牌，可以限制第三方应用对用户资源的访问权限，提高了安全性。OAuth已成为许多互联网服务和应用程序中常见的身份验证和授权协</p>
+<h2 id="SSO-Single-Sign-On"><a href="#SSO-Single-Sign-On" class="headerlink" title="SSO - Single Sign On"></a>SSO - Single Sign On</h2><p>单一登录（Single Sign-On，SSO）是一种身份验证过程，允许用户使用一组凭据（例如用户名和密码）登录到多个相关但独立的软件系统，而无需为每个系统单独进行身份验证。通过实现SSO，用户只需在登录时提供一次凭据，然后就可以在整个系统中无缝地访问其他受保护的资源，而无需反复进行身份验证。</p>
+<p>SSO的关键目标是提供更便捷的用户体验，减少用户需要记忆和管理的凭据数量。主要的SSO机制通常包括以下几种：</p>
+<ol>
+<li><strong>身份提供者（Identity Provider，IdP）：</strong> 负责验证用户身份并颁发令牌的系统。常见的IdP包括登录服务、身份管理系统等。</li>
+<li><strong>服务提供者（Service Provider，SP）：</strong> 提供受保护资源的系统。用户在IdP验证身份后，可以使用令牌访问相关SP的资源。</li>
+<li><strong>令牌（Token）：</strong> 在用户成功通过身份验证后，IdP颁发一个令牌，用于在不同系统之间传递身份信息。</li>
+</ol>
+<p>SSO有助于提高安全性，因为用户不再需要在多个系统中重复使用相同的凭据。常见的SSO实现包括基于令牌的SSO（如OAuth、OpenID Connect）、基于SAML（Security Assertion Markup Language）的SSO等。</p>
+<p>在企业环境中，SSO通常用于集成不同的企业应用程序、服务和系统，以提供更流畅的用户体验，减少密码疲劳问题。常见的SSO方案还包括通过企业的身份提供者（如Active Directory）实现的企业内部SSO。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E6%9C%89%E7%8A%B6%E6%80%81%E5%92%8C%E6%97%A0%E7%8A%B6%E6%80%81%E7%9A%84%E5%8C%BA%E5%88%AB.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/%E6%9C%89%E7%8A%B6%E6%80%81%E5%92%8C%E6%97%A0%E7%8A%B6%E6%80%81%E7%9A%84%E5%8C%BA%E5%88%AB.html" class="post-title-link" itemprop="url">有状态和无状态请求的区别</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-15 15:58:09" itemprop="dateCreated datePublished" datetime="2024-04-15T15:58:09+08:00">2024-04-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是状态"><a href="#什么是状态" class="headerlink" title="什么是状态"></a>什么是状态</h1><p>“状态”是指系统用于处理请求的存储信息。随着用户与应用程序交互或系统事件发生，这些信息可能会随时间而变化。 </p>
+<h1 id="有状态请求"><a href="#有状态请求" class="headerlink" title="有状态请求"></a>有状态请求</h1><p>有状态应用会存储用户 ID、会话信息、配置和偏好设置等数据，以帮助处理特定用户的请求。有状态设计允许应用为其用户提供个性化体验，同时无需在多个请求之间共享数据。 </p>
+<blockquote>
+<p>在有状态请求中，服务器会跟踪客户端的状态。这通常是通过会话或者cookie来实现的。每次客户端发送给服务器的请求，服务器都会参考之前的信息来处理这次请求。一个典型的例子就是登录到网站后，服务器会存储你的信息（比如用户名）。当你在网站内进行其他操作时，服务器会通过识别你的状态来确保你已经登录，这样你就可以访问需要登录才能打开的页面。</p>
+</blockquote>
+<h1 id="无状态的由来"><a href="#无状态的由来" class="headerlink" title="无状态的由来"></a>无状态的由来</h1><p>随着应用程序变得越来越复杂，流量也越来越大，有状态设计的局限性也越来越明显。管理和维护会话数据会给系统带来巨大的性能开销和复杂性。这种复杂性使得系统难以水平扩展，因为跨多个实例共享状态成为一项挑战。对可扩展性和效率的迫切需求推动了无状态设计的流行。请求包含处理请求所需的所有信息，而不是状态管理机制。系统能够处理高级别的请求，同时增加系统扩展的灵活性，使其更加节省资源。 </p>
+<h1 id="无状态请求"><a href="#无状态请求" class="headerlink" title="无状态请求"></a>无状态请求</h1><blockquote>
+<p>在无状态请求中，服务器并不记录任何关于客户端的状态信息。每个请求都是独立的，服务器不会关联不同的请求。这意味着每个请求都必须包含所有必要的信息，服务器不能依赖于过去的请求或会话来获取任何信息。无状态请求可以使服务器更容易扩展，因为它们并不需要保存任何关于客户端的状态信息。</p>
+</blockquote>
+<h1 id="有状态和无状态的区别"><a href="#有状态和无状态的区别" class="headerlink" title="有状态和无状态的区别"></a>有状态和无状态的区别</h1><blockquote>
+<p>有状态请求和无状态请求主要的区别在于系统是否记住过去的信息,在实际应用中，根据使用场景的需要，既有无状态也有有状态的存在。例如，HTTP协议本身就是无状态的，但是我们可以通过在应用层面添加会话或者cookie等工具，以便让HTTP请求变成有状态的。</p>
+</blockquote>
+<h1 id="无状态应用场景"><a href="#无状态应用场景" class="headerlink" title="无状态应用场景"></a>无状态应用场景</h1><ol>
+<li><p><code>微服务和无服务器计算</code> 它们体现了无状态，使服务和功能能够独立运行，从而提高可扩展性和资源效率。</p>
+</li>
+<li><p><code>RESTful API 和 CDN</code> 通过包含所有必要信息的每个 API 调用或请求，无状态设计简化了操作并提高了内容传递速度。</p>
+</li>
+</ol>
+<h1 id="无状态的缺点"><a href="#无状态的缺点" class="headerlink" title="无状态的缺点"></a><strong>无状态的缺点</strong></h1><ol>
+<li><p>更大的请求大小——需要在每个请求中包含完整的数据，这会导致数据传输增加，从而影响性能。 </p>
+</li>
+<li><p>传输效率低下——不断发送完整数据集的效率可能低于访问有状态设计中的集中式数据。 </p>
+</li>
+<li><p>并不总是理想的——在本质上需要状态的场景中，例如复杂的用户交互，无状态设计可能会增加更多复杂性，而不是简化流程。大多数应用程序根据每个组件的需求和限制选择有状态和无状态设计之间的混合方法。</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/API%E7%BD%91%E5%85%B3.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/API%E7%BD%91%E5%85%B3.html" class="post-title-link" itemprop="url">API网关</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-15 15:58:09" itemprop="dateCreated datePublished" datetime="2024-04-15T15:58:09+08:00">2024-04-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是API网关"><a href="#什么是API网关" class="headerlink" title="什么是API网关"></a>什么是API网关</h1><blockquote>
+<p>API 网关是一个管理、处理和路由API调用到后端服务的系统。作为微服务架构中的关键组件，API网关为客户端（如移动设备、Web应用程序、第三方服务等）提供了一个统一的入口点，并将请求路由到适当的微服务上。此外，它还可以提供额外的跨服务功能，包括请求聚合、协议转换、请求和响应转换等。</p>
+</blockquote>
+<h2 id="API的功能"><a href="#API的功能" class="headerlink" title="API的功能"></a>API的功能</h2><h3 id="请求路由"><a href="#请求路由" class="headerlink" title="请求路由"></a>请求路由</h3><p>API网关将接收到的请求转发到正确的服务。例如，它可以基于URL路径或请求参数将请求路由到特定的微服务。</p>
+<h3 id="API聚合"><a href="#API聚合" class="headerlink" title="API聚合"></a>API聚合</h3><p>API网关可以将多个API请求聚合为一个请求，减少客户端需要做的调用次数，以便提升性能和用户体验。</p>
+<h3 id="身份验证和授权"><a href="#身份验证和授权" class="headerlink" title="身份验证和授权"></a>身份验证和授权</h3><p>它可以在请求到达后端服务之前进行用户身份验证和授权检查，提供安全层，确保只有验证过的用户可以访问敏感信息。</p>
+<h3 id="限流和服务降级"><a href="#限流和服务降级" class="headerlink" title="限流和服务降级"></a>限流和服务降级</h3><p>网关可以限制对后端服务的请求频率，帮助防范DDoS攻击，并在系统负载过高时实施服务降级策略。</p>
+<h3 id="跨应用程序消息传递"><a href="#跨应用程序消息传递" class="headerlink" title="跨应用程序消息传递"></a>跨应用程序消息传递</h3><p>API网关支持不同类型的跨应用程序通讯协议，如HTTP, WebSocket等。</p>
+<h3 id="监控和日志记录"><a href="#监控和日志记录" class="headerlink" title="监控和日志记录"></a>监控和日志记录</h3><p>为了诊断和调试问题，API网关可以对通过它的流量进行监控，并记录日志。</p>
+<h3 id="响应转换"><a href="#响应转换" class="headerlink" title="响应转换"></a>响应转换</h3><p>它可以修改微服务的响应，以符合客户端的需要，例如把JSON转换为XML。</p>
+<h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><p>API网关可以在多个实例之间分配流量，和负载均衡器的工作相似，以提高性能和可靠性。</p>
+<h2 id="API网关的原理"><a href="#API网关的原理" class="headerlink" title="API网关的原理"></a>API网关的原理</h2><ol>
+<li><p>接收请求：API网关的第一步是接收从客户端发来的API请求。</p>
+</li>
+<li><p>预处理和验证：在路由请求之前，API网关需要进行一些预处理工作，比如用户认证（确定请求是否来自一个有效的用户）、鉴权（确定用户是否有权访问请求的资源）、请求校验（确定请求是否合法，是否包含全部必要的参数）等。另外，它也可能需要进行一些消息转换或协议转换的工作。</p>
+</li>
+<li><p>路由请求：API网关将经过校验之后的有效请求路由到正确的后端服务或微服务，比如根据URL或者请求的参数来决定将请求路由到哪一个服务。</p>
+</li>
+<li><p>请求聚合：对于需要多个微服务共同配合来完成的请求，API网关可以将这些请求聚合，而后一次性返回给客户端。这样可以减少客户端需要发出的请求数，从而提升性能和用户体验。</p>
+</li>
+<li><p>响应返回：当后端服务处理完请求后，会将响应返回给API网关，网关之后再将这些响应返回给客户端。在这个过程中，API网关可能还会进行一些后处理，比如进行数据格式转换，或者添加一些特殊的HTTP头等。</p>
+</li>
+<li><p>日志和监控：在整个过程中，API网关会持续记录日志，同时进行性能监控和错误跟踪。这些信息对于系统的维护和故障排查产生重大价值。</p>
+</li>
+</ol>
+<h2 id="API网关的优点"><a href="#API网关的优点" class="headerlink" title="API网关的优点"></a>API网关的优点</h2><ol>
+<li><strong>抽象化：</strong>API 网关为外部消费者访问一组微服务提供了一个统一的入口点，对底层实施细节进行抽象化，同时允许微服务独立演进。</li>
+<li><strong>安全性：</strong>API 网关可以处理身份验证、授权和速率限制等安全任务，从而提高底层微服务的安全性。</li>
+<li><strong>性能：</strong>API 网关可以缓存响应并执行请求&#x2F;响应转换，提高系统的整体性能。</li>
+<li><strong>开发人员体验：</strong>API 网关提供分析、归档和测试工具，使开发人员可以更容易建立和维护基于微服务的应用程序。</li>
+<li><strong>消费者体验：</strong>API 网关可以让消费者更容易发现和使用微服务提供的 API，改善整体易用性和用户体验。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -2722,7 +2232,7 @@ dbMapping:
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

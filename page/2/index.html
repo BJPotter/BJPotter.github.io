@@ -2557,7 +2557,7 @@ Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTYxNjI1
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E6%B3%A8%E8%A7%A3.html">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java-5-JVM.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -2571,7 +2571,7 @@ Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTYxNjI1
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/java%E6%B3%A8%E8%A7%A3.html" class="post-title-link" itemprop="url">java注解</a>
+            <a href="/post/java-5-JVM.html" class="post-title-link" itemprop="url">java基础-JVM</a>
         </h2>
 
         <div class="post-meta">
@@ -2583,129 +2583,13 @@ Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTYxNjI1
 
               <time title="创建时间：2024-05-28 18:11:46" itemprop="dateCreated datePublished" datetime="2024-05-28T18:11:46+08:00">2024-05-28</time>
             </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="什么是注解"><a href="#什么是注解" class="headerlink" title="什么是注解"></a>什么是注解</h1><p>注解(Annotation)是Java语言用于将元数据(metadata)与程序元素(类、方法、字段等)关联的一种机制。它提供了一种形式化的方法,使代码可以在编译期被特定的工具或编译器进行处理。注解本身不会直接影响程序的语义,但可以被用来生成辅助代码、校验程序逻辑等。</p>
-<h1 id="注解的作用"><a href="#注解的作用" class="headerlink" title="注解的作用"></a>注解的作用</h1><ol>
-<li><strong>编译时检查</strong> - 通过注解表达约束条件,编译器可以检查这些约束是否被违反。例如<code>@Override</code>确保方法正确覆写。</li>
-<li><strong>生成辅助代码</strong> - 注解可以被工具处理,生成相关的辅助代码,如XML配置文件、代理类等。</li>
-<li><strong>运行时处理</strong> - 在运行时通过反射获取注解信息,并进行相应的处理,如缓存管理、权限控制等。</li>
-</ol>
-<h1 id="注解的分类"><a href="#注解的分类" class="headerlink" title="注解的分类"></a>注解的分类</h1><ol>
-<li><strong>Java内置注解</strong> - Java语言内置的标准注解,如<code>@Override</code>、<code>@Deprecated</code>、<code>@SuppressWarnings</code>等。</li>
-<li><strong>元注解</strong> - 用于定义注解的注解,如<code>@Retention</code>、<code>@Target</code>、<code>@Inherited</code>、<code>@Documented</code>等。</li>
-<li><strong>自定义注解</strong> - 根据具体需求自行定义的注解。</li>
-</ol>
-<h1 id="元注解详解"><a href="#元注解详解" class="headerlink" title="元注解详解"></a>元注解详解</h1><p>元注解是用来定义其他注解的注解,它们可以嵌套地应用于其他注解上。常见的元注解包括:</p>
-<ul>
-<li><code>@Retention</code> - 指定注解的保留策略,可选值为SOURCE(源码级别)、CLASS(class文件级别)和RUNTIME(运行时级别)。</li>
-<li><code>@Target</code> - 指定注解可以应用的程序元素类型,如TYPE、METHOD、FIELD等。</li>
-<li><code>@Inherited</code> - 指定注解是否可以被子类继承。</li>
-<li><code>@Documented</code> - 指定注解是否可以被javadoc工具文档化。</li>
-<li><code>@Repeatable</code> - 指定注解是否可以在同一个程序元素上重复使用。(Java 8新增)</li>
-</ul>
-<h1 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h1><p>自定义注解的步骤如下:</p>
-<ol>
-<li>使用<code>@interface</code>定义注解接口,声明注解的成员变量。</li>
-<li>使用元注解对注解进行配置,如<code>@Retention</code>、<code>@Target</code>等。</li>
-<li>在代码中使用自定义注解,为其成员变量赋值。</li>
-<li>通过反射获取注解信息,并进行相应的处理。</li>
-</ol>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">java<span class="token annotation punctuation">@Retention</span><span class="token punctuation">(</span><span class="token class-name">RetentionPolicy</span><span class="token punctuation">.</span>RUNTIME<span class="token punctuation">)</span>
-<span class="token annotation punctuation">@Target</span><span class="token punctuation">(</span><span class="token class-name">ElementType</span><span class="token punctuation">.</span>METHOD<span class="token punctuation">)</span>
-<span class="token keyword">public</span> <span class="token annotation punctuation">@interface</span> <span class="token class-name">CacheResult</span> <span class="token punctuation">&#123;</span>
-    <span class="token class-name">String</span> <span class="token function">cacheKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token string">""</span><span class="token punctuation">;</span> 
-    <span class="token keyword">long</span> <span class="token function">expireTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token number">30</span> <span class="token operator">*</span> <span class="token number">60</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token annotation punctuation">@CacheResult</span><span class="token punctuation">(</span>cacheKey<span class="token operator">=</span><span class="token string">"#userId"</span><span class="token punctuation">,</span> expireTime<span class="token operator">=</span><span class="token number">3600</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> <span class="token class-name">User</span> <span class="token function">getUserInfo</span><span class="token punctuation">(</span><span class="token class-name">String</span> userId<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="注解的含义"><a href="#注解的含义" class="headerlink" title="注解的含义"></a>注解的含义</h1><h2 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h2><p>@Target元注解用于指定注解可以应用于哪些程序元素。它接受一个ElementType参数的数组,常用的ElementType值包括:</p>
-<ul>
-<li>ElementType.TYPE - 可应用于类、接口、枚举等</li>
-<li>ElementType.FIELD - 可应用于字段、枚举常量</li>
-<li>ElementType.METHOD - 可应用于方法</li>
-<li>ElementType.PARAMETER - 可应用于方法参数</li>
-<li>ElementType.CONSTRUCTOR - 可应用于构造函数</li>
-<li>ElementType.LOCAL_VARIABLE - 可应用于局部变量</li>
-<li>ElementType.ANNOTATION_TYPE - 可应用于注解类型</li>
-</ul>
-<p>例如,@Target({ElementType.METHOD, ElementType.TYPE})表示该注解可以应用于方法和类&#x2F;接口上。</p>
-<h2 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h2><p>@Retention元注解用于指定注解的生命周期,即注解信息在哪个级别被保留下来。它接受一个RetentionPolicy参数,常用的RetentionPolicy值包括:</p>
-<ul>
-<li>RetentionPolicy.SOURCE - 注解只保留在源代码级别,编译时被丢弃</li>
-<li>RetentionPolicy.CLASS - 注解保留在class文件级别,但在运行时会被JVM丢弃</li>
-<li>RetentionPolicy.RUNTIME - 注解可以在运行时被JVM保留,因此可以通过反射读取注解信息</li>
-</ul>
-<p>@Retention(RetentionPolicy.RUNTIME)表示该注解在运行时可以被反射访问。 </p>
-<h1 id="注解的应用场景"><a href="#注解的应用场景" class="headerlink" title="注解的应用场景"></a>注解的应用场景</h1><ol>
-<li><strong>配置管理</strong> - 使用注解配置替代XML文件,如Spring的<code>@Configuration</code>、<code>@Bean</code>等。</li>
-<li><strong>ORM映射</strong> - 使用注解描述对象与数据库表的映射,如JPA的<code>@Entity</code>、<code>@Table</code>等。</li>
-<li><strong>校验约束</strong> - 使用注解表达校验规则,如Bean Validation的<code>@NotNull</code>、<code>@Size</code>等。</li>
-<li><strong>日志记录</strong> - 使用注解标记需要记录日志的方法,如Log4j的<code>@Log</code>。</li>
-<li><strong>缓存管理</strong> - 使用注解标记需要缓存的方法及缓存策略。</li>
-<li><strong>安全控制</strong> - 使用注解控制方法的安全访问级别,如Spring Security的<code>@Secured</code>。</li>
-<li><strong>异步处理</strong> - 使用注解标记需要异步执行的方法,如Spring的<code>@Async</code>。</li>
-<li><strong>事务管理</strong> - 使用注解配置事务属性,如Spring的<code>@Transactional</code>。</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java%E5%9F%BA%E7%A1%80%E4%B8%83-JVM.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/java%E5%9F%BA%E7%A1%80%E4%B8%83-JVM.html" class="post-title-link" itemprop="url">java基础-JVM</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-01 15:46:28" itemprop="dateModified" datetime="2024-07-01T15:46:28+08:00">2024-07-01</time>
               </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-05-28 18:11:46" itemprop="dateCreated datePublished" datetime="2024-05-28T18:11:46+08:00">2024-05-28</time>
-            </span>
 
           
 
@@ -2811,22 +2695,131 @@ Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTYxNjI1
 <h2 id="对象优先在Eden区分配"><a href="#对象优先在Eden区分配" class="headerlink" title="对象优先在Eden区分配"></a>对象优先在Eden区分配</h2><p>大多数新创建的对象在Eden区分配，当Eden区满时触发Minor GC，将存活对象移到Survivor区。</p>
 <h2 id="大对象直接进入老年代"><a href="#大对象直接进入老年代" class="headerlink" title="大对象直接进入老年代"></a>大对象直接进入老年代</h2><p>避免在新生代频繁复制大对象，减少内存复制开销。</p>
 <h2 id="长期存活对象将进入老年代"><a href="#长期存活对象将进入老年代" class="headerlink" title="长期存活对象将进入老年代"></a>长期存活对象将进入老年代</h2><p>对象在Survivor区经历多次GC后，晋升到老年代。</p>
-<h1 id="虚拟机类加载机制"><a href="#虚拟机类加载机制" class="headerlink" title="虚拟机类加载机制"></a>虚拟机类加载机制</h1><h2 id="简述java类加载机制"><a href="#简述java类加载机制" class="headerlink" title="简述java类加载机制"></a>简述java类加载机制</h2><p>Java类加载机制包括加载、链接和初始化三个步骤。加载阶段通过类加载器读取类文件，将其转化为二进制数据；链接阶段验证、准备和解析类；初始化阶段执行类的静态初始化器和静态变量初始化。</p>
-<h2 id="描述一下JVM加载Class文件的原理机制"><a href="#描述一下JVM加载Class文件的原理机制" class="headerlink" title="描述一下JVM加载Class文件的原理机制"></a>描述一下JVM加载Class文件的原理机制</h2><p>JVM通过类加载器加载Class文件，加载过程包括查找和加载Class文件，将其转化为Class对象。加载器遵循双亲委派模型，保证类加载的安全性和一致性。</p>
-<h2 id="什么是类加载器，类加载器有哪些"><a href="#什么是类加载器，类加载器有哪些" class="headerlink" title="什么是类加载器，类加载器有哪些?"></a>什么是类加载器，类加载器有哪些?</h2><p>类加载器是负责加载类文件的组件，主要有以下几种：</p>
-<ul>
-<li><strong>启动类加载器（Bootstrap ClassLoader）</strong>：加载JDK核心类库。</li>
-<li><strong>扩展类加载器（Extension ClassLoader）</strong>：加载扩展类库。</li>
-<li><strong>应用程序类加载器（Application ClassLoader）</strong>：加载应用程序类。</li>
-<li><strong>自定义类加载器</strong>：用户定义的类加载器。</li>
-</ul>
-<h2 id="说一下类装载的执行过程？"><a href="#说一下类装载的执行过程？" class="headerlink" title="说一下类装载的执行过程？"></a>说一下类装载的执行过程？</h2><p>类装载的执行过程包括：</p>
+<h1 id="虚拟机类加载机制"><a href="#虚拟机类加载机制" class="headerlink" title="虚拟机类加载机制"></a>虚拟机类加载机制</h1><blockquote>
+<p>Java类加载机制是Java虚拟机（JVM）的核心组成部分之一，负责在运行时加载、链接和初始化类。通俗的来讲就是每个.java文件经过javac编译工具编译后生成.class文件，类加载机制就是把这些.class文件中的二进制读到内存中，并对数据进行链接（验证、准备、解析）和初始化，初始化完成后，会在方法区保存一份该类的元数据，同时在堆中创建一个与之对应的<code>Class</code>对象，该<code>Class</code>对象包含了该类的相关信息。</p>
+</blockquote>
+<h2 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h2><p>加载（Loading）-&gt; 验证（Verification）-&gt; 准备（Preparation）-&gt; 解析（Resolution）-&gt; 初始化（Initialization）-&gt; 使用（Usage）-&gt; 卸载（unloading）</p>
+<p>1.加载指将字节码文件加载到JVM</p>
+<p>2.验证指是否符合JVM虚拟机的规范</p>
+<p>3.准备指给静态变量分配内存空间，并设置置默认初始值</p>
+<p>4.解析指将类的符号引用转换为直接引用，让虚拟机可以找到对应的内存地址</p>
+<p>5.初始化指对静态代码块和静态变量进行初始化操作</p>
+<p>6.使用指可以被程序其他的类调用或者说直接引用</p>
+<p>7.卸载指在java虚拟机中，如果某个类不再使用，那就认为这个类是无用的，可以被卸载。</p>
+<h2 id="类什么时候会加载"><a href="#类什么时候会加载" class="headerlink" title="类什么时候会加载"></a>类什么时候会加载</h2><p>1.创建类的实例：当程序中使用<code>new</code>关键字创建类的实例时，对应的类会被加载。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">MyClass</span> obj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>2.<strong>访问类的静态变量或静态方法</strong>：当程序中访问类的静态变量或静态方法时，对应的类也会被加载。例如：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">MyClass</span><span class="token punctuation">.</span><span class="token function">staticMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>3.<strong>通过反射动态加载类</strong>：通过Java的反射机制，可以在运行时动态加载类。例如：**</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"com.example.MyClass"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>4.<strong>启动应用程序时的入口类加载</strong>：当启动Java应用程序时，会指定一个入口类，该入口类会被加载并执行<code>main()</code>方法。这也会触发入口类所依赖的其他类的加载。</p>
+<p>5.<strong>继承</strong>：当一个类继承了另一个类时，子类的加载会导致父类也被加载，除非父类已经被加载过。</p>
+<p>6.<strong>实现接口</strong>：当一个类实现了某个接口时，接口中定义的常量会被加载。</p>
+<h2 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h2><img src="https://telegraph-image-2ni.pages.dev/file/2dded58d88ad824bb04c3.png" style="zoom:33%;">
+
+<p>类的加载过程有五个阶段，其中验证、准备、解析这个子阶段属于链接阶段。下面详细说下，类的加载过程的每个阶段</p>
+<p>1.<strong>加载</strong>：将类的字节码被加载到JVM中。包括从文件系统或者网络中读取.class文件，并将其转换为内存中的二进制数据。在加载阶段，还会为类创建一个<code>java.lang.Class</code>对象。</p>
+<p>2.<strong>验证</strong>：确保类的字节码符合JVM规范，不会导致安全问题或运行时异常。</p>
+<p>3.<strong>准备</strong>：为类的静态变量分配内存空间，并设置默认初始值。</p>
+<p>4.<strong>解析</strong>：将类中的符号引用转换为直接引用，使得虚拟机能够找到对应的内存地址。</p>
+<p>5.<strong>初始化</strong>：在初始化阶段，执行类的静态初始化器（static initializer）和静态变量初始化。静态初始化器是类中的静态代码块，用于初始化类的静态成员变量或执行其他静态初始化操作。</p>
+<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><blockquote>
+<p>在<strong>加载</strong>阶段，类加载器通过类的全限定名，获取该类字节流数据。</p>
+</blockquote>
+<p>1.<strong>启动类加载器（Bootstrap Class Loader）：</strong>负责加载jre\lib 目录下的jar，由C++实现，不是ClassLoader子类。</p>
+<p>2.<strong>拓展类加载器（Extension Class Loader）：</strong>负责加载Java平台中扩展功能的一些jar包，包括jre\lib\ext 目录中 jar包。由Java代码实现。</p>
+<p>3.<strong>应用程序类加载器（Application Class Loader）：</strong>我们自己开发的应用程序，就是由它进行加载的，负责加载ClassPath路径下所有jar包。</p>
+<p>4.<strong>自定义类加载器（Custom Class Loader）</strong>：可以加载任何类，包括Java标准库中的类、第三方库中的类以及自己编写的类。其加载范围和方式可以根据需求进行灵活定制。</p>
+<img src="https://telegraph-image-2ni.pages.dev/file/e1208860284124c277d23.png" style="zoom: 50%;">
+
+
+
+
+
+<h2 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h2><blockquote>
+<p>简单说就是爹能干的，儿子肯定不干，就是任何一个类加载器在接到一个类的加载请求时，都会先让其父类进行加载，只有父类无法加载（或者没有父类）的情况下，才尝试自己加载。</p>
+</blockquote>
 <ol>
-<li><strong>加载</strong>：通过类加载器读取类文件。</li>
-<li><strong>链接</strong>：包括验证、准备和解析三个阶段。</li>
-<li><strong>初始化</strong>：执行类的静态初始化器和静态变量初始化。</li>
+<li><strong>安全性（Security）</strong>：双亲委派模型可以确保Java核心类库不会被替换或篡改，从而提高了Java程序的安全性。由于Java核心类库由启动类加载器加载，且无法被覆盖，因此不容易受到恶意攻击。</li>
+<li><strong>避免类的重复加载（Avoidance of Duplicate Loading）</strong>：双亲委派模型可以避免同一个类被不同的类加载器加载多次，从而节省了内存空间并减少了资源浪费。</li>
+<li><strong>统一标准（Standardization）</strong>：双亲委派模型提供了一个统一的类加载机制，使得Java应用程序具有一致的行为。无论是在Java虚拟机的实现上，还是在开发Java应用程序时，都能够遵循同样的加载规则，减少了不必要的复杂性和混乱。</li>
+<li><strong>类的隔离性（Isolation）</strong>：双亲委派模型通过委派链的方式实现了类的隔离，每个类加载器只负责加载自己能够访问到的类，从而有效地隔离了不同模块或组件的类，防止了类之间的相互干扰和冲突。</li>
+<li><strong>性能优化（Performance Optimization）</strong>：双亲委派模型在加载类时会先检查父类加载器是否已经加载过该类，如果已经加载过，则直接返回已加载的类，从而减少了重复加载和搜索的时间，提高了加载性能。</li>
 </ol>
-<h2 id="什么是双亲委派模型？"><a href="#什么是双亲委派模型？" class="headerlink" title="什么是双亲委派模型？"></a>什么是双亲委派模型？</h2><p>双亲委派模型是指类加载时，类加载器先委托父类加载器加载，父类加载器无法加载时，子类加载器再尝试加载。这保证了类的加载安全和统一。</p>
+<h2 id="自定义类加载器"><a href="#自定义类加载器" class="headerlink" title="自定义类加载器"></a>自定义类加载器</h2><p>自定义类加载器的好处：</p>
+<ol>
+<li><strong>动态更新（Dynamic Updating）</strong>：自定义类加载器可以实现动态更新类的功能。例如，当应用程序运行时，可以检测到新的类文件并加载，从而实现热部署或动态扩展应用程序的功能。</li>
+<li><strong>类的加密解密（Class Encryption and Decryption）</strong>：自定义类加载器可以在加载类文件时进行解密操作，从而保护类文件的安全性。通过在加载过程中实现解密逻辑，可以防止类文件被恶意篡改或者盗用。</li>
+<li><strong>加载非标准文件格式（Loading Non-Standard File Formats）</strong>：自定义类加载器可以加载非标准的类文件格式，例如从数据库、网络或者自定义的存储介质中加载类文件。</li>
+<li><strong>从特定位置加载类（Loading Classes from Specific Locations）</strong>：自定义类加载器可以从特定的位置加载类文件，例如从特定的目录、JAR文件或者远程服务器加载类文件。</li>
+<li><strong>实现类加载策略（Implementing Class Loading Strategies）</strong>：自定义类加载器可以根据特定的策略加载类文件，例如按需加载、按版本加载或者按条件加载。</li>
+<li><strong>解决类加载冲突（Resolving Class Loading Conflicts）</strong>：自定义类加载器可以解决类加载冲突问题，例如当多个模块中存在相同类名但不同版本的类文件时，可以使用自定义类加载器实现类隔离和版本管理。</li>
+<li><strong>实现类加载的权限控制（Implementing Class Loading Permissions）</strong>：自定义类加载器可以实现对类加载的权限控制，例如根据用户身份或者访问权限加载不同的类文件。</li>
+<li><strong>实现类的热替换（Implementing Class Hot Swapping）</strong>：自定义类加载器可以实现类的热替换功能，即在运行时替换正在使用的类，而不需要重启应用程序。</li>
+</ol>
+<blockquote>
+<p>下面我们使用自定义的类加载器加载指定的类，并通过反射调用类的方法。</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CustomClassLoader</span> <span class="token keyword">extends</span> <span class="token class-name">ClassLoader</span><span class="token punctuation">&#123;</span>
+    <span class="token comment">// 定义加载类的路径</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> classPath<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">CustomClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">CustomClassLoader</span><span class="token punctuation">(</span><span class="token class-name">String</span> classPath<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>classPath <span class="token operator">=</span> classPath<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> <span class="token function">findClass</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ClassNotFoundException</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 读取指定路径下的类文件的二进制数据</span>
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data <span class="token operator">=</span> <span class="token function">loadClassData</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 调用defineClass方法将二进制数据转换为Class对象</span>
+            <span class="token keyword">return</span> <span class="token function">defineClass</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> data<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> data<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">ClassNotFoundException</span><span class="token punctuation">(</span><span class="token string">"Class "</span> <span class="token operator">+</span> name <span class="token operator">+</span> <span class="token string">" not found."</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment">// 加载类文件的二进制数据</span>
+    <span class="token keyword">private</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">loadClassData</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> fileName <span class="token operator">=</span> classPath <span class="token operator">+</span> <span class="token class-name">File</span><span class="token punctuation">.</span>separatorChar <span class="token operator">+</span> name<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token char">'.'</span><span class="token punctuation">,</span> <span class="token class-name">File</span><span class="token punctuation">.</span>separatorChar<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">".class"</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">InputStream</span> inputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>fileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+             <span class="token class-name">ByteArrayOutputStream</span> outputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">int</span> len<span class="token punctuation">;</span>
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> buffer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token number">4096</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>len <span class="token operator">=</span> inputStream<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                outputStream<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">return</span> outputStream<span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 自定义类加载器实例化</span>
+        <span class="token class-name">CustomClassLoader</span> classLoader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CustomClassLoader</span><span class="token punctuation">(</span><span class="token string">"D:\\Project\\JAVA\\src\\com.example.CustomClassLoader.class"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 使用自定义类加载器加载指定类</span>
+        <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> clazz <span class="token operator">=</span> classLoader<span class="token punctuation">.</span><span class="token function">loadClass</span><span class="token punctuation">(</span><span class="token string">"com.example.CustomClassLoader"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 创建实例</span>
+        <span class="token class-name">Object</span> instance <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 调用方法</span>
+        <span class="token class-name">Method</span> method <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"sayHello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>instance<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"say hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="类加载器的作用域"><a href="#类加载器的作用域" class="headerlink" title="类加载器的作用域"></a>类加载器的作用域</h2><blockquote>
+<p>类加载器的作用域（Scope）指的是类加载器加载类的可见范围和生命周期管理。类加载器的作用域决定了类的可见性、类的隔离性以及类的生命周期。</p>
+</blockquote>
+<ol>
+<li><strong>可见性（Visibility）</strong>：每个类加载器实例都有自己的加载路径和类加载命名空间，它只能看到自己加载的类和其父类加载器加载的类。因此，类加载器的可见性决定了哪些类对于特定的类加载器是可见的。</li>
+<li><strong>隔离性（Isolation）</strong>：类加载器的隔离性确保了每个类加载器实例加载的类相互之间是隔离的，即同一个类在不同的类加载器实例中被加载时，会被认为是不同的类。这种隔离性保护了应用程序的安全性和稳定性，防止不同模块或组件之间的类产生冲突和干扰。</li>
+<li><strong>生命周期管理（Lifecycle Management）</strong>：类加载器的生命周期管理包括类加载器的创建、使用和销毁。在Java应用程序中，类加载器的生命周期通常与应用程序的生命周期相对应。例如，在应用程序启动时创建类加载器实例，在应用程序结束时销毁类加载器实例。</li>
+</ol>
 <h1 id="JVM调优"><a href="#JVM调优" class="headerlink" title="JVM调优"></a>JVM调优</h1><h2 id="说一下JVM调优的工具？"><a href="#说一下JVM调优的工具？" class="headerlink" title="说一下JVM调优的工具？"></a>说一下JVM调优的工具？</h2><p>常用的JVM调优工具包括：</p>
 <ul>
 <li><strong>jstat</strong>：监控JVM内存和垃圾回收情况。</li>
@@ -4839,6 +4832,205 @@ cmd -<span class="token operator">></span> <span class="token variable"><span cl
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/java-4-IO.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/java-4-IO.html" class="post-title-link" itemprop="url">java基础-io</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-25 14:31:35" itemprop="dateCreated datePublished" datetime="2024-04-25T14:31:35+08:00">2024-04-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-28 17:42:25" itemprop="dateModified" datetime="2024-04-28T17:42:25+08:00">2024-04-28</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是IO"><a href="#什么是IO" class="headerlink" title="什么是IO"></a>什么是IO</h1><h2 id="冯诺依曼结构"><a href="#冯诺依曼结构" class="headerlink" title="冯诺依曼结构"></a>冯诺依曼结构</h2><p>根据冯.诺依曼结构，计算机结构分为 5 大部分：运算器、控制器、存储器、输入设备、输出设备。</p>
+<img src="https://telegraph-image-2ni.pages.dev/file/b412f6130798df7f5dcf8.jpg" style="zoom: 33%;">
+
+<p>我们的IO主要指的是输入设备和输出设备，输入设备（比如键盘）和输出设备（比如显示器）都属于外部设备。</p>
+<h2 id="IO的具体流程"><a href="#IO的具体流程" class="headerlink" title="IO的具体流程"></a>IO的具体流程</h2><p>一个进程的地址空间划分为用户空间和内核空间，内核空间负责系统级别的资源操作（文件管理、进程通信、内存管理等等）。如果要进行IO。必须依赖内核空间，用户空间（应用程序空间）没有权限进行IO操作，如果想要进行IO操作，只能发起系统调用请求操作系统，由操作系统调用内核完成具体的IO操作，（<strong>应用程序实际上只发起了IO操作的调用，具体IO的执行是由操作系统的内核来完成的。</strong>）</p>
+<h2 id="IO步骤总结"><a href="#IO步骤总结" class="headerlink" title="IO步骤总结"></a>IO步骤总结</h2><ol>
+<li>内核等待 I&#x2F;O 设备准备好数据</li>
+<li>内核将数据从内核空间拷贝到用户空间。</li>
+</ol>
+<h3 id="磁盘IO的数据流向"><a href="#磁盘IO的数据流向" class="headerlink" title="磁盘IO的数据流向"></a>磁盘IO的数据流向</h3><p>在读操作时，数据从磁盘设备流向内核空间，然后再流向用户空间；在写操作时，数据从用户空间流向内核空间，然后再流向磁盘设备。</p>
+<h3 id="网络IO数据流向"><a href="#网络IO数据流向" class="headerlink" title="网络IO数据流向"></a>网络IO数据流向</h3><p>在接收数据时，数据从网络设备流向内核空间，再流向用户空间（应用程序的内存空间）；在发送数据时，数据从应用程序的内存流向内核空间，最后流向网络设备。</p>
+<h1 id="Java中3种常见-IO-模型"><a href="#Java中3种常见-IO-模型" class="headerlink" title="Java中3种常见 IO 模型"></a>Java中3种常见 IO 模型</h1><h2 id="BIO"><a href="#BIO" class="headerlink" title="BIO"></a>BIO</h2><p>同步阻塞IO，应用程序发起 read 调用后，会一直阻塞，直到内核把数据拷贝到用户空间。</p>
+<h2 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h2><p>同步非阻塞IO中，应用程序发起read调用后，如果内核中没有就绪的数据，内核会立即返回一个错误，应用程序继续执行其他操作，这是非阻塞的；如果内核中数据已经就绪，当应用程序需要再次发起read调用来读取数据时是阻塞的。（<strong>阻不阻塞取决于内核数据是否准备就绪，不阻塞可以执行其他操作，阻塞的话只能等待</strong>）</p>
+<p><strong>缺点：</strong>不断轮询询问内核空间是否准备就绪，浪费CPU性能</p>
+<h2 id="AIO"><a href="#AIO" class="headerlink" title="AIO"></a>AIO</h2><p>应用程序发起read调用后，内核会立即返回，不需要阻塞等待数据的准备和拷贝，内核在后台会继续处理这些IO，并在IO完成后通过事件或者回调机制通知应用程序。</p>
+<p><strong>回调函数（Callback）</strong>：在发起异步I&#x2F;O请求时，一般会传递一个回调函数给操作系统。一旦I&#x2F;O操作完成，操作系统就会调用这个回调函数，以此来通知应用程序。这个回调函数通常会包含操作的结果，比如操作是否成功，读取或写入的数据量等信息。</p>
+<p><strong>事件通知（Event Notification）</strong>：操作系统提供一种机制，允许应用程序询问或者等待一个或多个I&#x2F;O操作的完成通知。例如Linux的epoll，BSD的kqueue，Java的NIO(Non-blocking I&#x2F;O)库等。应用程序可以在一次查询中得知多个I&#x2F;O操作是否完成，这在处理大量并发连接时，可以提高效率。</p>
+<h1 id="BIO-1"><a href="#BIO-1" class="headerlink" title="BIO"></a>BIO</h1><blockquote>
+<p>BIO是同步阻塞IO，当一个线程进行IO操作的时候，它会阻塞到线程执行完毕。以流的方式处理数据，基于字符流和字节流操作的</p>
+</blockquote>
+<h2 id="字符流和字节流的区别"><a href="#字符流和字节流的区别" class="headerlink" title="字符流和字节流的区别"></a>字符流和字节流的区别</h2><img src="/images/IO.drawio.svg" style="zoom:70%;">
+
+<p>在java中IO指的是input和output，在java中分为输入流和输出流，根据处理数据不同的单位分为字节流和字符流。字节流以字节（8位）为单位进行数据处理，如图片、视频，字符流是以字符进行为单位进行数据处理，如文本。</p>
+<ul>
+<li>处理单位：字节流以字节为单位，字符流以字符为单位。</li>
+<li>用途：字节流可以处理所有类型的数据，字符流只能处理字符类型的数据。</li>
+<li>处理中文字符：字节流可能会出现乱码的情况，字符流按字符处理，不会出现乱码</li>
+</ul>
+<h2 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a>字节流</h2><h3 id="InputStream"><a href="#InputStream" class="headerlink" title="InputStream"></a>InputStream</h3><p><code>InputStream</code>用于从源头（通常是文件）读取数据（字节信息）到内存中，<code>java.io.InputStream</code>抽象类是所有字节输入流的父类。</p>
+<p><code>read()</code>：返回输入流中下一个字节的数据。返回的值介于 0 到 255 之间。如果未读取任何字节，则代码返回 <code>-1</code> ，表示文件结束。</p>
+<p><code>read(byte b[ ])</code> : 从输入流中读取一些字节存储到数组 <code>b</code> 中。如果数组 <code>b</code> 的长度为零，则不读取。如果没有可用字节读取，返回 <code>-1</code>。如果有可用字节读取，则最多读取的字节数最多等于 <code>b.length</code> ， 返回读取的字节数。这个方法等价于 <code>read(b, 0, b.length)</code>。</p>
+<p><code>read(byte b[], int off, int len)</code>：在<code>read(byte b[ ])</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字节数）。</p>
+<p><code>skip(long n)</code>：忽略输入流中的 n 个字节 ,返回实际忽略的字节数。</p>
+<p><code>available()</code>：返回输入流中可以读取的字节数。</p>
+<p><code>close()</code>：关闭输入流释放相关的系统资源。</p>
+<h3 id="OutputStream"><a href="#OutputStream" class="headerlink" title="OutputStream"></a>OutputStream</h3><p><code>write(int b)</code>：将特定字节写入输出流。</p>
+<p><code>write(byte b[ ])</code> : 将数组<code>b</code> 写入到输出流，等价于 <code>write(b, 0, b.length)</code> 。</p>
+<p><code>write(byte[] b, int off, int len)</code> : 在<code>write(byte b[ ])</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字节数）。</p>
+<p><code>flush()</code>：刷新此输出流并强制写出所有缓冲的输出字节。</p>
+<p><code>close()</code>：关闭输出流释放相关的系统资源。</p>
+<h2 id="字符流"><a href="#字符流" class="headerlink" title="字符流"></a>字符流</h2><p>字节流对字符的处理（特别是中文）会出现乱码，字符流默认采用unicode编码，避免这个情况。</p>
+<p><strong>字符流的优点：</strong></p>
+<p>1.可以处理中文字符</p>
+<p>2.支持unicode编码，也可以根据构造函数自定义编码集</p>
+<p>3.可以实现读一行，写一行</p>
+<h3 id="Reader"><a href="#Reader" class="headerlink" title="Reader"></a>Reader</h3><p><code>read()</code> : 从输入流读取一个字符。</p>
+<p><code>read(char[] cbuf)</code> : 从输入流中读取一些字符，并将它们存储到字符数组 <code>cbuf</code>中，等价于 <code>read(cbuf, 0, cbuf.length)</code> 。</p>
+<p><code>read(char[] cbuf, int off, int len)</code>：在<code>read(char[] cbuf)</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字符数）。</p>
+<p><code>skip(long n)</code>：忽略输入流中的 n 个字符 ,返回实际忽略的字符数。</p>
+<p><code>close()</code> : 关闭输入流并释放相关的系统资源。</p>
+<h3 id="Writer"><a href="#Writer" class="headerlink" title="Writer"></a>Writer</h3><p><code>write(int c)</code> : 写入单个字符。</p>
+<p><code>write(char[] cbuf)</code>：写入字符数组 <code>cbuf</code>，等价于<code>write(cbuf, 0, cbuf.length)</code>。</p>
+<p><code>write(char[] cbuf, int off, int len)</code>：在<code>write(char[] cbuf)</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字符数）。</p>
+<p><code>write(String str)</code>：写入字符串，等价于 <code>write(str, 0, str.length())</code> 。</p>
+<p><code>write(String str, int off, int len)</code>：在<code>write(String str)</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字符数）。</p>
+<p><code>append(CharSequence csq)</code>：将指定的字符序列附加到指定的 <code>Writer</code> 对象并返回该 <code>Writer</code> 对象。</p>
+<p><code>append(char c)</code>：将指定的字符附加到指定的 <code>Writer</code> 对象并返回该 <code>Writer</code> 对象。</p>
+<p><code>flush()</code>：刷新此输出流并强制写出所有缓冲的输出字符。</p>
+<p><code>close()</code>:关闭输出流释放相关的系统资源。</p>
+<h2 id="缓冲流"><a href="#缓冲流" class="headerlink" title="缓冲流"></a>缓冲流</h2><p>IO 操作是很消耗性能的，缓冲流将数据加载至缓冲区，一次性读取&#x2F;写入多个字节，从而避免频繁的 IO 操作，提高流的传输效率。</p>
+<h3 id="字节缓冲流"><a href="#字节缓冲流" class="headerlink" title="字节缓冲流"></a>字节缓冲流</h3><p><code>BufferedInputStream</code> 从源头（通常是文件）读取数据（字节信息）到内存的过程中不会一个字节一个字节的读取，而是会先将读取到的字节存放在缓存区，并从内部缓冲区中单独读取字节。这样大幅减少了 IO 次数，提高了读取效率。</p>
+<p><code>BufferedOutputStream</code> 将数据（字节信息）写入到目的地（通常是文件）的过程中不会一个字节一个字节的写入，而是会先将要写入的字节存放在缓存区，并从内部缓冲区中单独写入字节。这样大幅减少了 IO 次数，提高了读取效率</p>
+<h3 id="字符缓冲流"><a href="#字符缓冲流" class="headerlink" title="字符缓冲流"></a>字符缓冲流</h3><p><code>BufferedReader</code> （字符缓冲输入流）和 <code>BufferedWriter</code>（字符缓冲输出流）类似于 <code>BufferedInputStream</code>（字节缓冲输入流）和<code>BufferedOutputStream</code>（字节缓冲输入流），内部都维护了一个字节数组作为缓冲区。不过，前者主要是用来操作字符信息。</p>
+<h2 id="转换流"><a href="#转换流" class="headerlink" title="转换流"></a>转换流</h2><p>转换流主要是InputStreamReader和OutputStreamWriter,InputStreamReader 用于将字节输入流转换为字符输入流，其中 OutputStreamWriter 用于将字节输出流转换为字符输出流。使用转换流可以在一定程度上避免乱码，还可以指定输入输出所使用的字符集。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">InputStreamReader</span> isr <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"example.txt"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> "UTF<span class="token operator">-</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">OutputStreamWriter</span> osw <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">OutputStreamWriter</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span><span class="token string">"example.txt"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h1 id="NIO-1"><a href="#NIO-1" class="headerlink" title="NIO"></a>NIO</h1><blockquote>
+<p>NIO是同步非阻塞IO，它是非阻塞、面向缓冲、基于通道的IO,可以通过少量的线程处理多个连接，相关的类在java.nio包下，主要有三大核心channel（通道）、buffer（缓存）、selector（选择器）</p>
+</blockquote>
+<h2 id="NIO和BIO的区别"><a href="#NIO和BIO的区别" class="headerlink" title="NIO和BIO的区别"></a>NIO和BIO的区别</h2><ul>
+<li>数据单位：BIO以流的方式处理数据，NIO是以块的方式处理数据</li>
+<li>是否阻塞：BIO是阻塞的，NIO是非阻塞的</li>
+<li>操作方式：BIO是以字符流或者字节流处理数据，NIO是基于通道和缓冲进行数据处理</li>
+</ul>
+<h2 id="NIO核心组件"><a href="#NIO核心组件" class="headerlink" title="NIO核心组件"></a>NIO核心组件</h2><p>NIO的核心组件是Channel、Buffer、Selector,如下图所示</p>
+<img src="/images/NIO.png" style="zoom:43%;">
+
+<h3 id="数据流向"><a href="#数据流向" class="headerlink" title="数据流向"></a>数据流向</h3><blockquote>
+<p>缓冲区是数据的临时存储区，通道是连接数据源和缓冲区的桥梁，负责数据的实际传输。</p>
+<p>读操作时，数据从数据源流向缓冲区。</p>
+<p>写操作时，数据从缓冲区流向目标位置。</p>
+</blockquote>
+<p><img src="/images/NIO.drawio.svg"></p>
+<h3 id="缓冲区"><a href="#缓冲区" class="headerlink" title="缓冲区"></a>缓冲区</h3><p>所有数据的读写都是通过缓冲区进行的，缓冲区实质上是一块可以写数据和读取数据的内存，这块内存被包装成 NIO Buffer 对象，并提供一组方法，用来方便地操作这块内存。</p>
+<ul>
+<li><p>容量(Capacity)：缓冲区能够容纳的数据元素的最大数量。这一容量在缓冲区创建时被设定并且不能改变。</p>
+</li>
+<li><p>位置(Position)：下一个要被读或写的元素的索引。位置会自动由相应的 get 或 put 方法更新。</p>
+</li>
+<li><p>限制(Limit)：缓冲区中第一个不应该读取或写入的元素的索引。或者说，你可操作的数据大小（limit - position）。</p>
+</li>
+<li><p>标记(Mark)：一个备忘位置。可以通过 Buffer.mark() 在此位置设置标记，之后可以通过 Buffer.reset() 方法恢复到这个位置。</p>
+</li>
+</ul>
+<p><strong>操作步骤：</strong></p>
+<ol>
+<li><p>写数据到Buffer：调用 Buffer.put() 之类的方法写数据。写完后，position 显示最新写入数据的位置。</p>
+</li>
+<li><p>调用flip()方法：切换Buffer到读模式。读写模式切换是通过 Buffer.flip() 方法完成的，它将 limit 设置为当前 position 的值，position 设置为 0 ，准备读取数据。</p>
+</li>
+<li><p>从Buffer中读数据：调用 Buffer.get() 读取数据。</p>
+</li>
+<li><p>调用clear()方法或compact()方法：读完后，调用 Buffer.clear() 或 Buffer.compact() 切换到写模式，准备再次写入。清空缓冲区并不会删除其中的数据，只是所有的状态值(position、limit、mark)都被设定为初始状态。所以看起来它是空的。</p>
+</li>
+</ol>
+<h3 id="通道"><a href="#通道" class="headerlink" title="通道"></a>通道</h3><p>通道代表了与能够执行 I&#x2F;O 操作的实体（例如，文件、套接字）的连接。简单来说，任何时候你想读写数据（不论是来自文件、网络还是其他地方）</p>
+<ul>
+<li><p>双向性：Java NIO的通道可以同时进行读和写操作，而Java IO流通常都是单向的（InputStream或OutputStream）。</p>
+</li>
+<li><p>非阻塞性：Java NIO的通道可以被配置为非阻塞模式，因此我们可以在异步模式中使用它们。例如，一个线程可以请求写数据到一个通道，但是该线程继续做别的事情，当数据写入成功后，线程将收到通知。</p>
+</li>
+<li><p>可直接访问缓冲区：数据可以直接从缓冲区写入到通道，或者从通道读取到缓冲区。它们之间的连接足够紧密，以至于Java编译器会为其生成优化的代码。</p>
+</li>
+<li><p>通道实现：Java NIO中最重要的通道实现是 FileChannel（用于文件读写），SocketChannel和ServerSocketChannel（用于TCP网络读写）和DatagramChannel（用于UDP网络读写）。</p>
+</li>
+</ul>
+<h3 id="选择器"><a href="#选择器" class="headerlink" title="选择器"></a>选择器</h3><p>选择器（Selector）是一个特殊的组件，允许一个单一的线程管理多个通道。也就是说，如果你的应用程序有成千上万的开放连接，每个连接都有它的通道，那么你可以用一个单独的线程，使用一个选择器来管理这些通道，而不是为每一个通道都创建一个线程。这就是NIO实现高并发的一种方式，由于创建和切换线程都是相对高昂的操作，所以使用选择器能极大提升效率。</p>
+<ul>
+<li><p>多路复用：选择器允许一个单独的线程管理多个通道，或者说“选择”出已经准备好进行I&#x2F;O操作的通道。这就是NIO中经常提到的“多路复用”。</p>
+</li>
+<li><p>非阻塞式的I&#x2F;O操作：通过将一或多个通道注册到选择器上，你可以询问选择器是否有准备好的通道，或者更精确的，是否有满足我们关心的事件的通道。</p>
+</li>
+<li><p>选择键（SelectionKey）：当你将通道注册到选择器上时，选择器会返回一个SelectionKey对象，这个对象包含了一些你对之后能发生在注册的通道上面的操作的信息。这是通过对Interest集合进行设置来完成的，最常用的就是SelectionKey.OPREAD（读取操作准备好）和SelectionKey.OPWRITE（写入操作准备好）</p>
+</li>
+<li><p>通道的注册和查询：通常会将通道注册(register)到选择器，然后通过调用选择器的 select()方法，查询准备好的通道。这个方法会阻塞，直到至少有一个通道准备好了你感兴趣的事件。你还可以使用 select(long timeout)方法或 selectNow()方法，前者会在指定时间内等待，后者则不会阻塞。</p>
+</li>
+</ul>
+<h1 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h1><h2 id="什么是零拷贝"><a href="#什么是零拷贝" class="headerlink" title="什么是零拷贝"></a>什么是零拷贝</h2><p>传统的数据传输需要数据在用户空间（User Space）和内核空间（Kernel Space）之间进行多次复制操作，这不仅会占用大量CPU，还会增大系统的内存压力。零拷贝减少了两次CPU将数据从内核空间到用户空间的拷贝。</p>
+<h2 id="零拷贝的实现方式"><a href="#零拷贝的实现方式" class="headerlink" title="零拷贝的实现方式"></a>零拷贝的实现方式</h2><ol>
+<li><p>内存映射文件（MappedByteBuffer）：这是一种将文件或文件的一部分映射到内存中的方式。当映射完成后，你可以直接对映射内存进行操作，任何对内存的修改都会反映到文件上，反之亦然。这种方式避免了Java堆和文件之间的数据拷贝，意味着可以直接对文件进行操作，而不需要在Java堆上创建一个中间缓冲区。</p>
+</li>
+<li><p>文件通道的传输（transferTo&#x2F;transferFrom）：这是另一种零拷贝技术，允许我们将一个通道的数据直接传输到另一个通道。传输数据时，数据并没有经过用户空间，而是直接通过内核空间，从而避免了多余的数据复制过程。</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -4908,7 +5100,7 @@ cmd -<span class="token operator">></span> <span class="token variable"><span cl
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
