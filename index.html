@@ -188,9 +188,8 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-07-03 09:00:59 / 修改时间：18:00:04" itemprop="dateCreated datePublished" datetime="2024-07-03T09:00:59+08:00">2024-07-03</time>
+              <time title="创建时间：2024-07-04 08:55:19" itemprop="dateCreated datePublished" datetime="2024-07-04T08:55:19+08:00">2024-07-04</time>
             </span>
 
           
@@ -387,6 +386,8 @@ thread<span class="token punctuation">.</span><span class="token function">notif
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<p><strong>锁升级的过程</strong></p>
+<p>无锁-&gt;偏向锁（有一个线程访问同步代码）-&gt;轻量级锁（多个线程访问进行CAS自旋，用户态）-&gt;重量级锁（自旋大于10次升级为重量级锁，内核态）</p>
 <h4 id="ReentrantLock可重入锁"><a href="#ReentrantLock可重入锁" class="headerlink" title="ReentrantLock可重入锁"></a><code>ReentrantLock可重入锁</code></h4><p><code>ReentrantLock</code>（可重入锁），它允许线程在持有锁的情况下能够再次获取同一个锁,具有显式锁定机制，提供了更灵活的锁定操作,它比 <code>synchronized</code> 关键字更强大。</p>
 <p><strong>创建ReentrantLock对象</strong></p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">ReentrantLock</span> lock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ReentrantLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -546,6 +547,25 @@ thread<span class="token punctuation">.</span><span class="token function">notif
 <li><strong>提高线程的可管理性</strong>：可以限制线程的数量，防止因线程过多导致的资源消耗问题。</li>
 <li><strong>提供更强的任务执行能力</strong>：可以对线程进行统一的管理、调优和监控。</li>
 </ol>
+<h2 id="线程池的状态"><a href="#线程池的状态" class="headerlink" title="线程池的状态"></a>线程池的状态</h2><img src="https://telegraph-image-2ni.pages.dev/file/185dea93ba62f526dd009.png" style="zoom:50%;">
+
+
+
+<ol>
+<li><strong>RUNNING（运行）</strong>：线程池处于正常工作状态，能够接受新的任务，并且处理阻塞队列中的任务。</li>
+<li><strong>SHUTDOWN（关闭）</strong>：不再接受新的任务，但是能够处理阻塞队列中已经存在的任务，等待阻塞队列中的任务完成。</li>
+<li><strong>STOP（停止）</strong>：不再接受新的任务，也不处理阻塞队列中的任务，并且会中断正在处理中的任务。</li>
+<li><strong>TIDYING（整理）</strong>：所有任务都已经终止，工作线程数为0，线程池会转换到这个状态来执行一些内部清理工作。</li>
+<li><strong>TERMINATED（终止）</strong>：线程池完全终止，已经执行了terminated()钩子方法。</li>
+</ol>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> RUNNING    <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> SHUTDOWN   <span class="token operator">=</span>  <span class="token number">0</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> STOP       <span class="token operator">=</span>  <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> TIDYING    <span class="token operator">=</span>  <span class="token number">2</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> TERMINATED <span class="token operator">=</span>  <span class="token number">3</span> <span class="token operator">&lt;&lt;</span> COUNT_BITS<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
 <h2 id="创建线程池的方式"><a href="#创建线程池的方式" class="headerlink" title="创建线程池的方式"></a>创建线程池的方式</h2><p><strong>方式一：通过<code>ThreadPoolExecutor</code>构造函数来创建（推荐）</strong></p>
 <p><strong>方式二：通过 <code>Executor</code> 框架的工具类 <code>Executors</code> 来创建。</strong></p>
 <h3 id="使用-ThreadPoolExecutors-创建线程池"><a href="#使用-ThreadPoolExecutors-创建线程池" class="headerlink" title="使用 ThreadPoolExecutors 创建线程池"></a>使用 <code>ThreadPoolExecutors</code> 创建线程池</h3><p>线程池必须手动通过 <code>ThreadPoolExecutor</code> 的构造函数来声明，避免使用<code>Executors</code> 类创建线程池，会有OOM风险,<strong>使用有界队列，控制线程创建数量。</strong>显示地给我们的线程池命名，这样有助于我们定位问题。</p>
@@ -633,6 +653,45 @@ thread<span class="token punctuation">.</span><span class="token function">notif
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="如何启动线程池"><a href="#如何启动线程池" class="headerlink" title="如何启动线程池"></a>如何启动线程池</h2><h3 id="execute方法"><a href="#execute方法" class="headerlink" title="execute方法"></a>execute方法</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Executor</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">void</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token class-name">Runnable</span> command<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>用于提交不需要返回值的任务，适合简单的异步执行。</p>
+<h3 id="submit方法"><a href="#submit方法" class="headerlink" title="submit方法"></a>submit方法</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">ExecutorService</span> <span class="token keyword">extends</span> <span class="token class-name">Executor</span> <span class="token punctuation">&#123;</span>
+    <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token function">submit</span><span class="token punctuation">(</span><span class="token class-name">Callable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> task<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token function">submit</span><span class="token punctuation">(</span><span class="token class-name">Runnable</span> task<span class="token punctuation">,</span> <span class="token class-name">T</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> <span class="token function">submit</span><span class="token punctuation">(</span><span class="token class-name">Runnable</span> task<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>submit</code> 方法会返回一个 <code>Future</code> 对象，通过 <code>Future</code> 对象我们可以获取任务的执行结果，取消任务的执行，或者检查任务是否完成。</p>
+<p>如果任务执行过程中抛出了异常，异常会被封装在 <code>Future</code> 对象中，并在调用 <code>get()</code> 方法时抛出。</p>
+<h2 id="线程池原理分析"><a href="#线程池原理分析" class="headerlink" title="线程池原理分析"></a>线程池原理分析</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token class-name">Runnable</span> command<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>command <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">NullPointerException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> c <span class="token operator">=</span> ctl<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">workerCountOf</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token operator">&lt;</span> corePoolSize<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">addWorker</span><span class="token punctuation">(</span>command<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token keyword">return</span><span class="token punctuation">;</span>
+            c <span class="token operator">=</span> ctl<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">isRunning</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> workQueue<span class="token punctuation">.</span><span class="token function">offer</span><span class="token punctuation">(</span>command<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">int</span> recheck <span class="token operator">=</span> ctl<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span> <span class="token function">isRunning</span><span class="token punctuation">(</span>recheck<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token function">remove</span><span class="token punctuation">(</span>command<span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token function">reject</span><span class="token punctuation">(</span>command<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">workerCountOf</span><span class="token punctuation">(</span>recheck<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+                <span class="token function">addWorker</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">addWorker</span><span class="token punctuation">(</span>command<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token function">reject</span><span class="token punctuation">(</span>command<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol>
+<li>如果当前运行的线程数小于核心线程数，那么就会新建一个线程来执行任务。</li>
+<li>如果当前运行的线程数等于或大于核心线程数，但是小于最大线程数，那么就把该任务放入到任务队列里等待执行。</li>
+<li>如果向任务队列投放任务失败（任务队列已经满了），但是当前运行的线程数是小于最大线程数的，就新建一个线程来执行任务。</li>
+<li>如果当前运行的线程数已经等同于最大线程数了，新建线程将会使当前运行的线程超出最大线程数，那么当前任务会被拒绝，拒绝策略会调用<code>RejectedExecutionHandler.rejectedExecution()</code>方法。</li>
+</ol>
 <h1 id="高级多线程技术"><a href="#高级多线程技术" class="headerlink" title="高级多线程技术"></a>高级多线程技术</h1><h2 id="Future-和-Callable-接口"><a href="#Future-和-Callable-接口" class="headerlink" title="Future 和 Callable 接口"></a>Future 和 Callable 接口</h2><ul>
 <li><p><strong>Callable 接口</strong>：<code>java.util.concurrent.Callable</code> 是一个泛型接口，类似于 <code>Runnable</code>，但是可以返回一个结果或抛出一个异常。它的 <code>call()</code> 方法可以在执行时返回结果。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Callable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">V</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
@@ -1262,8 +1321,7 @@ skipListMap<span class="token punctuation">.</span><span class="token function">
 <li><p><strong>优化IO操作</strong>：对于涉及IO操作的多线程程序，使用非阻塞IO或者异步IO技术，可以减少线程阻塞时间，提高系统的并发处理能力。</p>
 </li>
 </ol>
-<h2 id="线程安全的设计模式"><a href="#线程安全的设计模式" class="headerlink" title="线程安全的设计模式"></a>线程安全的设计模式</h2><ol>
-<li><p><strong>Immutable对象</strong>：使用<code>final</code>关键字声明对象引用和成员变量，确保对象状态不可变。</p>
+<h2 id="线程安全的设计模式"><a href="#线程安全的设计模式" class="headerlink" title="线程安全的设计模式"></a>线程安全的设计模式</h2><h3 id="Immutable对象"><a href="#Immutable对象" class="headerlink" title="Immutable对象"></a>Immutable对象</h3><p>使用<code>final</code>关键字声明对象引用和成员变量，确保对象状态不可变。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">ImmutableObject</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> id<span class="token punctuation">;</span>
     <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
@@ -1281,8 +1339,8 @@ skipListMap<span class="token punctuation">.</span><span class="token function">
         <span class="token keyword">return</span> name<span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><strong>ThreadLocal</strong>：<code>ThreadLocal</code>提供了线程局部变量，每个线程都有自己的变量副本，避免了线程安全问题。</p>
+
+<h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><h4 id="ThreadLocal是什么"><a href="#ThreadLocal是什么" class="headerlink" title="ThreadLocal是什么"></a>ThreadLocal是什么</h4><p><code>ThreadLocal</code>是一个线程局部变量，可以让每个线程都有自己的变量副本，不同线程间的变量无法相互访问和修改，避免了线程安全问题。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ThreadLocalExample</span>  <span class="token punctuation">&#123;</span>
     <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">ThreadLocal</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">></span></span> threadLocal <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThreadLocal</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     
@@ -1296,8 +1354,88 @@ skipListMap<span class="token punctuation">.</span><span class="token function">
         <span class="token punctuation">&#125;</span>
 
     <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="ThreadLocal原理解析"><a href="#ThreadLocal原理解析" class="headerlink" title="ThreadLocal原理解析"></a>ThreadLocal原理解析</h4><p>ThreadLocal内部使用ThreadLocalMap来存储每个线程的变量副本，最终存到entry中继承WeakReference，其中key是ThreadLocal对象是弱引用，value是设置的值是强引用，ThreadLocalMap是ThreadLocal的静态内部类,每个线程都有自己的ThreadLocalMap。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">set</span><span class="token punctuation">(</span><span class="token class-name">T</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">Thread</span> t <span class="token operator">=</span> <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">ThreadLocalMap</span> map <span class="token operator">=</span> <span class="token function">getMap</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>map <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            map<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+            <span class="token function">createMap</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="内存泄漏问题"><a href="#内存泄漏问题" class="headerlink" title="内存泄漏问题"></a>内存泄漏问题</h4><p>由于ThreadLocalMap使用ThreadLocal作为key来存储entry,如果ThreadLocal被回收,key变成null,强引用的value无法释放，就会出现内存泄漏。所以ThreadLocal使用完毕后,需要调用remove()方法清除数据,避免出现内存泄漏。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+         <span class="token class-name">ThreadLocalMap</span> m <span class="token operator">=</span> <span class="token function">getMap</span><span class="token punctuation">(</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token keyword">if</span> <span class="token punctuation">(</span>m <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+             m<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">ThreadLocal</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> threadLocal <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThreadLocal</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+    	threadLocal<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"业务数据"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token comment">// TODO 其它业务逻辑</span>
+	<span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+    	threadLocal<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><ul>
+<li>隔离线程，存储一些不安全的工具类，如SimpleDateFormat</li>
+<li>Spring中的事务管理器</li>
+<li>SpringMvc中httpSession、HttpRequest、HttpResponse</li>
+</ul>
+<h2 id="Java-内存模型（JMM）"><a href="#Java-内存模型（JMM）" class="headerlink" title="Java 内存模型（JMM）"></a>Java 内存模型（JMM）</h2><p>Java 内存模型（Java Memory Model, JMM）定义了多线程程序中变量的访问规则，即一个线程如何与另一个线程通信。JMM 规定了在不同线程之间共享变量时的可见性和有序性。</p>
+<p>JMM 的实现是基于happens-before原则的。happens-before 原则定义了两个事件之间的顺序关系，如果一个事件先行于另一个事件，则第一个事件对第二个事件可见。</p>
+<h3 id="关键概念"><a href="#关键概念" class="headerlink" title="关键概念"></a>关键概念</h3><ol>
+<li><strong>可见性</strong>：<ul>
+<li>可见性问题是指一个线程对共享变量的修改，另一个线程是否能立即看到。</li>
+<li>JMM 通过 <code>volatile</code> 关键字、锁（synchronized）、和 final 关键字来保证可见性。</li>
+</ul>
+</li>
+<li><strong>有序性</strong>：<ul>
+<li>有序性问题是指程序执行的顺序是否和代码的顺序一致。</li>
+<li>JMM 允许编译器和处理器对指令进行重排序，但会保证重排序不会影响单线程程序的正确性。</li>
+<li><code>volatile</code> 关键字和锁也可以用来保证有序性。</li>
+</ul>
+</li>
+<li><strong>原子性</strong>：<ul>
+<li>原子性问题是指一个操作是否是不可分割的，即操作要么全部执行，要么全部不执行。</li>
+<li>JMM 保证基本数据类型的读写操作是原子性的，但复合操作（如 i++）不是原子性的。</li>
+</ul>
+</li>
 </ol>
+<h2 id="volatile-关键字"><a href="#volatile-关键字" class="headerlink" title="volatile 关键字"></a><code>volatile</code> 关键字</h2><p><code>volatile</code> 关键字是 Java 提供的一种轻量级同步机制，用于确保变量的可见性和有序性。</p>
+<h5 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h5><ul>
+<li><strong>可见性</strong>：当一个变量被声明为 <code>volatile</code> 时，所有线程对该变量的读写操作都直接从主内存中读取或写入，而不是从线程的本地缓存中读取或写入。</li>
+<li><strong>有序性</strong>：<code>volatile</code> 变量的读写操作不会被重排序，与 <code>volatile</code> 变量的读写操作之间存在内存屏障（Memory Barrier）。</li>
+</ul>
+<h2 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h2><p>AQS（AbstractQueuedSynchronizer）是Java并发编程中用于实现同步锁的抽象类，它提供了统一的锁获取、释放、等待、唤醒等操作。AQS的核心思想是<strong>使用一个原子操作</strong><code>state</code>来表示锁的状态，并使用一个<strong>FIFO队列</strong>来存储等待获取锁的线程。</p>
+<p><strong>AQS关键部分：</strong></p>
+<ul>
+<li><strong>state</strong>: 一个volatile的int类型变量，用来表示锁的当前状态。不同的state值代表不同的锁状态，例如0表示锁未被持有，1表示锁被持有，2表示存在等待队列等。</li>
+<li><strong>FIFO队列</strong>: 用来存储等待获取锁的线程。AQS使用了一个称为<strong>CLH队列</strong>（Craig、Landin和Hagersten队列）的变体来实现FIFO队列。</li>
+<li><strong>tryAcquire</strong>: 尝试获取锁的方法。如果state值为0，则表示锁未被持有，并尝试将其CAS（Compare And Swap）为1，表示获取锁成功。如果state值不为0，则表示锁已被持有，当前线程需要加入FIFO队列等待。</li>
+<li><strong>tryRelease</strong>: 释放锁的方法。如果state值为当前线程的持有值，则将其CAS为0，表示释放锁成功。否则，表示当前线程不持有锁，抛出异常。</li>
+<li><strong>acquire</strong>: 获取锁的方法。如果tryAcquire成功，则直接返回。如果tryAcquire失败，则当前线程会加入FIFO队列并等待。当锁被释放时，会唤醒FIFO队列中的第一个线程尝试获取锁。</li>
+<li><strong>release</strong>: 释放锁的方法。与tryRelease类似，但会唤醒FIFO队列中的下一个等待线程。</li>
+</ul>
+<p><strong>AQS类型的锁</strong></p>
+<ul>
+<li><strong>独占锁</strong>: 只有一个线程可以持有锁。例如ReentrantLock。</li>
+<li><strong>共享锁</strong>: 多个线程可以同时持有锁，但需要遵守特定的规则。例如ReentrantReadWriteLock。</li>
+<li><strong>公平锁</strong>: 按照线程进入队列的顺序分配锁。</li>
+<li><strong>非公平锁</strong>: 不按照线程进入队列的顺序分配锁，可能存在先到后得的情况。</li>
+</ul>
+<p><strong>AQS优点：</strong></p>
+<ul>
+<li><strong>可扩展性</strong>: AQS的代码结构清晰，易于扩展。</li>
+<li><strong>灵活性</strong>: AQS可以支持多种类型的锁，满足不同的同步需求。</li>
+<li><strong>效率</strong>: AQS采用了CAS操作和FIFO队列等技术，提高了锁的获取和释放效率。</li>
+</ul>
 <h2 id="线程分析工具"><a href="#线程分析工具" class="headerlink" title="线程分析工具"></a>线程分析工具</h2><ol>
 <li><strong>Java VisualVM</strong>：基于图形界面的多功能工具，可以监视本地和远程的Java应用程序，它提供了线程和堆栈跟踪的能力，可以用来识别应用程序中的线程问题和性能瓶颈。</li>
 <li><strong>jstack</strong>：JDK自带的一个命令行工具，用于生成 Java 应用程序中每个线程的堆栈跟踪信息，它可以帮助分析线程的状态、线程之间的死锁等问题。</li>
