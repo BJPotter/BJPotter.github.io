@@ -165,6 +165,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/API%E7%BD%91%E5%85%B3.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="potter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potter's 个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/API%E7%BD%91%E5%85%B3.html" class="post-title-link" itemprop="url">API网关</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-15 15:58:09" itemprop="dateCreated datePublished" datetime="2024-04-15T15:58:09+08:00">2024-04-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是API网关"><a href="#什么是API网关" class="headerlink" title="什么是API网关"></a>什么是API网关</h1><blockquote>
+<p>API 网关是一个管理、处理和路由API调用到后端服务的系统。作为微服务架构中的关键组件，API网关为客户端（如移动设备、Web应用程序、第三方服务等）提供了一个统一的入口点，并将请求路由到适当的微服务上。此外，它还可以提供额外的跨服务功能，包括请求聚合、协议转换、请求和响应转换等。</p>
+</blockquote>
+<h2 id="API的功能"><a href="#API的功能" class="headerlink" title="API的功能"></a>API的功能</h2><h3 id="请求路由"><a href="#请求路由" class="headerlink" title="请求路由"></a>请求路由</h3><p>API网关将接收到的请求转发到正确的服务。例如，它可以基于URL路径或请求参数将请求路由到特定的微服务。</p>
+<h3 id="API聚合"><a href="#API聚合" class="headerlink" title="API聚合"></a>API聚合</h3><p>API网关可以将多个API请求聚合为一个请求，减少客户端需要做的调用次数，以便提升性能和用户体验。</p>
+<h3 id="身份验证和授权"><a href="#身份验证和授权" class="headerlink" title="身份验证和授权"></a>身份验证和授权</h3><p>它可以在请求到达后端服务之前进行用户身份验证和授权检查，提供安全层，确保只有验证过的用户可以访问敏感信息。</p>
+<h3 id="限流和服务降级"><a href="#限流和服务降级" class="headerlink" title="限流和服务降级"></a>限流和服务降级</h3><p>网关可以限制对后端服务的请求频率，帮助防范DDoS攻击，并在系统负载过高时实施服务降级策略。</p>
+<h3 id="跨应用程序消息传递"><a href="#跨应用程序消息传递" class="headerlink" title="跨应用程序消息传递"></a>跨应用程序消息传递</h3><p>API网关支持不同类型的跨应用程序通讯协议，如HTTP, WebSocket等。</p>
+<h3 id="监控和日志记录"><a href="#监控和日志记录" class="headerlink" title="监控和日志记录"></a>监控和日志记录</h3><p>为了诊断和调试问题，API网关可以对通过它的流量进行监控，并记录日志。</p>
+<h3 id="响应转换"><a href="#响应转换" class="headerlink" title="响应转换"></a>响应转换</h3><p>它可以修改微服务的响应，以符合客户端的需要，例如把JSON转换为XML。</p>
+<h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><p>API网关可以在多个实例之间分配流量，和负载均衡器的工作相似，以提高性能和可靠性。</p>
+<h2 id="API网关的原理"><a href="#API网关的原理" class="headerlink" title="API网关的原理"></a>API网关的原理</h2><ol>
+<li><p>接收请求：API网关的第一步是接收从客户端发来的API请求。</p>
+</li>
+<li><p>预处理和验证：在路由请求之前，API网关需要进行一些预处理工作，比如用户认证（确定请求是否来自一个有效的用户）、鉴权（确定用户是否有权访问请求的资源）、请求校验（确定请求是否合法，是否包含全部必要的参数）等。另外，它也可能需要进行一些消息转换或协议转换的工作。</p>
+</li>
+<li><p>路由请求：API网关将经过校验之后的有效请求路由到正确的后端服务或微服务，比如根据URL或者请求的参数来决定将请求路由到哪一个服务。</p>
+</li>
+<li><p>请求聚合：对于需要多个微服务共同配合来完成的请求，API网关可以将这些请求聚合，而后一次性返回给客户端。这样可以减少客户端需要发出的请求数，从而提升性能和用户体验。</p>
+</li>
+<li><p>响应返回：当后端服务处理完请求后，会将响应返回给API网关，网关之后再将这些响应返回给客户端。在这个过程中，API网关可能还会进行一些后处理，比如进行数据格式转换，或者添加一些特殊的HTTP头等。</p>
+</li>
+<li><p>日志和监控：在整个过程中，API网关会持续记录日志，同时进行性能监控和错误跟踪。这些信息对于系统的维护和故障排查产生重大价值。</p>
+</li>
+</ol>
+<h2 id="API网关的优点"><a href="#API网关的优点" class="headerlink" title="API网关的优点"></a>API网关的优点</h2><ol>
+<li><strong>抽象化：</strong>API 网关为外部消费者访问一组微服务提供了一个统一的入口点，对底层实施细节进行抽象化，同时允许微服务独立演进。</li>
+<li><strong>安全性：</strong>API 网关可以处理身份验证、授权和速率限制等安全任务，从而提高底层微服务的安全性。</li>
+<li><strong>性能：</strong>API 网关可以缓存响应并执行请求&#x2F;响应转换，提高系统的整体性能。</li>
+<li><strong>开发人员体验：</strong>API 网关提供分析、归档和测试工具，使开发人员可以更容易建立和维护基于微服务的应用程序。</li>
+<li><strong>消费者体验：</strong>API 网关可以让消费者更容易发现和使用微服务提供的 API，改善整体易用性和用户体验。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/DDIA%E7%AC%94%E8%AE%B0.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2237,78 +2326,6 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bjpotter.github.io/post/%E9%80%92%E5%BD%92%E7%AE%97%E6%B3%95.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="potter">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potter's 个人博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/%E9%80%92%E5%BD%92%E7%AE%97%E6%B3%95.html" class="post-title-link" itemprop="url">递归算法的7个最佳实践</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-04 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-04T00:00:00+08:00">2018-03-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-16 09:01:59" itemprop="dateModified" datetime="2024-04-16T09:01:59+08:00">2024-04-16</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>递归算法是在算法中反复使用的一种方法，其特点是一个函数直接或间接地调用了自己。递归算法能够用简洁的代码来解决复杂问题，如分治算法、搜索算法、排序算法等。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/%E9%80%92%E5%BD%92%E7%AE%97%E6%B3%95.html">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2378,14 +2395,14 @@ clickhouse-client --port <span class="token number">8000</span> --query <span cl
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">52</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

@@ -20,16 +20,16 @@
     var CONFIG = {"hostname":"bjpotter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="什么是 ElasticsearchElasticsearch 是在 Apache Lucene 上构建的分布式、RESTful风格搜索和分析引擎，常用于日志分析、全文搜索、安全智能、业务分析和运维智能使用案例。 工作原理Elasticsearch使用倒排索引来促进快速全文搜索，从而实现快速高效的数据访问。 倒排索引与正排索引区别概念概述正排索引，全称为正向索引，是根据文档或者信息的ID等顺序，将相">
+  <meta name="description" content="基础概念什么是 ElasticsearchElasticsearch 是在 Apache Lucene 上构建的分布式、RESTful风格搜索和分析引擎，常用于日志分析、全文搜索、安全智能、业务分析和运维智能使用案例。 Elasticsearch的核心功能工作原理Elasticsearch使用倒排索引来促进快速全文搜索，从而实现快速高效的数据访问。 倒排索引与正排索引区别 概念概述  正排索引，全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Elasticsearch">
 <meta property="og:url" content="https://bjpotter.github.io/post/Elasticsearch.html">
 <meta property="og:site_name" content="Potter&#39;s 个人博客">
-<meta property="og:description" content="什么是 ElasticsearchElasticsearch 是在 Apache Lucene 上构建的分布式、RESTful风格搜索和分析引擎，常用于日志分析、全文搜索、安全智能、业务分析和运维智能使用案例。 工作原理Elasticsearch使用倒排索引来促进快速全文搜索，从而实现快速高效的数据访问。 倒排索引与正排索引区别概念概述正排索引，全称为正向索引，是根据文档或者信息的ID等顺序，将相">
+<meta property="og:description" content="基础概念什么是 ElasticsearchElasticsearch 是在 Apache Lucene 上构建的分布式、RESTful风格搜索和分析引擎，常用于日志分析、全文搜索、安全智能、业务分析和运维智能使用案例。 Elasticsearch的核心功能工作原理Elasticsearch使用倒排索引来促进快速全文搜索，从而实现快速高效的数据访问。 倒排索引与正排索引区别 概念概述  正排索引，全">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://bjpotter.github.io/images/Elasticsearch.drawio.svg">
 <meta property="article:published_time" content="2024-04-22T04:56:21.480Z">
-<meta property="article:modified_time" content="2024-04-22T04:56:21.481Z">
+<meta property="article:modified_time" content="2024-07-25T10:13:04.174Z">
 <meta property="article:author" content="potter">
 <meta property="article:tag" content="Elasticsearch">
 <meta name="twitter:card" content="summary">
@@ -198,6 +198,13 @@
 
               <time title="创建时间：2024-04-22 12:56:21" itemprop="dateCreated datePublished" datetime="2024-04-22T12:56:21+08:00">2024-04-22</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-25 18:13:04" itemprop="dateModified" datetime="2024-07-25T18:13:04+08:00">2024-07-25</time>
+              </span>
 
           
 
@@ -210,14 +217,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="什么是-Elasticsearch"><a href="#什么是-Elasticsearch" class="headerlink" title="什么是 Elasticsearch"></a>什么是 Elasticsearch</h1><p>Elasticsearch 是在 Apache Lucene 上构建的分布式、RESTful风格搜索和分析引擎，常用于日志分析、全文搜索、安全智能、业务分析和运维智能使用案例。</p>
-<h1 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h1><p>Elasticsearch使用倒排索引来促进快速全文搜索，从而实现快速高效的数据访问。</p>
-<h2 id="倒排索引与正排索引区别"><a href="#倒排索引与正排索引区别" class="headerlink" title="倒排索引与正排索引区别"></a>倒排索引与正排索引区别</h2><h3 id="概念概述"><a href="#概念概述" class="headerlink" title="概念概述"></a>概念概述</h3><p>正排索引，全称为正向索引，是根据文档或者信息的ID等顺序，将相应的内容存储到索引中。它主要用于快速检索某个文档或者信息的内容。而倒排索引，全称为反向索引，则是根据文档或者信息中的某个关键词来查找存储该关键词的文档或者信息ID。这种索引方式主要用于关键词搜索。</p>
-<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><p>正排索引的数据结构是B+树或者hash表，查询的时候只需要执行一次查找即可找到值，倒排索引的数据结构是倒排表，每次词对应一个倒排项，倒排项包含该词出现的文档编号，和词项在文中的位置信息。</p>
-<h3 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h3><p>正排索引，需要存储每个文档的完整的信息，如果存在多个文档，还需要建立一个文档池，将每个文档存储在一起，并在正向索引表中指向文档池中的相应位置。倒排索引不需要存储文档内容，只需存储关键字及其出现的文档和位置信息，存储内容较小，可以存储在内存中，提高查询效率。</p>
-<h3 id="搜索效率"><a href="#搜索效率" class="headerlink" title="搜索效率"></a>搜索效率</h3><p>正排索引只需要查找一次就能找到相应的文档内容，倒排索引中，每个关键词可能对应多个文档，搜索速度方便不如正排索引。</p>
-<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>正排索引适用于单个文档查找、内容显示如图书馆或档案的管理系统采用正排索引，倒排索引主要用于文本搜索、信息检索如搜索引擎中关键字查询，搜索引擎用倒排索引才检索与关键词相关的页面。</p>
-<h1 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h1><h2 id="数据提取"><a href="#数据提取" class="headerlink" title="数据提取"></a>数据提取</h2><p>Elasticsearch 首先导入JSON 格式的数据，无论是直接输入还是通过 logstash 和 beats 等工具处理。</p>
+        <h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><h2 id="什么是-Elasticsearch"><a href="#什么是-Elasticsearch" class="headerlink" title="什么是 Elasticsearch"></a>什么是 Elasticsearch</h2><p>Elasticsearch 是在 Apache Lucene 上构建的分布式、RESTful风格搜索和分析引擎，常用于日志分析、全文搜索、安全智能、业务分析和运维智能使用案例。</p>
+<h2 id="Elasticsearch的核心功能"><a href="#Elasticsearch的核心功能" class="headerlink" title="Elasticsearch的核心功能"></a>Elasticsearch的核心功能</h2><h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><p>Elasticsearch使用倒排索引来促进快速全文搜索，从而实现快速高效的数据访问。</p>
+<h3 id="倒排索引与正排索引区别"><a href="#倒排索引与正排索引区别" class="headerlink" title="倒排索引与正排索引区别"></a>倒排索引与正排索引区别</h3><ul>
+<li>概念概述</li>
+</ul>
+<p>正排索引，全称为正向索引，是根据文档或者信息的ID等顺序，将相应的内容存储到索引中。它主要用于快速检索某个文档或者信息的内容。而倒排索引，全称为反向索引，则是根据文档或者信息中的某个关键词来查找存储该关键词的文档或者信息ID。这种索引方式主要用于关键词搜索。</p>
+<ul>
+<li>数据结构</li>
+</ul>
+<p>正排索引的数据结构是B+树或者hash表，查询的时候只需要执行一次查找即可找到值，倒排索引的数据结构是倒排表，每次词对应一个倒排项，倒排项包含该词出现的文档编号，和词项在文中的位置信息。</p>
+<ul>
+<li>存储方式</li>
+</ul>
+<p>正排索引，需要存储每个文档的完整的信息，如果存在多个文档，还需要建立一个文档池，将每个文档存储在一起，并在正向索引表中指向文档池中的相应位置。倒排索引不需要存储文档内容，只需存储关键字及其出现的文档和位置信息，存储内容较小，可以存储在内存中，提高查询效率。</p>
+<ul>
+<li>搜索效率</li>
+</ul>
+<p>正排索引只需要查找一次就能找到相应的文档内容，倒排索引中，每个关键词可能对应多个文档，搜索速度方便不如正排索引。</p>
+<ul>
+<li>应用场景</li>
+</ul>
+<p>正排索引适用于单个文档查找、内容显示如图书馆或档案的管理系统采用正排索引，倒排索引主要用于文本搜索、信息检索如搜索引擎中关键字查询，搜索引擎用倒排索引才检索与关键词相关的页面。</p>
+<h2 id="安装与配置"><a href="#安装与配置" class="headerlink" title="安装与配置"></a>安装与配置</h2><h3 id="安装Elasticsearch"><a href="#安装Elasticsearch" class="headerlink" title="安装Elasticsearch"></a>安装Elasticsearch</h3><h3 id="配置文件解析（elasticsearch-yml）"><a href="#配置文件解析（elasticsearch-yml）" class="headerlink" title="配置文件解析（elasticsearch.yml）"></a>配置文件解析（elasticsearch.yml）</h3><h3 id="启动与验证"><a href="#启动与验证" class="headerlink" title="启动与验证"></a>启动与验证</h3><h1 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h1><h2 id="数据提取"><a href="#数据提取" class="headerlink" title="数据提取"></a>数据提取</h2><p>Elasticsearch 首先导入JSON 格式的数据，无论是直接输入还是通过 logstash 和 beats 等工具处理。</p>
 <h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>它对这些数据进行索引，创建一个倒排索引，通过将术语链接到文档中的位置来实现快速文本搜索。</p>
 <h2 id="分片和复制"><a href="#分片和复制" class="headerlink" title="分片和复制"></a>分片和复制</h2><p>系统通过分片在节点之间分发数据，并通过复制增强容错能力和可用性。</p>
 <h2 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h2><p>查询 DSL（Domain Specific Language 特定领域语言） 允许用户执行搜索，访问倒排索引以快速找到相关文档。</p>
@@ -225,9 +247,126 @@
 <h2 id="结果检索"><a href="#结果检索" class="headerlink" title="结果检索"></a>结果检索</h2><p>几乎实时地检索并返回查询结果。</p>
 <img src="/images/Elasticsearch.drawio.svg" style="zoom:67%;">
 
+<h1 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h1><ul>
+<li>索引管理<ul>
+<li>创建索引</li>
+<li>删除索引</li>
+<li>查看索引状态</li>
+</ul>
+</li>
+<li>文档管理<ul>
+<li>增加文档</li>
+<li>获取文档</li>
+<li>更新文档</li>
+<li>删除文档</li>
+</ul>
+</li>
+<li>批量操作<ul>
+<li>批量插入</li>
+<li>批量更新</li>
+<li>批量删除</li>
+</ul>
+</li>
+</ul>
+<h1 id="查询与分析"><a href="#查询与分析" class="headerlink" title="查询与分析"></a>查询与分析</h1><ul>
+<li>查询DSL<ul>
+<li>查询DSL简介</li>
+<li>match查询</li>
+<li>term查询</li>
+<li>range查询</li>
+<li>bool查询</li>
+</ul>
+</li>
+<li>过滤<ul>
+<li>filter的使用</li>
+<li>聚合</li>
+<li>常见聚合操作（如sum, avg, min, max等）</li>
+</ul>
+</li>
+</ul>
+<h1 id="高级功能"><a href="#高级功能" class="headerlink" title="高级功能"></a>高级功能</h1><ul>
+<li>分片与副本<ul>
+<li>分片概念</li>
+<li>副本设置</li>
+<li>分片与副本管理</li>
+</ul>
+</li>
+<li>映射<ul>
+<li>什么是映射</li>
+<li>动态映射</li>
+<li>静态映射</li>
+</ul>
+</li>
+<li>分析器<ul>
+<li>内置分析器</li>
+<li>自定义分析器</li>
+<li>分词器的使用</li>
+</ul>
+</li>
+</ul>
+<h1 id="集群管理"><a href="#集群管理" class="headerlink" title="集群管理"></a>集群管理</h1><ul>
+<li>节点与集群<ul>
+<li>单节点配置</li>
+<li>多节点集群配置</li>
+<li>集群健康检查</li>
+</ul>
+</li>
+<li>数据备份与恢复<ul>
+<li>快照与恢复</li>
+<li>备份策略</li>
+</ul>
+</li>
+</ul>
+<h1 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h1><ul>
+<li>安全配置<ul>
+<li>用户认证</li>
+<li>角色与权限</li>
+</ul>
+</li>
+<li>HTTPS配置<ul>
+<li>安装证书</li>
+<li>配置HTTPS</li>
+</ul>
+</li>
+</ul>
+<h1 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h1><ul>
+<li>性能调优<ul>
+<li>JVM调优</li>
+<li>分片与副本优化</li>
+</ul>
+</li>
+<li>查询性能优化<ul>
+<li>缓存策略</li>
+<li>查询重写</li>
+</ul>
+</li>
+</ul>
+<h1 id="实战案例"><a href="#实战案例" class="headerlink" title="实战案例"></a>实战案例</h1><ul>
+<li>全文搜索实现<ul>
+<li>电商搜索引擎</li>
+<li>博客搜索功能</li>
+</ul>
+</li>
+<li>实时日志分析<ul>
+<li>Logstash与Elasticsearch结合</li>
+<li>Kibana数据展示</li>
+</ul>
+</li>
+</ul>
+<h1 id="扩展学习"><a href="#扩展学习" class="headerlink" title="扩展学习"></a>扩展学习</h1><ul>
+<li>Elasticsearch生态系统<ul>
+<li>Logstash</li>
+<li>Kibana</li>
+<li>Beats</li>
+</ul>
+</li>
+<li>实时数据流处理<ul>
+<li>Elasticsearch与Kafka</li>
+<li>Elasticsearch与Spark</li>
+</ul>
+</li>
+</ul>
 
-
-<h1 id="数据采集的实现"><a href="#数据采集的实现" class="headerlink" title="数据采集的实现"></a>数据采集的实现</h1><h1 id="数据处理的实现"><a href="#数据处理的实现" class="headerlink" title="数据处理的实现"></a>数据处理的实现</h1><h1 id="数据存储的实现"><a href="#数据存储的实现" class="headerlink" title="数据存储的实现"></a>数据存储的实现</h1><h1 id="安全问题的实现"><a href="#安全问题的实现" class="headerlink" title="安全问题的实现"></a>安全问题的实现</h1><h1 id="集群的实现"><a href="#集群的实现" class="headerlink" title="集群的实现"></a>集群的实现</h1><h1 id="搜索的实现"><a href="#搜索的实现" class="headerlink" title="搜索的实现"></a>搜索的实现</h1><h1 id="分析的实现"><a href="#分析的实现" class="headerlink" title="分析的实现"></a>分析的实现</h1>
     </div>
 
     
@@ -310,7 +449,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Elasticsearch"><span class="nav-number">1.</span> <span class="nav-text">什么是 Elasticsearch</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%E4%B8%8E%E6%AD%A3%E6%8E%92%E7%B4%A2%E5%BC%95%E5%8C%BA%E5%88%AB"><span class="nav-number">2.1.</span> <span class="nav-text">倒排索引与正排索引区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5%E6%A6%82%E8%BF%B0"><span class="nav-number">2.1.1.</span> <span class="nav-text">概念概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.2.</span> <span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.3.</span> <span class="nav-text">存储方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2%E6%95%88%E7%8E%87"><span class="nav-number">2.1.4.</span> <span class="nav-text">搜索效率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.1.5.</span> <span class="nav-text">应用场景</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">工作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%8F%90%E5%8F%96"><span class="nav-number">3.1.</span> <span class="nav-text">数据提取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">3.2.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%89%87%E5%92%8C%E5%A4%8D%E5%88%B6"><span class="nav-number">3.3.</span> <span class="nav-text">分片和复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2"><span class="nav-number">3.4.</span> <span class="nav-text">搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E5%92%8C%E6%B1%87%E6%80%BB"><span class="nav-number">3.5.</span> <span class="nav-text">分析和汇总</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E6%A3%80%E7%B4%A2"><span class="nav-number">3.6.</span> <span class="nav-text">结果检索</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">数据采集的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.</span> <span class="nav-text">数据处理的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">6.</span> <span class="nav-text">数据存储的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">7.</span> <span class="nav-text">安全问题的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">8.</span> <span class="nav-text">集群的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">9.</span> <span class="nav-text">搜索的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">10.</span> <span class="nav-text">分析的实现</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Elasticsearch"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 Elasticsearch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Elasticsearch%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD"><span class="nav-number">1.2.</span> <span class="nav-text">Elasticsearch的核心功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.</span> <span class="nav-text">工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%E4%B8%8E%E6%AD%A3%E6%8E%92%E7%B4%A2%E5%BC%95%E5%8C%BA%E5%88%AB"><span class="nav-number">1.3.1.</span> <span class="nav-text">倒排索引与正排索引区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="nav-number">1.4.</span> <span class="nav-text">安装与配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Elasticsearch"><span class="nav-number">1.4.1.</span> <span class="nav-text">安装Elasticsearch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88elasticsearch-yml%EF%BC%89"><span class="nav-number">1.4.2.</span> <span class="nav-text">配置文件解析（elasticsearch.yml）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E4%B8%8E%E9%AA%8C%E8%AF%81"><span class="nav-number">1.4.3.</span> <span class="nav-text">启动与验证</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">工作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%8F%90%E5%8F%96"><span class="nav-number">2.1.</span> <span class="nav-text">数据提取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">2.2.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%89%87%E5%92%8C%E5%A4%8D%E5%88%B6"><span class="nav-number">2.3.</span> <span class="nav-text">分片和复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2"><span class="nav-number">2.4.</span> <span class="nav-text">搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E5%92%8C%E6%B1%87%E6%80%BB"><span class="nav-number">2.5.</span> <span class="nav-text">分析和汇总</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E6%A3%80%E7%B4%A2"><span class="nav-number">2.6.</span> <span class="nav-text">结果检索</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text">基本操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E4%B8%8E%E5%88%86%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">查询与分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD"><span class="nav-number">5.</span> <span class="nav-text">高级功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86"><span class="nav-number">6.</span> <span class="nav-text">集群管理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%80%A7"><span class="nav-number">7.</span> <span class="nav-text">安全性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-number">8.</span> <span class="nav-text">性能优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B"><span class="nav-number">9.</span> <span class="nav-text">实战案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E5%AD%A6%E4%B9%A0"><span class="nav-number">10.</span> <span class="nav-text">扩展学习</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -324,14 +463,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">52</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
