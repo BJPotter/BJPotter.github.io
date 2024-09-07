@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Orign Potter" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="学习路线Lambda表达式和Stream流编程 Lambda表达式：Java 8 引入了Lambda表达式，简化了匿名内部类的使用，使代码更加简洁，Lambda表达式是函数式编程的一部分，通过学习它，可以理解函数作为一等公民的思想，即函数可以作为参数传递和返回值。 Stream流：Java 8 中的Stream API允许对集合执行声明式操作（如过滤、映射、规约），并支持并行处理，Stream流的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring webflux">
+<meta property="og:url" content="https://bjpotter.github.io/post/SpringWebFlux.html">
+<meta property="og:site_name" content="Orign Potter&#39;s 个人博客">
+<meta property="og:description" content="学习路线Lambda表达式和Stream流编程 Lambda表达式：Java 8 引入了Lambda表达式，简化了匿名内部类的使用，使代码更加简洁，Lambda表达式是函数式编程的一部分，通过学习它，可以理解函数作为一等公民的思想，即函数可以作为参数传递和返回值。 Stream流：Java 8 中的Stream API允许对集合执行声明式操作（如过滤、映射、规约），并支持并行处理，Stream流的">
+<meta property="og:locale">
+<meta property="og:image" content="https://telegraph-image-2ni.pages.dev/file/4939e3692f13dd640bc3f.png">
+<meta property="article:published_time" content="2024-09-07T06:27:38.448Z">
+<meta property="article:modified_time" content="2024-09-07T06:27:38.449Z">
+<meta property="article:author" content="Orign Potter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://telegraph-image-2ni.pages.dev/file/4939e3692f13dd640bc3f.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://BJPotter.github.io/post/SpringWebFlux.html"/>
+
+
+
+
+
+  <title>spring webflux | Orign Potter's 个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orign Potter's 个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home                          //首页"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive          //归档"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th           //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags                     //标签"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user                   //关于"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://BJPotter.github.io/post/SpringWebFlux.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orign Potter's 个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">spring webflux</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-09-07T14:27:38+08:00">
+                2024-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="学习路线"><a href="#学习路线" class="headerlink" title="学习路线"></a>学习路线</h1><h2 id="Lambda表达式和Stream流编程"><a href="#Lambda表达式和Stream流编程" class="headerlink" title="Lambda表达式和Stream流编程"></a><strong>Lambda表达式和Stream流编程</strong></h2><ul>
+<li><strong>Lambda表达式</strong>：Java 8 引入了Lambda表达式，简化了匿名内部类的使用，使代码更加简洁，Lambda表达式是函数式编程的一部分，通过学习它，可以理解函数作为一等公民的思想，即函数可以作为参数传递和返回值。</li>
+<li><strong>Stream流</strong>：Java 8 中的Stream API允许对集合执行声明式操作（如过滤、映射、规约），并支持并行处理，Stream流的操作链具有惰性，直到终端操作才执行，这种流式处理思想与Reactive编程有共通之处。</li>
+</ul>
+<h2 id="函数式编程的思想"><a href="#函数式编程的思想" class="headerlink" title="函数式编程的思想"></a><strong>函数式编程的思想</strong></h2><ul>
+<li>函数式编程是一种编程范式，强调函数的不可变性、无副作用、纯函数等概念，学习函数式编程有助于理解Reactive编程的核心思想，因为Reactive编程依赖于非阻塞、异步处理，这些都是函数式编程的重要特征。</li>
+</ul>
+<h2 id="JDK-9的响应式流（Reactive-Streams）"><a href="#JDK-9的响应式流（Reactive-Streams）" class="headerlink" title="JDK 9的响应式流（Reactive Streams）"></a><strong>JDK 9的响应式流（Reactive Streams）</strong></h2><ul>
+<li><strong>Flux</strong>：JDK 9 引入了Reactive Streams API，为异步流处理提供了标准。Flux是Reactor库中的核心组件之一，可以看作是Stream API的扩展版，专为异步、非阻塞环境设计。通过Flux，数据流可以是动态的、无限的，且支持背压机制。</li>
+<li><strong>背压和实现机制</strong>：背压（Backpressure）是响应式流的重要概念，指的是在数据生产者和消费者之间进行协调，防止生产者过度生产数据而导致消费者处理不过来。学习背压有助于理解如何在Reactive编程中平衡系统的负载。</li>
+</ul>
+<h2 id="掌握Reactor库的基础"><a href="#掌握Reactor库的基础" class="headerlink" title="掌握Reactor库的基础"></a><strong>掌握Reactor库的基础</strong></h2><ul>
+<li>熟练掌握了Lambda表达式、Stream API和Reactive Streams之后，Reactor库中的核心概念和操作（如Flux、Mono）都是这些基础的扩展。</li>
+</ul>
+<h2 id="学习WebFlux"><a href="#学习WebFlux" class="headerlink" title="学习WebFlux"></a><strong>学习WebFlux</strong></h2><ul>
+<li>学习WebFlux时，掌握了函数式编程的思想、响应式流的概念以及背压机制，这些都是WebFlux的基石。WebFlux构建在Reactor之上，理解Reactor库的运作会更容易掌握WebFlux的工作原理和应用。</li>
+</ul>
+<img src="https://telegraph-image-2ni.pages.dev/file/4939e3692f13dd640bc3f.png" style="zoom: 33%;">
+
+
+
+<h1 id="前置基础"><a href="#前置基础" class="headerlink" title="前置基础"></a>前置基础</h1><h2 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h2><p>函数式接口(Functional Interface)就是一个有且仅有一个抽象方法，但是可以有多个非抽象方法的接口。</p>
+<h3 id="如何定义函数式接口"><a href="#如何定义函数式接口" class="headerlink" title="如何定义函数式接口"></a>如何定义函数式接口</h3><p>函数式接口只能包含一个抽象方法，并且通过@FunctionalInterface注解标注此接口</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@FunctionalInterface</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">OpreationAdd</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> <span class="token function">opreationAdd</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span><span class="token keyword">int</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Java8提供的函数式接口"><a href="#Java8提供的函数式接口" class="headerlink" title="Java8提供的函数式接口"></a>Java8提供的函数式接口</h3><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>函数式接口</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>Consumer<T></T></strong></td>
+<td>代表了接受一个输入参数并且无返回的操作</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Function&lt;T,R&gt;</strong></td>
+<td>接受一个输入参数，返回一个结果。</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Supplier<T></T></strong></td>
+<td>无参数，返回一个结果。</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>UnaryOperator<T></T></strong></td>
+<td>接受一个参数为类型T,返回值类型也为T。</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Predicate<T></T></strong></td>
+<td>接受一个输入参数，返回一个布尔值结果。</td>
+</tr>
+</tbody></table>
+<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//consumer</span>
+<span class="token class-name">Consumer</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> consumer <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token operator">::</span><span class="token function">println</span><span class="token punctuation">;</span>
+consumer<span class="token punctuation">.</span><span class="token function">accept</span><span class="token punctuation">(</span><span class="token string">"hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//function</span>
+<span class="token class-name">Function</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span><span class="token class-name">Integer</span><span class="token punctuation">></span></span> function <span class="token operator">=</span> <span class="token class-name">String</span><span class="token operator">::</span><span class="token function">length</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>function<span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token string">"hello"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//supplier</span>
+<span class="token class-name">Supplier</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> supplier <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token string">"result"</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>supplier<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//unaryopreator</span>
+<span class="token class-name">UnaryOperator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">></span></span> unaryOperator <span class="token operator">=</span> x <span class="token operator">-></span> x <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>unaryOperator<span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//predicte</span>
+<span class="token class-name">Predicate</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> predicate <span class="token operator">=</span> s <span class="token operator">-></span> s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>predicate<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h2><p>Lambda表达式也叫闭包，允许把函数作为一个方法的参数传递到方法中。</p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>可以理解为将一个方法，去除方法名，将方法参数用-&gt;方式指向方法体</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token punctuation">(</span>parameters<span class="token punctuation">)</span> <span class="token operator">-></span> expression
+or
+<span class="token punctuation">(</span>paramters<span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token punctuation">&#123;</span>expression<span class="token punctuation">;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="使用方式-1"><a href="#使用方式-1" class="headerlink" title="使用方式"></a>使用方式</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">OpreationAdd</span> opreationAdd <span class="token operator">=</span> <span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span> <span class="token operator">-></span> a <span class="token operator">+</span> b<span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>opreationAdd<span class="token punctuation">.</span><span class="token function">opreationAdd</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>注意事项</strong></p>
+<ol>
+<li>成员变量不能和lambda表达式的变量同名</li>
+<li>lambda表达式可以访问final修饰的成员变量</li>
+</ol>
+<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><h3 id="什么是Stream"><a href="#什么是Stream" class="headerlink" title="什么是Stream"></a>什么是Stream</h3><p>Stream是一种流式操作，流在管道中传输，可以在管道中任意节点做处理，经过中间操作和最终操作后得到最终的处理结果。</p>
+<h3 id="如何创建Stream"><a href="#如何创建Stream" class="headerlink" title="如何创建Stream"></a>如何创建Stream</h3><p>创建Stream就是指从数据源如数组、集合获取一个流</p>
+<h4 id="通过集合创建流"><a href="#通过集合创建流" class="headerlink" title="通过集合创建流"></a>通过集合创建流</h4><p>Java8 中的 Collection 接口被扩展，提供了两个获取流的方法：</p>
+<ul>
+<li>default Stream stream() : 返回一个顺序流</li>
+<li>default Stream parallelStream() : 返回一个并行流</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">></span></span> list <span class="token operator">=</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">></span></span> stream <span class="token operator">=</span> list<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">></span></span> integerStream <span class="token operator">=</span> list<span class="token punctuation">.</span><span class="token function">parallelStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="通过数组创建流"><a href="#通过数组创建流" class="headerlink" title="通过数组创建流"></a>通过数组创建流</h4><p>Java8 中的 Arrays 的静态方法 stream() 可以获取数组流：</p>
+<ul>
+<li>static Stream stream(T[] array): 返回一个流</li>
+<li>public static IntStream stream(int[] array)</li>
+<li>public static LongStream stream(long[] array)</li>
+<li>public static DoubleStream stream(double[] array)</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Integer</span><span class="token punctuation">[</span><span class="token punctuation">]</span> a <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token number">9</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">></span></span> stream <span class="token operator">=</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h4 id="通过Stream的of"><a href="#通过Stream的of" class="headerlink" title="通过Stream的of"></a>通过Stream的of</h4><p>Stream类静态方法 of(), 通过显示值创建一个流。它可以接收任意数量的参数。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">></span></span> integerStream <span class="token operator">=</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="中间操作"><a href="#中间操作" class="headerlink" title="中间操作"></a>中间操作</h3><p>中间操作主要包括筛选、映射、排序</p>
+<p><strong>筛选</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>方 法</strong></th>
+<th align="left"><strong>描 述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>filter(Predicatep)</strong></td>
+<td align="left">接收 Lambda ， 从流中排除某些元素</td>
+</tr>
+<tr>
+<td align="left"><strong>distinct()</strong></td>
+<td align="left">筛选，通过流所生成元素的 hashCode() 和 equals() 去除重复元素</td>
+</tr>
+<tr>
+<td align="left"><strong>limit(long maxSize)</strong></td>
+<td align="left">截断流，使其元素不超过给定数量</td>
+</tr>
+<tr>
+<td align="left"><strong>skip(long n)</strong></td>
+<td align="left">跳过元素，返回一个扔掉了前 n 个元素的流。 若流中元素不足 n 个，则返回一个空流。与 limit(n) 互补</td>
+</tr>
+</tbody></table>
+<p><strong>映射</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>方法</strong></th>
+<th align="left"><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>map(Function f)</strong></td>
+<td align="left">接收一个函数作为参数，该函数会被应用到每个元素上，并将其映射成一个新的元素。</td>
+</tr>
+<tr>
+<td align="left"><strong>mapToDouble(ToDoubleFunction f)</strong></td>
+<td align="left">接收一个函数作为参数，该函数会被应用到每个元素上，产生一个新的 DoubleStream。</td>
+</tr>
+<tr>
+<td align="left"><strong>mapToInt(ToIntFunction f)</strong></td>
+<td align="left">接收一个函数作为参数，该函数会被应用到每个元素上，产生一个新的 IntStream。</td>
+</tr>
+<tr>
+<td align="left"><strong>mapToLong(ToLongFunction f)</strong></td>
+<td align="left">接收一个函数作为参数，该函数会被应用到每个元素上，产生一个新的 LongStream。</td>
+</tr>
+<tr>
+<td align="left"><strong>flatMap(Function f)</strong></td>
+<td align="left">接收一个函数作为参数，将流中的每个值都换成另一个流，然后把所有流连接成一个流</td>
+</tr>
+</tbody></table>
+<p><strong>排序</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>方法</strong></th>
+<th align="left"><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>sorted()</strong></td>
+<td align="left">产生一个新流，其中按自然顺序排序</td>
+</tr>
+<tr>
+<td align="left"><strong>sorted(Comparator</strong> <strong>com)</strong></td>
+<td align="left">产生一个新流，其中按比较器顺序排序</td>
+</tr>
+</tbody></table>
+<h3 id="终止操作"><a href="#终止操作" class="headerlink" title="终止操作"></a>终止操作</h3><ul>
+<li>终端操作会从流的流水线生成结果。其结果可以是任何不是流的值，例如：List、nteger，甚至是 void 。</li>
+<li>流进行了终止操作后，不能再次使用。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>方法</strong></th>
+<th align="left"><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>allMatch(Predicate p)</strong></td>
+<td align="left">检查是否匹配所有元素</td>
+</tr>
+<tr>
+<td align="left"><strong>anyMatch(Predicate p)</strong></td>
+<td align="left">检查是否至少匹配一个元素</td>
+</tr>
+<tr>
+<td align="left"><strong>noneMatch(Predicate</strong> <strong>p)</strong></td>
+<td align="left">检查是否没有匹配所有元素</td>
+</tr>
+<tr>
+<td align="left"><strong>findFirst()</strong></td>
+<td align="left">返回第一个元素</td>
+</tr>
+<tr>
+<td align="left"><strong>findAny()</strong></td>
+<td align="left">返回当前流中的任意元素</td>
+</tr>
+<tr>
+<td align="left"><strong>count()</strong></td>
+<td align="left">返回流中元素总数</td>
+</tr>
+<tr>
+<td align="left"><strong>max(Comparator c)</strong></td>
+<td align="left">返回流中最大值</td>
+</tr>
+<tr>
+<td align="left"><strong>min(Comparator c)</strong></td>
+<td align="left">返回流中最小值</td>
+</tr>
+<tr>
+<td align="left"><strong>forEach(Consumer c)</strong></td>
+<td align="left">内部迭代(使用 Collection 接口需要用户去做迭代，称为外部迭代。 相反，Stream API 使用内部迭代——它帮你把迭代做了)</td>
+</tr>
+<tr>
+<td align="left"><strong>reduce(T identity, BinaryOperator b)</strong></td>
+<td align="left">可以将流中元素反复结合起来，得到一个值。返回 T</td>
+</tr>
+<tr>
+<td align="left"><strong>reduce(BinaryOperator b)</strong></td>
+<td align="left">可以将流中元素反复结合起来，得到一个值。返回 Optional</td>
+</tr>
+<tr>
+<td align="left"><strong>collect(Collector c)</strong></td>
+<td align="left">将流转换为其他形式。接收一个 Collector接口的实现，用于给Stream中元素做汇总的方法</td>
+</tr>
+</tbody></table>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>一个包含员工的列表，并希望筛选出工资超过 5000 的员工，并按工资降序排列，最后获取前三名员工的名字列表。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Employee</span><span class="token punctuation">></span></span> employees <span class="token operator">=</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span>
+                <span class="token keyword">new</span> <span class="token class-name">Employee</span><span class="token punctuation">(</span><span class="token string">"Alice"</span><span class="token punctuation">,</span> <span class="token number">6000</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token keyword">new</span> <span class="token class-name">Employee</span><span class="token punctuation">(</span><span class="token string">"Bob"</span><span class="token punctuation">,</span> <span class="token number">4500</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token keyword">new</span> <span class="token class-name">Employee</span><span class="token punctuation">(</span><span class="token string">"Charlie"</span><span class="token punctuation">,</span> <span class="token number">7000</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token keyword">new</span> <span class="token class-name">Employee</span><span class="token punctuation">(</span><span class="token string">"David"</span><span class="token punctuation">,</span> <span class="token number">5500</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token keyword">new</span> <span class="token class-name">Employee</span><span class="token punctuation">(</span><span class="token string">"Eve"</span><span class="token punctuation">,</span> <span class="token number">3000</span><span class="token punctuation">)</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> collect <span class="token operator">=</span> employees<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>e <span class="token operator">-></span> e<span class="token punctuation">.</span><span class="token function">getSalary</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">5000</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">sorted</span><span class="token punctuation">(</span><span class="token punctuation">(</span>e1<span class="token punctuation">,</span> e2<span class="token punctuation">)</span> <span class="token operator">-></span> e2<span class="token punctuation">.</span><span class="token function">getSalary</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> e1<span class="token punctuation">.</span><span class="token function">getSalary</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">limit</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token class-name">Employee</span><span class="token operator">::</span><span class="token function">getName</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span><span class="token class-name">Collectors</span><span class="token punctuation">.</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+collect<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token operator">::</span><span class="token function">println</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h1 id="正式学习"><a href="#正式学习" class="headerlink" title="正式学习"></a>正式学习</h1><h2 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h2><h3 id="Reactive-Programming-Introduction"><a href="#Reactive-Programming-Introduction" class="headerlink" title="Reactive Programming Introduction"></a><strong>Reactive Programming Introduction</strong></h3><p><strong>Reactive Programming</strong> 是一种编程范式，专注于处理数据流和传播变化,这种编程方式强调异步数据流、非阻塞操作和对变化的即时反应。</p>
+<ul>
+<li><strong>异步 (Asynchronous)</strong>: 在异步编程中，任务不会阻塞线程，允许其他任务继续执行。这有助于提高应用程序的性能和响应速度。</li>
+<li><strong>非阻塞 (Non-blocking)</strong>: 非阻塞意味着操作不会让调用者等待结果，而是立即返回，使系统能高效处理更多的并发任务。</li>
+<li><strong>响应式流 (Reactive Streams)</strong>: 这是一个处理数据流的标准化规范，支持背压机制（Backpressure），确保数据生产者不会压垮消费者,<code>Reactive Streams</code> 规范包括四个核心接口：<code>Publisher</code>、<code>Subscriber</code>、<code>Subscription</code>、和 <code>Processor</code>。</li>
+</ul>
+<h3 id="Project-Reactor"><a href="#Project-Reactor" class="headerlink" title="Project Reactor"></a><strong>Project Reactor</strong></h3><p><strong>Project Reactor</strong> 是一个遵循 Reactive Streams 规范的库，提供强大的 API 来处理异步数据流。它的核心组件包括 <code>Mono</code> 和 <code>Flux</code>。</p>
+<ul>
+<li><p><strong>Mono</strong>: 表示一个包含 0 或 1 个元素的异步序列。适用于可能产生单个值或没有值的场景。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Mono</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> mono <span class="token operator">=</span> <span class="token class-name">Mono</span><span class="token punctuation">.</span><span class="token function">just</span><span class="token punctuation">(</span><span class="token string">"Hello, Mono!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+mono<span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token operator">::</span><span class="token function">println</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 输出: Hello, Mono!</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li><p><strong>Flux</strong>: 表示一个包含 0 到 N 个元素的异步序列。适用于处理多个值的场景。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Flux</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> flux <span class="token operator">=</span> <span class="token class-name">Flux</span><span class="token punctuation">.</span><span class="token function">just</span><span class="token punctuation">(</span><span class="token string">"Hello"</span><span class="token punctuation">,</span> <span class="token string">"Flux"</span><span class="token punctuation">,</span> <span class="token string">"!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+flux<span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token operator">::</span><span class="token function">println</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+<span class="token comment">// 输出:</span>
+<span class="token comment">// Hello</span>
+<span class="token comment">// Flux</span>
+<span class="token comment">// !</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p><strong>Schedulers</strong>: <code>Schedulers</code> 是 Reactor 提供的调度器，用于指定操作执行的线程模型。常用的调度器类型包括：</p>
+<ul>
+<li><code>Schedulers.boundedElastic()</code>: 用于 I&#x2F;O 密集型操作，提供一个弹性线程池。</li>
+<li><code>Schedulers.parallel()</code>: 用于 CPU 密集型操作，提供固定大小的线程池，通常与 CPU 核心数一致。</li>
+<li><code>Schedulers.single()</code>: 提供单线程调度器，适用于需要在同一线程中执行的任务。</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Flux</span><span class="token punctuation">.</span><span class="token function">just</span><span class="token punctuation">(</span><span class="token string">"Task 1"</span><span class="token punctuation">,</span> <span class="token string">"Task 2"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">subscribeOn</span><span class="token punctuation">(</span><span class="token class-name">Schedulers</span><span class="token punctuation">.</span><span class="token function">boundedElastic</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">doOnNext</span><span class="token punctuation">(</span>task <span class="token operator">-></span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Processing: "</span> <span class="token operator">+</span> task<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+<h2 id="Introduction-to-Spring-WebFlux"><a href="#Introduction-to-Spring-WebFlux" class="headerlink" title="Introduction to Spring WebFlux"></a><strong>Introduction to Spring WebFlux</strong></h2><ul>
+<li>理解Spring WebFlux的架构及其与Spring MVC的区别。</li>
+<li>学习Spring WebFlux的请求处理模型。</li>
+</ul>
+<h3 id="Creating-Reactive-Endpoints"><a href="#Creating-Reactive-Endpoints" class="headerlink" title="Creating Reactive Endpoints"></a><strong>Creating Reactive Endpoints</strong></h3><ul>
+<li>使用<code>RouterFunction</code>和<code>HandlerFunction</code>创建函数式路由。</li>
+<li>使用注解驱动方式（<code>@RestController</code>）创建反应式控制器。</li>
+</ul>
+<h3 id="Reactive-Data-Access"><a href="#Reactive-Data-Access" class="headerlink" title="Reactive Data Access"></a><strong>Reactive Data Access</strong></h3><ul>
+<li>学习使用Spring Data R2DBC进行反应式数据库操作。</li>
+<li>了解如何使用Reactor API进行异步数据处理。</li>
+</ul>
+<h2 id="深入学习"><a href="#深入学习" class="headerlink" title="深入学习"></a>深入学习</h2><h3 id="Error-Handling-in-WebFlux"><a href="#Error-Handling-in-WebFlux" class="headerlink" title="Error Handling in WebFlux"></a><strong>Error Handling in WebFlux</strong></h3><ul>
+<li>学习错误处理策略：<code>onErrorResume</code>、<code>onErrorReturn</code>、<code>onErrorMap</code>等。</li>
+</ul>
+<h3 id="Testing-Reactive-Applications"><a href="#Testing-Reactive-Applications" class="headerlink" title="Testing Reactive Applications"></a><strong>Testing Reactive Applications</strong></h3><ul>
+<li>使用<code>StepVerifier</code>进行Reactive流的单元测试。</li>
+<li>学习如何测试WebFlux应用的不同层面。</li>
+</ul>
+<h3 id="Backpressure"><a href="#Backpressure" class="headerlink" title="Backpressure"></a><strong>Backpressure</strong></h3><ul>
+<li>理解反压机制及其在WebFlux中的应用。</li>
+<li>学习如何在应用中处理背压问题。</li>
+</ul>
+<h2 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h2><h3 id="Integration-with-Other-Frameworks"><a href="#Integration-with-Other-Frameworks" class="headerlink" title="Integration with Other Frameworks"></a><strong>Integration with Other Frameworks</strong></h3><ul>
+<li>了解如何将Spring WebFlux与其他框架（如WebSockets、Kafka、RabbitMQ）集成。</li>
+<li>学习Spring Cloud Gateway中的WebFlux应用。</li>
+</ul>
+<h3 id="Performance-Tuning"><a href="#Performance-Tuning" class="headerlink" title="Performance Tuning"></a><strong>Performance Tuning</strong></h3><ul>
+<li>学习如何进行性能调优，优化反应式应用的吞吐量和延迟。</li>
+</ul>
+<h3 id="Security-in-Reactive-Applications"><a href="#Security-in-Reactive-Applications" class="headerlink" title="Security in Reactive Applications"></a><strong>Security in Reactive Applications</strong></h3><ul>
+<li>学习Spring Security的反应式集成，如何保护WebFlux应用。</li>
+</ul>
+<h2 id="实践项目"><a href="#实践项目" class="headerlink" title="实践项目"></a>实践项目</h2><h3 id="Develop-a-Full-Reactive-Application"><a href="#Develop-a-Full-Reactive-Application" class="headerlink" title="Develop a Full Reactive Application"></a><strong>Develop a Full Reactive Application</strong></h3><ul>
+<li>设计并实现一个完整的Spring WebFlux项目，包括数据访问、路由、错误处理、安全性等。</li>
+<li>结合Kafka或RabbitMQ，实现异步消息传递和处理。</li>
+</ul>
+<h3 id="Deploying-Reactive-Applications"><a href="#Deploying-Reactive-Applications" class="headerlink" title="Deploying Reactive Applications"></a><strong>Deploying Reactive Applications</strong></h3><ul>
+<li>了解如何在生产环境中部署和监控Spring WebFlux应用。</li>
+<li>学习如何使用工具（如Prometheus、Grafana）进行实时监控。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Orign Potter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://bjpotter.github.io/post/SpringWebFlux.html" title="spring webflux">https://bjpotter.github.io/post/SpringWebFlux.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/Software%20cracking.html" rel="next" title="软件破解">
+                <i class="fa fa-chevron-left"></i> 软件破解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/SpringMVC%E7%90%86%E8%AE%BA.html" rel="prev" title="SpringMvc理论">
+                SpringMvc理论 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive%20%20%20%20%20%20%20%20%20%20/%E5%BD%92%E6%A1%A3">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/BJPotter" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuzhi0531@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/imlzgg" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com/potterhacks" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF"><span class="nav-number">1.</span> <span class="nav-text">学习路线</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8CStream%E6%B5%81%E7%BC%96%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">Lambda表达式和Stream流编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E7%9A%84%E6%80%9D%E6%83%B3"><span class="nav-number">1.2.</span> <span class="nav-text">函数式编程的思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK-9%E7%9A%84%E5%93%8D%E5%BA%94%E5%BC%8F%E6%B5%81%EF%BC%88Reactive-Streams%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">JDK 9的响应式流（Reactive Streams）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%8C%E6%8F%A1Reactor%E5%BA%93%E7%9A%84%E5%9F%BA%E7%A1%80"><span class="nav-number">1.4.</span> <span class="nav-text">掌握Reactor库的基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0WebFlux"><span class="nav-number">1.5.</span> <span class="nav-text">学习WebFlux</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%9F%BA%E7%A1%80"><span class="nav-number">2.</span> <span class="nav-text">前置基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.1.</span> <span class="nav-text">函数式接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.1.1.</span> <span class="nav-text">如何定义函数式接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java8%E6%8F%90%E4%BE%9B%E7%9A%84%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.1.2.</span> <span class="nav-text">Java8提供的函数式接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.3.</span> <span class="nav-text">使用方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambda"><span class="nav-number">2.2.</span> <span class="nav-text">Lambda</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-number">2.2.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">使用方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream"><span class="nav-number">2.3.</span> <span class="nav-text">Stream</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFStream"><span class="nav-number">2.3.1.</span> <span class="nav-text">什么是Stream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BAStream"><span class="nav-number">2.3.2.</span> <span class="nav-text">如何创建Stream</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E9%9B%86%E5%90%88%E5%88%9B%E5%BB%BA%E6%B5%81"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">通过集合创建流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E6%95%B0%E7%BB%84%E5%88%9B%E5%BB%BA%E6%B5%81"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">通过数组创建流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87Stream%E7%9A%84of"><span class="nav-number">2.3.2.3.</span> <span class="nav-text">通过Stream的of</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E6%93%8D%E4%BD%9C"><span class="nav-number">2.3.3.</span> <span class="nav-text">中间操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%88%E6%AD%A2%E6%93%8D%E4%BD%9C"><span class="nav-number">2.3.4.</span> <span class="nav-text">终止操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.3.5.</span> <span class="nav-text">示例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E5%BC%8F%E5%AD%A6%E4%B9%A0"><span class="nav-number">3.</span> <span class="nav-text">正式学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-number">3.1.</span> <span class="nav-text">基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Reactive-Programming-Introduction"><span class="nav-number">3.1.1.</span> <span class="nav-text">Reactive Programming Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Project-Reactor"><span class="nav-number">3.1.2.</span> <span class="nav-text">Project Reactor</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction-to-Spring-WebFlux"><span class="nav-number">3.2.</span> <span class="nav-text">Introduction to Spring WebFlux</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Creating-Reactive-Endpoints"><span class="nav-number">3.2.1.</span> <span class="nav-text">Creating Reactive Endpoints</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reactive-Data-Access"><span class="nav-number">3.2.2.</span> <span class="nav-text">Reactive Data Access</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0"><span class="nav-number">3.3.</span> <span class="nav-text">深入学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Error-Handling-in-WebFlux"><span class="nav-number">3.3.1.</span> <span class="nav-text">Error Handling in WebFlux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Testing-Reactive-Applications"><span class="nav-number">3.3.2.</span> <span class="nav-text">Testing Reactive Applications</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Backpressure"><span class="nav-number">3.3.3.</span> <span class="nav-text">Backpressure</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E9%98%B6"><span class="nav-number">3.4.</span> <span class="nav-text">进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Integration-with-Other-Frameworks"><span class="nav-number">3.4.1.</span> <span class="nav-text">Integration with Other Frameworks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Performance-Tuning"><span class="nav-number">3.4.2.</span> <span class="nav-text">Performance Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Security-in-Reactive-Applications"><span class="nav-number">3.4.3.</span> <span class="nav-text">Security in Reactive Applications</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5%E9%A1%B9%E7%9B%AE"><span class="nav-number">3.5.</span> <span class="nav-text">实践项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Develop-a-Full-Reactive-Application"><span class="nav-number">3.5.1.</span> <span class="nav-text">Develop a Full Reactive Application</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploying-Reactive-Applications"><span class="nav-number">3.5.2.</span> <span class="nav-text">Deploying Reactive Applications</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orign Potter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

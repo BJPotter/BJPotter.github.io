@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="git," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="学习如何使用Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git tutorial">
+<meta property="og:url" content="https://bjpotter.github.io/post/Git%20Tutorial.html">
+<meta property="og:site_name" content="Orign Potter&#39;s 个人博客">
+<meta property="og:description" content="学习如何使用Git">
+<meta property="og:locale">
+<meta property="og:image" content="https://bjpotter.github.io/images/git%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.png">
+<meta property="article:published_time" content="2024-01-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-09-07T06:27:38.442Z">
+<meta property="article:author" content="Orign Potter">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://bjpotter.github.io/images/git%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://BJPotter.github.io/post/Git Tutorial.html"/>
+
+
+
+
+
+  <title>git tutorial | Orign Potter's 个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orign Potter's 个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home                          //首页"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive          //归档"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th           //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags                     //标签"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user                   //关于"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://BJPotter.github.io/post/Git%20Tutorial.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orign Potter's 个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">git tutorial</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-01-24T00:00:00+08:00">
+                2024-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  学习如何使用Git
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="git介绍"><a href="#git介绍" class="headerlink" title="git介绍"></a>git介绍</h1><blockquote>
+<p>Git是一个版本控制系统</p>
+<p>Git可以追踪代码的更改</p>
+<p>Git可以让多人一起协作编写代码</p>
+</blockquote>
+<h2 id="什么是git"><a href="#什么是git" class="headerlink" title="什么是git"></a>什么是git</h2><p>git是一个版本控制系统，由Linus Torvalds在2005年创建的，后来一直由Junio Hamano维护，git经常用来跟踪代码变更，跟踪谁变更了代码，协作处理。</p>
+<h2 id="git能做什么"><a href="#git能做什么" class="headerlink" title="git能做什么"></a>git能做什么</h2><p>主要用来管理项目，包括拉取远程仓库到本地，推送本地代码到远程仓库，合并分支到主分支。</p>
+<h2 id="git工作流程"><a href="#git工作流程" class="headerlink" title="git工作流程"></a>git工作流程</h2><blockquote>
+<p>首先初始化一个本地文件夹作为一个工作区域，会默认生成一个.git的隐藏文件，当工作区域的文件发生添加或者删除的时候，git会认为进行了修改，我们add执行后把修改后的状态暂存到暂存区，commit执行后把暂存区的文件，提交到head区，commit可以添加提交原因，也会记录提交时间、提交人等信息，可以通过log命令查看，执行push以后，我们就把本地的改动推送到了远程仓库，当其他人对项目进行了修改，并且提交到了远程，我们可以通过pull获取远程最新的代码到本地工作区。</p>
+</blockquote>
+<p><img src="/images/git%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.png"></p>
+<h2 id="为什么使用git"><a href="#为什么使用git" class="headerlink" title="为什么使用git"></a>为什么使用git</h2><ul>
+<li>超过70%的开发者都在使用git</li>
+<li>开发者可以通过git在世界上任何地方都可以一起办公</li>
+<li>开发者可以看到这个项目整个历史</li>
+<li>开发者也可以回退到更早之前的历史版本</li>
+</ul>
+<h2 id="什么是github"><a href="#什么是github" class="headerlink" title="什么是github"></a>什么是github</h2><p>首先git不等于github,github的制作工具使用了git，github是一个大的开源公司。github是一个远程的仓库平台，常见的远程仓库平台有github、gitlab、Bitbucket</p>
+<h1 id="git开始"><a href="#git开始" class="headerlink" title="git开始"></a>git开始</h1><h2 id="git安装"><a href="#git安装" class="headerlink" title="git安装"></a>git安装</h2><blockquote>
+<p>下载安装<a target="_blank" rel="noopener" href="https://git-scm.com/">https://www.git-scm.com/</a></p>
+</blockquote>
+<h2 id="git全局配置"><a href="#git全局配置" class="headerlink" title="git全局配置"></a>git全局配置</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#设置全局用户名</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.name <span class="token string">"test"</span>
+<span class="token comment">#设置全局用户邮箱</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.email <span class="token string">"test@gmail.com"</span>
+<span class="token comment">#设置全局用户密码</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.password <span class="token string">"testpassword"</span>
+<span class="token comment">#设置全局代理</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> <span class="token assign-left variable">http.proxy</span><span class="token operator">=</span>xxxx
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> <span class="token assign-left variable">https.proxy</span><span class="token operator">=</span>xxxx
+<span class="token comment">#查看全局配置</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> <span class="token parameter variable">--list</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>注意：</strong>如果你相对某个仓库单独设置，移除–global命令就可以了</p>
+<h2 id="初始化git"><a href="#初始化git" class="headerlink" title="初始化git"></a>初始化git</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#创建一个文件夹</span>
+<span class="token function">mkdir</span> myproject
+<span class="token comment">#切换到当前文件夹</span>
+<span class="token builtin class-name">cd</span> myproject
+<span class="token comment">#初始化git</span>
+<span class="token function">git</span> init 
+Initialized empty Git repository <span class="token keyword">in</span> /Users/user/myproject/.git/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>现在已经创建并初始化了一个git仓库，会自动生成一个隐藏的.git文件负责对代码进行追踪更改。</p>
+<h1 id="git新增文件"><a href="#git新增文件" class="headerlink" title="git新增文件"></a>git新增文件</h1><blockquote>
+<p>我们创建git仓库，但是他现在是空的，我们在工作区随便创建一个文件</p>
+<p>touch test.txt</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#查看仓库状态</span>
+<span class="token function">git</span> status
+On branch master
+No commits yet
+Untracked files:
+  <span class="token punctuation">(</span>use <span class="token string">"git add ..."</span> to include <span class="token keyword">in</span> what will be committed<span class="token punctuation">)</span>
+    test.txt
+
+nothing added to commit but untracked files present <span class="token punctuation">(</span>use <span class="token string">"git add"</span> to track<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>On branch master  说明我们在master分支</p>
+<p>No commits yet 我们还没有提交过</p>
+<p>Untracked files  test.txt文件没有被提交</p>
+</blockquote>
+<h1 id="git暂存环境"><a href="#git暂存环境" class="headerlink" title="git暂存环境"></a>git暂存环境</h1><blockquote>
+<p>Git的核心功能是暂存环境和提交两个概念。</p>
+<p>工作中，我们可能添加、编辑、删除文件，但是无论是什么操作，我们结束后都应该把它放到暂存环境，暂存环境的文件准备提交到仓库。</p>
+<p>例如：我们创建test.txt，此时我们把它添加到暂存环境</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#把test.txt添加到暂存环境</span>
+<span class="token function">git</span> <span class="token function">add</span> test.txt
+<span class="token comment">#查看下状态</span>
+<span class="token function">git</span> status
+On branch master
+No commits yet
+Changes to be committed:
+  <span class="token punctuation">(</span>use <span class="token string">"git rm --cached ..."</span> to unstage<span class="token punctuation">)</span>
+    new file: test.txt
+<span class="token comment">#test.txt已经添加到暂存环境了，等着被提交的状态</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="添加一个文件"><a href="#添加一个文件" class="headerlink" title="添加一个文件"></a>添加一个文件</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> <span class="token function">add</span> test.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="添加多个文件"><a href="#添加多个文件" class="headerlink" title="添加多个文件"></a>添加多个文件</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> <span class="token function">add</span> <span class="token punctuation">[</span>file1<span class="token punctuation">]</span> <span class="token punctuation">[</span>file2<span class="token punctuation">]</span> <span class="token punctuation">[</span>file3<span class="token punctuation">]</span>
+<span class="token comment">#或者</span>
+<span class="token function">git</span> <span class="token function">add</span> <span class="token parameter variable">--all</span>
+<span class="token comment">#使用--all参数，将会暂存所有的改变的文件（新增、修改、删除的文件）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>注意：</strong>git add –all 等同于 git add -A</p>
+<h1 id="git提交"><a href="#git提交" class="headerlink" title="git提交"></a>git提交</h1><h2 id="暂存提交"><a href="#暂存提交" class="headerlink" title="暂存提交"></a>暂存提交</h2><blockquote>
+<p>我们完成工作后将文件添加到暂存区，之后需要提交到本地仓库，git每次提交都会保留一个节点，如果发现bug，可以根据节点id进行回退，当我们提交的时候可以携带提交信息，例如：</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#使用-m 参数可以添加消息</span>
+<span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"First commit"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="不暂存提交"><a href="#不暂存提交" class="headerlink" title="不暂存提交"></a>不暂存提交</h2><blockquote>
+<p>当进行小的更改时，使用暂存环境有点浪费时间，我们可以直接提交更改，跳过暂存环境。 </p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#使用-a 参数将自动暂存每个已更改的、已跟踪的文件。</span>
+<span class="token function">git</span> commit <span class="token parameter variable">-a</span> <span class="token parameter variable">-m</span> <span class="token string">"Updated test.txt"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="提交日志"><a href="#提交日志" class="headerlink" title="提交日志"></a>提交日志</h2><blockquote>
+<p>我们要查看仓库的历史提交记录，可以查看日志</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#查看历史提交记录</span>
+<span class="token function">git</span> log <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h1 id="分支"><a href="#分支" class="headerlink" title="分支"></a>分支</h1><h2 id="新建分支"><a href="#新建分支" class="headerlink" title="新建分支"></a>新建分支</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#新增分支</span>
+<span class="token function">git</span> branch newBranchName
+<span class="token comment">#查看当前分支</span>
+<span class="token function">git</span> branch
+<span class="token comment"># 查看当前分支包含远程的</span>
+<span class="token function">git</span> branch <span class="token parameter variable">-a</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="切换分支"><a href="#切换分支" class="headerlink" title="切换分支"></a>切换分支</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># git checkout 分支名称进行切换分支</span>
+<span class="token function">git</span> checkout master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="紧急分支"><a href="#紧急分支" class="headerlink" title="紧急分支"></a>紧急分支</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 创建新分支并切换到新分支</span>
+<span class="token function">git</span> checkout <span class="token parameter variable">-b</span> newBranchName<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="分支合并"><a href="#分支合并" class="headerlink" title="分支合并"></a>分支合并</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 把其他分支合并到主分支</span>
+<span class="token comment"># 切换到主分支</span>
+<span class="token function">git</span> checkout master
+<span class="token comment"># 合并其他分支到主分支</span>
+<span class="token function">git</span> merge otherBranchName
+<span class="token comment"># 删除其他分支</span>
+<span class="token function">git</span> branch <span class="token parameter variable">-d</span> otherBranchName<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="分支冲突"><a href="#分支冲突" class="headerlink" title="分支冲突"></a>分支冲突</h2><blockquote>
+<p>一般产生的冲突的原因是，其他分支修改了test.txt文件，你的主分支也进行了对test.txt文件的修改，导致其他分支合并到主分支，不知道按照谁的为准导致产生了冲突</p>
+<p>解决步骤：</p>
+<p>1.git status 查看冲突的文件(或者查看分支的区别：git diff <source_branch> <target_branch>)</target_branch></source_branch></p>
+<p>2.找到冲突的的文件在主分支中修改成我们想要的</p>
+<p>3.git add 冲突文件 提交我们的冲突文件到暂存环境</p>
+<p>4.git commit -m “fix conflict” 提交到本地仓库，分支就会自动合并了，冲突就可以解决了</p>
+<p>5.删除被合并的分支就可以了 git branch -d otherBranchName</p>
+</blockquote>
+<h1 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h1><blockquote>
+<ol>
+<li>克隆本地仓库 git clone &#x2F;path&#x2F;repository</li>
+<li>克隆远程仓库 git clone username@host:&#x2F;path&#x2F;repository</li>
+</ol>
+</blockquote>
+<h1 id="git拉取"><a href="#git拉取" class="headerlink" title="git拉取"></a>git拉取</h1><h2 id="添加远程仓库"><a href="#添加远程仓库" class="headerlink" title="添加远程仓库"></a>添加远程仓库</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 给本地仓库添加远程仓库</span>
+<span class="token function">git</span> remote <span class="token function">add</span> origin https://github.com/BJPotter/BJPotter.github.io.git<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="拉取远程仓库"><a href="#拉取远程仓库" class="headerlink" title="拉取远程仓库"></a>拉取远程仓库</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># git pull 可以拉取远程仓库的内容</span>
+<span class="token function">git</span> pull 
+<span class="token comment"># git pull 是两个命令的结合，分别是 git fetch  和 git merge</span>
+<span class="token comment"># git fetch 获取远程仓库最新的内容</span>
+<span class="token comment"># git merge 将获取到最新的内容合并到本地分支</span>
+<span class="token comment"># 更新本地仓库</span>
+<span class="token function">git</span> pull origin<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="git推送"><a href="#git推送" class="headerlink" title="git推送"></a>git推送</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 提交本地的更改到本地仓库</span>
+<span class="token function">git</span> commit <span class="token parameter variable">-a</span> <span class="token parameter variable">-m</span> <span class="token string">"Updated local repo"</span>
+<span class="token comment"># 推送到远程仓库</span>
+<span class="token function">git</span> push origin<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h1><blockquote>
+<p>查看本地仓库的操作记录： git log</p>
+<p>查看具体某个人的操作记录： git log –author&#x3D;”xxxx”</p>
+</blockquote>
+<h1 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h1><h2 id="git-reset"><a href="#git-reset" class="headerlink" title="git reset"></a>git reset</h2><blockquote>
+<p>版本重置，根据git log 提交的id，可以以重置到某个提交节点id，类似于快照的概念。</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 重置到节点id</span>
+<span class="token function">git</span> reset <span class="token parameter variable">--hard</span> 节点id
+<span class="token comment"># 推送到远程</span>
+<span class="token function">git</span> push
+<span class="token comment"># 如果git push 报错，可能是本地库HEAD指向的版本比远程库的要旧，使用-f参数强制覆盖远程</span>
+<span class="token function">git</span> push <span class="token parameter variable">-f</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="git-revert"><a href="#git-revert" class="headerlink" title="git revert"></a>git revert</h2><blockquote>
+<p>版本还原，在现在的基础上剔除掉之前提交的某个版本，形成一个新的版本</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 覆盖节点id</span>
+<span class="token function">git</span> revert <span class="token parameter variable">-n</span> 节点id
+<span class="token comment"># 这里可能会出现冲突，那么需要手动修改冲突的文件</span>
+<span class="token comment"># 添加到暂存区</span>
+<span class="token function">git</span> <span class="token function">add</span> 文件名
+<span class="token comment"># 提交到本地仓库</span>
+<span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"版本还原"</span>
+<span class="token comment"># 推送到远程</span>
+<span class="token function">git</span> push<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="远程强制覆盖本地"><a href="#远程强制覆盖本地" class="headerlink" title="远程强制覆盖本地"></a>远程强制覆盖本地</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 拉取所有更新，不同步</span>
+<span class="token function">git</span> fetch <span class="token parameter variable">--all</span>
+<span class="token comment"># 本地代码同步线上最新版本(会覆盖本地所有与远程仓库上同名的文件)；</span>
+<span class="token function">git</span> reset <span class="token parameter variable">--hard</span> origin/master
+<span class="token comment"># 再更新一次（其实也可以不用，第二步命令做过了其实）</span>
+<span class="token function">git</span> pull<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Orign Potter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://bjpotter.github.io/post/Git%20Tutorial.html" title="git tutorial">https://bjpotter.github.io/post/Git%20Tutorial.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/git/" rel="tag"># git</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/SQL%20Tutorial.html" rel="next" title="Sql Tutourial">
+                <i class="fa fa-chevron-left"></i> Sql Tutourial
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/ClickHouse.html" rel="prev" title="Clickhouse">
+                Clickhouse <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive%20%20%20%20%20%20%20%20%20%20/%E5%BD%92%E6%A1%A3">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/BJPotter" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuzhi0531@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/imlzgg" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com/potterhacks" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">git介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFgit"><span class="nav-number">1.1.</span> <span class="nav-text">什么是git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-number">1.2.</span> <span class="nav-text">git能做什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.3.</span> <span class="nav-text">git工作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8git"><span class="nav-number">1.4.</span> <span class="nav-text">为什么使用git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFgithub"><span class="nav-number">1.5.</span> <span class="nav-text">什么是github</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git%E5%BC%80%E5%A7%8B"><span class="nav-number">2.</span> <span class="nav-text">git开始</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#git%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text">git安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git%E5%85%A8%E5%B1%80%E9%85%8D%E7%BD%AE"><span class="nav-number">2.2.</span> <span class="nav-text">git全局配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96git"><span class="nav-number">2.3.</span> <span class="nav-text">初始化git</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git%E6%96%B0%E5%A2%9E%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">git新增文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git%E6%9A%82%E5%AD%98%E7%8E%AF%E5%A2%83"><span class="nav-number">4.</span> <span class="nav-text">git暂存环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="nav-number">4.1.</span> <span class="nav-text">添加一个文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E5%A4%9A%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="nav-number">4.2.</span> <span class="nav-text">添加多个文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git%E6%8F%90%E4%BA%A4"><span class="nav-number">5.</span> <span class="nav-text">git提交</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9A%82%E5%AD%98%E6%8F%90%E4%BA%A4"><span class="nav-number">5.1.</span> <span class="nav-text">暂存提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E6%9A%82%E5%AD%98%E6%8F%90%E4%BA%A4"><span class="nav-number">5.2.</span> <span class="nav-text">不暂存提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4%E6%97%A5%E5%BF%97"><span class="nav-number">5.3.</span> <span class="nav-text">提交日志</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E6%94%AF"><span class="nav-number">6.</span> <span class="nav-text">分支</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E5%88%86%E6%94%AF"><span class="nav-number">6.1.</span> <span class="nav-text">新建分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%87%E6%8D%A2%E5%88%86%E6%94%AF"><span class="nav-number">6.2.</span> <span class="nav-text">切换分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A7%E6%80%A5%E5%88%86%E6%94%AF"><span class="nav-number">6.3.</span> <span class="nav-text">紧急分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6"><span class="nav-number">6.4.</span> <span class="nav-text">分支合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E5%86%B2%E7%AA%81"><span class="nav-number">6.5.</span> <span class="nav-text">分支冲突</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%8B%E9%9A%86%E4%BB%93%E5%BA%93"><span class="nav-number">7.</span> <span class="nav-text">克隆仓库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git%E6%8B%89%E5%8F%96"><span class="nav-number">8.</span> <span class="nav-text">git拉取</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-number">8.1.</span> <span class="nav-text">添加远程仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%89%E5%8F%96%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-number">8.2.</span> <span class="nav-text">拉取远程仓库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git%E6%8E%A8%E9%80%81"><span class="nav-number">9.</span> <span class="nav-text">git推送</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A5%E5%BF%97"><span class="nav-number">10.</span> <span class="nav-text">日志</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E5%9B%9E%E9%80%80"><span class="nav-number">11.</span> <span class="nav-text">版本回退</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#git-reset"><span class="nav-number">11.1.</span> <span class="nav-text">git reset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-revert"><span class="nav-number">11.2.</span> <span class="nav-text">git revert</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E5%BC%BA%E5%88%B6%E8%A6%86%E7%9B%96%E6%9C%AC%E5%9C%B0"><span class="nav-number">11.3.</span> <span class="nav-text">远程强制覆盖本地</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orign Potter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

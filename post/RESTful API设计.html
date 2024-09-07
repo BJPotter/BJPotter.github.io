@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="RESTful," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="什么是RESTful APIREST（Representational State Transfer）是基于HTTP协议的架构风格，通过一组约束条件和原则来设计和实现网络服务,RESTful API是遵循这些原则并以REST架构风格实现的Web服务接口。 REST架构的核心原则资源（Resources）资源应该是名词，通常是实体，例如用户（User）、订单（Order）、产品（Product）等,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RESTful API设计">
+<meta property="og:url" content="https://bjpotter.github.io/post/RESTful%20API%E8%AE%BE%E8%AE%A1.html">
+<meta property="og:site_name" content="Orign Potter&#39;s 个人博客">
+<meta property="og:description" content="什么是RESTful APIREST（Representational State Transfer）是基于HTTP协议的架构风格，通过一组约束条件和原则来设计和实现网络服务,RESTful API是遵循这些原则并以REST架构风格实现的Web服务接口。 REST架构的核心原则资源（Resources）资源应该是名词，通常是实体，例如用户（User）、订单（Order）、产品（Product）等,">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-09-07T06:27:38.445Z">
+<meta property="article:modified_time" content="2024-09-07T06:27:38.445Z">
+<meta property="article:author" content="Orign Potter">
+<meta property="article:tag" content="RESTful">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://BJPotter.github.io/post/RESTful API设计.html"/>
+
+
+
+
+
+  <title>RESTful API设计 | Orign Potter's 个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orign Potter's 个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home                          //首页"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive          //归档"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th           //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags                     //标签"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user                   //关于"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://BJPotter.github.io/post/RESTful%20API%E8%AE%BE%E8%AE%A1.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orign Potter's 个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">RESTful API设计</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-09-07T14:27:38+08:00">
+                2024-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="什么是RESTful-API"><a href="#什么是RESTful-API" class="headerlink" title="什么是RESTful API"></a>什么是RESTful API</h1><p>REST（Representational State Transfer）是基于HTTP协议的架构风格，通过一组约束条件和原则来设计和实现网络服务,RESTful API是遵循这些原则并以REST架构风格实现的Web服务接口。</p>
+<h1 id="REST架构的核心原则"><a href="#REST架构的核心原则" class="headerlink" title="REST架构的核心原则"></a>REST架构的核心原则</h1><h2 id="资源（Resources）"><a href="#资源（Resources）" class="headerlink" title="资源（Resources）"></a>资源（Resources）</h2><p>资源应该是名词，通常是实体，例如用户（User）、订单（Order）、产品（Product）等,避免在URI中使用动词。</p>
+<h2 id="无状态（Stateless）"><a href="#无状态（Stateless）" class="headerlink" title="无状态（Stateless）"></a>无状态（Stateless）</h2><p>每个请求从客户端到服务器都必须包含理解请求所需的全部信息，服务器不应存储客户端的状态。</p>
+<h2 id="分层架构"><a href="#分层架构" class="headerlink" title="分层架构"></a>分层架构</h2><p>REST架构鼓励分层设计，客户端不需要了解服务端的实现细节，通过中间层来处理缓存、安全等问题。</p>
+<h2 id="可缓存性"><a href="#可缓存性" class="headerlink" title="可缓存性"></a>可缓存性</h2><p>服务端响应应明确指明其是否可被缓存，提高系统性能。</p>
+<h1 id="RESTful-API设计的关键要素"><a href="#RESTful-API设计的关键要素" class="headerlink" title="RESTful API设计的关键要素"></a>RESTful API设计的关键要素</h1><h2 id="HTTP方法"><a href="#HTTP方法" class="headerlink" title="HTTP方法"></a>HTTP方法</h2><ul>
+<li><strong>GET</strong>: 获取资源</li>
+<li><strong>POST</strong>: 创建新资源</li>
+<li><strong>PUT</strong>: 更新现有资源</li>
+<li><strong>DELETE</strong>: 删除资源</li>
+<li><strong>PATCH</strong>: 部分更新资源</li>
+</ul>
+<h2 id="URL结构"><a href="#URL结构" class="headerlink" title="URL结构"></a>URL结构</h2><ul>
+<li>使用名词而非动词</li>
+<li>保持简单的层级结构</li>
+<li>使用复数形式表示集合</li>
+</ul>
+<p>例如：<code>/users</code>、<code>/users/123</code>、<code>/users/123/orders</code></p>
+<h2 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h2><ul>
+<li><strong>200 OK</strong>: 请求成功</li>
+<li><strong>201 Created</strong>: 资源创建成功</li>
+<li><strong>400 Bad Request</strong>: 客户端错误</li>
+<li><strong>404 Not Found</strong>: 资源不存在</li>
+<li><strong>500 Internal Server Error</strong>: 服务器错误</li>
+</ul>
+<h2 id="版本控制"><a href="#版本控制" class="headerlink" title="版本控制"></a>版本控制</h2><p>在URL中包含版本信息，如：<code>/api/v1/users</code></p>
+<h1 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h1><h2 id="使用名词而非动词"><a href="#使用名词而非动词" class="headerlink" title="使用名词而非动词"></a>使用名词而非动词</h2><ul>
+<li><strong>不推荐</strong>: <code>/getUsers</code></li>
+<li><strong>推荐</strong>: <code>/users</code></li>
+</ul>
+<h2 id="保持简单的层级结构"><a href="#保持简单的层级结构" class="headerlink" title="保持简单的层级结构"></a>保持简单的层级结构</h2><p>避免过多的层级，建议不超过2-3级，例如：<code>/users/123/orders/456</code></p>
+<h2 id="处理错误"><a href="#处理错误" class="headerlink" title="处理错误"></a>处理错误</h2><p>返回有意义的错误消息和适当的状态码，以帮助客户端理解问题。</p>
+<h2 id="分页和过滤"><a href="#分页和过滤" class="headerlink" title="分页和过滤"></a>分页和过滤</h2><p>使用查询参数进行分页和过滤，例如：<code>/users?page=2&amp;limit=20</code></p>
+<h2 id="安全性考虑"><a href="#安全性考虑" class="headerlink" title="安全性考虑"></a>安全性考虑</h2><ul>
+<li>使用HTTPS</li>
+<li>实施身份验证和授权</li>
+<li>限制请求速率</li>
+</ul>
+<h2 id="实际案例分析"><a href="#实际案例分析" class="headerlink" title="实际案例分析"></a>实际案例分析</h2><p>考虑一个简单的博客API：</p>
+<ul>
+<li><code>GET /posts</code>: 获取所有文章</li>
+<li><code>POST /posts</code>: 创建新文章</li>
+<li><code>GET /posts/&#123;id&#125;</code>: 获取特定文章</li>
+<li><code>PUT /posts/&#123;id&#125;</code>: 更新特定文章</li>
+<li><code>DELETE /posts/&#123;id&#125;</code>: 删除特定文章</li>
+<li><code>GET /posts/&#123;id&#125;/comments</code>: 获取特定文章的评论</li>
+</ul>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><ol>
+<li><strong>在URL中使用动词</strong>：应使用名词表示资源。</li>
+<li><strong>忽视HTTP方法的语义</strong>：确保使用正确的HTTP方法处理请求。</li>
+<li><strong>返回不一致的数据结构</strong>：保持API响应的一致性。</li>
+<li><strong>忽视安全性</strong>：始终考虑API的安全性。</li>
+<li><strong>过度嵌套URL结构</strong>：保持URL结构的简单性。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Orign Potter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://bjpotter.github.io/post/RESTful%20API%E8%AE%BE%E8%AE%A1.html" title="RESTful API设计">https://bjpotter.github.io/post/RESTful%20API%E8%AE%BE%E8%AE%A1.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RESTful/" rel="tag"># RESTful</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/Redis%E5%AE%9E%E8%B7%B5.html" rel="next" title="Redis实践">
+                <i class="fa fa-chevron-left"></i> Redis实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/PostgreSQL.html" rel="prev" title="PostgreSQL 学习">
+                PostgreSQL 学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive%20%20%20%20%20%20%20%20%20%20/%E5%BD%92%E6%A1%A3">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/BJPotter" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuzhi0531@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/imlzgg" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com/potterhacks" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFRESTful-API"><span class="nav-number">1.</span> <span class="nav-text">什么是RESTful API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#REST%E6%9E%B6%E6%9E%84%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E5%88%99"><span class="nav-number">2.</span> <span class="nav-text">REST架构的核心原则</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%EF%BC%88Resources%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">资源（Resources）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A0%E7%8A%B6%E6%80%81%EF%BC%88Stateless%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">无状态（Stateless）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84"><span class="nav-number">2.3.</span> <span class="nav-text">分层架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E7%BC%93%E5%AD%98%E6%80%A7"><span class="nav-number">2.4.</span> <span class="nav-text">可缓存性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RESTful-API%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%85%B3%E9%94%AE%E8%A6%81%E7%B4%A0"><span class="nav-number">3.</span> <span class="nav-text">RESTful API设计的关键要素</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP%E6%96%B9%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">HTTP方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#URL%E7%BB%93%E6%9E%84"><span class="nav-number">3.2.</span> <span class="nav-text">URL结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E7%A0%81"><span class="nav-number">3.3.</span> <span class="nav-text">状态码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="nav-number">3.4.</span> <span class="nav-text">版本控制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E6%88%98"><span class="nav-number">4.</span> <span class="nav-text">实战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%90%8D%E8%AF%8D%E8%80%8C%E9%9D%9E%E5%8A%A8%E8%AF%8D"><span class="nav-number">4.1.</span> <span class="nav-text">使用名词而非动词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%9D%E6%8C%81%E7%AE%80%E5%8D%95%E7%9A%84%E5%B1%82%E7%BA%A7%E7%BB%93%E6%9E%84"><span class="nav-number">4.2.</span> <span class="nav-text">保持简单的层级结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E9%94%99%E8%AF%AF"><span class="nav-number">4.3.</span> <span class="nav-text">处理错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%E5%92%8C%E8%BF%87%E6%BB%A4"><span class="nav-number">4.4.</span> <span class="nav-text">分页和过滤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%80%A7%E8%80%83%E8%99%91"><span class="nav-number">4.5.</span> <span class="nav-text">安全性考虑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90"><span class="nav-number">4.6.</span> <span class="nav-text">实际案例分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">4.7.</span> <span class="nav-text">常见问题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orign Potter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

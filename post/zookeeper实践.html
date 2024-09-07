@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="zookeeper," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="基础知识基本概念Zookeeper简介 Zookeeper是一个开源的分布式协调服务，主要用于分布式应用中的数据管理。它提供了高性能、可用性和严格的顺序访问控制。Zookeeper通过一个简单的树形数据结构来存储数据，每个节点称为znode。  架构Zookeeper采用主从架构，由一个Leader和多个Follower组成。Leader负责处理写请求和协调数据的同步，而Follower则处理读请">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zookeeper实践">
+<meta property="og:url" content="https://bjpotter.github.io/post/zookeeper%E5%AE%9E%E8%B7%B5.html">
+<meta property="og:site_name" content="Orign Potter&#39;s 个人博客">
+<meta property="og:description" content="基础知识基本概念Zookeeper简介 Zookeeper是一个开源的分布式协调服务，主要用于分布式应用中的数据管理。它提供了高性能、可用性和严格的顺序访问控制。Zookeeper通过一个简单的树形数据结构来存储数据，每个节点称为znode。  架构Zookeeper采用主从架构，由一个Leader和多个Follower组成。Leader负责处理写请求和协调数据的同步，而Follower则处理读请">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-09-07T06:27:38.879Z">
+<meta property="article:modified_time" content="2024-09-07T06:27:38.880Z">
+<meta property="article:author" content="Orign Potter">
+<meta property="article:tag" content="zookeeper">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://BJPotter.github.io/post/zookeeper实践.html"/>
+
+
+
+
+
+  <title>zookeeper实践 | Orign Potter's 个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orign Potter's 个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home                          //首页"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive          //归档"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th           //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags                     //标签"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user                   //关于"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://BJPotter.github.io/post/zookeeper%E5%AE%9E%E8%B7%B5.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orign Potter's 个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">zookeeper实践</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-09-07T14:27:38+08:00">
+                2024-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="Zookeeper简介"><a href="#Zookeeper简介" class="headerlink" title="Zookeeper简介"></a>Zookeeper简介</h3><blockquote>
+<p>Zookeeper是一个开源的分布式协调服务，主要用于分布式应用中的数据管理。它提供了高性能、可用性和严格的顺序访问控制。Zookeeper通过一个简单的树形数据结构来存储数据，每个节点称为znode。</p>
+</blockquote>
+<h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p>Zookeeper采用主从架构，由一个Leader和多个Follower组成。Leader负责处理写请求和协调数据的同步，而Follower则处理读请求并将写请求转发给Leader。Zookeeper通过Zab协议（Zookeeper Atomic Broadcast）来实现数据的一致性。</p>
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><ol>
+<li><strong>配置管理</strong>：在分布式系统中，配置文件的管理和同步非常重要。Zookeeper可以存储配置信息，并在配置变化时通知各个节点。</li>
+<li><strong>命名服务</strong>：Zookeeper可以用作分布式系统中的命名服务，提供唯一的命名空间。</li>
+<li><strong>分布式锁</strong>：Zookeeper可以实现分布式锁，确保在分布式环境中只有一个节点在某一时刻可以访问共享资源。</li>
+<li><strong>集群管理</strong>：Zookeeper可以监控分布式系统中节点的状态，帮助实现节点的动态增减和故障恢复。</li>
+</ol>
+<h2 id="分布式系统基础"><a href="#分布式系统基础" class="headerlink" title="分布式系统基础"></a>分布式系统基础</h2><h3 id="一致性（Consistency）"><a href="#一致性（Consistency）" class="headerlink" title="一致性（Consistency）"></a>一致性（Consistency）</h3><p>一致性指的是在分布式系统中，所有节点在同一时间看到的数据是一致的。换句话说，当一个节点完成写操作后，所有节点都能立即看到更新的数据。</p>
+<p><strong>实现原理</strong>：</p>
+<ul>
+<li><strong>强一致性</strong>：每次写操作都必须等待所有副本节点确认写入成功后，才会返回成功响应。通过分布式事务或两阶段提交协议（2PC）来实现。</li>
+<li><strong>最终一致性</strong>：系统允许暂时的不一致，但保证在一定时间内所有节点的数据最终会达到一致。通过异步复制和背景同步来实现。</li>
+</ul>
+<h3 id="可用性-Availability"><a href="#可用性-Availability" class="headerlink" title="可用性(Availability)"></a>可用性(Availability)</h3><p>可用性指的是系统在任何时候都能响应用户的请求，即使某些节点出现故障，系统仍然能够提供服务。</p>
+<p><strong>实现原理</strong>：</p>
+<ul>
+<li><strong>冗余</strong>：通过在多个节点上复制数据，确保即使某些节点出现故障，其他节点仍然可以提供服务。</li>
+<li><strong>故障转移</strong>：当检测到某个节点故障时，系统能够自动负载均衡将请求转发到其他正常节点。</li>
+</ul>
+<h3 id="分区容错性"><a href="#分区容错性" class="headerlink" title="分区容错性"></a>分区容错性</h3><p>分区容错性指的是系统能够在网络分区的情况下继续运行。网络分区是指系统的不同部分无法相互通信。</p>
+<p><strong>实现原理</strong>：</p>
+<ul>
+<li><strong>数据复制</strong>：通过在多个数据中心复制数据，确保即使某个数据中心与其他数据中心失去通信，系统仍然能够继续提供服务。</li>
+<li><strong>一致性协议</strong>：使用一致性协议（如Paxos或Raft）在网络分区恢复后，确保数据的一致性。</li>
+<li><strong>故障检测</strong>：系统能够检测到网络分区，并采取相应的措施，如将请求转发到其他正常节点。</li>
+</ul>
+<h3 id="CAP定理"><a href="#CAP定理" class="headerlink" title="CAP定理"></a>CAP定理</h3><p>CAP定理指出，在分布式系统中，不可能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition Tolerance）这三个特性。只能在其中选择两个。</p>
+<ul>
+<li><strong>一致性（Consistency）</strong>：所有节点在同一时间看到的数据是一致的。</li>
+<li><strong>可用性（Availability）</strong>：系统在任何时候都能响应用户的请求。</li>
+<li><strong>分区容错性（Partition Tolerance）</strong>：系统能够在网络分区的情况下继续运行。</li>
+</ul>
+<p><strong>CAP定理的选择</strong>：</p>
+<ul>
+<li><strong>CA（一致性 + 可用性）</strong>：系统在网络分区时无法继续运行。例如，关系型数据库通常在网络分区时会停止服务，以确保数据一致性。</li>
+<li><strong>CP（一致性 + 分区容错性）</strong>：系统在网络分区时仍然保持数据一致性，但可能无法响应所有请求。例如，分布式数据库如HBase在网络分区时会优先保证数据一致性，但可能会拒绝部分请求。</li>
+<li><strong>AP（可用性 + 分区容错性）</strong>：系统在网络分区时仍然能够响应请求，但可能会出现数据不一致。例如，NoSQL数据库如Cassandra在网络分区时会优先保证可用性，但可能会出现暂时的数据不一致。</li>
+</ul>
+<h1 id="Zookeeper核心概念"><a href="#Zookeeper核心概念" class="headerlink" title="Zookeeper核心概念"></a>Zookeeper核心概念</h1><h2 id="节点（ZNode）"><a href="#节点（ZNode）" class="headerlink" title="节点（ZNode）"></a>节点（ZNode）</h2><p>Zookeeper的数据节点称为ZNode，每个ZNode都可以存储数据和子节点。ZNode分为两种类型：</p>
+<ol>
+<li><strong>持久节点（Persistent ZNode）</strong>：<ul>
+<li><strong>定义</strong>：持久节点在创建后会一直存在，直到显式删除。</li>
+<li><strong>用途</strong>：通常用于存储配置信息或元数据。</li>
+</ul>
+</li>
+<li><strong>临时节点（Ephemeral ZNode）</strong>：<ul>
+<li><strong>定义</strong>：临时节点与客户端会话绑定，当客户端会话结束或超时时，临时节点会自动删除。</li>
+<li><strong>用途</strong>：通常用于实现分布式锁或临时状态信息。</li>
+</ul>
+</li>
+</ol>
+<h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><p>Zookeeper的数据模型是一个层次化的树结构，类似于文件系统。每个节点（ZNode）都可以存储数据和子节点。</p>
+<ul>
+<li><strong>根节点</strong>：树的顶层节点，表示为“&#x2F;”。</li>
+<li><strong>子节点</strong>：每个节点可以有多个子节点，形成树状结构。</li>
+</ul>
+<h2 id="会话（Session）"><a href="#会话（Session）" class="headerlink" title="会话（Session）"></a>会话（Session）</h2><p>会话是客户端与Zookeeper服务器之间的连接。每个会话都有一个唯一的会话ID和会话超时机制。</p>
+<ul>
+<li><strong>会话ID</strong>：唯一标识客户端会话。</li>
+<li><strong>会话超时</strong>：如果客户端在指定时间内没有与服务器通信，会话将超时，服务器会清理与该会话相关的临时节点。</li>
+</ul>
+<h2 id="版本（Version"><a href="#版本（Version" class="headerlink" title="版本（Version)"></a>版本（Version)</h2><p>每个ZNode都有一个数据版本号（version），用于实现乐观锁和数据一致性。</p>
+<ul>
+<li><strong>数据版本号</strong>：每次对节点数据进行更新时，版本号会递增。</li>
+<li><strong>乐观锁</strong>：在更新节点数据时，客户端可以指定预期的版本号，如果版本号匹配，则更新成功；否则更新失败。</li>
+</ul>
+<h1 id="Zookeeper架构"><a href="#Zookeeper架构" class="headerlink" title="Zookeeper架构"></a>Zookeeper架构</h1><h2 id="Zookeeper集群概述"><a href="#Zookeeper集群概述" class="headerlink" title="Zookeeper集群概述"></a>Zookeeper集群概述</h2><p>Zookeeper通常以集群模式运行，以确保高可用性和数据一致性。集群中的每个节点称为服务器（Server）。一个典型的Zookeeper集群由3到5个服务器组成，以便在某些服务器出现故障时仍能继续提供服务。</p>
+<h2 id="Leader和Follower"><a href="#Leader和Follower" class="headerlink" title="Leader和Follower"></a>Leader和Follower</h2><p>Zookeeper集群采用主从架构，其中包括一个Leader和多个Follower。</p>
+<ul>
+<li><strong>Leader</strong>：<ul>
+<li>负责处理所有的写请求。</li>
+<li>负责协调事务并确保数据的一致性。</li>
+<li>通过ZAB协议（Zookeeper Atomic Broadcast）与Follower进行通信。</li>
+</ul>
+</li>
+<li><strong>Follower</strong>：<ul>
+<li>负责处理读请求。</li>
+<li>将写请求转发给Leader。</li>
+<li>参与选举过程，当Leader失效时，Follower可以成为新的Leader。</li>
+</ul>
+</li>
+</ul>
+<h2 id="ZAB协议"><a href="#ZAB协议" class="headerlink" title="ZAB协议"></a>ZAB协议</h2><p>ZAB（Zookeeper Atomic Broadcast）协议是Zookeeper用来保证集群中的数据一致性和高可用性的核心协议。ZAB协议主要包括以下两个阶段：</p>
+<ol>
+<li><strong>领导选举（Leader Election）</strong>：<ul>
+<li>当Zookeeper集群启动或当前Leader失效时，集群会进行领导选举。</li>
+<li>所有服务器会投票选举一个新的Leader。</li>
+<li>新的Leader被选举后，会通知所有Follower，并进入同步阶段。</li>
+</ul>
+</li>
+<li><strong>同步阶段（Synchronization Phase）</strong>：<ul>
+<li>Leader与Follower同步数据，确保所有节点的数据一致。</li>
+<li>同步完成后，集群进入广播阶段。</li>
+</ul>
+</li>
+<li><strong>广播阶段（Broadcast Phase）</strong>：<ul>
+<li>Leader接收客户端的写请求，并将请求转发给所有Follower。</li>
+<li>Follower接收到请求后，会进行投票并返回确认。</li>
+<li>当Leader收到大多数Follower的确认后，会提交事务并通知所有Follower。</li>
+</ul>
+</li>
+</ol>
+<h1 id="Zookeeper操作"><a href="#Zookeeper操作" class="headerlink" title="Zookeeper操作"></a>Zookeeper操作</h1><h2 id="安装Zookeeper"><a href="#安装Zookeeper" class="headerlink" title="安装Zookeeper"></a>安装Zookeeper</h2><ol>
+<li><strong>下载Zookeeper</strong>：<ul>
+<li>从Apache Zookeeper官方网站下载最新的Zookeeper版本。</li>
+<li>解压下载的文件到指定目录。</li>
+</ul>
+</li>
+<li><strong>配置Zookeeper</strong>：<ul>
+<li>进入解压后的Zookeeper目录，找到<code>conf</code>文件夹。</li>
+<li>复制<code>zoo_sample.cfg</code>并重命名为<code>zoo.cfg</code>。</li>
+</ul>
+</li>
+<li><strong>编辑zoo.cfg</strong>：<ul>
+<li>打开<code>zoo.cfg</code>文件，进行基本配置。</li>
+<li>主要配置项包括：</li>
+</ul>
+</li>
+</ol>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment"># 数据存储目录</span>
+<span class="token key attr-name">dataDir</span><span class="token punctuation">=</span><span class="token value attr-value">/path/to/zookeeper/data</span>
+
+<span class="token comment"># 客户端连接端口</span>
+<span class="token key attr-name">clientPort</span><span class="token punctuation">=</span><span class="token value attr-value">2181</span>
+
+<span class="token comment"># 集群中的服务器列表（如果是集群模式）</span>
+<span class="token key attr-name">server.1</span><span class="token punctuation">=</span><span class="token value attr-value">server1:2888:3888</span>
+<span class="token key attr-name">server.2</span><span class="token punctuation">=</span><span class="token value attr-value">server2:2888:3888</span>
+<span class="token key attr-name">server.3</span><span class="token punctuation">=</span><span class="token value attr-value">server3:2888:3888</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="4">
+<li><strong>启动Zookeeper</strong>：</li>
+</ol>
+<ul>
+<li>进入Zookeeper的<code>bin</code>目录，运行命令：</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./zkServer.sh start<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="基本配置项的含义和调优"><a href="#基本配置项的含义和调优" class="headerlink" title="基本配置项的含义和调优"></a>基本配置项的含义和调优</h3><ol>
+<li><strong>dataDir</strong>：存储Zookeeper数据的目录。建议设置为高性能磁盘路径。</li>
+<li><strong>clientPort</strong>：客户端连接Zookeeper的端口，默认为2181。</li>
+<li><strong>tickTime</strong>：Zookeeper的基本时间单位（以毫秒为单位），用于心跳和会话超时计算。默认值为2000（2秒）。</li>
+<li><strong>initLimit</strong>：Follower与Leader同步的初始化时间限制（tickTime的倍数）。默认值为10。</li>
+<li><strong>syncLimit</strong>：Follower与Leader之间的同步时间限制（tickTime的倍数）。默认值为5。</li>
+<li><strong>maxClientCnxns</strong>：每个客户端的最大连接数。默认值为60。</li>
+</ol>
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><h3 id="创建节点"><a href="#创建节点" class="headerlink" title="创建节点"></a>创建节点</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ZookeeperExample</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">ZooKeeper</span> zk <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ZooKeeper</span><span class="token punctuation">(</span><span class="token string">"localhost:2181"</span><span class="token punctuation">,</span> <span class="token number">3000</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> path <span class="token operator">=</span> <span class="token string">"/example"</span><span class="token punctuation">;</span>
+        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data <span class="token operator">=</span> <span class="token string">"Hello Zookeeper"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 创建持久节点</span>
+        zk<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> data<span class="token punctuation">,</span> <span class="token class-name">Ids</span><span class="token punctuation">.</span><span class="token constant">OPEN_ACL_UNSAFE</span><span class="token punctuation">,</span> <span class="token class-name">CreateMode</span><span class="token punctuation">.</span><span class="token constant">PERSISTENT</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        zk<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="删除节点"><a href="#删除节点" class="headerlink" title="删除节点"></a>删除节点</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java">zk<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span><span class="token string">"/example"</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// -1表示忽略版本号</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="读取节点数据"><a href="#读取节点数据" class="headerlink" title="读取节点数据"></a>读取节点数据</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data <span class="token operator">=</span> zk<span class="token punctuation">.</span><span class="token function">getData</span><span class="token punctuation">(</span><span class="token string">"/example"</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="设置节点数据"><a href="#设置节点数据" class="headerlink" title="设置节点数据"></a>设置节点数据</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> newData <span class="token operator">=</span> <span class="token string">"Updated Data"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+zk<span class="token punctuation">.</span><span class="token function">setData</span><span class="token punctuation">(</span><span class="token string">"/example"</span><span class="token punctuation">,</span> newData<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// -1表示忽略版本号</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="监视器（Watcher）"><a href="#监视器（Watcher）" class="headerlink" title="监视器（Watcher）"></a>监视器（Watcher）</h2><p>Zookeeper的监视机制允许客户端监听节点的变化。一旦节点发生变化，客户端会收到通知。</p>
+<h3 id="Watcher示例"><a href="#Watcher示例" class="headerlink" title="Watcher示例"></a>Watcher示例</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyWatcher</span> <span class="token keyword">implements</span> <span class="token class-name">Watcher</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">process</span><span class="token punctuation">(</span><span class="token class-name">WatchedEvent</span> event<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Event received: "</span> <span class="token operator">+</span> event<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="使用Watcher"><a href="#使用Watcher" class="headerlink" title="使用Watcher"></a>使用Watcher</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ZookeeperExample</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">ZooKeeper</span> zk <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ZooKeeper</span><span class="token punctuation">(</span><span class="token string">"localhost:2181"</span><span class="token punctuation">,</span> <span class="token number">3000</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">MyWatcher</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> path <span class="token operator">=</span> <span class="token string">"/example"</span><span class="token punctuation">;</span>
+        <span class="token comment">// 设置监视器</span>
+        zk<span class="token punctuation">.</span><span class="token function">getData</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 模拟数据变化</span>
+        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> newData <span class="token operator">=</span> <span class="token string">"Updated Data"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        zk<span class="token punctuation">.</span><span class="token function">setData</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> newData<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        zk<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h1 id="Zookeeper高级特性"><a href="#Zookeeper高级特性" class="headerlink" title="Zookeeper高级特性"></a>Zookeeper高级特性</h1><h2 id="ACL（Access-Control-List）"><a href="#ACL（Access-Control-List）" class="headerlink" title="ACL（Access Control List）"></a>ACL（Access Control List）</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>Zookeeper的ACL（Access Control List）是用于控制对节点的访问权限的机制。ACL定义了哪些用户或实体可以对节点执行哪些操作。每个ZNode都可以有一个或多个ACL条目，每个条目定义了一个权限集和一个授权实体。</p>
+<h3 id="权限类型"><a href="#权限类型" class="headerlink" title="权限类型"></a>权限类型</h3><p>Zookeeper支持以下几种权限类型：</p>
+<ul>
+<li><strong>CREATE</strong>：创建子节点的权限。</li>
+<li><strong>READ</strong>：读取节点数据和子节点列表的权限。</li>
+<li><strong>WRITE</strong>：设置节点数据的权限。</li>
+<li><strong>DELETE</strong>：删除子节点的权限。</li>
+<li><strong>ADMIN</strong>：设置ACL的权限。</li>
+</ul>
+<h3 id="授权模式"><a href="#授权模式" class="headerlink" title="授权模式"></a>授权模式</h3><p>Zookeeper支持以下几种授权模式：</p>
+<ul>
+<li><strong>world</strong>：全世界都可以访问，只有一个用户<code>anyone</code>。</li>
+<li><strong>auth</strong>：所有已认证的用户。</li>
+<li><strong>digest</strong>：使用用户名和密码进行认证。</li>
+<li><strong>ip</strong>：基于IP地址的认证。</li>
+<li><strong>super</strong>：超级用户，具有所有权限。</li>
+</ul>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ZookeeperACLExample</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">ZooKeeper</span> zk <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ZooKeeper</span><span class="token punctuation">(</span><span class="token string">"localhost:2181"</span><span class="token punctuation">,</span> <span class="token number">3000</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> path <span class="token operator">=</span> <span class="token string">"/example_acl"</span><span class="token punctuation">;</span>
+        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data <span class="token operator">=</span> <span class="token string">"Hello Zookeeper with ACL"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 创建带有ACL的节点</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span>ACL<span class="token punctuation">></span></span> acls <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Id</span> userId <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Id</span><span class="token punctuation">(</span><span class="token string">"digest"</span><span class="token punctuation">,</span> <span class="token string">"user:password"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        acls<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">ACL</span><span class="token punctuation">(</span><span class="token class-name">ZooDefs<span class="token punctuation">.</span>Perms</span><span class="token punctuation">.</span><span class="token constant">ALL</span><span class="token punctuation">,</span> userId<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        zk<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> data<span class="token punctuation">,</span> acls<span class="token punctuation">,</span> <span class="token class-name">CreateMode</span><span class="token punctuation">.</span><span class="token constant">PERSISTENT</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        zk<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="四字命令"><a href="#四字命令" class="headerlink" title="四字命令"></a>四字命令</h2><h3 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h3><p>Zookeeper提供了一组四字命令，用于管理和监控Zookeeper服务器。这些命令可以通过telnet或nc工具发送到Zookeeper服务器的端口。</p>
+<h3 id="常用四字命令"><a href="#常用四字命令" class="headerlink" title="常用四字命令"></a>常用四字命令</h3><ul>
+<li><strong>stat</strong>：打印服务器状态信息，包括客户端连接数、节点数等。</li>
+<li><strong>srvr</strong>：打印服务器详细信息，包括版本、模式、节点数等。</li>
+<li><strong>mntr</strong>：打印服务器监控信息，包括请求数、延迟等。</li>
+<li><strong>ruok</strong>：检查服务器是否运行正常，返回<code>imok</code>表示正常。</li>
+<li><strong>conf</strong>：打印服务器的配置信息。</li>
+<li><strong>envi</strong>：打印服务器的环境变量信息。</li>
+<li><strong>cons</strong>：打印客户端连接信息。</li>
+<li><strong>dump</strong>：打印会话和临时节点信息。</li>
+</ul>
+<h3 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">"stat"</span> <span class="token operator">|</span> <span class="token function">nc</span> localhost <span class="token number">2181</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="事务操作（Multi）"><a href="#事务操作（Multi）" class="headerlink" title="事务操作（Multi）"></a>事务操作（Multi）</h2><h3 id="概述-2"><a href="#概述-2" class="headerlink" title="概述"></a>概述</h3><p>Zookeeper的事务操作（Multi）允许客户端在一个事务中执行多个操作。Multi操作是原子的，要么全部成功，要么全部失败。</p>
+<h3 id="支持的操作"><a href="#支持的操作" class="headerlink" title="支持的操作"></a>支持的操作</h3><ul>
+<li><strong>create</strong>：创建节点。</li>
+<li><strong>delete</strong>：删除节点。</li>
+<li><strong>setData</strong>：设置节点数据。</li>
+<li><strong>check</strong>：检查节点是否存在。</li>
+</ul>
+<h3 id="示例代码-1"><a href="#示例代码-1" class="headerlink" title="示例代码"></a>示例代码</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ZookeeperMultiExample</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">ZooKeeper</span> zk <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ZooKeeper</span><span class="token punctuation">(</span><span class="token string">"localhost:2181"</span><span class="token punctuation">,</span> <span class="token number">3000</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+        <span class="token comment">// 创建事务操作</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Op</span><span class="token punctuation">></span></span> ops <span class="token operator">=</span> <span class="token class-name">List</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span>
+            <span class="token class-name">Op</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token string">"/multi_node1"</span><span class="token punctuation">,</span> <span class="token string">"data1"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token class-name">ZooDefs<span class="token punctuation">.</span>Ids</span><span class="token punctuation">.</span><span class="token constant">OPEN_ACL_UNSAFE</span><span class="token punctuation">,</span> <span class="token class-name">CreateMode</span><span class="token punctuation">.</span><span class="token constant">PERSISTENT</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token class-name">Op</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token string">"/multi_node2"</span><span class="token punctuation">,</span> <span class="token string">"data2"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token class-name">ZooDefs<span class="token punctuation">.</span>Ids</span><span class="token punctuation">.</span><span class="token constant">OPEN_ACL_UNSAFE</span><span class="token punctuation">,</span> <span class="token class-name">CreateMode</span><span class="token punctuation">.</span><span class="token constant">PERSISTENT</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token class-name">Op</span><span class="token punctuation">.</span><span class="token function">setData</span><span class="token punctuation">(</span><span class="token string">"/multi_node1"</span><span class="token punctuation">,</span> <span class="token string">"new_data1"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">OpResult</span><span class="token punctuation">></span></span> results <span class="token operator">=</span> zk<span class="token punctuation">.</span><span class="token function">multi</span><span class="token punctuation">(</span>ops<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">OpResult</span> result <span class="token operator">:</span> results<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Operation result: "</span> <span class="token operator">+</span> result<span class="token punctuation">.</span><span class="token function">getType</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">KeeperException</span> <span class="token operator">|</span> <span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+            zk<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="实践与应用"><a href="#实践与应用" class="headerlink" title="实践与应用"></a>实践与应用</h1><h2 id="实际项目中的应用"><a href="#实际项目中的应用" class="headerlink" title="实际项目中的应用"></a>实际项目中的应用</h2><h3 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h3><p>Zookeeper可以用于实现分布式锁，确保在分布式环境中只有一个节点在某一时刻可以访问共享资源。</p>
+<p><strong>实现原理</strong>：</p>
+<ul>
+<li>使用Zookeeper的临时节点（Ephemeral ZNode）来实现锁。</li>
+<li>当一个节点需要获取锁时，它尝试创建一个临时节点。如果创建成功，则表示获取锁成功；否则，表示锁已被其他节点占用。</li>
+<li>当节点完成任务后，删除临时节点，释放锁。</li>
+<li>如果节点崩溃或会话超时，临时节点会自动删除，锁自动释放。</li>
+</ul>
+<p><strong>示例代码</strong>：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DistributedLock</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token class-name">ZooKeeper</span> zk<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> lockPath<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">DistributedLock</span><span class="token punctuation">(</span><span class="token class-name">ZooKeeper</span> zk<span class="token punctuation">,</span> <span class="token class-name">String</span> lockPath<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>zk <span class="token operator">=</span> zk<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>lockPath <span class="token operator">=</span> lockPath<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">acquireLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">KeeperException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            zk<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>lockPath<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token class-name">ZooDefs<span class="token punctuation">.</span>Ids</span><span class="token punctuation">.</span><span class="token constant">OPEN_ACL_UNSAFE</span><span class="token punctuation">,</span> <span class="token class-name">CreateMode</span><span class="token punctuation">.</span><span class="token constant">EPHEMERAL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">KeeperException<span class="token punctuation">.</span>NodeExistsException</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">releaseLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">KeeperException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
+        zk<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span>lockPath<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="配置管理"><a href="#配置管理" class="headerlink" title="配置管理"></a>配置管理</h3><p>Zookeeper可以用于分布式系统的配置管理，确保所有节点使用一致的配置。</p>
+<p><strong>实现原理</strong>：</p>
+<ul>
+<li>将配置信息存储在Zookeeper的持久节点（Persistent ZNode）中。</li>
+<li>各个节点启动时，从Zookeeper读取配置信息。</li>
+<li>当配置发生变化时，使用Watcher机制通知所有节点更新配置。</li>
+</ul>
+<p><strong>示例代码</strong>：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ConfigManager</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token class-name">ZooKeeper</span> zk<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> configPath<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">ConfigManager</span><span class="token punctuation">(</span><span class="token class-name">ZooKeeper</span> zk<span class="token punctuation">,</span> <span class="token class-name">String</span> configPath<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>zk <span class="token operator">=</span> zk<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>configPath <span class="token operator">=</span> configPath<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data <span class="token operator">=</span> zk<span class="token punctuation">.</span><span class="token function">getData</span><span class="token punctuation">(</span>configPath<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Watcher</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">process</span><span class="token punctuation">(</span><span class="token class-name">WatchedEvent</span> event<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>event<span class="token punctuation">.</span><span class="token function">getType</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token class-name">Event<span class="token punctuation">.</span>EventType<span class="token punctuation">.</span>NodeDataChanged</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token comment">// 配置发生变化，重新加载配置</span>
+                    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+                        <span class="token function">getConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                        e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">&#125;</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h3><p>Zookeeper可以用于服务发现，确保客户端能够找到可用的服务实例。</p>
+<p><strong>实现原理</strong>：</p>
+<ul>
+<li>服务提供者在Zookeeper中注册服务，创建临时节点（Ephemeral ZNode）。</li>
+<li>服务消费者从Zookeeper中获取服务列表，并使用Watcher机制监听服务变化。</li>
+<li>当服务提供者下线或崩溃时，临时节点会自动删除，通知消费者更新服务列表。</li>
+</ul>
+<p><strong>示例代码</strong>：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ServiceRegistry</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token class-name">ZooKeeper</span> zk<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> registryPath<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">ServiceRegistry</span><span class="token punctuation">(</span><span class="token class-name">ZooKeeper</span> zk<span class="token punctuation">,</span> <span class="token class-name">String</span> registryPath<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>zk <span class="token operator">=</span> zk<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>registryPath <span class="token operator">=</span> registryPath<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">registerService</span><span class="token punctuation">(</span><span class="token class-name">String</span> serviceName<span class="token punctuation">,</span> <span class="token class-name">String</span> serviceAddress<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> servicePath <span class="token operator">=</span> registryPath <span class="token operator">+</span> <span class="token string">"/"</span> <span class="token operator">+</span> serviceName<span class="token punctuation">;</span>
+        zk<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>servicePath<span class="token punctuation">,</span> serviceAddress<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token class-name">ZooDefs<span class="token punctuation">.</span>Ids</span><span class="token punctuation">.</span><span class="token constant">OPEN_ACL_UNSAFE</span><span class="token punctuation">,</span> <span class="token class-name">CreateMode</span><span class="token punctuation">.</span><span class="token constant">EPHEMERAL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="性能调优"><a href="#性能调优" class="headerlink" title="性能调优"></a>性能调优</h2><h3 id="内存配置"><a href="#内存配置" class="headerlink" title="内存配置"></a>内存配置</h3><ol>
+<li>JVM内存设置：增加JVM堆内存大小，确保Zookeeper有足够的内存处理请求。 </li>
+<li>缓存设置：调整Zookeeper的缓存大小，确保缓存能够容纳足够的数据。</li>
+</ol>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">export</span> <span class="token value attr-value">JVMFLAGS="-Xms2g -Xmx2g"     </span>
+<span class="token key attr-name">zookeeper.preAllocSize</span><span class="token punctuation">=</span><span class="token value attr-value">65536</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="磁盘配置"><a href="#磁盘配置" class="headerlink" title="磁盘配置"></a>磁盘配置</h3><ol>
+<li>数据目录：将Zookeeper的数据目录和事务日志目录配置在不同的磁盘上，减少I&#x2F;O冲突。</li>
+</ol>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">dataDir</span><span class="token punctuation">=</span><span class="token value attr-value">/path/to/data</span>
+<span class="token key attr-name">dataLogDir</span><span class="token punctuation">=</span><span class="token value attr-value">/path/to/log</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<ol start="2">
+<li>磁盘性能：使用高性能的SSD磁盘，提高读写性能。</li>
+</ol>
+<h3 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h3><ol>
+<li><strong>网络带宽</strong>：确保Zookeeper服务器之间有足够的网络带宽，减少网络延迟。</li>
+<li><strong>网络分区</strong>：使用可靠的网络设备和配置，减少网络分区的可能性。</li>
+</ol>
+<h2 id="故障处理"><a href="#故障处理" class="headerlink" title="故障处理"></a>故障处理</h2><h3 id="节点故障"><a href="#节点故障" class="headerlink" title="节点故障"></a>节点故障</h3><ol>
+<li>自动重启：配置Zookeeper服务器在故障时自动重启，减少服务中断时间。</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">zkServer.sh start<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="2">
+<li>监控和报警：使用监控工具监控Zookeeper服务器的状态，及时发现故障并报警。</li>
+</ol>
+<h3 id="网络分区"><a href="#网络分区" class="headerlink" title="网络分区"></a>网络分区</h3><ol>
+<li><strong>领导选举</strong>：当网络分区导致Leader失效时，Zookeeper会自动进行领导选举，选出新的Leader。</li>
+<li><strong>数据同步</strong>：网络分区恢复后，Zookeeper会自动进行数据同步，确保所有节点的数据一致。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Orign Potter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://bjpotter.github.io/post/zookeeper%E5%AE%9E%E8%B7%B5.html" title="zookeeper实践">https://bjpotter.github.io/post/zookeeper%E5%AE%9E%E8%B7%B5.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/zookeeper/" rel="tag"># zookeeper</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/webhook.html" rel="next" title="webhook">
+                <i class="fa fa-chevron-left"></i> webhook
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86.html" rel="prev" title="反向代理">
+                反向代理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive%20%20%20%20%20%20%20%20%20%20/%E5%BD%92%E6%A1%A3">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/BJPotter" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuzhi0531@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/imlzgg" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com/potterhacks" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.1.</span> <span class="nav-text">Zookeeper简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.2.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.1.3.</span> <span class="nav-text">应用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80"><span class="nav-number">1.2.</span> <span class="nav-text">分布式系统基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%EF%BC%88Consistency%EF%BC%89"><span class="nav-number">1.2.1.</span> <span class="nav-text">一致性（Consistency）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E7%94%A8%E6%80%A7-Availability"><span class="nav-number">1.2.2.</span> <span class="nav-text">可用性(Availability)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%8C%BA%E5%AE%B9%E9%94%99%E6%80%A7"><span class="nav-number">1.2.3.</span> <span class="nav-text">分区容错性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP%E5%AE%9A%E7%90%86"><span class="nav-number">1.2.4.</span> <span class="nav-text">CAP定理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Zookeeper%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">Zookeeper核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%EF%BC%88ZNode%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">节点（ZNode）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">数据模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D%EF%BC%88Session%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">会话（Session）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%EF%BC%88Version"><span class="nav-number">2.4.</span> <span class="nav-text">版本（Version)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Zookeeper%E6%9E%B6%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">Zookeeper架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Zookeeper%E9%9B%86%E7%BE%A4%E6%A6%82%E8%BF%B0"><span class="nav-number">3.1.</span> <span class="nav-text">Zookeeper集群概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Leader%E5%92%8CFollower"><span class="nav-number">3.2.</span> <span class="nav-text">Leader和Follower</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZAB%E5%8D%8F%E8%AE%AE"><span class="nav-number">3.3.</span> <span class="nav-text">ZAB协议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Zookeeper%E6%93%8D%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text">Zookeeper操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Zookeeper"><span class="nav-number">4.1.</span> <span class="nav-text">安装Zookeeper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE%E9%A1%B9%E7%9A%84%E5%90%AB%E4%B9%89%E5%92%8C%E8%B0%83%E4%BC%98"><span class="nav-number">4.1.1.</span> <span class="nav-text">基本配置项的含义和调优</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">4.2.</span> <span class="nav-text">基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9"><span class="nav-number">4.2.1.</span> <span class="nav-text">创建节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9"><span class="nav-number">4.2.2.</span> <span class="nav-text">删除节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E8%8A%82%E7%82%B9%E6%95%B0%E6%8D%AE"><span class="nav-number">4.2.3.</span> <span class="nav-text">读取节点数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%8A%82%E7%82%B9%E6%95%B0%E6%8D%AE"><span class="nav-number">4.2.4.</span> <span class="nav-text">设置节点数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%91%E8%A7%86%E5%99%A8%EF%BC%88Watcher%EF%BC%89"><span class="nav-number">4.3.</span> <span class="nav-text">监视器（Watcher）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Watcher%E7%A4%BA%E4%BE%8B"><span class="nav-number">4.3.1.</span> <span class="nav-text">Watcher示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Watcher"><span class="nav-number">4.3.2.</span> <span class="nav-text">使用Watcher</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Zookeeper%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7"><span class="nav-number">5.</span> <span class="nav-text">Zookeeper高级特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ACL%EF%BC%88Access-Control-List%EF%BC%89"><span class="nav-number">5.1.</span> <span class="nav-text">ACL（Access Control List）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">5.1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%83%E9%99%90%E7%B1%BB%E5%9E%8B"><span class="nav-number">5.1.2.</span> <span class="nav-text">权限类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%88%E6%9D%83%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.1.3.</span> <span class="nav-text">授权模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="nav-number">5.1.4.</span> <span class="nav-text">示例代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E5%AD%97%E5%91%BD%E4%BB%A4"><span class="nav-number">5.2.</span> <span class="nav-text">四字命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0-1"><span class="nav-number">5.2.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%9B%9B%E5%AD%97%E5%91%BD%E4%BB%A4"><span class="nav-number">5.2.2.</span> <span class="nav-text">常用四字命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="nav-number">5.2.3.</span> <span class="nav-text">使用示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E6%93%8D%E4%BD%9C%EF%BC%88Multi%EF%BC%89"><span class="nav-number">5.3.</span> <span class="nav-text">事务操作（Multi）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0-2"><span class="nav-number">5.3.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">5.3.2.</span> <span class="nav-text">支持的操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81-1"><span class="nav-number">5.3.3.</span> <span class="nav-text">示例代码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5%E4%B8%8E%E5%BA%94%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">实践与应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">6.1.</span> <span class="nav-text">实际项目中的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-number">6.1.1.</span> <span class="nav-text">分布式锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-number">6.1.2.</span> <span class="nav-text">配置管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="nav-number">6.1.3.</span> <span class="nav-text">服务发现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98"><span class="nav-number">6.2.</span> <span class="nav-text">性能调优</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E9%85%8D%E7%BD%AE"><span class="nav-number">6.2.1.</span> <span class="nav-text">内存配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A3%81%E7%9B%98%E9%85%8D%E7%BD%AE"><span class="nav-number">6.2.2.</span> <span class="nav-text">磁盘配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE"><span class="nav-number">6.2.3.</span> <span class="nav-text">网络配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86"><span class="nav-number">6.3.</span> <span class="nav-text">故障处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E6%95%85%E9%9A%9C"><span class="nav-number">6.3.1.</span> <span class="nav-text">节点故障</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%88%86%E5%8C%BA"><span class="nav-number">6.3.2.</span> <span class="nav-text">网络分区</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orign Potter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

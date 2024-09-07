@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="什么是集合java中集合也叫容器，由两大派类接口而来，一类是Conllection接口，存放的是单类型的元素，一类是Map，存放的是键值对。Collection接口主要有三大子接口分别为List、Set、Queue（线性表、链表、栈、队列都在这些接口中）   List、Set、Queue、Map的区别 List 存储的元素是有序可以重复的。 Set 存储的元素是无序不可以重复。 Queue 存储的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java基础-集合">
+<meta property="og:url" content="https://bjpotter.github.io/post/java-2-%E9%9B%86%E5%90%88.html">
+<meta property="og:site_name" content="Orign Potter&#39;s 个人博客">
+<meta property="og:description" content="什么是集合java中集合也叫容器，由两大派类接口而来，一类是Conllection接口，存放的是单类型的元素，一类是Map，存放的是键值对。Collection接口主要有三大子接口分别为List、Set、Queue（线性表、链表、栈、队列都在这些接口中）   List、Set、Queue、Map的区别 List 存储的元素是有序可以重复的。 Set 存储的元素是无序不可以重复。 Queue 存储的">
+<meta property="og:locale">
+<meta property="og:image" content="https://bjpotter.github.io/images/%E9%9B%86%E5%90%88.drawio.svg">
+<meta property="og:image" content="https://telegraph-image-2ni.pages.dev/file/902447ae9cd9350ae6f04.png">
+<meta property="article:published_time" content="2024-09-07T06:27:38.871Z">
+<meta property="article:modified_time" content="2024-09-07T06:27:38.872Z">
+<meta property="article:author" content="Orign Potter">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://bjpotter.github.io/images/%E9%9B%86%E5%90%88.drawio.svg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://BJPotter.github.io/post/java-2-集合.html"/>
+
+
+
+
+
+  <title>java基础-集合 | Orign Potter's 个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orign Potter's 个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home                          //首页"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive          //归档"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th           //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags                     //标签"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user                   //关于"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://BJPotter.github.io/post/java-2-%E9%9B%86%E5%90%88.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orign Potter's 个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">java基础-集合</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-09-07T14:27:38+08:00">
+                2024-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="什么是集合"><a href="#什么是集合" class="headerlink" title="什么是集合"></a>什么是集合</h1><p>java中集合也叫容器，由两大派类接口而来，一类是Conllection接口，存放的是单类型的元素，一类是Map，存放的是键值对。Collection接口主要有三大子接口分别为List、Set、Queue（线性表、链表、栈、队列都在这些接口中）</p>
+<img src="/images/集合.drawio.svg" style="zoom:70%;">
+
+<h1 id="List、Set、Queue、Map的区别"><a href="#List、Set、Queue、Map的区别" class="headerlink" title="List、Set、Queue、Map的区别"></a>List、Set、Queue、Map的区别</h1><ul>
+<li>List 存储的元素是有序可以重复的。</li>
+<li>Set 存储的元素是无序不可以重复。</li>
+<li>Queue 存储的元素有先后的顺序</li>
+<li>Map 存储的是一对键值对，key是无序不可以重复的，value是无序可以重复的。</li>
+</ul>
+<h1 id="List"><a href="#List" class="headerlink" title="List"></a>List</h1><h2 id="ArrayList和Array的区别"><a href="#ArrayList和Array的区别" class="headerlink" title="ArrayList和Array的区别"></a>ArrayList和Array的区别</h2><p>ArrayList是基于动态数组实现的，Array是一个静态数组。</p>
+<ul>
+<li>存储空间：数组是固定长度的，集合可变长度的。</li>
+<li>存储类型：ArrayList只能存储引用数据类型，Array可以存储基本数据类型，也可以存储引用数据类型</li>
+<li>存储内容：ArrayList可以存储不同数据类型的对象，Array只能存储一种数据类型的元素</li>
+</ul>
+<h2 id="ArrayList和Array转换"><a href="#ArrayList和Array转换" class="headerlink" title="ArrayList和Array转换"></a>ArrayList和Array转换</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// 数组转换ArrayList的方法</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token class-name">ArrayToArrayList</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> array <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token string">"a"</span><span class="token punctuation">,</span> <span class="token string">"b"</span><span class="token punctuation">,</span> <span class="token string">"c"</span><span class="token punctuation">,</span> <span class="token string">"d"</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token comment">//1. use Arrays.asList()</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> listOne <span class="token operator">=</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//2. use Collections.addAll()</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> listTwo <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>listTwo<span class="token punctuation">,</span>array<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//3. use Constructor</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> listThree <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//4. use lambda</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> listFour <span class="token operator">=</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span><span class="token class-name">Collectors</span><span class="token punctuation">.</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token comment">// ArrayList转换数组的方法</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token class-name">ArrayListToArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token string">"a"</span><span class="token punctuation">,</span><span class="token string">"b"</span><span class="token punctuation">,</span><span class="token string">"c"</span><span class="token punctuation">,</span><span class="token string">"d"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//1. 转成Object数组</span>
+        <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span> objects <span class="token operator">=</span> list<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//2. 转成指定类型的数组</span>
+        <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> stringOne <span class="token operator">=</span> list<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//3. 使用lambda的方式转换成数组</span>
+        <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> stringsTwo <span class="token operator">=</span> list<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">::</span><span class="token keyword">new</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="ArrayList和Vector的区别"><a href="#ArrayList和Vector的区别" class="headerlink" title="ArrayList和Vector的区别"></a>ArrayList和Vector的区别</h2><ul>
+<li><p>ArrayList是List的主要实现类，线程不安全</p>
+</li>
+<li><p>Vector是List的古老实现类，线程安全。</p>
+</li>
+</ul>
+<h2 id="Vector和Stack的关系"><a href="#Vector和Stack的关系" class="headerlink" title="Vector和Stack的关系"></a>Vector和Stack的关系</h2><p>Stack继承Vector，Stack实现了后进先出的栈，Vector是一个列表，两个都是线程安全。</p>
+<h2 id="ArrayList的插入和删除的时间复杂度"><a href="#ArrayList的插入和删除的时间复杂度" class="headerlink" title="ArrayList的插入和删除的时间复杂度"></a>ArrayList的插入和删除的时间复杂度</h2><p>插入：</p>
+<ul>
+<li>头插法：O(n)</li>
+<li>尾插法：O(1)</li>
+<li>指定位置插入：O(n)</li>
+</ul>
+<p>删除：</p>
+<ul>
+<li>头删法：O(n)</li>
+<li>尾删法：O(1)</li>
+<li>指定位置删除：O(n)</li>
+</ul>
+<h2 id="LinkedList的插入和删除的时间复杂度"><a href="#LinkedList的插入和删除的时间复杂度" class="headerlink" title="LinkedList的插入和删除的时间复杂度"></a>LinkedList的插入和删除的时间复杂度</h2><ul>
+<li>头插法&#x2F;删法：O(1)</li>
+<li>尾插法&#x2F;删法：O(1)</li>
+<li>指定位置插入&#x2F;删除：O(n)</li>
+</ul>
+<h2 id="LinkedList为什么没有实现RandomAccess接口"><a href="#LinkedList为什么没有实现RandomAccess接口" class="headerlink" title="LinkedList为什么没有实现RandomAccess接口"></a>LinkedList为什么没有实现RandomAccess接口</h2><p>RandomAccess是一个标记接口，用来表明实现该接口的类支持随机访问（通过元素下标访问）。LinkedList底层是双向链表，内存不连续，无法支持随机访问。</p>
+<h2 id="ArrayList和LinkedList的区别"><a href="#ArrayList和LinkedList的区别" class="headerlink" title="ArrayList和LinkedList的区别"></a>ArrayList和LinkedList的区别</h2><ul>
+<li>数据结构：ArrayList是基于动态数组实现的，是顺序存储，支持随机访问，LinkedList是基于双向链表实现的（JDK 1.6之前为循环双向链表，JDK 1.7取消了循环）不支持顺序存储和随机访问</li>
+<li>效率：ArrayList如果涉及数组重组的插入和删除的操作效率较低，查询比较快，LinkedList查询效率比较低，插入删除效率比较高。</li>
+</ul>
+<h1 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h1><h2 id="Comparable-和-Comparator-的区别"><a href="#Comparable-和-Comparator-的区别" class="headerlink" title="Comparable 和 Comparator 的区别"></a>Comparable 和 Comparator 的区别</h2><p><strong>Comparable 可以看作是“对内”进行排序接口，而 Comparator 是“对外”进行排序的接口。</strong></p>
+<ul>
+<li>含义区别：comparable是比较，comparator是比较器的意思。</li>
+<li>重写方法：comparable要重写compareTo方法,comparator要重写compare方法。</li>
+<li>应用方式：comparable一般是在类中重写，comparator一般在集合工具类中传入匿名内部类。</li>
+</ul>
+<h3 id="基于comparator实现"><a href="#基于comparator实现" class="headerlink" title="基于comparator实现"></a>基于comparator实现</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Data</span>
+<span class="token annotation punctuation">@AllArgsConstructor</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Subject</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">Integer</span> subject_id<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> subject_name<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BasicOfComparator</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">Subject</span> s1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Subject</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token string">"java"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Subject</span> s2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Subject</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token string">"mysql"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Subject</span> s3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Subject</span><span class="token punctuation">(</span><span class="token number">14</span><span class="token punctuation">,</span><span class="token string">"redis"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Subject</span><span class="token punctuation">></span></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Subject</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token punctuation">&#123;</span>
+                <span class="token function">add</span><span class="token punctuation">(</span>s1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">add</span><span class="token punctuation">(</span>s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">add</span><span class="token punctuation">(</span>s3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>list<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Comparator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Subject</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span><span class="token class-name">Subject</span> o1<span class="token punctuation">,</span> <span class="token class-name">Subject</span> o2<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">return</span> o2<span class="token punctuation">.</span><span class="token function">getSubject_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>o1<span class="token punctuation">.</span><span class="token function">getSubject_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Subject</span> subject <span class="token operator">:</span> list<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>subject<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="基于comparbale实现"><a href="#基于comparbale实现" class="headerlink" title="基于comparbale实现"></a>基于comparbale实现</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Data</span>
+<span class="token annotation punctuation">@AllArgsConstructor</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Subject</span> <span class="token keyword">implements</span> <span class="token class-name">Comparable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Subject</span><span class="token punctuation">></span></span><span class="token punctuation">&#123;</span>
+    <span class="token class-name">Integer</span> subject_id<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> subject_name<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">compareTo</span><span class="token punctuation">(</span><span class="token class-name">Subject</span> o<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> o<span class="token punctuation">.</span><span class="token function">getSubject_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getSubject_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BasicOfComparable</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">Subject</span> s1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Subject</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token string">"java"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Subject</span> s2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Subject</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token string">"mysql"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Subject</span> s3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Subject</span><span class="token punctuation">(</span><span class="token number">14</span><span class="token punctuation">,</span><span class="token string">"redis"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Subject</span><span class="token punctuation">></span></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Subject</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token punctuation">&#123;</span>
+                <span class="token function">add</span><span class="token punctuation">(</span>s1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">add</span><span class="token punctuation">(</span>s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">add</span><span class="token punctuation">(</span>s3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>list<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Subject</span> subject <span class="token operator">:</span> list<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>subject<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="如何理解SET集合无序性和不可重复性"><a href="#如何理解SET集合无序性和不可重复性" class="headerlink" title="如何理解SET集合无序性和不可重复性"></a>如何理解SET集合无序性和不可重复性</h2><p>Set是一个基于Hash算法的数组，它的无序性体现在元素经过hash算法以后，存储在数组中的位置是无序的，不可重复性是指元素经过hash算法之后，计算出来的数组下标，如果存在数据元素，根据equals方法判断是否是同一个，如果是则新的覆盖旧的，所以set里面没有重复的元素。</p>
+<h2 id="HashSet、LinkedHashSet、TreeSet的区别"><a href="#HashSet、LinkedHashSet、TreeSet的区别" class="headerlink" title="HashSet、LinkedHashSet、TreeSet的区别"></a>HashSet、LinkedHashSet、TreeSet的区别</h2><p><strong>相同点</strong>：都是Set集合的实现类，元素唯一不重复，都不是现成安全</p>
+<p><strong>区别：</strong></p>
+<p>数据结构：HashSet是底层是哈希表，基于hashmap实现的，LinkedHashSet底层是链表和哈希表，满足FIFO，TreeSet底层是红黑树，元素是有序的。</p>
+<p>应用场景：HashSet应用不保证插入和取出元素顺序的场景，LinkedHashSet应用于FIFO场景，TreeSet应用于排序场景</p>
+<h1 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h1><h2 id="Queue和Deque的区别"><a href="#Queue和Deque的区别" class="headerlink" title="Queue和Deque的区别"></a>Queue和Deque的区别</h2><p>Queue是单端队列，只能从一端插入元素，另一端删除元素。Queue扩展了collection的接口分为两类方法，一类是操作失败后抛出异常，另一种是返回特殊值</p>
+<table>
+<thead>
+<tr>
+<th><code>Queue</code> 接口</th>
+<th>抛出异常</th>
+<th>返回特殊值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>插入队尾</td>
+<td>add(E e)</td>
+<td>offer(E e)</td>
+</tr>
+<tr>
+<td>删除队首</td>
+<td>remove()</td>
+<td>poll()</td>
+</tr>
+<tr>
+<td>查询队首元素</td>
+<td>element()</td>
+<td>peek()</td>
+</tr>
+</tbody></table>
+<p>Deque是双端队列，可以在队尾和队首进行插入元素和删除元素。Deque扩展了Queue的接口，增加了队尾和队首的进行删除和插入的方法，根据失败后处理方式的不同分为两类。</p>
+<table>
+<thead>
+<tr>
+<th><code>Deque</code> 接口</th>
+<th>抛出异常</th>
+<th>返回特殊值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>插入队首</td>
+<td>addFirst(E e)</td>
+<td>offerFirst(E e)</td>
+</tr>
+<tr>
+<td>插入队尾</td>
+<td>addLast(E e)</td>
+<td>offerLast(E e)</td>
+</tr>
+<tr>
+<td>删除队首</td>
+<td>removeFirst()</td>
+<td>pollFirst()</td>
+</tr>
+<tr>
+<td>删除队尾</td>
+<td>removeLast()</td>
+<td>pollLast()</td>
+</tr>
+<tr>
+<td>查询队首元素</td>
+<td>getFirst()</td>
+<td>peekFirst()</td>
+</tr>
+<tr>
+<td>查询队尾元素</td>
+<td>getLast()</td>
+<td>peekLast()</td>
+</tr>
+</tbody></table>
+<h2 id="ArrayDeque与LinkedList的区别"><a href="#ArrayDeque与LinkedList的区别" class="headerlink" title="ArrayDeque与LinkedList的区别"></a>ArrayDeque与LinkedList的区别</h2><p>相同点：ArrayDeque和LinkedList都实现了Deque接口，两个都有队列的功能。</p>
+<p>区别：</p>
+<ul>
+<li>ArrayDeque是基于可变长数组和双指针实现的，而LinkedList是基于链表实现的</li>
+<li>ArrayDeque不能存储Null数据，LinkedList可以存储</li>
+<li>ArrayDeque当容量满了以后涉及扩容会复制整个数组，丢弃旧数组，涉及了内存复制性能较低，当数据量大的时候LinkedList处理效率比较低，整体而言优先使用ArrayDeque实现队列</li>
+</ul>
+<h2 id="为什么有Stack还要用Deque实现栈"><a href="#为什么有Stack还要用Deque实现栈" class="headerlink" title="为什么有Stack还要用Deque实现栈"></a>为什么有Stack还要用Deque实现栈</h2><p>Stack继承了vector属于线程安全的，当处理大量数据的时候效率比较低。</p>
+<h2 id="什么是优先级队列"><a href="#什么是优先级队列" class="headerlink" title="什么是优先级队列"></a>什么是优先级队列</h2><p>优先级队列（Priority Queue）跟普通的队列有相似的行为，都是遵循队列的基本原则—先进先出（FIFO）, 但它有一个额外的特性：每个元素都有各自的“优先级”。</p>
+<p>在优先级队列中，元素被赋予优先级。当访问元素时，具有最高优先级的元素最先被访问。优先级队列有两个常见的应用场景：</p>
+<ol>
+<li><p>数据压缩：优先级队列常常被用于数据压缩，特别是霍夫曼编码。</p>
+</li>
+<li><p>Dijkstra算法：优先级队列也是实现Dijkstra算法的关键工具。</p>
+</li>
+</ol>
+<p>优先级队列是通过二叉堆实现的，它提供了O(log n)的添加和删除时间复杂度，以及O(1)的查询最大 &#x2F; 最小元素时间复杂度。</p>
+<p><strong>特点：</strong></p>
+<p><code>PriorityQueue</code> 利用了二叉堆的数据结构来实现的，底层使用可变长的数组来存储数据</p>
+<p><code>PriorityQueue</code> 通过堆元素的上浮和下沉，实现了在 O(logn) 的时间复杂度内插入元素和删除堆顶元素。</p>
+<p><code>PriorityQueue</code> 是非线程安全的，且不支持存储 <code>NULL</code> 和 <code>non-comparable</code> 的对象。</p>
+<p><code>PriorityQueue</code> 默认是小顶堆，但可以接收一个 <code>Comparator</code> 作为构造参数，从而来自定义元素优先级的先后。</p>
+<h2 id="什么是阻塞队列"><a href="#什么是阻塞队列" class="headerlink" title="什么是阻塞队列"></a>什么是阻塞队列</h2><p>阻塞队列（Blocking Queue）是一种特殊的队列，当队列为空时，消费者尝试从队列里取出元素的操作会被阻塞，直到队列中有可用元素；同样，当队列已满时，生产者尝试向队列添加元素的操作也会被阻塞，直到队列有可用空间。</p>
+<h3 id="阻塞队列的实现类"><a href="#阻塞队列的实现类" class="headerlink" title="阻塞队列的实现类"></a>阻塞队列的实现类</h3><ol>
+<li><p>ArrayBlockingQueue：是一个由数组支持的有界阻塞队列，队列的容量在初始化时设定。</p>
+</li>
+<li><p>LinkedBlockingQueue：是一个由链表支持的可选定长（即可以选择是否定长）阻塞队列。</p>
+</li>
+<li><p>PriorityBlockingQueue：是一个不限大小的并发阻塞队列。队列中的元素可按自然顺序进行排序，也可以通过Comparator接口进行排序。</p>
+</li>
+<li><p>DelayQueue：是一个在定时未到时，不能从中获取元素的无界阻塞队列，其内部实现是一个PriorityQueue。元素由其时间戳的长短决定队列中的排序，队头对象的定时时间最长。</p>
+</li>
+<li><p>SynchronousQueue：不存储元素的阻塞队列，每一个put操作必须等待一个take操作，反之亦然。</p>
+</li>
+<li><p>LinkedTransferQueue：是一种由链表结构组成的无界阻塞TransferQueue队列，相当于其他队列的综合体。TransferQueue是一种阻塞队列，其中的生产者的等待可能是为了将元素转移&#x2F;传递到消费者。</p>
+</li>
+<li><p>LinkedBlockingDeque：是一个由链表结构组成的双向阻塞队列。在最初提供的阻塞队列中，LinkedBlockingDeque是唯一一个支持前后两端插入和移除元素的队列。</p>
+</li>
+</ol>
+<h3 id="ArrayBlockingQueue和LinkedBlockingDeque的区别"><a href="#ArrayBlockingQueue和LinkedBlockingDeque的区别" class="headerlink" title="ArrayBlockingQueue和LinkedBlockingDeque的区别"></a>ArrayBlockingQueue和LinkedBlockingDeque的区别</h3><ol>
+<li><p>数据结构：ArrayBlockingQueue基于数组实现的。LinkedBlockingDeque基于链表实现的。</p>
+</li>
+<li><p>性能：LinkedBlockingDeque基于链表结构，插入和移除元素效率比较高。</p>
+</li>
+<li><p>双端访问：LinkedBlockingDeque支持从两端插入和移除元素。而ArrayBlockingQueue只能在队尾插入，在对头移除。</p>
+</li>
+<li><p>灵活性：LinkedBlockingDeque支持双端插入和移除，且可以选择是否定长，更具灵活性。</p>
+</li>
+</ol>
+<h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><h2 id="HashMap和HashTable的区别"><a href="#HashMap和HashTable的区别" class="headerlink" title="HashMap和HashTable的区别"></a>HashMap和HashTable的区别</h2><p>线程安全：HashMap非线程安全，HashTable内部方法用了synchronized修饰是线程安全的</p>
+<p>效率问题：HashMap不是线程安全的，效率比较高，考虑线程安全的请看，一般用concurrenthashmap</p>
+<p>NULL值和NULL键问题：hashmap允许一个null键多个null值，hashtable不允许null键和null值。</p>
+<p>初始容量和扩容问题：hashtable初始容量是11，扩容是2n+1,hashmap初始容量是16，扩容是2n</p>
+<p>底层数据结构：hashmap是数组+链表组成的，当链表长度大于8且数组长度大于64会转换为红黑树，hashtable也是数组和链表组成的，但是不会有生成红黑树的机制</p>
+<p>遍历方式：hashmap可以通过iterator和foreach遍历，hashtable只能通过iterator遍历。</p>
+<p><strong>HashMap</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * 默认初始容量 - 必须是2的幂。
+ */</span>
+<span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> <span class="token constant">DEFAULT_INITIAL_CAPACITY</span> <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> <span class="token number">4</span><span class="token punctuation">;</span> <span class="token comment">// 即 16</span>
+
+<span class="token comment">/**
+ * 最大容量，如果构造函数中隐含指定了更高的值，则使用此值。
+ * 必须是2的幂且 &lt;= 1&lt;&lt;30。
+ */</span>
+<span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> <span class="token constant">MAXIMUM_CAPACITY</span> <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> <span class="token number">30</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * 负载因子，如果构造函数中未指定，则使用此值。
+ */</span>
+<span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">float</span> <span class="token constant">DEFAULT_LOAD_FACTOR</span> <span class="token operator">=</span> <span class="token number">0.75f</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * 当链表中节点数量达到一定阈值时，将链表转换为树形结构。
+ * 当向具有至少这么多节点的桶中添加元素时进行转换。
+ * 此值必须大于2，并且至少应为8，以便与树结构移除中关于缩小时转换回普通桶的假设相匹配。
+ */</span>
+<span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> <span class="token constant">TREEIFY_THRESHOLD</span> <span class="token operator">=</span> <span class="token number">8</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * 在调整大小操作期间，用于取消树化（拆分）桶的节点数量阈值。
+ * 应小于TREEIFY_THRESHOLD，并且最多为6，以便在删除操作下的缩小检测中匹配。
+ */</span>
+<span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> <span class="token constant">UNTREEIFY_THRESHOLD</span> <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * 允许进行树形化的最小表容量。
+ * （否则，如果桶中节点太多，则会调整表的大小。）
+ * 应至少为4 * TREEIFY_THRESHOLD，以避免调整大小和树形化阈值之间的冲突。
+ */</span>
+<span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> <span class="token constant">MIN_TREEIFY_CAPACITY</span> <span class="token operator">=</span> <span class="token number">64</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token class-name">V</span> <span class="token function">put</span><span class="token punctuation">(</span><span class="token class-name">K</span> key<span class="token punctuation">,</span> <span class="token class-name">V</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token function">putVal</span><span class="token punctuation">(</span><span class="token function">hash</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">,</span> key<span class="token punctuation">,</span> value<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> <span class="token function">hash</span><span class="token punctuation">(</span><span class="token class-name">Object</span> key<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">int</span> h<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span>key <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">0</span> <span class="token operator">:</span> <span class="token punctuation">(</span>h <span class="token operator">=</span> key<span class="token punctuation">.</span><span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token punctuation">(</span>h <span class="token operator">>>></span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+<span class="token keyword">final</span> <span class="token class-name">V</span> <span class="token function">putVal</span><span class="token punctuation">(</span><span class="token keyword">int</span> hash<span class="token punctuation">,</span> <span class="token class-name">K</span> key<span class="token punctuation">,</span> <span class="token class-name">V</span> value<span class="token punctuation">,</span> <span class="token keyword">boolean</span> onlyIfAbsent<span class="token punctuation">,</span>
+                   <span class="token keyword">boolean</span> evict<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">Node</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">K</span><span class="token punctuation">,</span><span class="token class-name">V</span><span class="token punctuation">></span></span><span class="token punctuation">[</span><span class="token punctuation">]</span> tab<span class="token punctuation">;</span> <span class="token class-name">Node</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">K</span><span class="token punctuation">,</span><span class="token class-name">V</span><span class="token punctuation">></span></span> p<span class="token punctuation">;</span> <span class="token keyword">int</span> n<span class="token punctuation">,</span> i<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>tab <span class="token operator">=</span> table<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> <span class="token punctuation">(</span>n <span class="token operator">=</span> tab<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+            n <span class="token operator">=</span> <span class="token punctuation">(</span>tab <span class="token operator">=</span> <span class="token function">resize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>p <span class="token operator">=</span> tab<span class="token punctuation">[</span>i <span class="token operator">=</span> <span class="token punctuation">(</span>n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> hash<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+            tab<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">newNode</span><span class="token punctuation">(</span>hash<span class="token punctuation">,</span> key<span class="token punctuation">,</span> value<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">Node</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">K</span><span class="token punctuation">,</span><span class="token class-name">V</span><span class="token punctuation">></span></span> e<span class="token punctuation">;</span> <span class="token class-name">K</span> k<span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>p<span class="token punctuation">.</span>hash <span class="token operator">==</span> hash <span class="token operator">&amp;&amp;</span>
+                <span class="token punctuation">(</span><span class="token punctuation">(</span>k <span class="token operator">=</span> p<span class="token punctuation">.</span>key<span class="token punctuation">)</span> <span class="token operator">==</span> key <span class="token operator">||</span> <span class="token punctuation">(</span>key <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> key<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>k<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                e <span class="token operator">=</span> p<span class="token punctuation">;</span>
+            <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>p <span class="token keyword">instanceof</span> <span class="token class-name">TreeNode</span><span class="token punctuation">)</span>
+                e <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">TreeNode</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">K</span><span class="token punctuation">,</span><span class="token class-name">V</span><span class="token punctuation">></span></span><span class="token punctuation">)</span>p<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">putTreeVal</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> tab<span class="token punctuation">,</span> hash<span class="token punctuation">,</span> key<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> binCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token punctuation">;</span> <span class="token operator">++</span>binCount<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>e <span class="token operator">=</span> p<span class="token punctuation">.</span>next<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                        p<span class="token punctuation">.</span>next <span class="token operator">=</span> <span class="token function">newNode</span><span class="token punctuation">(</span>hash<span class="token punctuation">,</span> key<span class="token punctuation">,</span> value<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token keyword">if</span> <span class="token punctuation">(</span>binCount <span class="token operator">>=</span> <span class="token constant">TREEIFY_THRESHOLD</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">// -1 for 1st</span>
+                            <span class="token function">treeifyBin</span><span class="token punctuation">(</span>tab<span class="token punctuation">,</span> hash<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token keyword">break</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">&#125;</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>e<span class="token punctuation">.</span>hash <span class="token operator">==</span> hash <span class="token operator">&amp;&amp;</span>
+                        <span class="token punctuation">(</span><span class="token punctuation">(</span>k <span class="token operator">=</span> e<span class="token punctuation">.</span>key<span class="token punctuation">)</span> <span class="token operator">==</span> key <span class="token operator">||</span> <span class="token punctuation">(</span>key <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> key<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>k<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                        <span class="token keyword">break</span><span class="token punctuation">;</span>
+                    p <span class="token operator">=</span> e<span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>e <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// existing mapping for key</span>
+                <span class="token class-name">V</span> oldValue <span class="token operator">=</span> e<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>onlyIfAbsent <span class="token operator">||</span> oldValue <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+                    e<span class="token punctuation">.</span>value <span class="token operator">=</span> value<span class="token punctuation">;</span>
+                <span class="token function">afterNodeAccess</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> oldValue<span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token operator">++</span>modCount<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">++</span>size <span class="token operator">></span> threshold<span class="token punctuation">)</span>
+            <span class="token function">resize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">afterNodeInsertion</span><span class="token punctuation">(</span>evict<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>HashTable</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">	<span class="token comment">/**
+     * Constructs a new, empty hashtable with a default initial capacity (11)
+     * and load factor (0.75).
+     */</span>
+    <span class="token keyword">public</span> <span class="token class-name">Hashtable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">,</span> <span class="token number">0.75f</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">synchronized</span> <span class="token class-name">V</span> <span class="token function">put</span><span class="token punctuation">(</span><span class="token class-name">K</span> key<span class="token punctuation">,</span> <span class="token class-name">V</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 确保值不为null</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">NullPointerException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// 确保键不已经在哈希表中存在。</span>
+    <span class="token class-name">Entry</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">,</span><span class="token operator">?</span><span class="token punctuation">></span></span> tab<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> table<span class="token punctuation">;</span>
+    <span class="token comment">// 如果key如果为null，调用这个方法会抛出空指针异常</span>
+    <span class="token keyword">int</span> hash <span class="token operator">=</span> key<span class="token punctuation">.</span><span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> index <span class="token operator">=</span> <span class="token punctuation">(</span>hash <span class="token operator">&amp;</span> <span class="token number">0x7FFFFFFF</span><span class="token punctuation">)</span> <span class="token operator">%</span> tab<span class="token punctuation">.</span>length<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@SuppressWarnings</span><span class="token punctuation">(</span><span class="token string">"unchecked"</span><span class="token punctuation">)</span>
+    <span class="token class-name">Entry</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">K</span><span class="token punctuation">,</span><span class="token class-name">V</span><span class="token punctuation">></span></span> entry <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Entry</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">K</span><span class="token punctuation">,</span><span class="token class-name">V</span><span class="token punctuation">></span></span><span class="token punctuation">)</span>tab<span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token punctuation">;</span> entry <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token punctuation">;</span> entry <span class="token operator">=</span> entry<span class="token punctuation">.</span>next<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 如果找到相同的哈希值和键，则更新对应的值，并返回旧值。</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>entry<span class="token punctuation">.</span>hash <span class="token operator">==</span> hash<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> entry<span class="token punctuation">.</span>key<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">V</span> old <span class="token operator">=</span> entry<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+            entry<span class="token punctuation">.</span>value <span class="token operator">=</span> value<span class="token punctuation">;</span>
+            <span class="token keyword">return</span> old<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// 如果没有找到相同的哈希值和键，则将新的条目添加到指定索引位置。</span>
+    <span class="token function">addEntry</span><span class="token punctuation">(</span>hash<span class="token punctuation">,</span> key<span class="token punctuation">,</span> value<span class="token punctuation">,</span> index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="HashMap和HashSet的关系"><a href="#HashMap和HashSet的关系" class="headerlink" title="HashMap和HashSet的关系"></a>HashMap和HashSet的关系</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// 这个变量在序列化时将被忽略</span>
+<span class="token keyword">private</span> <span class="token keyword">transient</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">E</span><span class="token punctuation">,</span><span class="token class-name">Object</span><span class="token punctuation">></span></span> map<span class="token punctuation">;</span>
+<span class="token comment">//用于在底层映射中将一个对象与虚拟值关联起来。</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Object</span> <span class="token constant">PRESENT</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token class-name">E</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>   
+    <span class="token keyword">return</span> map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>e<span class="token punctuation">,</span> <span class="token constant">PRESENT</span><span class="token punctuation">)</span><span class="token operator">==</span><span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>HashSet基于HashMap实现的，hashmap存储的key-value pair,而hashset只存储对象</p>
+<h2 id="HashMap和TreeMap的关系"><a href="#HashMap和TreeMap的关系" class="headerlink" title="HashMap和TreeMap的关系"></a>HashMap和TreeMap的关系</h2><p>HashMap和TreeMap都实现了AbstractMap,但是TreeMap实现了NavigableMap和SortedMap两个接口，NavigableMap接口可以实现对集合内的元素搜索的能力，SortedMap接口实现了对集合的键进行排序的能力。</p>
+<h2 id="HashSet如何检查重复"><a href="#HashSet如何检查重复" class="headerlink" title="HashSet如何检查重复"></a>HashSet如何检查重复</h2><p>hashset添加一个对象的时候，首先计算这个对象的hashcode,找到数组下标的位置，如果这个位置是空的直接插入，如果不是空的就会使用equals()方法判断，两个hashcode相等的对象是否真的相同，如果相同的话就不会让它加入进去。</p>
+<h2 id="HashMap的底层实现"><a href="#HashMap的底层实现" class="headerlink" title="HashMap的底层实现"></a>HashMap的底层实现</h2><p>hashmap解决冲突用的链地址法，jdk 1.8之前用数组和链表的数据结构，1.8以后优化成了数组+链表+红黑树，当数组长度大于64，链表长度大于8链表部分会转换为红黑树。</p>
+<p><strong>红黑树：叫自平衡二叉搜索树，根节点都是黑色的，其余的节点可以是红色也可以是黑色的，插入、搜索、删除操作时间复杂度都是在O(log n)</strong></p>
+<h2 id="HashMap长度为什么是2的幂次方"><a href="#HashMap长度为什么是2的幂次方" class="headerlink" title="HashMap长度为什么是2的幂次方"></a>HashMap长度为什么是2的幂次方</h2><p><code>hash(key) % array.length</code></p>
+<ol>
+<li>快速计算索引</li>
+</ol>
+<p>HashMap使用按位与(&amp;)运算来代替取模(%)运算来计算元素在数组中的索引。当数组长度为2的幂次方时，(n-1) &amp; hash 等价于 hash % n，其中n是数组长度。按位与(&amp;)比取模(%)运算要快得多，所以使用2的幂次方长度的数组可以提高HashMap的存取效率。</p>
+<ol start="2">
+<li>均匀分布：当数组长度为2的幂次方时，不同的hash值发生碰撞的概率较小，这样可以使元素在哈希表中更均匀地散列。</li>
+</ol>
+<h2 id="HashMap的遍历方式"><a href="#HashMap的遍历方式" class="headerlink" title="HashMap的遍历方式"></a>HashMap的遍历方式</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HashMapIterator</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span><span class="token class-name">String</span><span class="token punctuation">></span></span> map <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">,</span> <span class="token string">"Java"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"2"</span><span class="token punctuation">,</span> <span class="token string">"JDK"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"3"</span><span class="token punctuation">,</span> <span class="token string">"Spring Framework"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"4"</span><span class="token punctuation">,</span> <span class="token string">"MyBatis framework"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"5"</span><span class="token punctuation">,</span> <span class="token string">"Redis"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"迭代器"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Iterator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Map<span class="token punctuation">.</span>Entry</span><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span><span class="token punctuation">></span></span> iterator <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">entrySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">iterator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>iterator<span class="token punctuation">.</span><span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token class-name">Map<span class="token punctuation">.</span>Entry</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span></span> entry <span class="token operator">=</span> iterator<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>entry<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>entry<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token class-name">Iterator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> iterator1 <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">keySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">iterator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>iterator1<span class="token punctuation">.</span><span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token class-name">String</span> string <span class="token operator">=</span> iterator1<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>string<span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>map<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>string<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"foreach"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Set</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Map<span class="token punctuation">.</span>Entry</span><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span><span class="token punctuation">></span></span> entries <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">entrySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Map<span class="token punctuation">.</span>Entry</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">></span></span> entry <span class="token operator">:</span> entries<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>entry<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>entry<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token class-name">Set</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> strings <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">keySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">String</span> string <span class="token operator">:</span> strings<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>string<span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>map<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>string<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"lambda"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span>value<span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>key<span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        map<span class="token punctuation">.</span><span class="token function">entrySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>stringStringEntry<span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>stringStringEntry<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">" : "</span><span class="token operator">+</span>stringStringEntry<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="什么是concurrenthashmap"><a href="#什么是concurrenthashmap" class="headerlink" title="什么是concurrenthashmap"></a>什么是concurrenthashmap</h2><img src="https://telegraph-image-2ni.pages.dev/file/902447ae9cd9350ae6f04.png" style="zoom:50%;">
+
+<p>ConcurrentHashMap的结构</p>
+<ul>
+<li>JDK 1.8之前,ConcurrentHashMap由Segment数组和HashEntry数组(链表)组成</li>
+<li>JDK 1.8之后,ConcurrentHashMap由Node数组和链表&#x2F;红黑树组成</li>
+</ul>
+<p>ConcurrentHashMap的线程安全机制</p>
+<p><strong>JDK 1.8之前</strong>: 将整个HashMap划分成多个Segment,每个Segment都有自己的锁，通过锁住Segment来保证线程安全,同一时刻最多只有一个线程能访问一个Segment，最大并发度为Segment的数量,默认为16</p>
+<p><strong>JDK 1.8之后</strong>: 采用Node + CAS + synchronized的方式来保证线程安全，锁的粒度更细,synchronized只锁定当前链表或红黑树的首节点，摒弃了Segment分段锁,利用CAS和synchronized来保证并发更新的安全，并发性能得到了大幅提升</p>
+<p><strong>1.CAS是一种无锁算法，它通过比较当前值和预期值，如果相同则进行更新，不同则重新操作的方式，减小了对整个数据的锁定概率。这属于乐观锁的一种，尝试不通过加锁的方式达到线程安全，但在高并发情况下，可能导致大量的失败重试。</strong></p>
+<p><strong>2.ConcurrentHashMap不能由NUll值NULL键。</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">V</span> <span class="token function">put</span><span class="token punctuation">(</span><span class="token class-name">K</span> key<span class="token punctuation">,</span> <span class="token class-name">V</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+     <span class="token keyword">return</span> <span class="token function">putVal</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token keyword">final</span> <span class="token class-name">V</span> <span class="token function">putVal</span><span class="token punctuation">(</span><span class="token class-name">K</span> key<span class="token punctuation">,</span> <span class="token class-name">V</span> value<span class="token punctuation">,</span> <span class="token keyword">boolean</span> onlyIfAbsent<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>key <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> value <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">NullPointerException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h1 id="集合注意事项"><a href="#集合注意事项" class="headerlink" title="集合注意事项"></a>集合注意事项</h1><h2 id="fail-fast"><a href="#fail-fast" class="headerlink" title="fail-fast"></a>fail-fast</h2><p>当多个线程对集合进行结构上的改变的操作时，有可能会产生 fail-fast 机制。</p>
+<p>原因：迭代器在遍历时直接访问集合中的内容，并且在遍历过程中使用一个 modCount 变量。集合在被遍历期间如果内容发生变化，就会改变modCount的值。每当迭代器使用hashNext()&#x2F;next()遍历下一个元素之前，都会检测modCount变量是否为expectedmodCount值，是的话就返回遍历；否则抛出异常，终止遍历。<br>解决办法：</p>
+<ol>
+<li>在遍历过程中，所有涉及到改变modCount值得地方全部加上synchronized。</li>
+<li>使用CopyOnWriteArrayList来替换ArrayList</li>
+</ol>
+<h2 id="Collections工具类"><a href="#Collections工具类" class="headerlink" title="Collections工具类"></a>Collections工具类</h2><p>collections工具类常用的方法有三大类，排序、查找、线程安全方法（不推荐使用）</p>
+<h2 id="集合判空"><a href="#集合判空" class="headerlink" title="集合判空"></a>集合判空</h2><p>判断集合元素是否为空，使用isempty()</p>
+<h2 id="集合转Map"><a href="#集合转Map" class="headerlink" title="集合转Map"></a>集合转Map</h2><p><strong>在使用 <code>java.util.stream.Collectors</code> 类的 <code>toMap()</code> 方法转为 <code>Map</code> 集合时，一定要注意当 value 为 null 时会抛 NPE 异常。</strong></p>
+<h2 id="集合遍历"><a href="#集合遍历" class="headerlink" title="集合遍历"></a>集合遍历</h2><p><strong>不要在 foreach 循环里进行元素的 <code>remove/add</code> 操作。remove 元素请使用 <code>Iterator</code> 方式，如果并发操作，需要对 <code>Iterator</code> 对象加锁。</strong></p>
+<h2 id="集合去重"><a href="#集合去重" class="headerlink" title="集合去重"></a>集合去重</h2><p><strong>可以利用 <code>Set</code> 元素唯一的特性，可以快速对一个集合进行去重操作，避免使用 <code>List</code> 的 <code>contains()</code> 进行遍历去重或者判断包含操作。</strong></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Orign Potter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://bjpotter.github.io/post/java-2-%E9%9B%86%E5%90%88.html" title="java基础-集合">https://bjpotter.github.io/post/java-2-%E9%9B%86%E5%90%88.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/java-1-%E5%9F%BA%E7%A1%80.html" rel="next" title="java基础">
+                <i class="fa fa-chevron-left"></i> java基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/java-3-%E5%B9%B6%E5%8F%91.html" rel="prev" title="java基础-并发编程">
+                java基础-并发编程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive%20%20%20%20%20%20%20%20%20%20/%E5%BD%92%E6%A1%A3">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/BJPotter" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuzhi0531@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/imlzgg" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com/potterhacks" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9B%86%E5%90%88"><span class="nav-number">1.</span> <span class="nav-text">什么是集合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#List%E3%80%81Set%E3%80%81Queue%E3%80%81Map%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.</span> <span class="nav-text">List、Set、Queue、Map的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#List"><span class="nav-number">3.</span> <span class="nav-text">List</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E5%92%8CArray%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.1.</span> <span class="nav-text">ArrayList和Array的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E5%92%8CArray%E8%BD%AC%E6%8D%A2"><span class="nav-number">3.2.</span> <span class="nav-text">ArrayList和Array转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E5%92%8CVector%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.3.</span> <span class="nav-text">ArrayList和Vector的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vector%E5%92%8CStack%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.4.</span> <span class="nav-text">Vector和Stack的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E7%9A%84%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%A0%E9%99%A4%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-number">3.5.</span> <span class="nav-text">ArrayList的插入和删除的时间复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedList%E7%9A%84%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%A0%E9%99%A4%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-number">3.6.</span> <span class="nav-text">LinkedList的插入和删除的时间复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedList%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B2%A1%E6%9C%89%E5%AE%9E%E7%8E%B0RandomAccess%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.7.</span> <span class="nav-text">LinkedList为什么没有实现RandomAccess接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList%E5%92%8CLinkedList%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.8.</span> <span class="nav-text">ArrayList和LinkedList的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Set"><span class="nav-number">4.</span> <span class="nav-text">Set</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Comparable-%E5%92%8C-Comparator-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">4.1.</span> <span class="nav-text">Comparable 和 Comparator 的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Ecomparator%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.1.1.</span> <span class="nav-text">基于comparator实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Ecomparbale%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.1.2.</span> <span class="nav-text">基于comparbale实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3SET%E9%9B%86%E5%90%88%E6%97%A0%E5%BA%8F%E6%80%A7%E5%92%8C%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E6%80%A7"><span class="nav-number">4.2.</span> <span class="nav-text">如何理解SET集合无序性和不可重复性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashSet%E3%80%81LinkedHashSet%E3%80%81TreeSet%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">4.3.</span> <span class="nav-text">HashSet、LinkedHashSet、TreeSet的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Queue"><span class="nav-number">5.</span> <span class="nav-text">Queue</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Queue%E5%92%8CDeque%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">5.1.</span> <span class="nav-text">Queue和Deque的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayDeque%E4%B8%8ELinkedList%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">5.2.</span> <span class="nav-text">ArrayDeque与LinkedList的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89Stack%E8%BF%98%E8%A6%81%E7%94%A8Deque%E5%AE%9E%E7%8E%B0%E6%A0%88"><span class="nav-number">5.3.</span> <span class="nav-text">为什么有Stack还要用Deque实现栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97"><span class="nav-number">5.4.</span> <span class="nav-text">什么是优先级队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97"><span class="nav-number">5.5.</span> <span class="nav-text">什么是阻塞队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="nav-number">5.5.1.</span> <span class="nav-text">阻塞队列的实现类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayBlockingQueue%E5%92%8CLinkedBlockingDeque%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">5.5.2.</span> <span class="nav-text">ArrayBlockingQueue和LinkedBlockingDeque的区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Map"><span class="nav-number">6.</span> <span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap%E5%92%8CHashTable%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">6.1.</span> <span class="nav-text">HashMap和HashTable的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap%E5%92%8CHashSet%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">6.2.</span> <span class="nav-text">HashMap和HashSet的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap%E5%92%8CTreeMap%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">6.3.</span> <span class="nav-text">HashMap和TreeMap的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashSet%E5%A6%82%E4%BD%95%E6%A3%80%E6%9F%A5%E9%87%8D%E5%A4%8D"><span class="nav-number">6.4.</span> <span class="nav-text">HashSet如何检查重复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0"><span class="nav-number">6.5.</span> <span class="nav-text">HashMap的底层实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap%E9%95%BF%E5%BA%A6%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF2%E7%9A%84%E5%B9%82%E6%AC%A1%E6%96%B9"><span class="nav-number">6.6.</span> <span class="nav-text">HashMap长度为什么是2的幂次方</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap%E7%9A%84%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F"><span class="nav-number">6.7.</span> <span class="nav-text">HashMap的遍历方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFconcurrenthashmap"><span class="nav-number">6.8.</span> <span class="nav-text">什么是concurrenthashmap</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%86%E5%90%88%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">7.</span> <span class="nav-text">集合注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#fail-fast"><span class="nav-number">7.1.</span> <span class="nav-text">fail-fast</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Collections%E5%B7%A5%E5%85%B7%E7%B1%BB"><span class="nav-number">7.2.</span> <span class="nav-text">Collections工具类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E5%90%88%E5%88%A4%E7%A9%BA"><span class="nav-number">7.3.</span> <span class="nav-text">集合判空</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E5%90%88%E8%BD%ACMap"><span class="nav-number">7.4.</span> <span class="nav-text">集合转Map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E5%90%88%E9%81%8D%E5%8E%86"><span class="nav-number">7.5.</span> <span class="nav-text">集合遍历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E5%90%88%E5%8E%BB%E9%87%8D"><span class="nav-number">7.6.</span> <span class="nav-text">集合去重</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orign Potter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

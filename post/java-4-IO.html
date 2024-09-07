@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="什么是IO冯诺依曼结构根据冯.诺依曼结构，计算机结构分为 5 大部分：运算器、控制器、存储器、输入设备、输出设备。   我们的IO主要指的是输入设备和输出设备，输入设备（比如键盘）和输出设备（比如显示器）都属于外部设备。 IO的具体流程一个进程的地址空间划分为用户空间和内核空间，内核空间负责系统级别的资源操作（文件管理、进程通信、内存管理等等）。如果要进行IO。必须依赖内核空间，用户空间（应用程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java基础-io">
+<meta property="og:url" content="https://bjpotter.github.io/post/java-4-IO.html">
+<meta property="og:site_name" content="Orign Potter&#39;s 个人博客">
+<meta property="og:description" content="什么是IO冯诺依曼结构根据冯.诺依曼结构，计算机结构分为 5 大部分：运算器、控制器、存储器、输入设备、输出设备。   我们的IO主要指的是输入设备和输出设备，输入设备（比如键盘）和输出设备（比如显示器）都属于外部设备。 IO的具体流程一个进程的地址空间划分为用户空间和内核空间，内核空间负责系统级别的资源操作（文件管理、进程通信、内存管理等等）。如果要进行IO。必须依赖内核空间，用户空间（应用程序">
+<meta property="og:locale">
+<meta property="og:image" content="https://telegraph-image-2ni.pages.dev/file/b412f6130798df7f5dcf8.jpg">
+<meta property="og:image" content="https://bjpotter.github.io/images/IO.drawio.svg">
+<meta property="og:image" content="https://bjpotter.github.io/images/NIO.png">
+<meta property="og:image" content="https://bjpotter.github.io/images/NIO.drawio.svg">
+<meta property="article:published_time" content="2024-09-07T06:27:38.873Z">
+<meta property="article:modified_time" content="2024-09-07T06:27:38.873Z">
+<meta property="article:author" content="Orign Potter">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://telegraph-image-2ni.pages.dev/file/b412f6130798df7f5dcf8.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://BJPotter.github.io/post/java-4-IO.html"/>
+
+
+
+
+
+  <title>java基础-io | Orign Potter's 个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orign Potter's 个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home                          //首页"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive          //归档"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th           //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags                     //标签"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user                   //关于"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://BJPotter.github.io/post/java-4-IO.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orign Potter's 个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">java基础-io</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-09-07T14:27:38+08:00">
+                2024-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="什么是IO"><a href="#什么是IO" class="headerlink" title="什么是IO"></a>什么是IO</h1><h2 id="冯诺依曼结构"><a href="#冯诺依曼结构" class="headerlink" title="冯诺依曼结构"></a>冯诺依曼结构</h2><p>根据冯.诺依曼结构，计算机结构分为 5 大部分：运算器、控制器、存储器、输入设备、输出设备。</p>
+<img src="https://telegraph-image-2ni.pages.dev/file/b412f6130798df7f5dcf8.jpg" style="zoom: 33%;">
+
+<p>我们的IO主要指的是输入设备和输出设备，输入设备（比如键盘）和输出设备（比如显示器）都属于外部设备。</p>
+<h2 id="IO的具体流程"><a href="#IO的具体流程" class="headerlink" title="IO的具体流程"></a>IO的具体流程</h2><p>一个进程的地址空间划分为用户空间和内核空间，内核空间负责系统级别的资源操作（文件管理、进程通信、内存管理等等）。如果要进行IO。必须依赖内核空间，用户空间（应用程序空间）没有权限进行IO操作，如果想要进行IO操作，只能发起系统调用请求操作系统，由操作系统调用内核完成具体的IO操作，（<strong>应用程序实际上只发起了IO操作的调用，具体IO的执行是由操作系统的内核来完成的。</strong>）</p>
+<h2 id="IO步骤总结"><a href="#IO步骤总结" class="headerlink" title="IO步骤总结"></a>IO步骤总结</h2><ol>
+<li>内核等待 I&#x2F;O 设备准备好数据</li>
+<li>内核将数据从内核空间拷贝到用户空间。</li>
+</ol>
+<h3 id="磁盘IO的数据流向"><a href="#磁盘IO的数据流向" class="headerlink" title="磁盘IO的数据流向"></a>磁盘IO的数据流向</h3><p>在读操作时，数据从磁盘设备流向内核空间，然后再流向用户空间；在写操作时，数据从用户空间流向内核空间，然后再流向磁盘设备。</p>
+<h3 id="网络IO数据流向"><a href="#网络IO数据流向" class="headerlink" title="网络IO数据流向"></a>网络IO数据流向</h3><p>在接收数据时，数据从网络设备流向内核空间，再流向用户空间（应用程序的内存空间）；在发送数据时，数据从应用程序的内存流向内核空间，最后流向网络设备。</p>
+<h1 id="Java中3种常见-IO-模型"><a href="#Java中3种常见-IO-模型" class="headerlink" title="Java中3种常见 IO 模型"></a>Java中3种常见 IO 模型</h1><h2 id="BIO"><a href="#BIO" class="headerlink" title="BIO"></a>BIO</h2><p>同步阻塞IO，应用程序发起 read 调用后，会一直阻塞，直到内核把数据拷贝到用户空间。</p>
+<h2 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h2><p>同步非阻塞IO中，应用程序发起read调用后，如果内核中没有就绪的数据，内核会立即返回一个错误，应用程序继续执行其他操作，这是非阻塞的；如果内核中数据已经就绪，当应用程序需要再次发起read调用来读取数据时是阻塞的。（<strong>阻不阻塞取决于内核数据是否准备就绪，不阻塞可以执行其他操作，阻塞的话只能等待</strong>）</p>
+<p><strong>缺点：</strong>不断轮询询问内核空间是否准备就绪，浪费CPU性能</p>
+<h2 id="AIO"><a href="#AIO" class="headerlink" title="AIO"></a>AIO</h2><p>应用程序发起read调用后，内核会立即返回，不需要阻塞等待数据的准备和拷贝，内核在后台会继续处理这些IO，并在IO完成后通过事件或者回调机制通知应用程序。</p>
+<p><strong>回调函数（Callback）</strong>：在发起异步I&#x2F;O请求时，一般会传递一个回调函数给操作系统。一旦I&#x2F;O操作完成，操作系统就会调用这个回调函数，以此来通知应用程序。这个回调函数通常会包含操作的结果，比如操作是否成功，读取或写入的数据量等信息。</p>
+<p><strong>事件通知（Event Notification）</strong>：操作系统提供一种机制，允许应用程序询问或者等待一个或多个I&#x2F;O操作的完成通知。例如Linux的epoll，BSD的kqueue，Java的NIO(Non-blocking I&#x2F;O)库等。应用程序可以在一次查询中得知多个I&#x2F;O操作是否完成，这在处理大量并发连接时，可以提高效率。</p>
+<h1 id="BIO-1"><a href="#BIO-1" class="headerlink" title="BIO"></a>BIO</h1><blockquote>
+<p>BIO是同步阻塞IO，当一个线程进行IO操作的时候，它会阻塞到线程执行完毕。以流的方式处理数据，基于字符流和字节流操作的</p>
+</blockquote>
+<h2 id="字符流和字节流的区别"><a href="#字符流和字节流的区别" class="headerlink" title="字符流和字节流的区别"></a>字符流和字节流的区别</h2><img src="/images/IO.drawio.svg" style="zoom:70%;">
+
+<p>在java中IO指的是input和output，在java中分为输入流和输出流，根据处理数据不同的单位分为字节流和字符流。字节流以字节（8位）为单位进行数据处理，如图片、视频，字符流是以字符进行为单位进行数据处理，如文本。</p>
+<ul>
+<li>处理单位：字节流以字节为单位，字符流以字符为单位。</li>
+<li>用途：字节流可以处理所有类型的数据，字符流只能处理字符类型的数据。</li>
+<li>处理中文字符：字节流可能会出现乱码的情况，字符流按字符处理，不会出现乱码</li>
+</ul>
+<h2 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a>字节流</h2><h3 id="InputStream"><a href="#InputStream" class="headerlink" title="InputStream"></a>InputStream</h3><p><code>InputStream</code>用于从源头（通常是文件）读取数据（字节信息）到内存中，<code>java.io.InputStream</code>抽象类是所有字节输入流的父类。</p>
+<p><code>read()</code>：返回输入流中下一个字节的数据。返回的值介于 0 到 255 之间。如果未读取任何字节，则代码返回 <code>-1</code> ，表示文件结束。</p>
+<p><code>read(byte b[ ])</code> : 从输入流中读取一些字节存储到数组 <code>b</code> 中。如果数组 <code>b</code> 的长度为零，则不读取。如果没有可用字节读取，返回 <code>-1</code>。如果有可用字节读取，则最多读取的字节数最多等于 <code>b.length</code> ， 返回读取的字节数。这个方法等价于 <code>read(b, 0, b.length)</code>。</p>
+<p><code>read(byte b[], int off, int len)</code>：在<code>read(byte b[ ])</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字节数）。</p>
+<p><code>skip(long n)</code>：忽略输入流中的 n 个字节 ,返回实际忽略的字节数。</p>
+<p><code>available()</code>：返回输入流中可以读取的字节数。</p>
+<p><code>close()</code>：关闭输入流释放相关的系统资源。</p>
+<h3 id="OutputStream"><a href="#OutputStream" class="headerlink" title="OutputStream"></a>OutputStream</h3><p><code>write(int b)</code>：将特定字节写入输出流。</p>
+<p><code>write(byte b[ ])</code> : 将数组<code>b</code> 写入到输出流，等价于 <code>write(b, 0, b.length)</code> 。</p>
+<p><code>write(byte[] b, int off, int len)</code> : 在<code>write(byte b[ ])</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字节数）。</p>
+<p><code>flush()</code>：刷新此输出流并强制写出所有缓冲的输出字节。</p>
+<p><code>close()</code>：关闭输出流释放相关的系统资源。</p>
+<h2 id="字符流"><a href="#字符流" class="headerlink" title="字符流"></a>字符流</h2><p>字节流对字符的处理（特别是中文）会出现乱码，字符流默认采用unicode编码，避免这个情况。</p>
+<p><strong>字符流的优点：</strong></p>
+<p>1.可以处理中文字符</p>
+<p>2.支持unicode编码，也可以根据构造函数自定义编码集</p>
+<p>3.可以实现读一行，写一行</p>
+<h3 id="Reader"><a href="#Reader" class="headerlink" title="Reader"></a>Reader</h3><p><code>read()</code> : 从输入流读取一个字符。</p>
+<p><code>read(char[] cbuf)</code> : 从输入流中读取一些字符，并将它们存储到字符数组 <code>cbuf</code>中，等价于 <code>read(cbuf, 0, cbuf.length)</code> 。</p>
+<p><code>read(char[] cbuf, int off, int len)</code>：在<code>read(char[] cbuf)</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字符数）。</p>
+<p><code>skip(long n)</code>：忽略输入流中的 n 个字符 ,返回实际忽略的字符数。</p>
+<p><code>close()</code> : 关闭输入流并释放相关的系统资源。</p>
+<h3 id="Writer"><a href="#Writer" class="headerlink" title="Writer"></a>Writer</h3><p><code>write(int c)</code> : 写入单个字符。</p>
+<p><code>write(char[] cbuf)</code>：写入字符数组 <code>cbuf</code>，等价于<code>write(cbuf, 0, cbuf.length)</code>。</p>
+<p><code>write(char[] cbuf, int off, int len)</code>：在<code>write(char[] cbuf)</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字符数）。</p>
+<p><code>write(String str)</code>：写入字符串，等价于 <code>write(str, 0, str.length())</code> 。</p>
+<p><code>write(String str, int off, int len)</code>：在<code>write(String str)</code> 方法的基础上增加了 <code>off</code> 参数（偏移量）和 <code>len</code> 参数（要读取的最大字符数）。</p>
+<p><code>append(CharSequence csq)</code>：将指定的字符序列附加到指定的 <code>Writer</code> 对象并返回该 <code>Writer</code> 对象。</p>
+<p><code>append(char c)</code>：将指定的字符附加到指定的 <code>Writer</code> 对象并返回该 <code>Writer</code> 对象。</p>
+<p><code>flush()</code>：刷新此输出流并强制写出所有缓冲的输出字符。</p>
+<p><code>close()</code>:关闭输出流释放相关的系统资源。</p>
+<h2 id="缓冲流"><a href="#缓冲流" class="headerlink" title="缓冲流"></a>缓冲流</h2><p>IO 操作是很消耗性能的，缓冲流将数据加载至缓冲区，一次性读取&#x2F;写入多个字节，从而避免频繁的 IO 操作，提高流的传输效率。</p>
+<h3 id="字节缓冲流"><a href="#字节缓冲流" class="headerlink" title="字节缓冲流"></a>字节缓冲流</h3><p><code>BufferedInputStream</code> 从源头（通常是文件）读取数据（字节信息）到内存的过程中不会一个字节一个字节的读取，而是会先将读取到的字节存放在缓存区，并从内部缓冲区中单独读取字节。这样大幅减少了 IO 次数，提高了读取效率。</p>
+<p><code>BufferedOutputStream</code> 将数据（字节信息）写入到目的地（通常是文件）的过程中不会一个字节一个字节的写入，而是会先将要写入的字节存放在缓存区，并从内部缓冲区中单独写入字节。这样大幅减少了 IO 次数，提高了读取效率</p>
+<h3 id="字符缓冲流"><a href="#字符缓冲流" class="headerlink" title="字符缓冲流"></a>字符缓冲流</h3><p><code>BufferedReader</code> （字符缓冲输入流）和 <code>BufferedWriter</code>（字符缓冲输出流）类似于 <code>BufferedInputStream</code>（字节缓冲输入流）和<code>BufferedOutputStream</code>（字节缓冲输入流），内部都维护了一个字节数组作为缓冲区。不过，前者主要是用来操作字符信息。</p>
+<h2 id="转换流"><a href="#转换流" class="headerlink" title="转换流"></a>转换流</h2><p>转换流主要是InputStreamReader和OutputStreamWriter,InputStreamReader 用于将字节输入流转换为字符输入流，其中 OutputStreamWriter 用于将字节输出流转换为字符输出流。使用转换流可以在一定程度上避免乱码，还可以指定输入输出所使用的字符集。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">InputStreamReader</span> isr <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"example.txt"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> "<span class="token constant">UTF</span><span class="token operator">-</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">OutputStreamWriter</span> osw <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">OutputStreamWriter</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span><span class="token string">"example.txt"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h1 id="NIO-1"><a href="#NIO-1" class="headerlink" title="NIO"></a>NIO</h1><blockquote>
+<p>NIO是同步非阻塞IO，它是非阻塞、面向缓冲、基于通道的IO,可以通过少量的线程处理多个连接，相关的类在java.nio包下，主要有三大核心channel（通道）、buffer（缓存）、selector（选择器）</p>
+</blockquote>
+<h2 id="NIO和BIO的区别"><a href="#NIO和BIO的区别" class="headerlink" title="NIO和BIO的区别"></a>NIO和BIO的区别</h2><ul>
+<li>数据单位：BIO以流的方式处理数据，NIO是以块的方式处理数据</li>
+<li>是否阻塞：BIO是阻塞的，NIO是非阻塞的</li>
+<li>操作方式：BIO是以字符流或者字节流处理数据，NIO是基于通道和缓冲进行数据处理</li>
+</ul>
+<h2 id="NIO核心组件"><a href="#NIO核心组件" class="headerlink" title="NIO核心组件"></a>NIO核心组件</h2><p>NIO的核心组件是Channel、Buffer、Selector,如下图所示</p>
+<img src="/images/NIO.png" style="zoom:43%;">
+
+<h3 id="数据流向"><a href="#数据流向" class="headerlink" title="数据流向"></a>数据流向</h3><blockquote>
+<p>缓冲区是数据的临时存储区，通道是连接数据源和缓冲区的桥梁，负责数据的实际传输。</p>
+<p>读操作时，数据从数据源流向缓冲区。</p>
+<p>写操作时，数据从缓冲区流向目标位置。</p>
+</blockquote>
+<p><img src="/images/NIO.drawio.svg"></p>
+<h3 id="缓冲区"><a href="#缓冲区" class="headerlink" title="缓冲区"></a>缓冲区</h3><p>是一块用于存储和操作数据的内存。</p>
+<p><strong>属性</strong></p>
+<ul>
+<li><p>容量(Capacity)：缓冲区能够容纳的数据元素的最大数量。这一容量在缓冲区创建时被设定并且不能改变。</p>
+</li>
+<li><p>位置(Position)：下一个要被读或写的元素的索引。位置会自动由相应的 get 或 put 方法更新。</p>
+</li>
+<li><p>限制(Limit)：缓冲区中第一个不应该读取或写入的元素的索引。或者说，你可操作的数据大小（limit - position）。</p>
+</li>
+<li><p>标记(Mark)：一个备忘位置。可以通过 Buffer.mark() 在此位置设置标记，之后可以通过 Buffer.reset() 方法恢复到这个位置。</p>
+</li>
+</ul>
+<p><strong>操作步骤：</strong></p>
+<ol>
+<li><p>写数据到Buffer：调用 Buffer.put() 之类的方法写数据。写完后，position 显示最新写入数据的位置。</p>
+</li>
+<li><p>调用flip()方法：切换Buffer到读模式。读写模式切换是通过 Buffer.flip() 方法完成的，它将 limit 设置为当前 position 的值，position 设置为 0 ，准备读取数据。</p>
+</li>
+<li><p>从Buffer中读数据：调用 Buffer.get() 读取数据。</p>
+</li>
+<li><p>调用clear()方法或compact()方法：读完后，调用 Buffer.clear() 或 Buffer.compact() 切换到写模式，准备再次写入。清空缓冲区并不会删除其中的数据，只是所有的状态值(position、limit、mark)都被设定为初始状态。所以看起来它是空的。</p>
+</li>
+</ol>
+<h3 id="通道"><a href="#通道" class="headerlink" title="通道"></a>通道</h3><p>是一个双向、非阻塞在缓冲区和实际的I&#x2F;O设备(如文件、网络套接字)之间传输数据的通道。</p>
+<ul>
+<li><p>双向性：Java NIO的通道可以同时进行读和写操作，而Java IO流通常都是单向的（InputStream或OutputStream）。</p>
+</li>
+<li><p>非阻塞性：Java NIO的通道可以被配置为非阻塞模式，因此我们可以在异步模式中使用它们。</p>
+</li>
+<li><p>可直接访问缓冲区：数据可以直接从缓冲区写入到通道，或者从通道读取到缓冲区。</p>
+</li>
+<li><p>通道实现：Java NIO中最重要的通道实现是 FileChannel（用于文件读写），SocketChannel和ServerSocketChannel（用于TCP网络读写）和DatagramChannel（用于UDP网络读写）。</p>
+</li>
+</ul>
+<h3 id="选择器"><a href="#选择器" class="headerlink" title="选择器"></a>选择器</h3><p>选择器是NIO中实现IO多路复用的核心组件，一个选择器可以监控多个通道的事件,如连接就绪、数据可读&#x2F;可写等，从而提高IO操作的并发性和吞吐量。</p>
+<h1 id="NIO零拷贝"><a href="#NIO零拷贝" class="headerlink" title="NIO零拷贝"></a>NIO零拷贝</h1><h2 id="什么是零拷贝"><a href="#什么是零拷贝" class="headerlink" title="什么是零拷贝"></a>什么是零拷贝</h2><p>传统的数据传输需要数据在用户空间（User Space）和内核空间（Kernel Space）之间进行多次复制操作，这不仅会占用大量CPU，还会增大系统的内存压力。零拷贝减少了两次CPU将数据从内核空间到用户空间的拷贝。</p>
+<h2 id="零拷贝的实现方式"><a href="#零拷贝的实现方式" class="headerlink" title="零拷贝的实现方式"></a>零拷贝的实现方式</h2><ol>
+<li><p>内存映射文件（MappedByteBuffer）：这是一种将文件或文件的一部分映射到内存中的方式。当映射完成后，你可以直接对映射内存进行操作，任何对内存的修改都会反映到文件上，反之亦然。这种方式避免了Java堆和文件之间的数据拷贝，意味着可以直接对文件进行操作，而不需要在Java堆上创建一个中间缓冲区。</p>
+</li>
+<li><p>文件通道的传输（transferTo&#x2F;transferFrom）：这是另一种零拷贝技术，允许我们将一个通道的数据直接传输到另一个通道。传输数据时，数据并没有经过用户空间，而是直接通过内核空间，从而避免了多余的数据复制过程。</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Orign Potter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://bjpotter.github.io/post/java-4-IO.html" title="java基础-io">https://bjpotter.github.io/post/java-4-IO.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/java-5-JVM.html" rel="next" title="java基础-JVM">
+                <i class="fa fa-chevron-left"></i> java基础-JVM
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/kafka%E5%AE%9E%E8%B7%B5.html" rel="prev" title="kafka实践">
+                kafka实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive%20%20%20%20%20%20%20%20%20%20/%E5%BD%92%E6%A1%A3">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/BJPotter" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuzhi0531@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/imlzgg" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com/potterhacks" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFIO"><span class="nav-number">1.</span> <span class="nav-text">什么是IO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%AF%E8%AF%BA%E4%BE%9D%E6%9B%BC%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">冯诺依曼结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO%E7%9A%84%E5%85%B7%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">IO的具体流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO%E6%AD%A5%E9%AA%A4%E6%80%BB%E7%BB%93"><span class="nav-number">1.3.</span> <span class="nav-text">IO步骤总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A3%81%E7%9B%98IO%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E5%90%91"><span class="nav-number">1.3.1.</span> <span class="nav-text">磁盘IO的数据流向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9CIO%E6%95%B0%E6%8D%AE%E6%B5%81%E5%90%91"><span class="nav-number">1.3.2.</span> <span class="nav-text">网络IO数据流向</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E4%B8%AD3%E7%A7%8D%E5%B8%B8%E8%A7%81-IO-%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">Java中3种常见 IO 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BIO"><span class="nav-number">2.1.</span> <span class="nav-text">BIO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NIO"><span class="nav-number">2.2.</span> <span class="nav-text">NIO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AIO"><span class="nav-number">2.3.</span> <span class="nav-text">AIO</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BIO-1"><span class="nav-number">3.</span> <span class="nav-text">BIO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E6%B5%81%E5%92%8C%E5%AD%97%E8%8A%82%E6%B5%81%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.1.</span> <span class="nav-text">字符流和字节流的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E8%8A%82%E6%B5%81"><span class="nav-number">3.2.</span> <span class="nav-text">字节流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#InputStream"><span class="nav-number">3.2.1.</span> <span class="nav-text">InputStream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OutputStream"><span class="nav-number">3.2.2.</span> <span class="nav-text">OutputStream</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E6%B5%81"><span class="nav-number">3.3.</span> <span class="nav-text">字符流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Reader"><span class="nav-number">3.3.1.</span> <span class="nav-text">Reader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Writer"><span class="nav-number">3.3.2.</span> <span class="nav-text">Writer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%86%B2%E6%B5%81"><span class="nav-number">3.4.</span> <span class="nav-text">缓冲流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E8%8A%82%E7%BC%93%E5%86%B2%E6%B5%81"><span class="nav-number">3.4.1.</span> <span class="nav-text">字节缓冲流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E7%BC%93%E5%86%B2%E6%B5%81"><span class="nav-number">3.4.2.</span> <span class="nav-text">字符缓冲流</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E6%8D%A2%E6%B5%81"><span class="nav-number">3.5.</span> <span class="nav-text">转换流</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NIO-1"><span class="nav-number">4.</span> <span class="nav-text">NIO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NIO%E5%92%8CBIO%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">4.1.</span> <span class="nav-text">NIO和BIO的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NIO%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="nav-number">4.2.</span> <span class="nav-text">NIO核心组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E5%90%91"><span class="nav-number">4.2.1.</span> <span class="nav-text">数据流向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="nav-number">4.2.2.</span> <span class="nav-text">缓冲区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E9%81%93"><span class="nav-number">4.2.3.</span> <span class="nav-text">通道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">4.2.4.</span> <span class="nav-text">选择器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NIO%E9%9B%B6%E6%8B%B7%E8%B4%9D"><span class="nav-number">5.</span> <span class="nav-text">NIO零拷贝</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9B%B6%E6%8B%B7%E8%B4%9D"><span class="nav-number">5.1.</span> <span class="nav-text">什么是零拷贝</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%B6%E6%8B%B7%E8%B4%9D%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">5.2.</span> <span class="nav-text">零拷贝的实现方式</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orign Potter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

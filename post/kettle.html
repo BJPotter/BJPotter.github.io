@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ETL," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="数据分析工具对比 SPSS: 优势：适用于统计学分析运算、数据挖掘、预测分析和决策支持。 用途：在学术界和商业领域广泛使用。   linggo: 优势：主要用于教学，解决线性和非线性方程。 用途：在教育和研究中应用广泛。   gephi: 优势：解决网络社交关系分析的图。 用途：用于研究社交网络、网络分析和复杂系统的可视化。   帆软: FineReport：类似于Excel，主要用于商业报表。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kettel">
+<meta property="og:url" content="https://bjpotter.github.io/post/kettle.html">
+<meta property="og:site_name" content="Orign Potter&#39;s 个人博客">
+<meta property="og:description" content="数据分析工具对比 SPSS: 优势：适用于统计学分析运算、数据挖掘、预测分析和决策支持。 用途：在学术界和商业领域广泛使用。   linggo: 优势：主要用于教学，解决线性和非线性方程。 用途：在教育和研究中应用广泛。   gephi: 优势：解决网络社交关系分析的图。 用途：用于研究社交网络、网络分析和复杂系统的可视化。   帆软: FineReport：类似于Excel，主要用于商业报表。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-09-07T06:27:38.876Z">
+<meta property="article:modified_time" content="2024-09-07T06:27:38.877Z">
+<meta property="article:author" content="Orign Potter">
+<meta property="article:tag" content="ETL">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://BJPotter.github.io/post/kettle.html"/>
+
+
+
+
+
+  <title>Kettel | Orign Potter's 个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orign Potter's 个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home                          //首页"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive          //归档"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th           //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags                     //标签"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user                   //关于"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://BJPotter.github.io/post/kettle.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orign Potter's 个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Kettel</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-09-07T14:27:38+08:00">
+                2024-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="数据分析工具对比"><a href="#数据分析工具对比" class="headerlink" title="数据分析工具对比"></a>数据分析工具对比</h1><ol>
+<li><strong>SPSS</strong>:<ul>
+<li><strong>优势</strong>：适用于统计学分析运算、数据挖掘、预测分析和决策支持。</li>
+<li><strong>用途</strong>：在学术界和商业领域广泛使用。</li>
+</ul>
+</li>
+<li><strong>linggo</strong>:<ul>
+<li><strong>优势</strong>：主要用于教学，解决线性和非线性方程。</li>
+<li><strong>用途</strong>：在教育和研究中应用广泛。</li>
+</ul>
+</li>
+<li><strong>gephi</strong>:<ul>
+<li><strong>优势</strong>：解决网络社交关系分析的图。</li>
+<li><strong>用途</strong>：用于研究社交网络、网络分析和复杂系统的可视化。</li>
+</ul>
+</li>
+<li><strong>帆软</strong>:<ul>
+<li><strong>FineReport</strong>：类似于Excel，主要用于商业报表。</li>
+<li><strong>FineBI</strong>：用于大屏可视化进行数据分析，支持大数据BI。</li>
+<li><strong>用途</strong>：用于生成报表、数据分析和大数据可视化。</li>
+</ul>
+</li>
+<li><strong>Tableau</strong>:<ul>
+<li><strong>优势</strong>：拖放操作转化为数据查询，对数据进行可视化。</li>
+<li><strong>用途</strong>：用于数据可视化、交互式分析和实时数据监控。</li>
+</ul>
+</li>
+<li><strong>Power BI</strong>:<ul>
+<li><strong>优势</strong>：微软旗下的可视化报表，可以进行数据整合（Excel、数据库）、数据分析和实时数据监控。</li>
+<li><strong>用途</strong>：用于数据分析、报表制作和实时数据监控，与微软生态系统集成紧密。</li>
+</ul>
+</li>
+</ol>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><blockquote>
+<p>Kettle，由Pentaho公司开发和维护,是一款开源的ETL(Extract、Transform、Load)工具，所以也称为Pentaho Data Integration(PDI)。</p>
+<p>Kettle主要用于数据的抽取、转换和加载，为用户提供了一系列丰富的数据整合功能，主要目标是将原始数据转化为有价值、有意义的信息。</p>
+</blockquote>
+<h1 id="Kettle的安装与配置"><a href="#Kettle的安装与配置" class="headerlink" title="Kettle的安装与配置"></a>Kettle的安装与配置</h1><h2 id="JAVA环境配置"><a href="#JAVA环境配置" class="headerlink" title="JAVA环境配置"></a>JAVA环境配置</h2><blockquote>
+<p>Kettle是基于JAVA开发的，如果运行需要配置JAVA_HOME环境变量（或者配置PENTAHO_JAVA_HOME），建议安装版本JDK1.8版本及以上</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 系统变量</span>
+变量名：<span class="token variable"><span class="token variable">`</span>JAVA_HOME<span class="token variable">`</span></span> 变量值：<span class="token variable"><span class="token variable">`</span>D:<span class="token punctuation">\</span>jdk1.8.0_291<span class="token variable">`</span></span>
+<span class="token comment"># PATH变量</span>
+变量值： <span class="token variable"><span class="token variable">`</span>%JAVA_HOME%<span class="token punctuation">\</span>bin<span class="token variable">`</span></span>
+<span class="token comment"># 验证</span>
+cmd -<span class="token operator">></span> <span class="token variable"><span class="token variable">`</span><span class="token function">java</span> <span class="token parameter variable">-version</span><span class="token variable">`</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Kettle安装"><a href="#Kettle安装" class="headerlink" title="Kettle安装"></a>Kettle安装</h2><blockquote>
+<p>下载kettle,解压到本地,双击Spoon.bat 就能启动kettle。 </p>
+</blockquote>
+<h1 id="Kettle的四大组件"><a href="#Kettle的四大组件" class="headerlink" title="Kettle的四大组件"></a>Kettle的四大组件</h1><h2 id="Spooner（转换工具）"><a href="#Spooner（转换工具）" class="headerlink" title="Spooner（转换工具）"></a>Spooner（转换工具）</h2><blockquote>
+<p>Spooner是Kettle的图形化设计工具，它开源并且易于使用。可以创建和编辑PDI的转换和作业。通过拖拽图形组件，可以很方便地进行数据连接、转换设计以及调试排错。它的可视化界面使得复杂的数据处理流程变得清晰和直观。</p>
+</blockquote>
+<h2 id="Kitchen（执行工具）"><a href="#Kitchen（执行工具）" class="headerlink" title="Kitchen（执行工具）"></a>Kitchen（执行工具）</h2><blockquote>
+<p>Kitchen是在命令行环境下，用来执行kettle作业的工具。你可以不依赖图形化界面，在脚本或者计划任务中直接使用Kitchen来执行定义好的作业，为自动化数据处理提供了可能。</p>
+</blockquote>
+<h2 id="Pan（执行工具）"><a href="#Pan（执行工具）" class="headerlink" title="Pan（执行工具）"></a>Pan（执行工具）</h2><blockquote>
+<p>类似于Kitchen，Pan也是一个命令行工具，区别在于它用来执行的是单一的数据转换。当你希望在命令行中独立运行和调度数据转换时，Pan工具就是你的选择。</p>
+</blockquote>
+<h2 id="Carte（集群服务）"><a href="#Carte（集群服务）" class="headerlink" title="Carte（集群服务）"></a>Carte（集群服务）</h2><blockquote>
+<p>Carte是Kettle提供的轻量级的Web容器，它可以把构建在Spoon上的ETL转换和作业发布到服务器上执行，支持远程的ETL任务的运行和监控。更重要的是，Carte支持集群配置，能在多台服务器间分发转换运算，满足大规模数据处理的需求</p>
+</blockquote>
+<h1 id="Kettle-的核心概念"><a href="#Kettle-的核心概念" class="headerlink" title="Kettle 的核心概念"></a>Kettle 的核心概念</h1><p>在 Kettle 中，有两个核心概念：<strong>转换</strong> 和 <strong>作业</strong>。</p>
+<h2 id="转换-Transformation"><a href="#转换-Transformation" class="headerlink" title="转换 (Transformation)"></a>转换 (Transformation)</h2><p>转换是 Kettle 中的数据处理单元，它定义了一系列数据操作步骤，从数据源提取数据，进行转换处理，最后加载到目标数据源。常见的转换步骤包括：</p>
+<ul>
+<li><strong>数据输入</strong>：从各种数据源（如数据库、CSV 文件、Excel 文件、XML 文件等）读取数据。</li>
+<li><strong>数据过滤</strong>：根据条件过滤数据，例如删除空值、去重、筛选特定记录等。</li>
+<li><strong>数据转换</strong>：执行数据转换操作，如数据类型转换、字符串处理、日期处理、数学运算等。</li>
+<li><strong>数据输出</strong>：将处理后的数据写入目标数据源，例如数据库表、文件、API 等。</li>
+</ul>
+<h2 id="作业-Job"><a href="#作业-Job" class="headerlink" title="作业 (Job)"></a>作业 (Job)</h2><p>作业是 Kettle 中的任务管理单元，用于定义一系列操作步骤的执行顺序。这些步骤可以包括转换的执行、文件操作、条件判断、循环等。作业通常用于实现复杂的 ETL 流程控制。作业的常见步骤包括：</p>
+<ul>
+<li><strong>作业入口</strong>：定义作业的开始点。</li>
+<li><strong>转换调用</strong>：在作业中调用一个或多个转换。</li>
+<li><strong>文件操作</strong>：如移动、复制、删除文件。</li>
+<li><strong>条件判断</strong>：基于某些条件决定下一步操作。</li>
+<li><strong>循环控制</strong>：实现重复执行某些步骤。</li>
+</ul>
+<h1 id="数据转换与集成"><a href="#数据转换与集成" class="headerlink" title="数据转换与集成"></a>数据转换与集成</h1><h2 id="数据转换"><a href="#数据转换" class="headerlink" title="数据转换"></a>数据转换</h2><ol>
+<li><strong>数据清洗</strong>：<ul>
+<li>对数据进行清洗，包括处理空值、重复值、异常值等。</li>
+<li>进行数据的规范化，确保数据格式的统一性。</li>
+<li>验证数据的有效性，并进行去噪声处理，以提高数据质量。</li>
+</ul>
+</li>
+<li><strong>数据标准化</strong>：<ul>
+<li>转换原始数据，使其符合特定的数据标准模式或数据规范。</li>
+<li>包括单位转换、数据归一化等操作，以确保数据的一致性和可比性。</li>
+</ul>
+</li>
+<li><strong>数据构建</strong>：<ul>
+<li>根据业务需求，从原始数据中提取新的特征数据。</li>
+<li>进一步创建数据模型，以支持后续的数据分析和业务决策。</li>
+</ul>
+</li>
+<li><strong>数据聚合</strong>：<ul>
+<li>对数据进行汇总抽象，包括进行总计、平均、最大值、最小值等统计操作。</li>
+<li>通过聚合操作，从原始数据中提炼出更高层次的信息，为分析提供更好的支持。</li>
+</ul>
+</li>
+</ol>
+<h2 id="数据集成"><a href="#数据集成" class="headerlink" title="数据集成"></a>数据集成</h2><ol>
+<li><strong>数据同步</strong>：<ul>
+<li>将分散在不同源系统中的数据，按照特定的规则同步更新到一个或多个目标系统中。</li>
+<li>确保数据的一致性和实时性，使得用户可以获取最新的数据。</li>
+</ul>
+</li>
+<li><strong>数据联合</strong>：<ul>
+<li>将来自不同数据源的关联数据结合在一起，提供统一的数据视图。</li>
+<li>实现对同一业务主题的全面分析，为用户提供更加综合的数据支持。</li>
+</ul>
+</li>
+<li><strong>数据仓库建设</strong>：<ul>
+<li>利用数据集成技术，将企业内部的业务数据进行提炼、转换和加载。</li>
+<li>构建满足多维度分析需求的数据仓库，为企业提供决策支持和业务洞察。</li>
+</ul>
+</li>
+</ol>
+<h1 id="操作案例"><a href="#操作案例" class="headerlink" title="操作案例"></a>操作案例</h1><h2 id="转换和作业"><a href="#转换和作业" class="headerlink" title="转换和作业"></a>转换和作业</h2><h3 id="转换-Transformation-1"><a href="#转换-Transformation-1" class="headerlink" title="转换 (Transformation)"></a>转换 (Transformation)</h3><p>转换包括一个或多个步骤，步骤之间通过跳（hop）来连接。跳定义了一个单向通道，允许数据从一个步骤流向另一个步骤。在 Kettle 中，数据的单位是行，数据流就是数据行从一个步骤到另一个步骤的移动。</p>
+<h3 id="作业-Job-1"><a href="#作业-Job-1" class="headerlink" title="作业 (Job)"></a>作业 (Job)</h3><p>作业包含了一系列转换和其他任务步骤。如果需要定时执行一系列步骤，通常会用到作业。作业可以在步骤之间设置依赖关系、条件判断和循环控制，以实现复杂的流程控制。</p>
+<h2 id="输入和输出"><a href="#输入和输出" class="headerlink" title="输入和输出"></a>输入和输出</h2><h3 id="CSV-输入"><a href="#CSV-输入" class="headerlink" title="CSV 输入"></a>CSV 输入</h3><p><strong>步骤：</strong></p>
+<ol>
+<li>新建转换：在 Spoon 中，点击 <code>File</code> -&gt; <code>New</code> -&gt; <code>Transformation</code> 创建一个新的转换。</li>
+<li>添加 CSV 文件输入步骤：<ul>
+<li>在左侧的 <code>Design</code> 面板中，找到 <code>输入</code> -&gt; <code>CSV 文件输入</code>，拖动到画布上。</li>
+<li>双击 <code>CSV 文件输入</code> 步骤，打开配置对话框。</li>
+<li>指定文件位置：点击 <code>浏览</code>，选择要读取的 CSV 文件。</li>
+<li>获取字段：点击 <code>获取字段</code> 按钮，将字段类型改成 <code>String</code>。</li>
+<li>点击 <code>预览</code> 按钮，查看数据预览，确认配置无误。</li>
+</ul>
+</li>
+</ol>
+<h3 id="Excel-输入"><a href="#Excel-输入" class="headerlink" title="Excel 输入"></a>Excel 输入</h3><p><strong>步骤：</strong></p>
+<ol>
+<li>新建转换：在 Spoon 中，点击 <code>File</code> -&gt; <code>New</code> -&gt; <code>Transformation</code> 创建一个新的转换。</li>
+<li>添加 Excel 文件输入步骤：<ul>
+<li>在左侧的 <code>Design</code> 面板中，找到 <code>输入</code> -&gt; <code>Excel 输入</code>，拖动到画布上。</li>
+<li>双击 <code>Excel 输入</code> 步骤，打开配置对话框。</li>
+<li>表引擎：选择 <code>Excel 2007 XLSX (Apache POI Streaming)</code>。</li>
+<li>浏览：点击 <code>浏览</code>，选择要读取的 Excel 文件。</li>
+<li>增加：点击 <code>增加</code> 按钮，添加表和工作表。</li>
+<li>获取字段：点击 <code>获取字段</code> 按钮，将字段类型改成 <code>String</code>。</li>
+<li>点击 <code>预览</code> 按钮，查看数据预览，确认配置无误。</li>
+</ul>
+</li>
+</ol>
+<h3 id="文本文件输出"><a href="#文本文件输出" class="headerlink" title="文本文件输出"></a>文本文件输出</h3><p><strong>步骤：</strong></p>
+<ol>
+<li>新建转换：在 Spoon 中，点击 <code>File</code> -&gt; <code>New</code> -&gt; <code>Transformation</code> 创建一个新的转换。</li>
+<li>添加文本文件输出步骤：<ul>
+<li>在左侧的 <code>Design</code> 面板中，找到 <code>输出</code> -&gt; <code>文本文件输出</code>，拖动到画布上。</li>
+<li>双击 <code>文本文件输出</code> 步骤，打开配置对话框。</li>
+<li>浏览：点击 <code>浏览</code>，选择输出文件的位置。</li>
+<li>扩展名：指定输出文件的扩展名（例如 <code>.txt</code>）。</li>
+<li>分隔符：指定字段之间的分隔符（例如 <code>,</code>）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="Excel-输出"><a href="#Excel-输出" class="headerlink" title="Excel 输出"></a>Excel 输出</h3><p><strong>步骤：</strong></p>
+<ol>
+<li>新建转换：在 Spoon 中，点击 <code>File</code> -&gt; <code>New</code> -&gt; <code>Transformation</code> 创建一个新的转换。</li>
+<li>添加 Excel 文件输出步骤：<ul>
+<li>在左侧的 <code>Design</code> 面板中，找到 <code>输出</code> -&gt; <code>Excel 输出</code>，拖动到画布上。</li>
+<li>双击 <code>Excel 输出</code> 步骤，打开配置对话框。</li>
+<li>浏览：点击 <code>浏览</code>，选择输出文件的位置。</li>
+<li>指定其他输出配置，如工作表名称和字段映射。</li>
+</ul>
+</li>
+</ol>
+<h2 id="脚本执行"><a href="#脚本执行" class="headerlink" title="脚本执行"></a>脚本执行</h2><h3 id="SQL-脚本"><a href="#SQL-脚本" class="headerlink" title="SQL 脚本"></a>SQL 脚本</h3><p><strong>步骤：</strong></p>
+<ol>
+<li>新建作业：在 Spoon 中，点击 <code>File</code> -&gt; <code>New</code> -&gt; <code>Job</code> 创建一个新的作业。</li>
+<li>添加 SQL 脚本步骤：<ul>
+<li>在左侧的 <code>Design</code> 面板中，找到 <code>SQL</code> -&gt; <code>SQL</code>，拖动到画布上。</li>
+<li>双击 <code>SQL</code> 步骤，打开配置对话框。</li>
+<li>配置数据库连接：选择或新建数据库连接。</li>
+<li>编写 SQL 脚本：在 <code>SQL 脚本</code> 区域编写要执行的 SQL 语句。</li>
+<li>点击 <code>测试</code> 按钮，确认 SQL 脚本正确执行。</li>
+</ul>
+</li>
+</ol>
+<h3 id="SQL-表-To-Excel"><a href="#SQL-表-To-Excel" class="headerlink" title="SQL 表 To Excel"></a>SQL 表 To Excel</h3><p><strong>步骤：</strong></p>
+<ol>
+<li>新建作业：在 Spoon 中，点击 <code>File</code> -&gt; <code>New</code> -&gt; <code>Job</code> 创建一个新的作业。</li>
+<li>添加转换执行步骤：<ul>
+<li>在左侧的 <code>Design</code> 面板中，找到 <code>转换</code> -&gt; <code>启动转换</code>，拖动到画布上。</li>
+<li>双击 <code>启动转换</code> 步骤，打开配置对话框。</li>
+<li>浏览：点击 <code>浏览</code>，选择一个包含以下步骤的转换文件。</li>
+</ul>
+</li>
+</ol>
+<p><strong>转换文件步骤：</strong></p>
+<ol>
+<li>添加表输入步骤：<ul>
+<li>在 Spoon 中，新建一个转换。</li>
+<li>在左侧的 <code>Design</code> 面板中，找到 <code>输入</code> -&gt; <code>表输入</code>，拖动到画布上。</li>
+<li>双击 <code>表输入</code> 步骤，打开配置对话框。</li>
+<li>配置数据库连接：选择或新建数据库连接。</li>
+<li>编写 SQL 查询：在 <code>SQL 查询</code> 区域编写从数据库表中提取数据的 SQL 查询。</li>
+<li>点击 <code>预览</code> 按钮，查看数据预览。</li>
+</ul>
+</li>
+<li>添加 Excel 输出步骤：<ul>
+<li>在左侧的 <code>Design</code> 面板中，找到 <code>输出</code> -&gt; <code>Excel 输出</code>，拖动到画布上。</li>
+<li>双击 <code>Excel 输出</code> 步骤，打开配置对话框。</li>
+<li>浏览：选择输出 Excel 文件的位置。</li>
+<li>配置其他输出选项，如工作表名称和字段映射。</li>
+</ul>
+</li>
+<li>连接表输入和 Excel 输出步骤：将 <code>表输入</code> 步骤和 <code>Excel 输出</code> 步骤连接起来。</li>
+<li>保存转换文件：保存转换文件，并在作业的 <code>启动转换</code> 步骤中引用该文件。</li>
+</ol>
+<h1 id="优势与应用场景"><a href="#优势与应用场景" class="headerlink" title="优势与应用场景"></a>优势与应用场景</h1><h2 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h2><ul>
+<li><strong>可扩展性</strong>：支持插件机制，可以根据需要扩展功能。用户可以编写自定义插件来实现特定的数据处理逻辑。</li>
+<li><strong>跨平台</strong>：基于 Java 开发，可以运行在多种操作系统上，包括 Windows、Linux 和 macOS。</li>
+<li><strong>易用性</strong>：提供了图形化界面，简化了 ETL 过程的设计和调试。用户不需要编写代码即可创建复杂的数据处理流程。</li>
+<li><strong>社区支持</strong>：作为开源项目，拥有广泛的社区支持和丰富的文档资源。用户可以在社区中找到帮助和共享经验。</li>
+</ul>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><ul>
+<li><strong>数据仓库构建和维护</strong>：将来自不同数据源的数据抽取、清洗、转换后加载到数据仓库中。</li>
+<li><strong>数据迁移和同步</strong>：在不同数据库或系统之间迁移和同步数据。</li>
+<li><strong>数据清洗和预处理</strong>：对原始数据进行清洗和预处理，为数据分析和机器学习准备干净的数据集。</li>
+<li><strong>报表和分析数据准备</strong>：从各种数据源抽取数据，进行聚合和计算，为报表和数据分析提供基础数据。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Orign Potter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://bjpotter.github.io/post/kettle.html" title="Kettel">https://bjpotter.github.io/post/kettle.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ETL/" rel="tag"># ETL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/kafka%E5%AE%9E%E8%B7%B5.html" rel="next" title="kafka实践">
+                <i class="fa fa-chevron-left"></i> kafka实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/webhook.html" rel="prev" title="webhook">
+                webhook <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive%20%20%20%20%20%20%20%20%20%20/%E5%BD%92%E6%A1%A3">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/BJPotter" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuzhi0531@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/imlzgg" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com/potterhacks" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7%E5%AF%B9%E6%AF%94"><span class="nav-number">1.</span> <span class="nav-text">数据分析工具对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kettle%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">Kettle的安装与配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JAVA%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">3.1.</span> <span class="nav-text">JAVA环境配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kettle%E5%AE%89%E8%A3%85"><span class="nav-number">3.2.</span> <span class="nav-text">Kettle安装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kettle%E7%9A%84%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">Kettle的四大组件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spooner%EF%BC%88%E8%BD%AC%E6%8D%A2%E5%B7%A5%E5%85%B7%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">Spooner（转换工具）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kitchen%EF%BC%88%E6%89%A7%E8%A1%8C%E5%B7%A5%E5%85%B7%EF%BC%89"><span class="nav-number">4.2.</span> <span class="nav-text">Kitchen（执行工具）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pan%EF%BC%88%E6%89%A7%E8%A1%8C%E5%B7%A5%E5%85%B7%EF%BC%89"><span class="nav-number">4.3.</span> <span class="nav-text">Pan（执行工具）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Carte%EF%BC%88%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1%EF%BC%89"><span class="nav-number">4.4.</span> <span class="nav-text">Carte（集群服务）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kettle-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">5.</span> <span class="nav-text">Kettle 的核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E6%8D%A2-Transformation"><span class="nav-number">5.1.</span> <span class="nav-text">转换 (Transformation)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9A-Job"><span class="nav-number">5.2.</span> <span class="nav-text">作业 (Job)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E8%BD%AC%E6%8D%A2%E4%B8%8E%E9%9B%86%E6%88%90"><span class="nav-number">6.</span> <span class="nav-text">数据转换与集成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E8%BD%AC%E6%8D%A2"><span class="nav-number">6.1.</span> <span class="nav-text">数据转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%E6%88%90"><span class="nav-number">6.2.</span> <span class="nav-text">数据集成</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%A1%88%E4%BE%8B"><span class="nav-number">7.</span> <span class="nav-text">操作案例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E6%8D%A2%E5%92%8C%E4%BD%9C%E4%B8%9A"><span class="nav-number">7.1.</span> <span class="nav-text">转换和作业</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E6%8D%A2-Transformation-1"><span class="nav-number">7.1.1.</span> <span class="nav-text">转换 (Transformation)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9A-Job-1"><span class="nav-number">7.1.2.</span> <span class="nav-text">作业 (Job)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA"><span class="nav-number">7.2.</span> <span class="nav-text">输入和输出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CSV-%E8%BE%93%E5%85%A5"><span class="nav-number">7.2.1.</span> <span class="nav-text">CSV 输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Excel-%E8%BE%93%E5%85%A5"><span class="nav-number">7.2.2.</span> <span class="nav-text">Excel 输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E8%BE%93%E5%87%BA"><span class="nav-number">7.2.3.</span> <span class="nav-text">文本文件输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Excel-%E8%BE%93%E5%87%BA"><span class="nav-number">7.2.4.</span> <span class="nav-text">Excel 输出</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E6%89%A7%E8%A1%8C"><span class="nav-number">7.3.</span> <span class="nav-text">脚本执行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL-%E8%84%9A%E6%9C%AC"><span class="nav-number">7.3.1.</span> <span class="nav-text">SQL 脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL-%E8%A1%A8-To-Excel"><span class="nav-number">7.3.2.</span> <span class="nav-text">SQL 表 To Excel</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF%E4%B8%8E%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">8.</span> <span class="nav-text">优势与应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF"><span class="nav-number">8.1.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">8.2.</span> <span class="nav-text">应用场景</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orign Potter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

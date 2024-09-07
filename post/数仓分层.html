@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="系统设计," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="数仓分层数仓概念什么是数据仓库 数据仓库，英文名称为Data Warehouse，可简写为DW或DWH,是为企业所有级别的决策制定过程，提供所有类型数据支持的战略集合。它出于分析性报告和决策支持目的而创建。  数据仓库作用 构建面向分析的集成化数据环境，提供指导业务流程改进、监视时间、成本、质量以及控制。数据仓库本身并不 “生产” 任何数据，同时自身也不需要 “消费” 任何的数据，数据来源于外部，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数仓分层">
+<meta property="og:url" content="https://bjpotter.github.io/post/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82.html">
+<meta property="og:site_name" content="Orign Potter&#39;s 个人博客">
+<meta property="og:description" content="数仓分层数仓概念什么是数据仓库 数据仓库，英文名称为Data Warehouse，可简写为DW或DWH,是为企业所有级别的决策制定过程，提供所有类型数据支持的战略集合。它出于分析性报告和决策支持目的而创建。  数据仓库作用 构建面向分析的集成化数据环境，提供指导业务流程改进、监视时间、成本、质量以及控制。数据仓库本身并不 “生产” 任何数据，同时自身也不需要 “消费” 任何的数据，数据来源于外部，">
+<meta property="og:locale">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-91d6a6ca901449e1e3dc96851f408453_1440w.webp">
+<meta property="og:image" content="https://bjpotter.github.io/post/Users/Administrator/AppData/Local/Temp/WeChat%20Files/1bcb8ac1f3fd27d4452992905efd093.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-ce707b3e18e8fa5bb6adc377acedcf78_1440w.webp">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-a0874931c5b236e904ff335547bf88ad_1440w.webp">
+<meta property="article:published_time" content="2024-09-07T06:27:38.884Z">
+<meta property="article:modified_time" content="2024-09-07T06:27:38.885Z">
+<meta property="article:author" content="Orign Potter">
+<meta property="article:tag" content="系统设计">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic4.zhimg.com/80/v2-91d6a6ca901449e1e3dc96851f408453_1440w.webp">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://BJPotter.github.io/post/数仓分层.html"/>
+
+
+
+
+
+  <title>数仓分层 | Orign Potter's 个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orign Potter's 个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home                          //首页"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive          //归档"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th           //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags                     //标签"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user                   //关于"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://BJPotter.github.io/post/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orign Potter's 个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">数仓分层</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-09-07T14:27:38+08:00">
+                2024-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="数仓分层"><a href="#数仓分层" class="headerlink" title="数仓分层"></a>数仓分层</h1><h2 id="数仓概念"><a href="#数仓概念" class="headerlink" title="数仓概念"></a>数仓概念</h2><h3 id="什么是数据仓库"><a href="#什么是数据仓库" class="headerlink" title="什么是数据仓库"></a>什么是数据仓库</h3><blockquote>
+<p>数据仓库，英文名称为<code>Data Warehouse</code>，可简写为<code>DW</code>或<code>DWH</code>,是为企业所有级别的决策制定过程，提供所有类型数据支持的战略集合。<strong>它出于分析性报告和决策支持目的而创建</strong>。</p>
+</blockquote>
+<h3 id="数据仓库作用"><a href="#数据仓库作用" class="headerlink" title="数据仓库作用"></a>数据仓库作用</h3><blockquote>
+<p>构建面向分析的集成化数据环境，提供指导业务流程改进、监视时间、成本、质量以及控制。数据仓库本身并不 “生产” 任何数据，同时自身也不需要 “消费” 任何的数据，数据来源于外部，并且开放给外部应用，这也是为什么叫 “仓库” ，而不叫 “工厂” 的原因。</p>
+</blockquote>
+<h3 id="数据仓库的特点"><a href="#数据仓库的特点" class="headerlink" title="数据仓库的特点"></a>数据仓库的特点</h3><h4 id="面向主题"><a href="#面向主题" class="headerlink" title="面向主题"></a>面向主题</h4><blockquote>
+<p>操作型数据库的数据组织面向事务处理任务，各个业务系统之间各自分离，而数据仓库中的数据是按照一定的主题域进行组织。主题是一个抽象的概念，是指用户使用数据仓库进行决策时所关心的重点方面，一个主题通常包含多个操作型信息系统。</p>
+</blockquote>
+<h4 id="集成"><a href="#集成" class="headerlink" title="集成"></a>集成</h4><blockquote>
+<p>面向事务处理的操作型数据库通常与某些特定的应用相关，数据库之间相互独立，并且往往是异构的。而数据仓库中的数据是在对原有分散的数据库数据抽取、清理的基础上经过系统加工、汇总和整理得到的，必须消除元数据中的不一致性，以保证数据仓库内的信息关于整个企业的一致的全局信息。</p>
+</blockquote>
+<h4 id="不可更新"><a href="#不可更新" class="headerlink" title="不可更新"></a>不可更新</h4><blockquote>
+<p>操作型数据库中的数据通常实时更新，数据根据需要及时发生变化。数据仓库的数据主要供企业决策分析之用，所涉及的数据操作主要是数据查询，一旦某个数据进入数据很残酷以后，一般情况下将被长期保留，也就是数据仓库中一般有大量的查询操作，但修改和删除操作很少，通常只需要定期的加载、刷新。</p>
+</blockquote>
+<h4 id="时变性"><a href="#时变性" class="headerlink" title="时变性"></a>时变性</h4><blockquote>
+<p>操作型数据库主要关心当前某一个时间段内的数据，而数据仓库中的数据通常包含历史信息，系统记录了企业从过去某一个时点（如开始应用数据仓库的时点）到目前的各个阶段的信息，通过这些信息，可以对企业的发展历程和未来趋势做出定量分析和预测。</p>
+</blockquote>
+<h4 id="数据仓库中的数据"><a href="#数据仓库中的数据" class="headerlink" title="数据仓库中的数据"></a>数据仓库中的数据</h4><blockquote>
+<p>包括元数据，粒度数据、当前详细数据，历史数据、档案数据。</p>
+</blockquote>
+<p>1.4.1 元数据</p>
+<blockquote>
+<p>最重要的部分，关于数据的数据。也成为数据仓库的结构，是所有数据集成体现。仓库开发者使用元素来管理和控制仓库的建立和维护。</p>
+</blockquote>
+<p>1.4.2 粒度数据</p>
+<blockquote>
+<p>定义为呼叫仓库所保存的信息的概要程度。不同粒度表示为不同级别的汇总数据。汇总数据是信息仓库的特点，所有的企业数据分类（按部门、地区、功能等）需要的信息都不同，同时有效的信息仓库是未不同风格提供的，轻量级汇总数据是企业自行的主要依据，它来自根据企业组成部分的轻量级汇总数据或来自当前详细数据。这一层的数据容量比其他任何一个都少，代表一个折衷的积累，用来支撑广泛的各式的需要和兴趣。通过高度汇总，执行者能够使用“钻取”到达逐步增加的详细层。</p>
+</blockquote>
+<p>1.4.3 当前详细数据</p>
+<blockquote>
+<p>是信息仓库的核心，存放大量数据。数据来自业务操作数据库，通过主题来组织，不是代表特定应用，而是代表整个企业。在仓库中数据粒度最低，当数据精确化时，其中的每一个数据实体都是一个块照、一个时刻，表示一个瞬间。一旦需要经常支持企业需求，数据随即进行更新。</p>
+</blockquote>
+<p>1.4.4 历史数据</p>
+<blockquote>
+<p>以前的有意义数据（一般两年以上），给企业带来延续的利益和价值。包含巨大的数据量，可以用来预测和趋势分析。包括：旧数据（原始或汇总形式）、描述旧数据特征的元数据。</p>
+</blockquote>
+<h4 id="1-5-数据仓库的基本架构"><a href="#1-5-数据仓库的基本架构" class="headerlink" title="1.5 数据仓库的基本架构"></a>1.5 数据仓库的基本架构</h4><blockquote>
+<p>数据仓库的目的是构建面向分析的继承化数据环境，为企业提供决策支持（Decision Support）。其实数据仓库本身并不“生产”然后数据，同时自身也不需要“消费”任何数据，数据来源于外部，并且开放给外部应用，这也是为什么叫“仓库”，而不叫“工厂”的原因。因此数据仓库的基本架构主要包含的数据流入流出的过程，可以分为三层</p>
+<p>–原始层（元数据）</p>
+<p>–仓库层（数据仓库）</p>
+<p>–应用层（数据应用）</p>
+</blockquote>
+<img src="https://pic4.zhimg.com/80/v2-91d6a6ca901449e1e3dc96851f408453_1440w.webp" alt="img" style="zoom: 50%;">
+
+<img src="/post/Users\Administrator\AppData\Local\Temp\WeChat Files\1bcb8ac1f3fd27d4452992905efd093.jpg" alt="1bcb8ac1f3fd27d4452992905efd093" style="zoom: 50%;">
+
+
+
+
+
+<h4 id="1-6-数据库和数据仓库的区别"><a href="#1-6-数据库和数据仓库的区别" class="headerlink" title="1.6 数据库和数据仓库的区别"></a>1.6 数据库和数据仓库的区别</h4><img src="https://pic1.zhimg.com/80/v2-ce707b3e18e8fa5bb6adc377acedcf78_1440w.webp" alt="img" style="zoom:50%;">
+
+<p>数据仓库是在传统数据库的基础之上发展起来的，但它并不是对传统数据库的彻底抛弃，而是旨在弥补传统数据库在数据分析能力方面的不足，以提供良好的大规模数据分析能力为己任，力图为决策提供有效的技术支持。和传统数据库相比，数据仓库在总体特征、面向用户、存储内容等方面，都有着重大的差异（如下表）。</p>
+<img src="https://pic2.zhimg.com/80/v2-a0874931c5b236e904ff335547bf88ad_1440w.webp" alt="img" style="zoom: 33%;">
+
+<h3 id="原始数据层"><a href="#原始数据层" class="headerlink" title="原始数据层"></a>原始数据层</h3><blockquote>
+<p>ODS(Operational Data Store)</p>
+<ol>
+<li>保持数据原貌，不做任何修改</li>
+<li>压缩采用 LZO，压缩比是 100g 数据压缩完 10g 左右。</li>
+<li>创建分区表</li>
+</ol>
+</blockquote>
+<h3 id="明细数据层"><a href="#明细数据层" class="headerlink" title="明细数据层"></a>明细数据层</h3><blockquote>
+<p>DWD</p>
+<p>1.数据清洗<br>（1）空值去除<br>（2）过滤核心字段无意义的数据，比如订单表中订单 id 为 null，支付表中支付 id 为空<br>（3）将用户行为宽表和业务表进行数据一致性处理</p>
+<p>2.清洗的手段<br>Sql、mr、rdd、kettle、Python等等</p>
+<p>3.清洗掉多少数据算合理<br>1 万条数据清洗掉 1 条。</p>
+<p>4.脱敏<br>对手机号、身份证号等敏感数据脱敏</p>
+<p>5.维度退化<br>对业务数据传过来的表进行维度退化和降维。（商品一级二级三级、省市县、年月日）</p>
+<p>6.LZO压缩</p>
+<p>7.列式存储 parquet</p>
+</blockquote>
+<h3 id="服务数据层"><a href="#服务数据层" class="headerlink" title="服务数据层"></a>服务数据层</h3><blockquote>
+<p>DWS</p>
+<ol>
+<li><p>DWS 层有 3-5 张宽表（处理 100-200 个指标 70%以上的需求）</p>
+<p>  具体宽表名称：用户行为宽表，用户购买商品明细行为宽表，商品宽表，购物车宽表，物流宽表、登录注册、售后等。</p>
+</li>
+<li><p>哪个宽表最宽？大概有多少个字段？<br>最宽的是用户行为宽表。大概有 60-100 个字段</p>
+</li>
+<li><p>具体用户行为宽表字段名称<br>评论、打赏、收藏、关注–商品、关注–人、点赞、分享、好价爆料、文章发布、活跃、签到、补签卡、幸运屋、礼品、金币、电商点击、gmv</p>
+</li>
+</ol>
+</blockquote>
+<h3 id="主题数据层"><a href="#主题数据层" class="headerlink" title="主题数据层"></a>主题数据层</h3><blockquote>
+<p>DWT</p>
+<p>分析过的指标<br>日活、月活、周活、留存、留存率、新增（日、周、年）、转化率、流失、回流、七天内连续 3 天登录（点赞、收藏、评价、购买、加购、下单、活动）、连续 3 周（月）登录、GMV、复购率、复购率排行、点赞、评论、收藏、领优惠价人数、使用优惠价、沉默、值不值得买、退款人数、退款率 topn 热门商品</p>
+<p>留转 G 复活指标<br>（1）活跃<br>日活：100 万 ；月活：是日活的 2-3 倍 300 万<br>总注册的用户多少？1000 万-3000 万之间<br>（2）GMV<br>GMV：每天 10 万订单 （50 – 100 元） 500 万-1000 万<br>10%-20% 100 万-200 万<br>（3）复购率<br>某日常商品复购；（手纸、面膜、牙膏）10%-20%<br>电脑、显示器、手表 1%<br>（4）转化率<br>商品详情 &#x3D;》 加购物车 &#x3D;》下单 &#x3D;》 支付<br>5%-10% 60-70% 90%-95%<br>（5）留存率<br>1&#x2F;2&#x2F;3、周留存、月留存<br>搞活动： 10-20%</p>
+</blockquote>
+<h3 id="应用数据层"><a href="#应用数据层" class="headerlink" title="应用数据层"></a>应用数据层</h3><blockquote>
+<ol>
+<li><p>如何分析用户活跃？<br> 在启动日志中统计不同设备 id 出现次数。</p>
+</li>
+<li><p>如何分析用户新增?<br> 用活跃用户表 left join 用户新增表，用户新增表中 mid 为空的即为用户新增。</p>
+</li>
+<li><p>如何分析用户 1 天留存？<br> 留存用户&#x3D;前一天新增 join 今天活跃<br> 用户留存率&#x3D;留存用户&#x2F;前一天新增</p>
+</li>
+<li><p>如何分析沉默用户？<br> (登录时间为 7 天前,且只出现过一次)<br> 按照设备 id 对日活表分组，登录次数为 1，且是在一周前登录。</p>
+</li>
+<li><p>如何分析本周回流用户？<br> 本周活跃 left join 本周新增 left join 上周活跃，且本周新增 id 和上周活跃 id 都为 null。</p>
+</li>
+<li><p>如何分析流失用户？<br> (登录时间为 7 天前)<br> 按照设备 id 对日活表分组，且七天内没有登录过。</p>
+</li>
+<li><p>如何分析最近连续 3 周活跃用户数？<br> 按照设备 id 对周活进行分组，统计次数大于 3 次。</p>
+</li>
+<li><p>如何分析最近七天内连续三天活跃用户数？<br> 1）查询出最近 7 天的活跃用户，并对用户活跃日期进行排名<br> 2）计算用户活跃日期及排名之间的差值<br> 3）对同用户及差值分组，统计差值个数<br> 4）将差值相同个数大于等于 3 的数据取出，然后去重，即为连续 3 天及以上活跃的用户<br> 7天连续收藏、点赞、购买、加购、付款、浏览、商品点击、退货、1 个月连续 7 天、连续两周</p>
+</li>
+</ol>
+</blockquote>
+<h1 id="数仓建模"><a href="#数仓建模" class="headerlink" title="数仓建模"></a>数仓建模</h1><h2 id="常用建模工具"><a href="#常用建模工具" class="headerlink" title="常用建模工具"></a>常用建模工具</h2><blockquote>
+<p>PowerDesigner&#x2F;SQLYog&#x2F;EZDML</p>
+</blockquote>
+<h2 id="ODS层"><a href="#ODS层" class="headerlink" title="ODS层"></a>ODS层</h2><blockquote>
+<ol>
+<li>保持数据原貌不做任何修改，起到备份数据的作用。</li>
+<li>数据采用压缩，减少磁盘存储空间（例如：原始数据 100G，可以压缩到 10G 左右）</li>
+<li>创建分区表，防止后续的全表扫描</li>
+</ol>
+</blockquote>
+<h2 id="DWD层"><a href="#DWD层" class="headerlink" title="DWD层"></a>DWD层</h2><blockquote>
+<p>DWD 层需构建维度模型，一般采用星型模型，呈现的状态一般为星座模型。维度建模一般按照以下四个步骤：</p>
+<p>选择业务过程→声明粒度→确认维度→确认事实</p>
+<p>（1）选择业务过程</p>
+<p>在业务系统中，如果业务表过多，挑选我们感兴趣的业务线，比如下单业务，支付业务，退款业务，物流业务，一条业务线对应一张事实表。如果小公司业务表比较少，建议选择所有业务线。</p>
+<p>（2）声明粒度</p>
+<p>数据粒度指数据仓库的数据中保存数据的细化程度或综合程度的级别。<br>声明粒度意味着精确定义事实表中的一行数据表示什么，应该尽可能选择最小粒度，以此来应各种各样的需求。<br>典型的粒度声明如下：</p>
+<p>订单当中的每个商品项作为下单事实表中的一行，粒度为每次<br>每周的订单次数作为一行，粒度为每周。<br>每月的订单次数作为一行，粒度为每月。<br>注意：如果在 DWD 层粒度就是每周或者每月，那么后续就没有办法统计细粒度的指标了。所有建议采用最小粒度。<br>（3）确定维度</p>
+<p>维度的主要作用是描述业务是事实，主要表示的是“谁，何处，何时”等信息。例如：<br>时间维度、用户维度、地区维度等常见维度。</p>
+<p>（4）确定事实</p>
+<p>此处的“事实”一词，指的是业务中的度量值，例如订单金额、下单次数等。<br>在 DWD 层，以业务过程为建模驱动，基于每个具体业务过程的特点，构建最细粒度的明细层事实表。事实表可做适当的宽表化处理。</p>
+<p>根据维度建模中的星型模型思想，将维度进行退化。例如：地区表和省份表退化为地区维度表，商品表、品类表、spu 表、商品三级分类、商品二级分类、商品一级分类表退化为商品维度表，活动信息表和活动规则表退化为活动维度表。至此，数仓的维度建模已经完毕，DWS、DWT 和 ADS 和维度建模已经没有关系了。DWS 和 DWT 都是建宽表，宽表都是按照主题去建。主题相当于观察问题的角度，对应着维度表。</p>
+</blockquote>
+<h2 id="DWS层"><a href="#DWS层" class="headerlink" title="DWS层"></a>DWS层</h2><blockquote>
+<p>DWS 层统计各个主题对象的当天行为，服务于 DWT 层的主题宽表。DWS层的宽表字段，是站在不同维度的视角去看事实表，重点关注事实表的度量值，通过与之关联的事实表，获得不同的事实表的度量值。</p>
+</blockquote>
+<h2 id="DWT层"><a href="#DWT层" class="headerlink" title="DWT层"></a>DWT层</h2><blockquote>
+<p>以分析的主题对象为建模驱动，基于上层的应用和产品的指标需求，构建主题对象的全量宽表。<br>DWT 层主题宽表都记录什么字段？<br>每个维度关联的不同事实表度量值以及首次、末次时间、累积至今的度量值、累积某个时间段的度量值。</p>
+</blockquote>
+<h2 id="ADS层"><a href="#ADS层" class="headerlink" title="ADS层"></a>ADS层</h2><blockquote>
+<p>分别对设备主题、会员主题、商品主题和营销主题进行指标分析，其中营销主题是用户主题和商品主题的跨主题分析案例</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Orign Potter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://bjpotter.github.io/post/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82.html" title="数仓分层">https://bjpotter.github.io/post/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" rel="tag"># 系统设计</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/%E5%BA%8F%E5%88%97%E5%8C%96.html" rel="next" title="序列化">
+                <i class="fa fa-chevron-left"></i> 序列化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.html" rel="prev" title="操作系统">
+                操作系统 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive%20%20%20%20%20%20%20%20%20%20/%E5%BD%92%E6%A1%A3">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/BJPotter" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuzhi0531@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/imlzgg" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com/potterhacks" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82"><span class="nav-number">1.</span> <span class="nav-text">数仓分层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E4%BB%93%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">数仓概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93"><span class="nav-number">1.1.1.</span> <span class="nav-text">什么是数据仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%BD%9C%E7%94%A8"><span class="nav-number">1.1.2.</span> <span class="nav-text">数据仓库作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-number">1.1.3.</span> <span class="nav-text">数据仓库的特点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E4%B8%BB%E9%A2%98"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">面向主题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%86%E6%88%90"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">集成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E6%9B%B4%E6%96%B0"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">不可更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%B6%E5%8F%98%E6%80%A7"><span class="nav-number">1.1.3.4.</span> <span class="nav-text">时变性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="nav-number">1.1.3.5.</span> <span class="nav-text">数据仓库中的数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5-%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.3.6.</span> <span class="nav-text">1.5 数据仓库的基本架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.1.3.7.</span> <span class="nav-text">1.6 数据库和数据仓库的区别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E6%95%B0%E6%8D%AE%E5%B1%82"><span class="nav-number">1.1.4.</span> <span class="nav-text">原始数据层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%8E%E7%BB%86%E6%95%B0%E6%8D%AE%E5%B1%82"><span class="nav-number">1.1.5.</span> <span class="nav-text">明细数据层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%95%B0%E6%8D%AE%E5%B1%82"><span class="nav-number">1.1.6.</span> <span class="nav-text">服务数据层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E9%A2%98%E6%95%B0%E6%8D%AE%E5%B1%82"><span class="nav-number">1.1.7.</span> <span class="nav-text">主题数据层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E6%95%B0%E6%8D%AE%E5%B1%82"><span class="nav-number">1.1.8.</span> <span class="nav-text">应用数据层</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E4%BB%93%E5%BB%BA%E6%A8%A1"><span class="nav-number">2.</span> <span class="nav-text">数仓建模</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%BB%BA%E6%A8%A1%E5%B7%A5%E5%85%B7"><span class="nav-number">2.1.</span> <span class="nav-text">常用建模工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ODS%E5%B1%82"><span class="nav-number">2.2.</span> <span class="nav-text">ODS层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DWD%E5%B1%82"><span class="nav-number">2.3.</span> <span class="nav-text">DWD层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DWS%E5%B1%82"><span class="nav-number">2.4.</span> <span class="nav-text">DWS层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DWT%E5%B1%82"><span class="nav-number">2.5.</span> <span class="nav-text">DWT层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ADS%E5%B1%82"><span class="nav-number">2.6.</span> <span class="nav-text">ADS层</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orign Potter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

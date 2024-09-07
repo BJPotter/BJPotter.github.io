@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="系统设计,Algorithm," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="学习什么是负载均衡以及8种负载均衡算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="负载均衡">
+<meta property="og:url" content="https://bjpotter.github.io/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1.html">
+<meta property="og:site_name" content="Orign Potter&#39;s 个人博客">
+<meta property="og:description" content="学习什么是负载均衡以及8种负载均衡算法">
+<meta property="og:locale">
+<meta property="og:image" content="https://bjpotter.github.io/images/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.png">
+<meta property="article:published_time" content="2022-02-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-09-07T06:27:38.887Z">
+<meta property="article:author" content="Orign Potter">
+<meta property="article:tag" content="系统设计">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://bjpotter.github.io/images/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://BJPotter.github.io/post/负载均衡.html"/>
+
+
+
+
+
+  <title>负载均衡 | Orign Potter's 个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orign Potter's 个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home                          //首页"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive          //归档"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th           //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags                     //标签"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user                   //关于"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://BJPotter.github.io/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orign Potter's 个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">负载均衡</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-02-03T00:00:00+08:00">
+                2022-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  学习什么是负载均衡以及8种负载均衡算法
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="什么是负载均衡"><a href="#什么是负载均衡" class="headerlink" title="什么是负载均衡"></a>什么是负载均衡</h1><blockquote>
+<p>负载均衡（Load Balance）主要将不同客户端的请求流量平均分配到后端服务器</p>
+</blockquote>
+<h2 id="负载均衡的优点"><a href="#负载均衡的优点" class="headerlink" title="负载均衡的优点"></a>负载均衡的优点</h2><ol>
+<li><p>资源利用最大化：通过将传入的网络流量均匀分发到后端服务器，负载均衡器能够防止单个服务器的过载，从而使资源利用达到最大。</p>
+</li>
+<li><p>高可用性和可靠性：在分布式系统中，如果一个服务器出现故障，负载均衡器可以将流量路由到其他的服务器，从而增加了整体系统的可用性和可靠性。</p>
+</li>
+</ol>
+<h2 id="负载均衡的工作原理"><a href="#负载均衡的工作原理" class="headerlink" title="负载均衡的工作原理"></a>负载均衡的工作原理</h2><p>用户对应用程序的请求首先转到负载均衡器。然后，负载均衡器会将每个请求路由到服务器场中最适合处理该请求的单个服务器。</p>
+<h2 id="负载均衡的8种算法"><a href="#负载均衡的8种算法" class="headerlink" title="负载均衡的8种算法"></a>负载均衡的8种算法</h2><h3 id="Round-Robin"><a href="#Round-Robin" class="headerlink" title="Round Robin"></a>Round Robin</h3><blockquote>
+<p>轮询法是最简单的负载均衡算法。它将请求顺序分发给服务器列表中的每个服务器。所有服务器的负载都是均等的，这种策略适用于所有服务器处理能力相同的情况。</p>
+</blockquote>
+<h3 id="Least-Connections"><a href="#Least-Connections" class="headerlink" title="Least Connections"></a>Least Connections</h3><blockquote>
+<p>最少连接法是一种动态负载均衡方法，它将新请求发送到当前打开的连接数最少的服务器。这种策略适用于处理能力不同的多服务器环境。</p>
+</blockquote>
+<h3 id="Weighted-Round-Robin"><a href="#Weighted-Round-Robin" class="headerlink" title="Weighted Round Robin"></a>Weighted Round Robin</h3><blockquote>
+<p>加权轮询法是圆形轮循法的扩展版，它基于每个服务器的处理能力（权重）分配请求。权重越大，分配的请求越多。权重通常由管理员根据服务器性能设置。</p>
+</blockquote>
+<h3 id="Weighted-Least-Connections"><a href="#Weighted-Least-Connections" class="headerlink" title="Weighted Least Connections"></a>Weighted Least Connections</h3><blockquote>
+<p>加权最小连接法是最少连接法的扩展版，与最少连接法不同，该算法会考虑服务器的权重。这意味着新请求将更可能发送到权重较高的服务器。</p>
+</blockquote>
+<h3 id="IP-Hash"><a href="#IP-Hash" class="headerlink" title="IP Hash"></a>IP Hash</h3><blockquote>
+<p>IP Hash法将客户端IP地址转变为一个服务器列表中的索引，使得来自同一IP地址的请求总会发送到相同的服务器。此策略适用于需要会话保持的服务器处理。</p>
+</blockquote>
+<h3 id="Least-Response-Time"><a href="#Least-Response-Time" class="headerlink" title="Least Response Time"></a>Least Response Time</h3><blockquote>
+<p>最小响应时间法根据每个服务器的响应时间来分配请求。它通常会将请求发送到响应时间最短的服务器，适用于处理能力不同的多服务器环境。</p>
+</blockquote>
+<h3 id="Random"><a href="#Random" class="headerlink" title="Random"></a>Random</h3><blockquote>
+<p>随机法简单地将请求随机分配给服务器列表中的服务器。一般在服务器处理能力相同且服务器数量较多的情况下使用。</p>
+</blockquote>
+<h3 id="Least-Bandwidth"><a href="#Least-Bandwidth" class="headerlink" title="Least Bandwidth"></a>Least Bandwidth</h3><blockquote>
+<p>最小带宽法将请求发送到过去一段时间内使用带宽最少的服务器。此策略的目标是最大程度地利用网络资源，保证网络带宽的合理使用。</p>
+</blockquote>
+<img src="/images/负载均衡算法.png" alt="负载均衡算法" style="zoom:50%;">
+
+<h2 id="负载均衡器的类型"><a href="#负载均衡器的类型" class="headerlink" title="负载均衡器的类型"></a>负载均衡器的类型</h2><ol>
+<li><p>硬件负载均衡器：这是传统的负载均衡器，存在于数据中心，作为独立的物理设备。它们具有专门的处理能力，用于优化网络流量分配。硬件负载均衡器因其可靠性和高性能而被许多大型企业所使用。</p>
+</li>
+<li><p>软件负载均衡器：软件负载均衡器可以在物理服务器或虚拟机上安装和运行。它们提供了更多的灵活性和配置选项，并且可以用作虚拟负载均衡器。如Nginx和HAProxy都是流行的软件负载均衡器选项。</p>
+</li>
+<li><p>全局服务负载均衡（GSLB）：全局服务负载均衡涉及在地理上不同的数据中心之间分配流量。GSLB通常使用DNS技术根据位置、服务器健康状况、全局策略等因素来指导流量。</p>
+</li>
+<li><p>本地负载均衡：与GSLB相对，本地负载均衡器分配内部网络中的流量。例如，LAN或WAN中的多台服务器可以通过本地负载均衡器进行负载平衡。</p>
+</li>
+<li><p>网络层负载均衡（Layer 4）：这类负载均衡器基于数据链路层（第2层）和传输层（第4层）信息，如IP地址和TCP&#x2F;UDP端口，进行简单的负载分发决策。</p>
+</li>
+<li><p>应用层负载均衡（Layer 7）：这类负载均衡器工作在OSI模型的应用层，可以读取HTTP头信息，因此它们可以进行更复杂的路由决策，例如根据HTTP头信息、Cookies、URI等进行流量分发。</p>
+</li>
+<li><p>云负载均衡：云服务提供商提供负载均衡服务，该服务能够跨云环境的多个实例分配流量。这种服务通常是分布式的、可扩展的，并可实施多种复杂的分配策略。</p>
+</li>
+</ol>
+<h2 id="负载均衡技术有哪些类型？"><a href="#负载均衡技术有哪些类型？" class="headerlink" title="负载均衡技术有哪些类型？"></a>负载均衡技术有哪些类型？</h2><blockquote>
+<p>负载均衡器技术类型有两种分别是硬件负载均衡器和软件负载均衡器。</p>
+</blockquote>
+<h3 id="硬件负载均衡器"><a href="#硬件负载均衡器" class="headerlink" title="硬件负载均衡器"></a>硬件负载均衡器</h3><blockquote>
+<p>基于硬件的负载均衡器是一种硬件设备，可以安全地处理千兆字节的流量并将其重定向到数百个不同的服务器。可以将其存储在数据中心，使用虚拟化创建多个可以集中管理的数字或虚拟负载均衡器。</p>
+</blockquote>
+<h3 id="软件负载均衡器"><a href="#软件负载均衡器" class="headerlink" title="软件负载均衡器"></a>软件负载均衡器</h3><blockquote>
+<p>基于软件的负载均衡器是执行所有负载均衡功能的应用程序。您可以将它们安装在任何服务器上，也可作为完全托管的第三方服务的形式访问。</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Orign Potter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://bjpotter.github.io/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1.html" title="负载均衡">https://bjpotter.github.io/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" rel="tag"># 系统设计</a>
+          
+            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/%E9%80%92%E5%BD%92%E7%AE%97%E6%B3%95.html" rel="next" title="递归算法的7个最佳实践">
+                <i class="fa fa-chevron-left"></i> 递归算法的7个最佳实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/SQL%20Tutorial.html" rel="prev" title="Sql Tutourial">
+                Sql Tutourial <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive%20%20%20%20%20%20%20%20%20%20/%E5%BD%92%E6%A1%A3">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/BJPotter" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuzhi0531@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/imlzgg" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com/potterhacks" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">1.</span> <span class="nav-text">什么是负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-number">1.1.</span> <span class="nav-text">负载均衡的优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.</span> <span class="nav-text">负载均衡的工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%848%E7%A7%8D%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">负载均衡的8种算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Round-Robin"><span class="nav-number">1.3.1.</span> <span class="nav-text">Round Robin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Least-Connections"><span class="nav-number">1.3.2.</span> <span class="nav-text">Least Connections</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Weighted-Round-Robin"><span class="nav-number">1.3.3.</span> <span class="nav-text">Weighted Round Robin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Weighted-Least-Connections"><span class="nav-number">1.3.4.</span> <span class="nav-text">Weighted Least Connections</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP-Hash"><span class="nav-number">1.3.5.</span> <span class="nav-text">IP Hash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Least-Response-Time"><span class="nav-number">1.3.6.</span> <span class="nav-text">Least Response Time</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Random"><span class="nav-number">1.3.7.</span> <span class="nav-text">Random</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Least-Bandwidth"><span class="nav-number">1.3.8.</span> <span class="nav-text">Least Bandwidth</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%99%A8%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.4.</span> <span class="nav-text">负载均衡器的类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E6%8A%80%E6%9C%AF%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%EF%BC%9F"><span class="nav-number">1.5.</span> <span class="nav-text">负载均衡技术有哪些类型？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%99%A8"><span class="nav-number">1.5.1.</span> <span class="nav-text">硬件负载均衡器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%99%A8"><span class="nav-number">1.5.2.</span> <span class="nav-text">软件负载均衡器</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orign Potter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

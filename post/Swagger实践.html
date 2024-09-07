@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Swagger," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="什么是 Swagger？历史背景Swagger 的起源 Swagger 的创建：Swagger 由 Tony Tam 于 2010 年创建，最初是为了简化 API 文档的生成和维护。 开源项目：Swagger 很快成为一个开源项目，得到了广泛的社区支持和贡献。  Swagger 的发展 Swagger 1.x 和 2.x：最初的 Swagger 版本（1.x 和 2.x）定义了一种用于描述 RES">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot+JWT整合Swagger">
+<meta property="og:url" content="https://bjpotter.github.io/post/Swagger%E5%AE%9E%E8%B7%B5.html">
+<meta property="og:site_name" content="Orign Potter&#39;s 个人博客">
+<meta property="og:description" content="什么是 Swagger？历史背景Swagger 的起源 Swagger 的创建：Swagger 由 Tony Tam 于 2010 年创建，最初是为了简化 API 文档的生成和维护。 开源项目：Swagger 很快成为一个开源项目，得到了广泛的社区支持和贡献。  Swagger 的发展 Swagger 1.x 和 2.x：最初的 Swagger 版本（1.x 和 2.x）定义了一种用于描述 RES">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-09-07T06:27:38.449Z">
+<meta property="article:modified_time" content="2024-09-07T06:27:38.450Z">
+<meta property="article:author" content="Orign Potter">
+<meta property="article:tag" content="Swagger">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://BJPotter.github.io/post/Swagger实践.html"/>
+
+
+
+
+
+  <title>SpringBoot+JWT整合Swagger | Orign Potter's 个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orign Potter's 个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home                          //首页"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive          //归档"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th           //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags                     //标签"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user                   //关于"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://BJPotter.github.io/post/Swagger%E5%AE%9E%E8%B7%B5.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orign Potter's 个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">SpringBoot+JWT整合Swagger</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-09-07T14:27:38+08:00">
+                2024-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="什么是-Swagger？"><a href="#什么是-Swagger？" class="headerlink" title="什么是 Swagger？"></a>什么是 Swagger？</h1><h2 id="历史背景"><a href="#历史背景" class="headerlink" title="历史背景"></a>历史背景</h2><h3 id="Swagger-的起源"><a href="#Swagger-的起源" class="headerlink" title="Swagger 的起源"></a>Swagger 的起源</h3><ul>
+<li><strong>Swagger 的创建</strong>：Swagger 由 Tony Tam 于 2010 年创建，最初是为了简化 API 文档的生成和维护。</li>
+<li><strong>开源项目</strong>：Swagger 很快成为一个开源项目，得到了广泛的社区支持和贡献。</li>
+</ul>
+<h3 id="Swagger-的发展"><a href="#Swagger-的发展" class="headerlink" title="Swagger 的发展"></a>Swagger 的发展</h3><ul>
+<li><strong>Swagger 1.x 和 2.x</strong>：最初的 Swagger 版本（1.x 和 2.x）定义了一种用于描述 RESTful API 的规范，并提供了一套工具，包括 Swagger UI、Swagger Editor 和 Swagger Codegen。</li>
+<li><strong>Swagger 的普及</strong>：由于其易用性和强大的功能，Swagger 很快成为描述和文档化 API 的事实标准。</li>
+</ul>
+<h3 id="OpenAPI-规范"><a href="#OpenAPI-规范" class="headerlink" title="OpenAPI 规范"></a>OpenAPI 规范</h3><ul>
+<li><strong>OpenAPI Initiative</strong>：2015 年，Swagger 被 SmartBear Software 收购，并将 Swagger 规范捐赠给 Linux 基金会，成立了 OpenAPI Initiative（OAI）。</li>
+<li><strong>OpenAPI 3.0</strong>：2017 年，OpenAPI Initiative 发布了 OpenAPI 3.0 规范，这是对 Swagger 2.0 的重大改进，增加了更多功能和灵活性。</li>
+</ul>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="OpenAPI-规范-1"><a href="#OpenAPI-规范-1" class="headerlink" title="OpenAPI 规范"></a>OpenAPI 规范</h3><ul>
+<li><strong>定义</strong>：OpenAPI 规范（OAS）是一种描述 RESTful API 的标准格式。它允许开发者定义 API 的端点、请求参数、响应格式、安全机制等。</li>
+<li><strong>格式</strong>：OpenAPI 规范可以使用 JSON 或 YAML 格式编写。</li>
+</ul>
+<h3 id="主要组件"><a href="#主要组件" class="headerlink" title="主要组件"></a>主要组件</h3><ul>
+<li><strong>Paths</strong>：定义 API 的端点和操作（如 GET、POST、PUT、DELETE）。</li>
+<li><strong>Components</strong>：定义可重用的模型、参数、响应等。</li>
+<li><strong>Security</strong>：定义 API 的安全机制，如 API 密钥、OAuth2、JWT 等。</li>
+<li><strong>Info</strong>：提供 API 的元数据，如标题、描述、版本等。</li>
+</ul>
+<h3 id="工具有哪些"><a href="#工具有哪些" class="headerlink" title="工具有哪些"></a>工具有哪些</h3><ul>
+<li><strong>Swagger UI</strong>：一个交互式的用户界面，用于查看和测试 API。</li>
+<li><strong>Swagger Editor</strong>：一个在线编辑器，用于编写和测试 OpenAPI 规范文件。</li>
+<li><strong>Swagger Codegen</strong>：一个工具，用于根据 OpenAPI 规范生成客户端 SDK 和服务器端代码。</li>
+<li><strong>Swagger Hub</strong>：一个用于协作和管理 API 的平台。</li>
+</ul>
+<h1 id="为什么使用-Swagger？"><a href="#为什么使用-Swagger？" class="headerlink" title="为什么使用 Swagger？"></a>为什么使用 Swagger？</h1><ul>
+<li><strong>自动生成文档</strong>：Swagger 可以根据代码自动生成 API 文档，减少手动编写文档的工作量。</li>
+<li><strong>交互式界面</strong>：Swagger UI 提供了一个用户友好的界面，可以方便地查看和测试 API。</li>
+<li><strong>提高开发效率</strong>：通过自动生成文档和提供测试界面，Swagger 可以显著提高开发和维护 API 的效率。</li>
+</ul>
+<h1 id="版本问题"><a href="#版本问题" class="headerlink" title="版本问题"></a>版本问题</h1><p>Spring Boot 2.4.8 版本与 Springfox 3.0.0 存在一些兼容性问题。Springfox 3.0.0 更推荐与 Spring Boot 2.6.x 或更高版本一起使用。</p>
+<p><strong>以下解决方案来解决兼容性问题</strong></p>
+<p>方案1：使用 Springfox 3.0.0 并解决兼容性问题</p>
+<p>方案2：使用 Spring Boot 2.4.x 兼容的 Swagger 版本（下面采用此方案解决）</p>
+<p>方案3：升级 Spring Boot 版本</p>
+<h1 id="编程步骤"><a href="#编程步骤" class="headerlink" title="编程步骤"></a>编程步骤</h1><h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><p>在 <code>pom.xml</code> 文件中添加 Swagger的依赖项。</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>parent</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-parent<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.4.8<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>relativePath</span><span class="token punctuation">/></span></span> <span class="token comment">&lt;!-- lookup parent from repository --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>parent</span><span class="token punctuation">></span></span>
+<span class="token comment">&lt;!-- 省略其他 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>io.springfox<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>springfox-swagger2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.9.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>io.springfox<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>springfox-swagger-ui<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.9.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="配置-Swagger"><a href="#配置-Swagger" class="headerlink" title="配置 Swagger"></a>配置 Swagger</h2><p>创建一个配置类来配置 Swagger</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token annotation punctuation">@EnableSwagger2</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SwaggerConfig</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">Docket</span> <span class="token function">api</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Docket</span><span class="token punctuation">(</span><span class="token class-name">DocumentationType</span><span class="token punctuation">.</span><span class="token constant">SWAGGER_2</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">select</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">apis</span><span class="token punctuation">(</span><span class="token class-name">RequestHandlerSelectors</span><span class="token punctuation">.</span><span class="token function">basePackage</span><span class="token punctuation">(</span><span class="token string">"com.example.mp"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">paths</span><span class="token punctuation">(</span><span class="token class-name">PathSelectors</span><span class="token punctuation">.</span><span class="token function">any</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">securitySchemes</span><span class="token punctuation">(</span><span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">singletonList</span><span class="token punctuation">(</span><span class="token function">apiKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">securityContexts</span><span class="token punctuation">(</span><span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">singletonList</span><span class="token punctuation">(</span><span class="token function">securityContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">ApiInfo</span> <span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ApiInfoBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">title</span><span class="token punctuation">(</span><span class="token string">"IP-Insight"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">description</span><span class="token punctuation">(</span><span class="token string">"IP-Insight API Description"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">version</span><span class="token punctuation">(</span><span class="token string">"1.0.0"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+	<span class="token comment">// 添加AWT认证，后续请求都会携带jwt token</span>
+    <span class="token keyword">private</span> <span class="token class-name">SecurityScheme</span> <span class="token function">apiKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ApiKey</span><span class="token punctuation">(</span><span class="token string">"JWT"</span><span class="token punctuation">,</span> <span class="token string">"Authorization"</span><span class="token punctuation">,</span> <span class="token string">"header"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">SecurityContext</span> <span class="token function">securityContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token class-name">SecurityContext</span><span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">securityReferences</span><span class="token punctuation">(</span><span class="token function">defaultAuth</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">forPaths</span><span class="token punctuation">(</span><span class="token class-name">PathSelectors</span><span class="token punctuation">.</span><span class="token function">any</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">SecurityReference</span><span class="token punctuation">></span></span> <span class="token function">defaultAuth</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">AuthorizationScope</span> authorizationScope <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AuthorizationScope</span><span class="token punctuation">(</span><span class="token string">"global"</span><span class="token punctuation">,</span> <span class="token string">"accessEverything"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">AuthorizationScope</span><span class="token punctuation">[</span><span class="token punctuation">]</span> authorizationScopes <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AuthorizationScope</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        authorizationScopes<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> authorizationScope<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">singletonList</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">SecurityReference</span><span class="token punctuation">(</span><span class="token string">"JWT"</span><span class="token punctuation">,</span> authorizationScopes<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="标注控制器类"><a href="#标注控制器类" class="headerlink" title="标注控制器类"></a>标注控制器类</h2><p>使用 Swagger 注解来标注你的控制器和方法。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token annotation punctuation">@Api</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"test Controller"</span><span class="token punctuation">,</span> tags <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token string">"test"</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestController</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/test"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"test Method"</span><span class="token punctuation">,</span> tags <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token string">"方法测试"</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"test"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="配置安全访问"><a href="#配置安全访问" class="headerlink" title="配置安全访问"></a>配置安全访问</h2><p>代码涉及的jwt的认证，要想访问ui必须放行<code>&quot;/swagger-ui.html**&quot;, &quot;/swagger-resources/**&quot;, &quot;/v2/api-docs&quot;, &quot;/webjars/**</code>请求</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token annotation punctuation">@EnableWebSecurity</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SecurityConfig</span> <span class="token keyword">extends</span> <span class="token class-name">WebSecurityConfigurerAdapter</span> <span class="token punctuation">&#123;</span>
+
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">JwtUserDetailsService</span> jwtUserDetailsService<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">JwtUtils</span> jwtUtils<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">UserDetailsService</span> userDetailsService<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">configure</span><span class="token punctuation">(</span><span class="token class-name">HttpSecurity</span> http<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        http<span class="token punctuation">.</span><span class="token function">csrf</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">disable</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">sessionManagement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">sessionCreationPolicy</span><span class="token punctuation">(</span><span class="token class-name">SessionCreationPolicy</span><span class="token punctuation">.</span><span class="token constant">STATELESS</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">and</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">authorizeRequests</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">antMatchers</span><span class="token punctuation">(</span><span class="token string">"/auth/login"</span><span class="token punctuation">,</span> <span class="token string">"/auth/register"</span><span class="token punctuation">,</span><span class="token string">"/swagger-ui.html**"</span><span class="token punctuation">,</span> <span class="token string">"/swagger-resources/**"</span><span class="token punctuation">,</span> <span class="token string">"/v2/api-docs"</span><span class="token punctuation">,</span> <span class="token string">"/webjars/**"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">permitAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 允许匿名访问登录和注册路径</span>
+                <span class="token punctuation">.</span><span class="token function">anyRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">authenticated</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">and</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token comment">//注册过滤器</span>
+                <span class="token punctuation">.</span><span class="token function">addFilterBefore</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">JwtRequestFilter</span><span class="token punctuation">(</span>jwtUtils<span class="token punctuation">,</span> userDetailsService<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token class-name">UsernamePasswordAuthenticationFilter</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">configure</span><span class="token punctuation">(</span><span class="token class-name">AuthenticationManagerBuilder</span> auth<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        auth<span class="token punctuation">.</span><span class="token function">userDetailsService</span><span class="token punctuation">(</span>jwtUserDetailsService<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">passwordEncoder</span><span class="token punctuation">(</span><span class="token function">passwordEncoder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">PasswordEncoder</span> <span class="token function">passwordEncoder</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">BCryptPasswordEncoder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">AuthenticationManager</span> <span class="token function">authenticationManagerBean</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">authenticationManagerBean</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="访问-Swagger-UI"><a href="#访问-Swagger-UI" class="headerlink" title="访问 Swagger UI"></a>访问 Swagger UI</h2><p>启动你的 Spring Boot 应用程序，然后在浏览器中访问 Swagger UI。默认情况下，Swagger UI 可以通过以下 URL 访问：</p>
+<pre class="line-numbers language-http" data-language="http"><code class="language-http"><span class="token header"><span class="token header-name keyword">http</span><span class="token punctuation">:</span><span class="token header-value">//localhost:8080/swagger-ui/</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>在 Swagger UI 中，你会看到一个 “Authorize” 按钮。点击这个按钮，会弹出一个输入框，要求你输入 JWT Token。用户界面列出了所有的 API 端点，并且可以在界面上进行token获取。</p>
+<p><strong>输入 JWT Token</strong></p>
+<p>在弹出的输入框中，输入你的 JWT Token，格式如下：</p>
+<pre class="line-numbers language-none"><code class="language-none">Bearer &lt;your_jwt_token&gt;
+例如：
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTYxNjI1NDQwMCwiaWF0IjoxNjE2MjU0MDAwfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>点击 “Authorize” 按钮，Swagger UI 将携带这个 JWT Token 进行所有后续的 API 请求。</p>
+<h1 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h1><h2 id="基本注解"><a href="#基本注解" class="headerlink" title="基本注解"></a>基本注解</h2><h3 id="Api"><a href="#Api" class="headerlink" title="@Api"></a>@Api</h3><p><code>@Api</code> 注解用于标注一个控制器类，提供该类的基本信息。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token annotation punctuation">@Api</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Example Controller"</span><span class="token punctuation">,</span> tags <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token string">"Example"</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExampleController</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="ApiOperation"><a href="#ApiOperation" class="headerlink" title="@ApiOperation"></a>@ApiOperation</h3><p><code>@ApiOperation</code> 注解用于标注一个方法，提供该方法的基本信息。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/api"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExampleController</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/example"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Get Example"</span><span class="token punctuation">,</span> notes <span class="token operator">=</span> <span class="token string">"This is an example endpoint"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"Hello, Swagger!"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="参数注解"><a href="#参数注解" class="headerlink" title="参数注解"></a>参数注解</h2><h3 id="ApiParam"><a href="#ApiParam" class="headerlink" title="@ApiParam"></a>@ApiParam</h3><p><code>@ApiParam</code> 注解用于标注方法参数，提供该参数的基本信息。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/api"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExampleController</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/example/&#123;id&#125;"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Get Example by ID"</span><span class="token punctuation">,</span> notes <span class="token operator">=</span> <span class="token string">"Provide an ID to look up specific example"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getExampleById</span><span class="token punctuation">(</span>
+            <span class="token annotation punctuation">@ApiParam</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"ID of the example to retrieve"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span> 
+            <span class="token annotation punctuation">@PathVariable</span> <span class="token class-name">String</span> id<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"Hello, Swagger! ID: "</span> <span class="token operator">+</span> id<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="ApiImplicitParam"><a href="#ApiImplicitParam" class="headerlink" title="@ApiImplicitParam"></a>@ApiImplicitParam</h3><p><code>@ApiImplicitParam</code> 注解用于描述单个隐式参数。它有多个属性，用于详细描述参数的各个方面。</p>
+<p><strong>属性</strong></p>
+<ul>
+<li><code>name</code>：参数名称。</li>
+<li><code>value</code>：参数描述。</li>
+<li><code>required</code>：参数是否必需，默认为 <code>false</code>。</li>
+<li><code>dataType</code>：参数的数据类型，如 <code>string</code>、<code>int</code> 等。</li>
+<li><code>paramType</code>：参数类型，常见的值有 <code>query</code>（查询参数）、<code>header</code>（请求头）、<code>path</code>（路径参数）、<code>form</code>（表单参数）等。</li>
+<li><code>example</code>：参数的示例值。</li>
+<li><code>defaultValue</code>：参数的默认值。</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExampleController</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/example"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Get Example"</span><span class="token punctuation">,</span> notes <span class="token operator">=</span> <span class="token string">"This is an example endpoint with implicit param"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiImplicitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"param1"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"Parameter 1"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span> dataType <span class="token operator">=</span> <span class="token string">"string"</span><span class="token punctuation">,</span> paramType <span class="token operator">=</span> <span class="token string">"query"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"exampleValue"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getExample</span><span class="token punctuation">(</span><span class="token annotation punctuation">@RequestParam</span> <span class="token class-name">String</span> param1<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"Hello, Swagger! Param1: "</span> <span class="token operator">+</span> param1<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="ApiImplicitParams"><a href="#ApiImplicitParams" class="headerlink" title="@ApiImplicitParams"></a>@ApiImplicitParams</h3><p><code>@ApiImplicitParams</code> 注解用于描述多个隐式参数。它包含一个 <code>value</code> 属性，该属性是一个 <code>@ApiImplicitParam</code> 注解的数组。</p>
+<p><strong>属性</strong>:<code>value</code>：一个 <code>@ApiImplicitParam</code> 注解的数组。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExampleController</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/example"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Get Example"</span><span class="token punctuation">,</span> notes <span class="token operator">=</span> <span class="token string">"This is an example endpoint with multiple implicit params"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiImplicitParams</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+        <span class="token annotation punctuation">@ApiImplicitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"param1"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"Parameter 1"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span> dataType <span class="token operator">=</span> <span class="token string">"string"</span><span class="token punctuation">,</span> paramType <span class="token operator">=</span> <span class="token string">"query"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"exampleValue1"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@ApiImplicitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"param2"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"Parameter 2"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">,</span> dataType <span class="token operator">=</span> <span class="token string">"string"</span><span class="token punctuation">,</span> paramType <span class="token operator">=</span> <span class="token string">"query"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"exampleValue2"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getExample</span><span class="token punctuation">(</span><span class="token annotation punctuation">@RequestParam</span> <span class="token class-name">String</span> param1<span class="token punctuation">,</span> <span class="token annotation punctuation">@RequestParam</span><span class="token punctuation">(</span>required <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token class-name">String</span> param2<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"Hello, Swagger! Param1: "</span> <span class="token operator">+</span> param1 <span class="token operator">+</span> <span class="token string">", Param2: "</span> <span class="token operator">+</span> param2<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="响应注解"><a href="#响应注解" class="headerlink" title="响应注解"></a>响应注解</h2><h3 id="ApiResponse"><a href="#ApiResponse" class="headerlink" title="@ApiResponse"></a>@ApiResponse</h3><p><code>@ApiResponse</code> 注解用于描述单个响应信息。它有多个属性，用于详细描述响应的各个方面。</p>
+<p><strong>属性</strong></p>
+<ul>
+<li><code>code</code>：响应的 HTTP 状态码。</li>
+<li><code>message</code>：响应的描述信息。</li>
+<li><code>response</code>：响应的类类型，用于描述响应的具体数据结构。</li>
+<li><code>responseContainer</code>：响应的容器类型，如 <code>List</code> 或 <code>Map</code>。</li>
+<li><code>examples</code>：响应的示例值。</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/api"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExampleController</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/example"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Get Example"</span><span class="token punctuation">,</span> notes <span class="token operator">=</span> <span class="token string">"This is an example endpoint with a single response"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiResponse</span><span class="token punctuation">(</span>code <span class="token operator">=</span> <span class="token number">200</span><span class="token punctuation">,</span> message <span class="token operator">=</span> <span class="token string">"Successfully retrieved example"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"Hello, Swagger!"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="ApiResponses"><a href="#ApiResponses" class="headerlink" title="@ApiResponses"></a>@ApiResponses</h3><p><code>@ApiResponses</code> 注解用于描述多个响应信息。它包含一个 <code>value</code> 属性，该属性是一个 <code>@ApiResponse</code> 注解的数组。</p>
+<p><strong>属性</strong>:<code>value</code>：一个 <code>@ApiResponse</code> 注解的数组。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/api"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExampleController</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/example"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Get Example"</span><span class="token punctuation">,</span> notes <span class="token operator">=</span> <span class="token string">"This is an example endpoint with multiple responses"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiResponses</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token annotation punctuation">@ApiResponse</span><span class="token punctuation">(</span>code <span class="token operator">=</span> <span class="token number">200</span><span class="token punctuation">,</span> message <span class="token operator">=</span> <span class="token string">"Successfully retrieved example"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@ApiResponse</span><span class="token punctuation">(</span>code <span class="token operator">=</span> <span class="token number">401</span><span class="token punctuation">,</span> message <span class="token operator">=</span> <span class="token string">"You are not authorized to view the resource"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@ApiResponse</span><span class="token punctuation">(</span>code <span class="token operator">=</span> <span class="token number">403</span><span class="token punctuation">,</span> message <span class="token operator">=</span> <span class="token string">"Accessing the resource you were trying to reach is forbidden"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@ApiResponse</span><span class="token punctuation">(</span>code <span class="token operator">=</span> <span class="token number">404</span><span class="token punctuation">,</span> message <span class="token operator">=</span> <span class="token string">"The resource you were trying to reach is not found"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"Hello, Swagger!"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="模型注解"><a href="#模型注解" class="headerlink" title="模型注解"></a>模型注解</h2><h3 id="ApiModel"><a href="#ApiModel" class="headerlink" title="@ApiModel"></a>@ApiModel</h3><p><code>@ApiModel</code> 注解用于描述模型类。它有多个属性，用于详细描述模型类的各个方面。</p>
+<p><strong>属性</strong></p>
+<ul>
+<li><code>value</code>：模型类的名称。如果未指定，默认使用类名。</li>
+<li><code>description</code>：模型类的描述信息。</li>
+<li><code>parent</code>：模型类的父类。</li>
+<li><code>discriminator</code>：用于多态模型的区分字段。</li>
+<li><code>subTypes</code>：模型类的子类型。</li>
+<li><code>reference</code>：引用的外部模型。</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@ApiModel</span><span class="token punctuation">(</span>description <span class="token operator">=</span> <span class="token string">"Details about the user"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="ApiModelProperty"><a href="#ApiModelProperty" class="headerlink" title="@ApiModelProperty"></a>@ApiModelProperty</h3><p><code>@ApiModelProperty</code> 注解用于描述模型类的属性。它有多个属性，用于详细描述属性的各个方面。</p>
+<p><strong>属性</strong></p>
+<ul>
+<li><code>value</code>：属性的描述信息。</li>
+<li><code>name</code>：属性的名称。如果未指定，默认使用字段名。</li>
+<li><code>required</code>：属性是否必需，默认为 <code>false</code>。</li>
+<li><code>position</code>：属性在模型中的位置。</li>
+<li><code>hidden</code>：是否在 Swagger 文档中隐藏该属性，默认为 <code>false</code>。</li>
+<li><code>example</code>：属性的示例值。</li>
+<li><code>dataType</code>：属性的数据类型。</li>
+<li><code>allowableValues</code>：属性的允许值。</li>
+<li><code>access</code>：属性的访问级别（如 <code>public</code>、<code>private</code>）。</li>
+<li><code>notes</code>：属性的备注信息。</li>
+<li><code>readOnly</code>：属性是否为只读，默认为 <code>false</code>。</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@ApiModel</span><span class="token punctuation">(</span>description <span class="token operator">=</span> <span class="token string">"Details about the user"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>notes <span class="token operator">=</span> <span class="token string">"The unique ID of the user"</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> id<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>notes <span class="token operator">=</span> <span class="token string">"The name of the user"</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+
+    <span class="token comment">// Constructor, getters and setters</span>
+    <span class="token keyword">public</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token class-name">String</span> id<span class="token punctuation">,</span> <span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// Getters and Setters</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="其他注解"><a href="#其他注解" class="headerlink" title="其他注解"></a>其他注解</h2><h3 id="ApiIgnore"><a href="#ApiIgnore" class="headerlink" title="@ApiIgnore"></a>@ApiIgnore</h3><p><code>@ApiIgnore</code> 注解用于忽略某个方法或参数，使其不在 Swagger 文档中显示。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">io<span class="token punctuation">.</span>swagger<span class="token punctuation">.</span>annotations<span class="token punctuation">.</span></span><span class="token class-name">ApiIgnore</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">GetMapping</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">RequestMapping</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">RestController</span></span><span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@RestController</span>
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/api"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExampleController</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/ignore"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiIgnore</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">ignoreEndpoint</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token string">"This endpoint is ignored in Swagger documentation"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="安全配置"><a href="#安全配置" class="headerlink" title="安全配置"></a>安全配置</h1><h2 id="配置JWT"><a href="#配置JWT" class="headerlink" title="配置JWT"></a>配置JWT</h2><ul>
+<li><code>apiKey()</code> 方法定义了一个 API 密钥类型的安全方案，名称为 “JWT”，在请求头中传递。</li>
+<li><code>securityContext()</code> 方法应用了安全方案到所有的 API 路径。</li>
+<li><code>defaultAuth()</code> 方法定义了全局的授权范围。</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token annotation punctuation">@EnableSwagger2</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SwaggerConfig</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">Docket</span> <span class="token function">api</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Docket</span><span class="token punctuation">(</span><span class="token class-name">DocumentationType</span><span class="token punctuation">.</span><span class="token constant">SWAGGER_2</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">select</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">apis</span><span class="token punctuation">(</span><span class="token class-name">RequestHandlerSelectors</span><span class="token punctuation">.</span><span class="token function">basePackage</span><span class="token punctuation">(</span><span class="token string">"com.example.yourpackage"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">paths</span><span class="token punctuation">(</span><span class="token class-name">PathSelectors</span><span class="token punctuation">.</span><span class="token function">any</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">securitySchemes</span><span class="token punctuation">(</span><span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">singletonList</span><span class="token punctuation">(</span><span class="token function">apiKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">securityContexts</span><span class="token punctuation">(</span><span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">singletonList</span><span class="token punctuation">(</span><span class="token function">securityContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">ApiInfo</span> <span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ApiInfoBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">title</span><span class="token punctuation">(</span><span class="token string">"Your API Title"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">description</span><span class="token punctuation">(</span><span class="token string">"Your API Description"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">version</span><span class="token punctuation">(</span><span class="token string">"1.0.0"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">ApiKey</span> <span class="token function">apiKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ApiKey</span><span class="token punctuation">(</span><span class="token string">"JWT"</span><span class="token punctuation">,</span> <span class="token string">"Authorization"</span><span class="token punctuation">,</span> <span class="token string">"header"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">SecurityContext</span> <span class="token function">securityContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token class-name">SecurityContext</span><span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">securityReferences</span><span class="token punctuation">(</span><span class="token function">defaultAuth</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">forPaths</span><span class="token punctuation">(</span><span class="token class-name">PathSelectors</span><span class="token punctuation">.</span><span class="token function">any</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">SecurityReference</span><span class="token punctuation">></span></span> <span class="token function">defaultAuth</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">AuthorizationScope</span> authorizationScope <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AuthorizationScope</span><span class="token punctuation">(</span><span class="token string">"global"</span><span class="token punctuation">,</span> <span class="token string">"accessEverything"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">AuthorizationScope</span><span class="token punctuation">[</span><span class="token punctuation">]</span> authorizationScopes <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AuthorizationScope</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        authorizationScopes<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> authorizationScope<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">singletonList</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">SecurityReference</span><span class="token punctuation">(</span><span class="token string">"JWT"</span><span class="token punctuation">,</span> authorizationScopes<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="配置OAuth"><a href="#配置OAuth" class="headerlink" title="配置OAuth"></a>配置OAuth</h2><ul>
+<li><code>securityScheme()</code> 方法定义了一个 OAuth2 类型的安全方案，名称为 “oauth2schema”。</li>
+<li><code>authorizationScope()</code> 方法定义了授权范围。</li>
+<li><code>grantType()</code> 方法定义了授权类型，这里使用的是资源所有者密码凭证授权。</li>
+<li><code>securityContext()</code> 方法应用了安全方案到所有的 API 路径。</li>
+<li><code>defaultAuth()</code> 方法定义了全局的授权范围。</li>
+<li><code>security()</code> 方法配置了 Swagger UI 的安全设置，包括客户端 ID 和客户端密钥。</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token annotation punctuation">@EnableSwagger2</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SwaggerConfig</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">Docket</span> <span class="token function">api</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Docket</span><span class="token punctuation">(</span><span class="token class-name">DocumentationType</span><span class="token punctuation">.</span><span class="token constant">SWAGGER_2</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">select</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">apis</span><span class="token punctuation">(</span><span class="token class-name">RequestHandlerSelectors</span><span class="token punctuation">.</span><span class="token function">basePackage</span><span class="token punctuation">(</span><span class="token string">"com.example.yourpackage"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">paths</span><span class="token punctuation">(</span><span class="token class-name">PathSelectors</span><span class="token punctuation">.</span><span class="token function">any</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">securitySchemes</span><span class="token punctuation">(</span><span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">singletonList</span><span class="token punctuation">(</span><span class="token function">securityScheme</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">securityContexts</span><span class="token punctuation">(</span><span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">singletonList</span><span class="token punctuation">(</span><span class="token function">securityContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">ApiInfo</span> <span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ApiInfoBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">title</span><span class="token punctuation">(</span><span class="token string">"Your API Title"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">description</span><span class="token punctuation">(</span><span class="token string">"Your API Description"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">version</span><span class="token punctuation">(</span><span class="token string">"1.0.0"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">SecurityScheme</span> <span class="token function">securityScheme</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">OAuth</span><span class="token punctuation">(</span><span class="token string">"oauth2schema"</span><span class="token punctuation">,</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token function">authorizationScope</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token function">grantType</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">AuthorizationScope</span> <span class="token function">authorizationScope</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">AuthorizationScope</span><span class="token punctuation">(</span><span class="token string">"read"</span><span class="token punctuation">,</span> <span class="token string">"for read operations"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">GrantType</span> <span class="token function">grantType</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ResourceOwnerPasswordCredentialsGrant</span><span class="token punctuation">(</span><span class="token string">"http://localhost:8080/oauth/token"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">SecurityContext</span> <span class="token function">securityContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token class-name">SecurityContext</span><span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">securityReferences</span><span class="token punctuation">(</span><span class="token function">defaultAuth</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">forPaths</span><span class="token punctuation">(</span><span class="token class-name">PathSelectors</span><span class="token punctuation">.</span><span class="token function">any</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">SecurityReference</span><span class="token punctuation">></span></span> <span class="token function">defaultAuth</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">AuthorizationScope</span> authorizationScope <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AuthorizationScope</span><span class="token punctuation">(</span><span class="token string">"read"</span><span class="token punctuation">,</span> <span class="token string">"for read operations"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">AuthorizationScope</span><span class="token punctuation">[</span><span class="token punctuation">]</span> authorizationScopes <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AuthorizationScope</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        authorizationScopes<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> authorizationScope<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">singletonList</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">SecurityReference</span><span class="token punctuation">(</span><span class="token string">"oauth2schema"</span><span class="token punctuation">,</span> authorizationScopes<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">SecurityConfiguration</span> <span class="token function">security</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token class-name">SecurityConfigurationBuilder</span><span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">clientId</span><span class="token punctuation">(</span><span class="token string">"exampleClientId"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">clientSecret</span><span class="token punctuation">(</span><span class="token string">"exampleClientSecret"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">scopeSeparator</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">useBasicAuthenticationWithAccessCodeGrant</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Orign Potter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://bjpotter.github.io/post/Swagger%E5%AE%9E%E8%B7%B5.html" title="SpringBoot+JWT整合Swagger">https://bjpotter.github.io/post/Swagger%E5%AE%9E%E8%B7%B5.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Swagger/" rel="tag"># Swagger</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/Spring%E7%90%86%E8%AE%BA.html" rel="next" title="Spring理论知识">
+                <i class="fa fa-chevron-left"></i> Spring理论知识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/docker.html" rel="prev" title="docker">
+                docker <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive%20%20%20%20%20%20%20%20%20%20/%E5%BD%92%E6%A1%A3">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/BJPotter" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuzhi0531@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/imlzgg" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com/potterhacks" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Swagger%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什么是 Swagger？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="nav-number">1.1.</span> <span class="nav-text">历史背景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Swagger-%E7%9A%84%E8%B5%B7%E6%BA%90"><span class="nav-number">1.1.1.</span> <span class="nav-text">Swagger 的起源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Swagger-%E7%9A%84%E5%8F%91%E5%B1%95"><span class="nav-number">1.1.2.</span> <span class="nav-text">Swagger 的发展</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenAPI-%E8%A7%84%E8%8C%83"><span class="nav-number">1.1.3.</span> <span class="nav-text">OpenAPI 规范</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.2.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenAPI-%E8%A7%84%E8%8C%83-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">OpenAPI 规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E7%BB%84%E4%BB%B6"><span class="nav-number">1.2.2.</span> <span class="nav-text">主要组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="nav-number">1.2.3.</span> <span class="nav-text">工具有哪些</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8-Swagger%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">为什么使用 Swagger？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">版本问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E7%A8%8B%E6%AD%A5%E9%AA%A4"><span class="nav-number">4.</span> <span class="nav-text">编程步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96"><span class="nav-number">4.1.</span> <span class="nav-text">添加依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-Swagger"><span class="nav-number">4.2.</span> <span class="nav-text">配置 Swagger</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E6%B3%A8%E6%8E%A7%E5%88%B6%E5%99%A8%E7%B1%BB"><span class="nav-number">4.3.</span> <span class="nav-text">标注控制器类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%AE%89%E5%85%A8%E8%AE%BF%E9%97%AE"><span class="nav-number">4.4.</span> <span class="nav-text">配置安全访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE-Swagger-UI"><span class="nav-number">4.5.</span> <span class="nav-text">访问 Swagger UI</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-number">5.</span> <span class="nav-text">注解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%B3%A8%E8%A7%A3"><span class="nav-number">5.1.</span> <span class="nav-text">基本注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Api"><span class="nav-number">5.1.1.</span> <span class="nav-text">@Api</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiOperation"><span class="nav-number">5.1.2.</span> <span class="nav-text">@ApiOperation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E6%B3%A8%E8%A7%A3"><span class="nav-number">5.2.</span> <span class="nav-text">参数注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiParam"><span class="nav-number">5.2.1.</span> <span class="nav-text">@ApiParam</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiImplicitParam"><span class="nav-number">5.2.2.</span> <span class="nav-text">@ApiImplicitParam</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiImplicitParams"><span class="nav-number">5.2.3.</span> <span class="nav-text">@ApiImplicitParams</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%8D%E5%BA%94%E6%B3%A8%E8%A7%A3"><span class="nav-number">5.3.</span> <span class="nav-text">响应注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiResponse"><span class="nav-number">5.3.1.</span> <span class="nav-text">@ApiResponse</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiResponses"><span class="nav-number">5.3.2.</span> <span class="nav-text">@ApiResponses</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%B3%A8%E8%A7%A3"><span class="nav-number">5.4.</span> <span class="nav-text">模型注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiModel"><span class="nav-number">5.4.1.</span> <span class="nav-text">@ApiModel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiModelProperty"><span class="nav-number">5.4.2.</span> <span class="nav-text">@ApiModelProperty</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%B3%A8%E8%A7%A3"><span class="nav-number">5.5.</span> <span class="nav-text">其他注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ApiIgnore"><span class="nav-number">5.5.1.</span> <span class="nav-text">@ApiIgnore</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">6.</span> <span class="nav-text">安全配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEJWT"><span class="nav-number">6.1.</span> <span class="nav-text">配置JWT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEOAuth"><span class="nav-number">6.2.</span> <span class="nav-text">配置OAuth</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orign Potter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

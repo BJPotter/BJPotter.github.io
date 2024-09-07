@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="教程," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="安装PostgreSQL安装依赖 make &gt;&#x3D; 3.8.0 推荐gcc最新版 bzip、bzip2、tar、readline、readline-devel、zlib-devel Perl  下载源代码https :&#x2F;&#x2F;www.postgresql.org&#x2F;download&#x2F; # 下载名为postgresql-10.21.tar.gz  解压 gunzip postgresql-1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PostgreSQL 学习">
+<meta property="og:url" content="https://bjpotter.github.io/post/PostgreSQL.html">
+<meta property="og:site_name" content="Orign Potter&#39;s 个人博客">
+<meta property="og:description" content="安装PostgreSQL安装依赖 make &gt;&#x3D; 3.8.0 推荐gcc最新版 bzip、bzip2、tar、readline、readline-devel、zlib-devel Perl  下载源代码https :&#x2F;&#x2F;www.postgresql.org&#x2F;download&#x2F; # 下载名为postgresql-10.21.tar.gz  解压 gunzip postgresql-1">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-09-07T06:27:38.445Z">
+<meta property="article:modified_time" content="2024-09-07T06:27:38.445Z">
+<meta property="article:author" content="Orign Potter">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://BJPotter.github.io/post/PostgreSQL.html"/>
+
+
+
+
+
+  <title>PostgreSQL 学习 | Orign Potter's 个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orign Potter's 个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home                          //首页"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive          //归档"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th           //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags                     //标签"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user                   //关于"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://BJPotter.github.io/post/PostgreSQL.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orign Potter's 个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">PostgreSQL 学习</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-09-07T14:27:38+08:00">
+                2024-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="安装PostgreSQL"><a href="#安装PostgreSQL" class="headerlink" title="安装PostgreSQL"></a>安装PostgreSQL</h1><h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><ul>
+<li>make &gt;&#x3D; 3.8.0</li>
+<li>推荐gcc最新版</li>
+<li>bzip、bzip2、tar、readline、readline-devel、zlib-devel</li>
+<li>Perl</li>
+</ul>
+<h2 id="下载源代码"><a href="#下载源代码" class="headerlink" title="下载源代码"></a>下载源代码</h2><pre class="line-numbers language-uri" data-language="uri"><code class="language-uri"><span class="token path">https</span> ://www.postgresql.org/download/ <span class="token fragment"><span class="token fragment-delimiter">#</span></span> 下载名为postgresql-10.21.tar.gz  解压
+<span class="token path">gunzip</span> postgresql-10.21.tar.gz
+<span class="token path">tar</span> xf postgresql-10.21.tar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./configure <span class="token parameter variable">--prefix</span><span class="token operator">=</span>/usr/local/postgresql<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">make</span> <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="创建data、log目录"><a href="#创建data、log目录" class="headerlink" title="创建data、log目录"></a>创建data、log目录</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /usr/local/postgresql
+<span class="token function">mkdir</span> /usr/local/postgresql/data
+<span class="token function">mkdir</span> /usr/local/postgresql/log<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a>设置环境变量</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/profile
+<span class="token comment"># 添加</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">PGHOME</span><span class="token operator">=</span>/usr/local/postgresql
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">PGDATA</span><span class="token operator">=</span>/usr/local/postgresql/data
+<span class="token comment"># 保存后生效</span>
+<span class="token builtin class-name">source</span> /etc/profile<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="增加用户-postgres-并赋权"><a href="#增加用户-postgres-并赋权" class="headerlink" title="增加用户 postgres 并赋权"></a>增加用户 postgres 并赋权</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">useradd</span> postgres
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> postgres:root /usr/local/postgresql<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="初始化数据库"><a href="#初始化数据库" class="headerlink" title="初始化数据库"></a>初始化数据库</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">su</span> postgres
+/usr/local/postgresql/bin/initdb <span class="token parameter variable">-D</span> /usr/local/postgresql/data/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /usr/local/postgresql/data/postgresql.conf
+<span class="token comment"># 修改</span>
+listen_addresses <span class="token operator">=</span> <span class="token string">'*'</span>
+port <span class="token operator">=</span> <span class="token number">5432</span>
+
+<span class="token function">vim</span> /usr/local/postgresql/data/pg_hba.conf
+<span class="token comment"># 添加一行</span>
+<span class="token function">host</span>    all             all             <span class="token number">0.0</span>.0.0/0               trust<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pg_ctl start <span class="token parameter variable">-l</span> /usr/local/postgresql/log/pg_server.log<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="登录默认数据库"><a href="#登录默认数据库" class="headerlink" title="登录默认数据库"></a>登录默认数据库</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">/usr/local/postgresql/bin/psql postgres<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="为默认用户设置密码"><a href="#为默认用户设置密码" class="headerlink" title="为默认用户设置密码"></a>为默认用户设置密码</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">postgres</span><span class="token operator">=</span><span class="token comment"># sudo -u postgres psql postgres</span>
+postgres-<span class="token comment">#  \password postgres</span>
+Enter new password: 
+Enter it again: <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="基础教程"><a href="#基础教程" class="headerlink" title="基础教程"></a>基础教程</h1><h2 id="Querying-Data"><a href="#Querying-Data" class="headerlink" title="Querying Data"></a>Querying Data</h2><h2 id="Filtering-Data"><a href="#Filtering-Data" class="headerlink" title="Filtering Data"></a>Filtering Data</h2><h2 id="Joining-Multiple-Tables"><a href="#Joining-Multiple-Tables" class="headerlink" title="Joining Multiple Tables"></a>Joining Multiple Tables</h2><h2 id="Grouping-Data"><a href="#Grouping-Data" class="headerlink" title="Grouping Data"></a>Grouping Data</h2><h2 id="Set-Operations"><a href="#Set-Operations" class="headerlink" title="Set Operations"></a>Set Operations</h2><h2 id="Grouping-sets-Cube-and-Rollup"><a href="#Grouping-sets-Cube-and-Rollup" class="headerlink" title="Grouping sets, Cube, and Rollup"></a>Grouping sets, Cube, and Rollup</h2><h2 id="Subquery"><a href="#Subquery" class="headerlink" title="Subquery"></a>Subquery</h2><h2 id="Common-Table-Expressions"><a href="#Common-Table-Expressions" class="headerlink" title="Common Table Expressions"></a>Common Table Expressions</h2><h2 id="Modifying-Data"><a href="#Modifying-Data" class="headerlink" title="Modifying Data"></a>Modifying Data</h2><h2 id="Transactions"><a href="#Transactions" class="headerlink" title="Transactions"></a>Transactions</h2><h2 id="Import-amp-Export-Data"><a href="#Import-amp-Export-Data" class="headerlink" title="Import &amp; Export Data"></a>Import &amp; Export Data</h2><h2 id="Managing-Tables"><a href="#Managing-Tables" class="headerlink" title="Managing Tables"></a>Managing Tables</h2><h2 id="Understanding-PostgreSQL-Constraints"><a href="#Understanding-PostgreSQL-Constraints" class="headerlink" title="Understanding PostgreSQL Constraints"></a>Understanding PostgreSQL Constraints</h2><h2 id="PostgreSQL-Data-Types-in-Depth"><a href="#PostgreSQL-Data-Types-in-Depth" class="headerlink" title="PostgreSQL Data Types in Depth"></a>PostgreSQL Data Types in Depth</h2><h2 id="Conditional-Expressions-amp-Operators"><a href="#Conditional-Expressions-amp-Operators" class="headerlink" title="Conditional Expressions &amp; Operators"></a>Conditional Expressions &amp; Operators</h2><h2 id="PostgreSQL-Utilities"><a href="#PostgreSQL-Utilities" class="headerlink" title="PostgreSQL Utilities"></a>PostgreSQL Utilities</h2><h2 id="PostgreSQL-Recipes"><a href="#PostgreSQL-Recipes" class="headerlink" title="PostgreSQL Recipes"></a>PostgreSQL Recipes</h2><h1 id="高级教程"><a href="#高级教程" class="headerlink" title="高级教程"></a>高级教程</h1><h2 id="PL-x2F-pgSQL"><a href="#PL-x2F-pgSQL" class="headerlink" title="PL&#x2F;pgSQL"></a>PL&#x2F;pgSQL</h2><h2 id="Triggers"><a href="#Triggers" class="headerlink" title="Triggers"></a>Triggers</h2><h2 id="Views"><a href="#Views" class="headerlink" title="Views"></a>Views</h2><h2 id="Indexes"><a href="#Indexes" class="headerlink" title="Indexes"></a>Indexes</h2><h2 id="Administration"><a href="#Administration" class="headerlink" title="Administration"></a>Administration</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Orign Potter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://bjpotter.github.io/post/PostgreSQL.html" title="PostgreSQL 学习">https://bjpotter.github.io/post/PostgreSQL.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%95%99%E7%A8%8B/" rel="tag"># 教程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/RESTful%20API%E8%AE%BE%E8%AE%A1.html" rel="next" title="RESTful API设计">
+                <i class="fa fa-chevron-left"></i> RESTful API设计
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/SpringBoot%E5%AE%9E%E8%B7%B5.html" rel="prev" title="SpringBoot实践">
+                SpringBoot实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive%20%20%20%20%20%20%20%20%20%20/%E5%BD%92%E6%A1%A3">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/BJPotter" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuzhi0531@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/imlzgg" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com/potterhacks" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85PostgreSQL"><span class="nav-number">1.</span> <span class="nav-text">安装PostgreSQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-number">1.1.</span> <span class="nav-text">安装依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E6%BA%90%E4%BB%A3%E7%A0%81"><span class="nav-number">1.2.</span> <span class="nav-text">下载源代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91"><span class="nav-number">1.3.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.4.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAdata%E3%80%81log%E7%9B%AE%E5%BD%95"><span class="nav-number">1.5.</span> <span class="nav-text">创建data、log目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">1.6.</span> <span class="nav-text">设置环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A2%9E%E5%8A%A0%E7%94%A8%E6%88%B7-postgres-%E5%B9%B6%E8%B5%8B%E6%9D%83"><span class="nav-number">1.7.</span> <span class="nav-text">增加用户 postgres 并赋权</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.8.</span> <span class="nav-text">初始化数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.9.</span> <span class="nav-text">修改配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.10.</span> <span class="nav-text">启动服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BB%E5%BD%95%E9%BB%98%E8%AE%A4%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.11.</span> <span class="nav-text">登录默认数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E9%BB%98%E8%AE%A4%E7%94%A8%E6%88%B7%E8%AE%BE%E7%BD%AE%E5%AF%86%E7%A0%81"><span class="nav-number">1.12.</span> <span class="nav-text">为默认用户设置密码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">基础教程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Querying-Data"><span class="nav-number">2.1.</span> <span class="nav-text">Querying Data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Filtering-Data"><span class="nav-number">2.2.</span> <span class="nav-text">Filtering Data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Joining-Multiple-Tables"><span class="nav-number">2.3.</span> <span class="nav-text">Joining Multiple Tables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Grouping-Data"><span class="nav-number">2.4.</span> <span class="nav-text">Grouping Data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set-Operations"><span class="nav-number">2.5.</span> <span class="nav-text">Set Operations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Grouping-sets-Cube-and-Rollup"><span class="nav-number">2.6.</span> <span class="nav-text">Grouping sets, Cube, and Rollup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Subquery"><span class="nav-number">2.7.</span> <span class="nav-text">Subquery</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Common-Table-Expressions"><span class="nav-number">2.8.</span> <span class="nav-text">Common Table Expressions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Modifying-Data"><span class="nav-number">2.9.</span> <span class="nav-text">Modifying Data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transactions"><span class="nav-number">2.10.</span> <span class="nav-text">Transactions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Import-amp-Export-Data"><span class="nav-number">2.11.</span> <span class="nav-text">Import &amp; Export Data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Managing-Tables"><span class="nav-number">2.12.</span> <span class="nav-text">Managing Tables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Understanding-PostgreSQL-Constraints"><span class="nav-number">2.13.</span> <span class="nav-text">Understanding PostgreSQL Constraints</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PostgreSQL-Data-Types-in-Depth"><span class="nav-number">2.14.</span> <span class="nav-text">PostgreSQL Data Types in Depth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conditional-Expressions-amp-Operators"><span class="nav-number">2.15.</span> <span class="nav-text">Conditional Expressions &amp; Operators</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PostgreSQL-Utilities"><span class="nav-number">2.16.</span> <span class="nav-text">PostgreSQL Utilities</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PostgreSQL-Recipes"><span class="nav-number">2.17.</span> <span class="nav-text">PostgreSQL Recipes</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E6%95%99%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">高级教程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PL-x2F-pgSQL"><span class="nav-number">3.1.</span> <span class="nav-text">PL&#x2F;pgSQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Triggers"><span class="nav-number">3.2.</span> <span class="nav-text">Triggers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Views"><span class="nav-number">3.3.</span> <span class="nav-text">Views</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Indexes"><span class="nav-number">3.4.</span> <span class="nav-text">Indexes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Administration"><span class="nav-number">3.5.</span> <span class="nav-text">Administration</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orign Potter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

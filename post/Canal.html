@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Canal," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="数据库复制和同步的基本概念 作用：实现了数据在多个数据库实例之间的保持一致和同步。应用程序能够获得高可用性、灾备性和读取负载均衡等好处。   主从复制（Master-Slave Replication）：主从复制是最常见的数据库复制方法之一。在主从复制中，有一个主数据库（Master）和一个或多个从数据库（Slaves）。主数据库是数据的源头，它负责接收来自应用程序的写操作，并将这些写操作记录为称">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Canal">
+<meta property="og:url" content="https://bjpotter.github.io/post/Canal.html">
+<meta property="og:site_name" content="Orign Potter&#39;s 个人博客">
+<meta property="og:description" content="数据库复制和同步的基本概念 作用：实现了数据在多个数据库实例之间的保持一致和同步。应用程序能够获得高可用性、灾备性和读取负载均衡等好处。   主从复制（Master-Slave Replication）：主从复制是最常见的数据库复制方法之一。在主从复制中，有一个主数据库（Master）和一个或多个从数据库（Slaves）。主数据库是数据的源头，它负责接收来自应用程序的写操作，并将这些写操作记录为称">
+<meta property="og:locale">
+<meta property="og:image" content="https://camo.githubusercontent.com/63881e271f889d4a424c55cea2f9c2065f63494fecac58432eac415f6e47e959/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139313130343130313733353934372e706e67">
+<meta property="article:published_time" content="2024-09-07T06:27:38.439Z">
+<meta property="article:modified_time" content="2024-09-07T06:27:38.439Z">
+<meta property="article:author" content="Orign Potter">
+<meta property="article:tag" content="Canal">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://camo.githubusercontent.com/63881e271f889d4a424c55cea2f9c2065f63494fecac58432eac415f6e47e959/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139313130343130313733353934372e706e67">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://BJPotter.github.io/post/Canal.html"/>
+
+
+
+
+
+  <title>Canal | Orign Potter's 个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orign Potter's 个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home                          //首页"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive          //归档"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th           //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags                     //标签"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user                   //关于"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://BJPotter.github.io/post/Canal.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orign Potter's 个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Canal</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-09-07T14:27:38+08:00">
+                2024-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="数据库复制和同步的基本概念"><a href="#数据库复制和同步的基本概念" class="headerlink" title="数据库复制和同步的基本概念"></a>数据库复制和同步的基本概念</h1><blockquote>
+<p>作用：实现了数据在多个数据库实例之间的保持一致和同步。应用程序能够获得高可用性、灾备性和读取负载均衡等好处。</p>
+</blockquote>
+<ol>
+<li>主从复制（Master-Slave Replication）：主从复制是最常见的数据库复制方法之一。在主从复制中，有一个主数据库（Master）和一个或多个从数据库（Slaves）。主数据库是数据的源头，它负责接收来自应用程序的写操作，并将这些写操作记录为称为日志（Log）的格式。从数据库则通过读取这些日志，将主数据库的写操作进行重演，以保持数据的一致性。</li>
+<li>数据一致性（Data Consistency）：数据一致性是指主数据库和从数据库之间的数据保持一致。当在主数据库上进行写操作时，主数据库会将这些操作的日志记录下来，并将其发送给从数据库。从数据库会按照相同的顺序重现这些操作，确保数据的一致性。一致性的实现可以通过各种机制，例如基于事务日志（Transaction Log）或二进制日志（Binary Log）。</li>
+<li>数据传输（Data Transfer）：数据传输是指将主数据库的数据从一个位置传输到另一个位置。在数据库复制和同步过程中，数据传输通常通过网络进行。主数据库将写操作记录为日志，并通过网络传输给从数据库，从数据库接收日志并执行相应的操作。</li>
+<li>增量复制（Incremental Replication）：增量复制是一种常见的复制方式，其中只有发生了更改的部分数据会被复制和同步。这种方式可以减少网络传输的数据量，并提高复制效率。增量复制通常使用日志来跟踪数据的更改，只传输和应用这些更改。</li>
+<li>数据延迟（Data Latency）：在数据库复制和同步中，主数据库和从数据库之间可能存在一定的延迟。这是因为数据在传输和应用过程中需要一定的时间。数据延迟可能会导致从数据库上的数据不是实时的，在某些情况下可能会有一定的时间窗口内的数据不一致。</li>
+</ol>
+<h1 id="canal作用及原理"><a href="#canal作用及原理" class="headerlink" title="canal作用及原理"></a>canal作用及原理</h1><p><img src="https://camo.githubusercontent.com/63881e271f889d4a424c55cea2f9c2065f63494fecac58432eac415f6e47e959/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139313130343130313733353934372e706e67"></p>
+<p>canal作用：根据Mysql数据库增量日志进行解析，提供增量数据的订阅和消费。</p>
+<p>canal原理：canal模拟Mysql slave交互协议，伪装成slave发送dump报文，主数据库master收到dump请求后，推送binary log给canal。</p>
+<h1 id="数据库准备"><a href="#数据库准备" class="headerlink" title="数据库准备"></a>数据库准备</h1><p>1.开启binlog,&#x2F;etc&#x2F;my.cnf 中配置如下</p>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">mysqld</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">server-id</span><span class="token punctuation">=</span><span class="token value attr-value">1</span>
+<span class="token key attr-name">log_bin</span><span class="token punctuation">=</span><span class="token value attr-value">mysql-bin</span>
+<span class="token key attr-name">binlog-format</span><span class="token punctuation">=</span><span class="token value attr-value">row</span>
+<span class="token key attr-name">bind-address</span><span class="token punctuation">=</span><span class="token value attr-value">0.0.0.0</span>
+<span class="token key attr-name">port</span><span class="token punctuation">=</span><span class="token value attr-value">3306</span>
+<span class="token key attr-name">basedir</span><span class="token punctuation">=</span><span class="token value attr-value">/usr/local/mysql</span>
+<span class="token key attr-name">datadir</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql</span>
+<span class="token key attr-name">socket</span><span class="token punctuation">=</span><span class="token value attr-value">/tmp/mysql.sock</span>
+<span class="token key attr-name">log-error</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql/mysql.err</span>
+<span class="token key attr-name">pid-file</span><span class="token punctuation">=</span><span class="token value attr-value">/data/mysql/mysql.pid</span>
+<span class="token comment">#character config</span>
+<span class="token key attr-name">character_set_server</span><span class="token punctuation">=</span><span class="token value attr-value">utf8mb4</span>
+<span class="token key attr-name">symbolic-links</span><span class="token punctuation">=</span><span class="token value attr-value">0</span>
+<span class="token key attr-name">explicit_defaults_for_timestamp</span><span class="token punctuation">=</span><span class="token value attr-value">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>2.授权 canal 链接 MySQL 账号具有作为 MySQL slave 的权限, 如果已有账户可直接 grant</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">USER</span> canal IDENTIFIED <span class="token keyword">BY</span> <span class="token string">'canal'</span><span class="token punctuation">;</span>  
+<span class="token keyword">GRANT</span> <span class="token keyword">SELECT</span><span class="token punctuation">,</span> <span class="token keyword">REPLICATION</span> SLAVE<span class="token punctuation">,</span> <span class="token keyword">REPLICATION</span> CLIENT <span class="token keyword">ON</span> <span class="token operator">*</span><span class="token punctuation">.</span><span class="token operator">*</span> <span class="token keyword">TO</span> <span class="token string">'canal'</span><span class="token variable">@'%'</span><span class="token punctuation">;</span>
+FLUSH <span class="token keyword">PRIVILEGES</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h1 id="安装Server"><a href="#安装Server" class="headerlink" title="安装Server"></a>安装Server</h1><blockquote>
+<p>下载：canal.deployer-1.1.6.tar.gz</p>
+</blockquote>
+<p>1.conf&#x2F;example&#x2F;instance.properties配置修改</p>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment">#position info，需要改成自己的数据库信息</span>
+<span class="token key attr-name">canal.instance.master.address</span> <span class="token punctuation">=</span> <span class="token value attr-value">127.0.0.1:3306 </span>
+<span class="token key attr-name">canal.instance.master.journal.name</span> <span class="token value attr-value">= </span>
+<span class="token key attr-name">canal.instance.master.position</span> <span class="token value attr-value">= </span>
+<span class="token key attr-name">canal.instance.master.timestamp</span> <span class="token value attr-value">= </span>
+<span class="token comment">#canal.instance.standby.address = </span>
+<span class="token comment">#canal.instance.standby.journal.name =</span>
+<span class="token comment">#canal.instance.standby.position = </span>
+<span class="token comment">#canal.instance.standby.timestamp = </span>
+<span class="token comment">#username/password，需要改成自己的数据库信息</span>
+<span class="token key attr-name">canal.instance.dbUsername</span> <span class="token punctuation">=</span> <span class="token value attr-value">canal  </span>
+<span class="token key attr-name">canal.instance.dbPassword</span> <span class="token punctuation">=</span> <span class="token value attr-value">canal</span>
+<span class="token key attr-name">canal.instance.defaultDatabaseName</span> <span class="token value attr-value">=</span>
+<span class="token key attr-name">canal.instance.connectionCharset</span> <span class="token punctuation">=</span> <span class="token value attr-value">UTF-8</span>
+<span class="token comment">#table regex</span>
+<span class="token key attr-name">canal.instance.filter.regex</span> <span class="token punctuation">=</span> <span class="token value attr-value">.\*\\\\..\*</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>2.启动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> bin/startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="安装RDB适配器"><a href="#安装RDB适配器" class="headerlink" title="安装RDB适配器"></a>安装RDB适配器</h1><blockquote>
+<p>下载：canal.adapter-1.1.7-SNAPSHOT.tar.gz</p>
+</blockquote>
+<p>1.修改启动器配置: application.yml, 这里以mysql目标库为例,将bootstrap.yml注释掉</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">srcDataSources:
+    defaultDS:
+      url: jdbc:mysql://192.168.67.24:3306/mytest?useUnicode=true
+      username: root
+      password: *******
+  canalAdapters:
+  - instance: example # canal instance Name or mq topic name
+    groups:
+    - groupId: g1
+      outerAdapters:
+      - name: rdb                                               # 指定为rdb类型同步
+        key: mysql1                                            # 指定adapter的唯一key, 与表映射配置中outerAdapterKey对应
+        properties:
+          jdbc.driverClassName: com.mysql.jdbc.Driver        # jdbc驱动名, 部分jdbc的jar包需要自行放致lib目录下
+          jdbc.url: jdbc:mysql://192.168.67.16:31185/mytest?useUnicode=true        # jdbc url
+          jdbc.username: dongzhimen                                 # jdbc username
+          jdbc.password: **********                                # jdbc password
+          druid.stat.enable: false                                           
+		  druid.stat.slowSqlMillis: 1000	<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>2.修改conf&#x2F;rdb&#x2F;mytest_user.yml文件</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">dataSourceKey: defaultDS
+destination: example
+outerAdapterKey: mysql1
+concurrent: true
+dbMapping:
+  mirrorDb: true
+  database: mytest<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>其中dbMapping.database的值代表源库和目标库的schema名称，即两库的schema要一模一样</p>
+</blockquote>
+<p>3.启动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> startup.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Orign Potter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://bjpotter.github.io/post/Canal.html" title="Canal">https://bjpotter.github.io/post/Canal.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Canal/" rel="tag"># Canal</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/API%E7%BD%91%E5%85%B3.html" rel="next" title="API网关">
+                <i class="fa fa-chevron-left"></i> API网关
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/Build%20tools.html" rel="prev" title="Build Tools">
+                Build Tools <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive%20%20%20%20%20%20%20%20%20%20/%E5%BD%92%E6%A1%A3">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/BJPotter" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuzhi0531@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/imlzgg" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com/potterhacks" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%8D%E5%88%B6%E5%92%8C%E5%90%8C%E6%AD%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">数据库复制和同步的基本概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#canal%E4%BD%9C%E7%94%A8%E5%8F%8A%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">canal作用及原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%87%86%E5%A4%87"><span class="nav-number">3.</span> <span class="nav-text">数据库准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Server"><span class="nav-number">4.</span> <span class="nav-text">安装Server</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85RDB%E9%80%82%E9%85%8D%E5%99%A8"><span class="nav-number">5.</span> <span class="nav-text">安装RDB适配器</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orign Potter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

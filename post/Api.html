@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="系统设计," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="REST什么是 RESTful API？ Restful是指不通计算机系统之间按照Rest风格进行应用程序的通信  什么是 API？ 开发人员公开或创建 API，以便他们的应用程序可以以编程方式与其他应用程序进行通信 客户端： 客户端是要访问 Web 上信息的用户。客户端可以是使用 API 的个人或软件系统。例如，开发人员可以编写从天气系统访问天气数据的程序。或者，您可以在浏览器上直接访问天气网站">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Api">
+<meta property="og:url" content="https://bjpotter.github.io/post/Api.html">
+<meta property="og:site_name" content="Orign Potter&#39;s 个人博客">
+<meta property="og:description" content="REST什么是 RESTful API？ Restful是指不通计算机系统之间按照Rest风格进行应用程序的通信  什么是 API？ 开发人员公开或创建 API，以便他们的应用程序可以以编程方式与其他应用程序进行通信 客户端： 客户端是要访问 Web 上信息的用户。客户端可以是使用 API 的个人或软件系统。例如，开发人员可以编写从天气系统访问天气数据的程序。或者，您可以在浏览器上直接访问天气网站">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-09-07T06:27:38.438Z">
+<meta property="article:modified_time" content="2024-09-07T06:27:38.439Z">
+<meta property="article:author" content="Orign Potter">
+<meta property="article:tag" content="系统设计">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://BJPotter.github.io/post/Api.html"/>
+
+
+
+
+
+  <title>Api | Orign Potter's 个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Orign Potter's 个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home                          //首页"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive          //归档"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th           //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags                     //标签"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user                   //关于"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://BJPotter.github.io/post/Api.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Orign Potter's 个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Api</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-09-07T14:27:38+08:00">
+                2024-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="REST"><a href="#REST" class="headerlink" title="REST"></a>REST</h1><h2 id="什么是-RESTful-API？"><a href="#什么是-RESTful-API？" class="headerlink" title="什么是 RESTful API？"></a>什么是 RESTful API？</h2><blockquote>
+<p>Restful是指不通计算机系统之间按照Rest风格进行应用程序的通信</p>
+</blockquote>
+<h2 id="什么是-API？"><a href="#什么是-API？" class="headerlink" title="什么是 API？"></a>什么是 API？</h2><blockquote>
+<p>开发人员公开或创建 API，以便他们的应用程序可以以编程方式与其他应用程序进行通信</p>
+<p><strong>客户端：</strong> 客户端是要访问 Web 上信息的用户。客户端可以是使用 API 的个人或软件系统。例如，开发人员可以编写从天气系统访问天气数据的程序。或者，您可以在浏览器上直接访问天气网站访问相同的数据。</p>
+<p><strong>资源：</strong>资源是不同的应用程序向其客户端提供的信息。资源可以是图像、视频、文本、数字或任何类型的数据。向客户端提供资源的设备也称为服务器。企业使用 API 分享资源，既能提供 Web 服务，还能确保安全、可控，身份验证。</p>
+</blockquote>
+<h2 id="什么是-REST？"><a href="#什么是-REST？" class="headerlink" title="什么是 REST？"></a>什么是 REST？</h2><p>表征状态传输 (REST) 是一种软件架构，决定了 API 的工作条件。REST 最初作为管理复杂网络（例如互联网）上的通信的指南而建立。您可以使用基于 REST 的架构为高性能和可靠的大规模通信提供支持。您可以轻松应用和修改此种架构，为任何 API 系统带来可见性和跨平台可能性。</p>
+<p>API 开发人员可以使用多种不同的架构设计 API。遵循 REST 架构风格的 API 称为 REST API。实施 REST 架构的 Web 服务称为 RESTful Web 服务。术语 RESTful API 通常指 RESTful Web API。但是，术语 REST API 和 RESTful API 可以互换使用。</p>
+<p>以下是 REST 架构风格的一些原则：</p>
+<h3 id="统一接口"><a href="#统一接口" class="headerlink" title="统一接口"></a>统一接口</h3><p>统一接口是一切 RESTful Web 服务设计的基础。其表示服务器以标准格式传输信息。格式化的资源在 REST 中称为表征。此格式可以与服务器应用程序上资源的内部表征不同。例如，服务器可以将数据存储为文本，但以 HTML 表征格式发送该数据。</p>
+<p>统一接口强制实施四个架构约束：</p>
+<ol>
+<li>请求应确定资源。它们通过使用统一的资源标识符实现此功能。</li>
+<li>客户端包含资源表征中的足够信息以修改或删除资源（如需要）。服务器通过发送进一步描述资源的元数据以符合这一条件。</li>
+<li>客户端接收有关如何进一步处理表征的信息。服务器通过发送自描述信息实现此功能，该信息包含了有关客户端如何以最佳方式使用这些信息的元数据。</li>
+<li>客户端接收有关其完成任务需要的所有其他相关资源的信息。服务器通过在表征中发送超链接实现此功能，以便客户端可以动态发现更多资源。</li>
+</ol>
+<h3 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h3><p>在 REST 架构中，无状态指一种服务器独立于所有之前的请求完成每个客户端请求的通信方法。客户端可以以任意顺序请求资源，每个请求为无状态或与独立于其他请求。此 REST API 设计约束意味着服务器每次可以完全识别和满足请求。 </p>
+<h3 id="层次化系统"><a href="#层次化系统" class="headerlink" title="层次化系统"></a>层次化系统</h3><p>在层次化系统架构中，客户端可以连接到客户端和服务器之间的其他授权中间方，其仍将接收来自服务器的响应。服务器也可以将请求传递到其他服务器。您可以将 RESTful Web 服务设计为在包含多个层级（例如安全、应用程序和业务逻辑）的数个服务器上运行，从而共同满足客户端请求。这些层级对客户端仍不可见。</p>
+<h3 id="高速缓存能力"><a href="#高速缓存能力" class="headerlink" title="高速缓存能力"></a>高速缓存能力</h3><p>RESTful Web 服务支持缓存，缓存是指将一些响应存储在客户端或中间方上以提高服务器响应时间的流程。例如，假设您访问某个网站，该网站的每个页面都包含通用的页眉和页脚图像。每次您访问新的网站页面时，服务器必须重新发送相同的图像。为了避免出现这种情况，客户端在首次响应后会缓存或存储这些图像，之后直接使用缓存中的图像。RESTful Web 服务通过使用自行定义为可缓存或不可缓存的 API 响应来控制缓存。</p>
+<h3 id="按需编码"><a href="#按需编码" class="headerlink" title="按需编码"></a>按需编码</h3><p>在 REST 架构风格中，服务器可以通过将软件编程代码传输到客户端暂时扩展或自定义客户端功能。例如，当您在任何网站上填写注册表单时，浏览器会立即高亮您填写内容的任何错误，例如不正确的电话号码。正是由于服务器发送的代码，浏览器才可以实现这个功能。</p>
+<h2 id="RESTful-API-有哪些优势？"><a href="#RESTful-API-有哪些优势？" class="headerlink" title="RESTful API 有哪些优势？"></a>RESTful API 有哪些优势？</h2><p>RESTful API 有以下优势：</p>
+<h3 id="可扩展性"><a href="#可扩展性" class="headerlink" title="可扩展性"></a>可扩展性</h3><p>采用了 REST API 的系统可以高效扩展，因为 REST 优化了客户端-服务器交互。无状态可减轻服务器负载，因为服务器不必保留过去的客户端请求信息。管理良好的缓存可部分或完全消除某些客户端-服务器交互。所有这些功能都支持可扩展性，并且不会导致通信瓶颈进而降低性能。</p>
+<h3 id="灵活性"><a href="#灵活性" class="headerlink" title="灵活性"></a>灵活性</h3><p>RESTful Web 服务支持客户端-服务器完全分离。该服务简化并分离了多种服务器组件，以便可以独立改进每个部分。平台或技术在服务器应用程序端更改，不会影响客户端应用程序。分层应用程序功能可进一步提升灵活性。例如，开发人员可以更改数据库层，而无需重新编写应用程序逻辑。</p>
+<h3 id="独立性"><a href="#独立性" class="headerlink" title="独立性"></a>独立性</h3><p>REST API 与所使用的技术相互独立。您可以在不影响 API 设计的情况下以多种编程语言编写客户端和服务器应用程序。您也可以在不影响通信的情况下更改任何一端的基础技术。</p>
+<h2 id="RESTful-API-如何工作？"><a href="#RESTful-API-如何工作？" class="headerlink" title="RESTful API 如何工作？"></a>RESTful API 如何工作？</h2><p>RESTful API 的基本功能与浏览互联网一样。客户端在请求资源时使用 API 与服务器建立联系。API 开发人员在服务器应用程序 API 文档中说明了客户端应如何使用 REST API。以下是调用任何 REST API 的通用步骤：</p>
+<ol>
+<li>客户端向服务器发送请求。客户端遵循 API 文档以服务器可识别的方式设置请求格式。</li>
+<li>服务器对客户端进行身份验证，并确认客户端有权发送该请求。</li>
+<li>服务器接收请求并对其进行内部处理。</li>
+<li>服务器向客户端返回响应。响应包含通知客户端请求是否成功的信息。响应也包括客户端请求的任何信息。</li>
+</ol>
+<p>REST API 请求和响应详细信息略有不同，具体取决于 API 开发人员如何设计 API。</p>
+<h2 id="RESTful-API-客户端请求包含哪些内容？"><a href="#RESTful-API-客户端请求包含哪些内容？" class="headerlink" title="RESTful API 客户端请求包含哪些内容？"></a>RESTful API 客户端请求包含哪些内容？</h2><p>RESTful API 要求请求包含以下主要组件：</p>
+<h3 id="唯一的资源标识符"><a href="#唯一的资源标识符" class="headerlink" title="唯一的资源标识符"></a>唯一的资源标识符</h3><p>服务器通过唯一的资源标识符识别每个资源。对于 REST 服务，服务器通常使用统一资源定位符 (URL) 执行资源识别。URL 指定资源的路径。URL 类似于您访问任何网页时在浏览器中输入的网站地址。URL 也称为请求端点，并向服务器清晰指明客户端请求的内容。</p>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>开发人员通常使用超文本传输协议 (HTTP) 实施 RESTful API。HTTP 方法通知服务器需要对资源执行什么操作。以下为四种常见的 HTTP 方法：</p>
+<p><em><strong>GET</strong></em></p>
+<p>客户端使用 GET 访问位于服务器上指定 URL 上的资源。它们可以缓存 GET 请求，并在 RESTful API 请求中发送参数以指示服务器在发送之前筛选数据。</p>
+<p><em><strong>POST</strong></em></p>
+<p>客户端使用 POST 向服务器发送数据。它们将数据表征包含到了请求中。多次发送相同的 POST 请求会造成多次创建相同资源的不良影响。</p>
+<p><em><strong>PUT</strong></em></p>
+<p>客户端使用 PUT 更新服务器上的现有资源。与 POST 不同，在 RESTful Web 服务中多次发送相同的 PUT 请求具有相同的效果。</p>
+<p><em><strong>DELETE</strong></em></p>
+<p>客户端使用 DELETE 请求删除资源。DELETE 请求可以更改服务器状态。但是，如果用户没有合适的身份验证，则请求失败。</p>
+<h3 id="HTTP-头"><a href="#HTTP-头" class="headerlink" title="HTTP 头"></a>HTTP 头</h3><p>请求头是客户端和服务器之间交换的元数据。例如，请求头表示请求和响应的格式，提供有关请求状态的信息等等。</p>
+<p><em><strong>数据</strong></em></p>
+<p>REST API 请求可能包含 POST、PUT 和其他 HTTP 方法成功运行所需的数据。</p>
+<p><em><strong>参数</strong></em></p>
+<p>RESTful API 请求可以包含参数，这些参数向服务器提供更多有关需采取行动的详细信息。以下为一些不同类型的参数：</p>
+<ul>
+<li>指定 URL 详细信息的路径参数。</li>
+<li>请求有关资源的更多信息的查询参数。</li>
+<li>对客户端进行快速身份验证的 Cookie 参数。</li>
+</ul>
+<h2 id="什么是-RESTful-API-身份验证方法？"><a href="#什么是-RESTful-API-身份验证方法？" class="headerlink" title="什么是 RESTful API 身份验证方法？"></a>什么是 RESTful API 身份验证方法？</h2><p>RESTful Web 服务必须首先对请求进行身份验证，然后才能发送响应。身份验证是指验证身份的流程。例如，您可以出示身份证或驾驶证证明您的身份。同理，RESTful 服务客户端必须向服务器证明其身份才能确立信任。</p>
+<p>RESTful API 包含四种常见身份验证方法：</p>
+<h3 id="HTTP-身份验证"><a href="#HTTP-身份验证" class="headerlink" title="HTTP 身份验证"></a>HTTP 身份验证</h3><p>HTTP 定义您实施 REST API 时可直接使用的一些身份验证方案。以下为这些方案的其中两种：</p>
+<p><em><strong>基本身份验证</strong></em></p>
+<p>在基本身份验证中，客户端在请求头中发送用户名和密码。其使用 base64 编码，该编码技术将对组转化为一套 64 个字符进行安全传输。</p>
+<p><em><strong>不记名身份验证</strong></em></p>
+<p>术语不记名身份验证指向不记名令牌授予访问控制的流程。不记名令牌通常是服务器在响应登录请求时生成的加密字符串。客户端在请求头中发送令牌以访问资源。</p>
+<h3 id="API-密钥"><a href="#API-密钥" class="headerlink" title="API 密钥"></a>API 密钥</h3><p>API 密钥是 REST API 身份验证的另一个选项。在此方案中，服务器向首次通信的客户端分配生成的唯一值。无论客户端何时尝试访问资源，其使用唯一的 API 密钥进行验证。API 密钥的安全性较低，因为客户端必须传输密钥，其易受网络盗窃的攻击。</p>
+<h3 id="OAuth"><a href="#OAuth" class="headerlink" title="OAuth"></a>OAuth</h3><p>OAuth 结合密码和令牌实现对任何系统的高度安全登录访问。服务器首先请求密码，然后再额外请求令牌以完成授权流程。其可以随时查看令牌，也可以在特定范围和长度的一段时间内查看令牌。</p>
+<h2 id="RESTful-API-服务器响应包含哪些内容？"><a href="#RESTful-API-服务器响应包含哪些内容？" class="headerlink" title="RESTful API 服务器响应包含哪些内容？"></a>RESTful API 服务器响应包含哪些内容？</h2><p>REST 原则要求服务器响应包含以下主要组件：</p>
+<h3 id="状态行"><a href="#状态行" class="headerlink" title="状态行"></a>状态行</h3><p>状态行包含三位数字状态代码表示请求成功或请求出现故障。例如，2XX 代码表示成功，但 4XX 和 5XX 代码表示错误。3XX 代码表示 URL 重定向。</p>
+<p>以下为一些常见的状态代码：</p>
+<ul>
+<li>200：通用成功响应</li>
+<li>201：POST 方法成功响应</li>
+<li>400：服务器无法处理的不正确请求</li>
+<li>404：未找到资源</li>
+</ul>
+<h3 id="信息正文"><a href="#信息正文" class="headerlink" title="信息正文"></a>信息正文</h3><p>响应正文包含资源表征。服务器根据请求头包含的内容选择合适的表征格式。客户端可以以 XML 或 JSON 格式请求信息，这些格式定义如何以纯文本方式编写数据。例如，如果客户端请求名为 John 的人员的姓名和年龄，则服务器返回如下 JSON 表征：</p>
+<p>‘{“name”:”John”, “age”:30}’</p>
+<h3 id="头"><a href="#头" class="headerlink" title="头"></a>头</h3><p>响应也包含有关响应的头或元数据。它们提供有关响应的更多背景内容，包含服务器、编码、日期和内容类型等信息。</p>
+<h1 id="JSON-APIs"><a href="#JSON-APIs" class="headerlink" title="JSON APIs"></a>JSON APIs</h1><h2 id="资源（Resources）"><a href="#资源（Resources）" class="headerlink" title="资源（Resources）"></a><strong>资源（Resources）</strong></h2><p>资源是 API 暴露的核心实体，通常代表系统中的业务对象（如文章、用户、评论等）。每个资源都有一个唯一的标识符（ID）和类型。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">jsonCopy code<span class="token punctuation">&#123;</span>
+  <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"articles"</span><span class="token punctuation">,</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"1"</span><span class="token punctuation">,</span>
+    <span class="token property">"attributes"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"Introduction to JSON API"</span><span class="token punctuation">,</span>
+      <span class="token property">"content"</span><span class="token operator">:</span> <span class="token string">"..."</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="关系（Relationships）"><a href="#关系（Relationships）" class="headerlink" title="关系（Relationships）"></a><strong>关系（Relationships）</strong></h2><p>资源之间可以有关系。例如，一篇文章可以有多个评论，评论与文章之间形成了关系。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">jsonCopy code<span class="token punctuation">&#123;</span>
+  <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"articles"</span><span class="token punctuation">,</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"1"</span><span class="token punctuation">,</span>
+    <span class="token property">"relationships"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token property">"comments"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+          <span class="token punctuation">&#123;</span> <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"comments"</span><span class="token punctuation">,</span> <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"1"</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+          <span class="token punctuation">&#123;</span> <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"comments"</span><span class="token punctuation">,</span> <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"2"</span> <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">]</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="端点（Endpoints）"><a href="#端点（Endpoints）" class="headerlink" title="端点（Endpoints）"></a><strong>端点（Endpoints）</strong></h2><p>JSON API 使用一致的端点命名方式。例如，获取所有文章的请求可能是 <code>GET /articles</code>。</p>
+<h2 id="包含（Inclusion）"><a href="#包含（Inclusion）" class="headerlink" title="包含（Inclusion）"></a><strong>包含（Inclusion）</strong></h2><p>允许客户端在一次请求中包含与主资源相关联的其他资源。这可以减少多次请求的需求。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">jsonCopy code<span class="token punctuation">&#123;</span>
+  <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"articles"</span><span class="token punctuation">,</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"1"</span><span class="token punctuation">,</span>
+    <span class="token property">"relationships"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token property">"author"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"authors"</span><span class="token punctuation">,</span> <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"42"</span> <span class="token punctuation">&#125;</span> <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token property">"included"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"authors"</span><span class="token punctuation">,</span>
+      <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"42"</span><span class="token punctuation">,</span>
+      <span class="token property">"attributes"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"John Doe"</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="分页（Pagination）"><a href="#分页（Pagination）" class="headerlink" title="分页（Pagination）"></a><strong>分页（Pagination）</strong></h2><p>JSON API 支持对结果集的分页，以避免一次性返回大量数据。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">jsonCopy code<span class="token punctuation">&#123;</span>
+  <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token comment">// ... (当前页的资源)</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"meta"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"pagination"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token property">"total-pages"</span><span class="token operator">:</span> <span class="token number">5</span><span class="token punctuation">,</span>
+      <span class="token property">"current-page"</span><span class="token operator">:</span> <span class="token number">1</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="排序（Sorting）"><a href="#排序（Sorting）" class="headerlink" title="排序（Sorting）"></a><strong>排序（Sorting）</strong></h2><p>客户端可以指定返回结果的排序方式。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">jsonCopy code
+GET /articles?sort=title<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="过滤（Filtering）"><a href="#过滤（Filtering）" class="headerlink" title="过滤（Filtering）"></a><strong>过滤（Filtering）</strong></h2><p>客户端可以指定一些条件，以限制返回结果。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">jsonCopy code
+GET /articles?filter<span class="token punctuation">[</span>author<span class="token punctuation">]</span>=<span class="token number">42</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="错误处理（Error-Handling）"><a href="#错误处理（Error-Handling）" class="headerlink" title="错误处理（Error Handling）"></a><strong>错误处理（Error Handling）</strong></h2><p>定义了一套标准的错误格式和处理机制，使得错误信息一致且易于理解。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">jsonCopy code<span class="token punctuation">&#123;</span>
+  <span class="token property">"errors"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span> <span class="token property">"status"</span><span class="token operator">:</span> <span class="token string">"404"</span><span class="token punctuation">,</span> <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"Not Found"</span><span class="token punctuation">,</span> <span class="token property">"detail"</span><span class="token operator">:</span> <span class="token string">"Resource not found."</span> <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="SOAP"><a href="#SOAP" class="headerlink" title="SOAP"></a>SOAP</h1><ol>
+<li><p><strong>协议：</strong> SOAP 是一种协议，规定了消息的格式和交互方式。它通常在 HTTP 或 SMTP 等传输协议上运行。</p>
+</li>
+<li><p><strong>消息格式：</strong> SOAP 消息是用 XML 构建的。一个典型的 SOAP 消息包括 <code>&lt;Envelope&gt;</code> 元素，其中包含 <code>&lt;Header&gt;</code> 和 <code>&lt;Body&gt;</code> 元素，分别用于包含头部信息和主体信息。</p>
+<pre class="line-numbers language-none"><code class="language-none">xmlCopy code&lt;soap:Envelope xmlns:soap&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2003&#x2F;05&#x2F;soap-envelope&quot; xmlns:m&#x3D;&quot;http:&#x2F;&#x2F;www.example.org&quot;&gt;
+  &lt;soap:Header&gt;
+    &lt;!-- 头部信息 --&gt;
+  &lt;&#x2F;soap:Header&gt;
+  &lt;soap:Body&gt;
+    &lt;!-- 主体信息 --&gt;
+  &lt;&#x2F;soap:Body&gt;
+&lt;&#x2F;soap:Envelope&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p><strong>基于 XML-RPC：</strong> SOAP 被认为是 XML-RPC 的进一步发展，提供了更多的功能和灵活性。</p>
+</li>
+<li><p><strong>协议中立：</strong> 由于它可以在多种传输协议上运行，SOAP 是协议中立的。它可以在 HTTP、SMTP、JMS（Java Message Service）等协议上使用。</p>
+</li>
+<li><p><strong>支持 Web Services：</strong> SOAP 在 Web Services 中得到广泛应用。Web Services 是一种通过网络进行通信的技术，它使用标准的 Web 协议（如 HTTP、SOAP）来实现跨平台的应用集成。</p>
+</li>
+<li><p><strong>安全性：</strong> SOAP 提供了一些机制来确保消息的安全性，例如可以使用 HTTPS 来加密传输的数据，还可以通过 WS-Security 等标准来实现消息级的安全。</p>
+</li>
+<li><p><strong>复杂性：</strong> 与 REST 相比，SOAP 的消息格式相对较为复杂，因为它使用 XML，而且在一些简单的使用场景下可能显得繁琐。</p>
+</li>
+</ol>
+<h1 id="gRPC"><a href="#gRPC" class="headerlink" title="gRPC"></a>gRPC</h1><p>gRPC（gRPC Remote Procedure Call）是一个高性能、开源的 RPC（Remote Procedure Call）框架，由 Google 开发。它使用 HTTP&#x2F;2 协议进行通信，并支持多种编程语言。gRPC 的目标是使跨网络的服务调用更加简单和高效。</p>
+<p>以下是 gRPC 的一些关键特点：</p>
+<ol>
+<li><strong>IDL（Interface Definition Language）：</strong> 使用 Protobuf（Protocol Buffers）作为接口定义语言。IDL 描述了服务的方法、参数和返回值的数据结构。</li>
+<li><strong>多语言支持：</strong> gRPC 提供了多种语言的支持，包括但不限于 C++, Java, Python, Go, Ruby, C#, Node.js。</li>
+<li><strong>HTTP&#x2F;2：</strong> 使用基于二进制的 HTTP&#x2F;2 协议进行通信，以提高性能和效率。HTTP&#x2F;2 支持多路复用、头部压缩、流控制等特性。</li>
+<li><strong>双向流：</strong> gRPC 支持双向流通信，允许客户端和服务端可以同时发送多个消息。</li>
+<li><strong>代码生成：</strong> 使用 Protobuf 作为IDL，并通过代码生成工具生成客户端和服务端的代码。这简化了开发人员的工作，同时提供了强类型的 API。</li>
+<li><strong>支持拦截器：</strong> gRPC 支持在客户端和服务端使用拦截器，以便在请求和响应的处理链中执行逻辑。</li>
+<li><strong>多种服务调用类型：</strong> 支持四种服务调用类型，即单一请求-单一响应、单一请求-流响应、流请求-单一响应、流请求-流响应。</li>
+<li><strong>支持服务发现：</strong> gRPC 支持使用服务发现机制，使得服务能够注册和发现其他服务的位置。</li>
+<li><strong>可插拔：</strong> gRPC 的核心库是高度可插拔的，允许开发者根据需要选择适合的组件。</li>
+</ol>
+<h1 id="GraphQL"><a href="#GraphQL" class="headerlink" title="GraphQL"></a>GraphQL</h1><p>GraphQL（Graph Query Language）是一种由 Facebook 开发的查询语言和服务端运行时环境，用于 API 的查询和数据操纵。GraphQL 提供了一种更高效、强大且灵活的替代方式，相比于传统的 REST API，它更加精确地满足客户端的数据需求。</p>
+<p>以下是 GraphQL 的一些关键特点和概念：</p>
+<ol>
+<li><strong>强大的查询语言：</strong> GraphQL 允许客户端按照其需要的方式定义查询，而不是由服务端决定返回的数据结构。客户端能够精确地指定所需的字段和关联关系。</li>
+<li><strong>单一入口点：</strong> 所有的 GraphQL 查询都通过单一的入口点（通常是 <code>/graphql</code> 端点）进行。这个入口点能够处理客户端发起的各种查询。</li>
+<li><strong>精确定义的数据：</strong> GraphQL 的查询由客户端定义，服务端返回的数据与查询结构一一对应。这消除了过度获取或缺少数据的问题，称为”过度获取”（Over-fetching）和”欠获取”（Under-fetching）。</li>
+<li><strong>实时数据：</strong> 支持实时数据传输，使得服务端能够主动向客户端推送更新。</li>
+<li><strong>类型系统：</strong> GraphQL 使用类型系统来定义 API 中的对象和操作。服务端通过类型系统告诉客户端可以请求哪些数据，并在响应中提供相应的数据。</li>
+<li><strong>关联关系：</strong> 客户端能够一次性请求多个相关联的数据，减少了多次请求的需要。</li>
+<li><strong>自省：</strong> GraphQL 具有自省能力，客户端能够通过查询获取有关 API 结构的信息，包括可用的查询、变更和类型等。</li>
+<li><strong>扩展性：</strong> 允许服务端添加新的功能和字段，而不会破坏现有的查询。客户端可以选择是否使用新添加的功能。</li>
+</ol>
+<h1 id="Hateoas"><a href="#Hateoas" class="headerlink" title="Hateoas"></a>Hateoas</h1><p>HATEOAS，全称是“Hypermedia as the Engine of Application State”，中文翻译为“超媒体作为应用状态的引擎”，是一种 REST 架构风格的设计原则。</p>
+<p>HATEOAS 的核心思想是将应用程序的状态以及与应用程序交互的方式嵌入到 API 的响应中。在传统的 RESTful API 中，客户端需要提前了解 API 的结构，并且需要硬编码与 API 交互的方式。而 HATEOAS 的目标是通过在 API 的响应中提供相关的链接，使得客户端能够通过发现而非预先知道如何与 API 交互。</p>
+<p>关键特点和概念包括：</p>
+<ol>
+<li><strong>超媒体链接：</strong> API 的响应中包含了与当前资源相关的链接，这些链接可以指向其他资源或描述可执行的操作。</li>
+<li><strong>动态发现：</strong> 客户端不需要提前知道如何构造请求，而是通过解析 API 返回的超媒体链接来动态地发现可用的资源和操作。</li>
+<li><strong>资源状态：</strong> 客户端可以通过 API 提供的链接获取当前资源的状态，并了解可执行的下一步操作。</li>
+<li><strong>自描述性：</strong> API 提供了足够的信息，使得客户端能够理解如何使用 API，而无需依赖外部文档。</li>
+</ol>
+<p>HATEOAS 的设计理念强调了 API 的自描述性和灵活性，减少了客户端与服务端之间的紧耦合，提高了系统的可扩展性。实现 HATEOAS 的 API 可以更容易地适应变化，因为客户端只需要遵循 API 返回的链接，而不是依赖于硬编码的信息。</p>
+<p>虽然 HATEOAS 是 RESTful 架构的一个重要原则，但在实际应用中，并不是所有的 RESTful API 都严格遵循 HATEOAS。其复杂性和在某些场景下的适用性取决于具体的应用需求。</p>
+<h1 id="Open-api-spec"><a href="#Open-api-spec" class="headerlink" title="Open api spec"></a>Open api spec</h1><p>OpenAPI Specification（OpenAPI规范）是一种用于描述和定义 RESTful API 的开放标准。它以先前称为Swagger规范的形式开始，并在进入 Linux 基金会后更名为 OpenAPI。OpenAPI Specification 使用 JSON 或 YAML 格式，提供了一种清晰且易于理解的方式，用于描述 API 的结构、端点、参数、请求-响应规范以及其他相关信息。</p>
+<p>关键特点和组成部分包括：</p>
+<ol>
+<li><strong>API 文档定义：</strong> OpenAPI Specification 用于编写 API 文档，其中包括 API 的路径、操作、参数、请求和响应示例等。</li>
+<li><strong>端点和操作：</strong> 定义了 API 的不同端点（路径）以及每个端点上支持的操作（HTTP 方法）。</li>
+<li><strong>请求和响应：</strong> 详细说明了每个操作的请求和响应的结构，包括参数、头部、响应码等。</li>
+<li><strong>数据模型：</strong> 定义了在 API 中使用的数据模型，包括对象的属性、数据类型等。</li>
+<li><strong>安全性定义：</strong> 描述了 API 的安全性要求，例如身份验证、授权等。</li>
+<li><strong>标签和注释：</strong> 支持标签和注释，使得 API 文档更易读和更易于理解。</li>
+</ol>
+<p>使用 OpenAPI Specification 的好处包括：</p>
+<ul>
+<li><strong>文档自动生成：</strong> 可以利用 OpenAPI Specification 自动生成 API 文档，减少了手动文档编写的工作量。</li>
+<li><strong>客户端代码生成：</strong> 支持通过规范生成客户端代码，使得客户端更容易与 API 进行交互。</li>
+<li><strong>工具和生态系统：</strong> OpenAPI Specification 已经成为广泛采用的标准，有许多工具和库支持该规范，从而帮助开发者更轻松地构建和维护 API。</li>
+</ul>
+<h1 id="Authentication"><a href="#Authentication" class="headerlink" title="Authentication"></a>Authentication</h1><h2 id="JWT-Authentication"><a href="#JWT-Authentication" class="headerlink" title="JWT Authentication"></a>JWT Authentication</h2><p>JWT（JSON Web Token）是一种用于进行信息传递的开放标准（RFC 7519）。它通常用于在服务之间传递声明式信息，以便进行身份验证和授权。JWT 由三部分组成，这三部分通过点号（.）连接在一起：</p>
+<ol>
+<li><strong>Header（头部）：</strong> 包含了令牌的元数据，例如算法和令牌类型。</li>
+<li><strong>Payload（载荷）：</strong> 包含了声明，即关于实体（通常是用户）和其他数据的信息。有三种类型的声明：注册声明、公共声明和私有声明。</li>
+<li><strong>Signature（签名）：</strong> 用于验证令牌的真实性，防止被篡改。</li>
+</ol>
+<p>JWT 的基本工作流程如下：</p>
+<ol>
+<li><strong>认证：</strong> 用户提供用户名和密码进行身份验证。</li>
+<li><strong>颁发 Token：</strong> 服务器使用私钥生成 JWT，并将其返回给客户端。</li>
+<li><strong>存储 Token：</strong> 客户端通常将 JWT 存储在本地，例如在浏览器的 localStorage 中。</li>
+<li><strong>请求时发送 Token：</strong> 客户端在每个请求的 Authorization 头中发送 JWT。</li>
+<li><strong>验证和授权：</strong> 服务器验证 JWT 的签名，检查权限，并提供响应。</li>
+</ol>
+<p>JWT 的优势和用途包括：</p>
+<ul>
+<li><strong>跨域身份验证：</strong> 由于 JWT 可以在不同域之间传递，并且不需要在用户和服务器之间存储状态，因此非常适合用于跨域身份验证。</li>
+<li><strong>简化身份验证流程：</strong> JWT 简化了身份验证流程，因为它不需要在服务器上保存会话状态。</li>
+<li><strong>声明性信息：</strong> JWT 载荷可以包含任何类型的声明，使其成为携带用户角色、权限和其他信息的有效工具。</li>
+</ul>
+<p>需要注意的是，为了确保 JWT 的安全性，应该使用 HTTPS 协议来传输 JWT，并在服务器端使用适当的密钥进行签名和验证。此外，避免在 JWT 中存储敏感信息，因为 JWT 的内容可以被 Base64 解码。</p>
+<h2 id="Token-based-Authentication"><a href="#Token-based-Authentication" class="headerlink" title="Token based Authentication"></a>Token based Authentication</h2><p>Token-based authentication是一种身份验证方式，它通过使用令牌来验证用户身份。通常情况下，用户在登录成功后，系统会为其颁发一个令牌，该令牌包含了一些信息，用于标识用户和授予访问权限。这个令牌随后在每个请求中被发送，用于验证用户的身份和权限。</p>
+<p>基于令牌的身份验证的主要特点包括：</p>
+<ol>
+<li><strong>状态无关：</strong> 与传统的基于会话的身份验证方式不同，基于令牌的身份验证是状态无关的。服务器不需要在后端存储用户的会话信息。令牌本身包含了必要的用户信息，因此服务器可以独立验证用户的身份。</li>
+<li><strong>分布式系统：</strong> 适用于分布式系统和跨域应用程序。令牌可以在不同的服务之间传递，使得身份验证在不同服务之间更加灵活。</li>
+<li><strong>无状态：</strong> 服务器不需要在后端存储任何会话状态。每个请求都包含了足够的信息，以便服务器验证用户身份和权限。</li>
+<li><strong>安全性：</strong> 通过使用安全的令牌生成和验证机制，可以增加系统的安全性。例如，使用JWT（JSON Web Token）或其他加密算法可以保护令牌的传输和存储。</li>
+</ol>
+<p>Token-based身份验证通常涉及以下步骤：</p>
+<ul>
+<li><strong>用户登录：</strong> 用户提供凭据（通常是用户名和密码）进行身份验证。</li>
+<li><strong>颁发令牌：</strong> 服务器验证用户身份后，颁发一个令牌给用户。这个令牌可能包含用户的一些信息，如用户ID、角色和过期时间。</li>
+<li><strong>令牌存储：</strong> 客户端通常会将令牌存储在安全的位置，如浏览器的本地存储或内存中。</li>
+<li><strong>请求时发送令牌：</strong> 客户端在每个请求的头部或其他安全方式中发送令牌。</li>
+<li><strong>验证和授权：</strong> 服务器接收到令牌后，验证其签名和有效性，并根据令牌中的信息授权用户的访问。</li>
+</ul>
+<p>基于令牌的身份验证是现代应用程序中常见的一种方式，特别是在移动应用和前后端分离的Web应用中。</p>
+<h2 id="Session-based-Authentication"><a href="#Session-based-Authentication" class="headerlink" title="Session based Authentication"></a>Session based Authentication</h2><p>Session-based authentication是一种身份验证方式，它使用会话来跟踪和验证用户的身份。这种方式通常基于浏览器的会话机制，用户在登录成功后，服务器会为其创建一个会话，并分配一个唯一的会话标识（通常是一个会话ID）。该标识存储在用户的浏览器中，通常以cookie的形式保存。</p>
+<p>主要特点和步骤包括：</p>
+<ol>
+<li><strong>会话创建：</strong> 用户在登录成功后，服务器创建一个会话，生成一个唯一的会话ID，并将其发送到用户的浏览器，存储在cookie中。</li>
+<li><strong>会话存储：</strong> 用户的会话信息通常存储在服务器端，包括用户的身份信息、权限等。这可以存储在内存中、数据库中或其他持久化存储中。</li>
+<li><strong>请求时发送会话ID：</strong> 用户的浏览器在每个后续请求中都会将会话ID作为cookie发送到服务器。服务器使用这个ID来识别用户，并检查其会话状态。</li>
+<li><strong>验证和授权：</strong> 服务器接收到会话ID后，验证其有效性并检查用户的权限。如果会话有效且用户有相应权限，服务器会允许请求。</li>
+<li><strong>会话超时：</strong> 为了安全性，会话通常会设置过期时间。如果用户在一段时间内没有活动，会话可能会超时，需要重新登录。</li>
+<li><strong>注销：</strong> 用户可以选择主动注销，或者服务器可以在一定条件下自动注销用户的会话。</li>
+</ol>
+<p>Session-based authentication适用于传统的Web应用，通过服务器端存储会话信息，可以实现更多的控制和安全性。然而，它也带来了一些挑战，如需要在服务器端维护会话状态、难以扩展到分布式环境等。</p>
+<h2 id="Basic-Authentication"><a href="#Basic-Authentication" class="headerlink" title="Basic Authentication"></a>Basic Authentication</h2><p>Basic Authentication（基本身份验证）是一种简单的身份验证机制，通常用于HTTP协议。它是一种基于用户名和密码的验证方式，其工作原理如下：</p>
+<ol>
+<li><p><strong>请求时携带认证信息：</strong> 客户端在请求时，将用户名和密码按照一定的格式（Base64编码）加密，并放在请求的<code>Authorization</code>头中发送给服务器。</p>
+<p>例如，HTTP请求头中的基本认证信息可能如下所示：</p>
+<pre class="line-numbers language-none"><code class="language-none">makefileCopy code
+Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ&#x3D;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>其中，<code>dXNlcm5hbWU6cGFzc3dvcmQ=</code> 是将用户名和密码编码后的Base64字符串。</p>
+</li>
+<li><p><strong>服务器验证认证信息：</strong> 服务器接收到请求后，解码<code>Authorization</code>头中的认证信息，获取用户名和密码。</p>
+</li>
+<li><p><strong>验证用户名和密码：</strong> 服务器验证解码后的用户名和密码，如果匹配则允许访问，否则返回未授权（401 Unauthorized）的响应。</p>
+</li>
+</ol>
+<p>Basic Authentication的优点是简单易实现，适用于简单的身份验证场景。然而，它的安全性较低，因为用户名和密码是以明文的形式在网络上传输的，容易受到窃听攻击。</p>
+<p>由于安全性的限制，通常建议在使用Basic Authentication时，要结合使用HTTPS协议，以加密通信，提高安全性。另外，对于更高级的身份验证需求，例如使用令牌（Token）等方式可能更为安全和灵活。</p>
+<h2 id="OAuth-Open-Authorization"><a href="#OAuth-Open-Authorization" class="headerlink" title="OAuth - Open Authorization"></a>OAuth - Open Authorization</h2><p>OAuth（Open Authorization）是一种开放的授权协议，用于授权第三方应用程序访问资源所有者（用户）在另一服务提供者上存储的资源，而无需将资源所有者的凭据（例如用户名和密码）传递给第三方应用程序。</p>
+<p>OAuth的主要设计目标是在让用户安全地授权第三方应用程序访问其资源的同时，避免将用户的用户名和密码传递给第三方应用。OAuth协议涉及四个主要角色：</p>
+<ol>
+<li><strong>资源所有者（Resource Owner）：</strong> 即用户，是拥有资源（如照片、文件）的实体，能够对资源进行授权的实体。</li>
+<li><strong>客户端（Client）：</strong> 第三方应用程序，请求访问资源的应用。</li>
+<li><strong>授权服务器（Authorization Server）：</strong> 负责验证资源所有者身份并颁发访问令牌（Access Token）的服务器。</li>
+<li><strong>资源服务器（Resource Server）：</strong> 存储资源的服务器，受到访问令牌的保护，负责对请求进行认证和授权，并返回受保护的资源。</li>
+</ol>
+<p>OAuth协议中定义了不同的授权流程，其中最常见的是授权码授权流程（Authorization Code Grant），包括以下步骤：</p>
+<ol>
+<li><strong>客户端请求授权：</strong> 客户端向授权服务器请求授权，并提供回调地址。</li>
+<li><strong>用户授权：</strong> 资源所有者登录授权服务器，同意授权请求，授权服务器返回授权码。</li>
+<li><strong>授权码换取令牌：</strong> 客户端使用授权码向授权服务器请求访问令牌。</li>
+<li><strong>使用令牌访问资源：</strong> 客户端使用访问令牌向资源服务器请求访问受保护的资源。</li>
+</ol>
+<p>OAuth协议的优势在于用户只需提供一次用户名和密码给授权服务器，而不直接提供给第三方应用。此外，通过使用访问令牌，可以限制第三方应用对用户资源的访问权限，提高了安全性。OAuth已成为许多互联网服务和应用程序中常见的身份验证和授权协</p>
+<h2 id="SSO-Single-Sign-On"><a href="#SSO-Single-Sign-On" class="headerlink" title="SSO - Single Sign On"></a>SSO - Single Sign On</h2><p>单一登录（Single Sign-On，SSO）是一种身份验证过程，允许用户使用一组凭据（例如用户名和密码）登录到多个相关但独立的软件系统，而无需为每个系统单独进行身份验证。通过实现SSO，用户只需在登录时提供一次凭据，然后就可以在整个系统中无缝地访问其他受保护的资源，而无需反复进行身份验证。</p>
+<p>SSO的关键目标是提供更便捷的用户体验，减少用户需要记忆和管理的凭据数量。主要的SSO机制通常包括以下几种：</p>
+<ol>
+<li><strong>身份提供者（Identity Provider，IdP）：</strong> 负责验证用户身份并颁发令牌的系统。常见的IdP包括登录服务、身份管理系统等。</li>
+<li><strong>服务提供者（Service Provider，SP）：</strong> 提供受保护资源的系统。用户在IdP验证身份后，可以使用令牌访问相关SP的资源。</li>
+<li><strong>令牌（Token）：</strong> 在用户成功通过身份验证后，IdP颁发一个令牌，用于在不同系统之间传递身份信息。</li>
+</ol>
+<p>SSO有助于提高安全性，因为用户不再需要在多个系统中重复使用相同的凭据。常见的SSO实现包括基于令牌的SSO（如OAuth、OpenID Connect）、基于SAML（Security Assertion Markup Language）的SSO等。</p>
+<p>在企业环境中，SSO通常用于集成不同的企业应用程序、服务和系统，以提供更流畅的用户体验，减少密码疲劳问题。常见的SSO方案还包括通过企业的身份提供者（如Active Directory）实现的企业内部SSO。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Orign Potter
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://bjpotter.github.io/post/Api.html" title="Api">https://bjpotter.github.io/post/Api.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" rel="tag"># 系统设计</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/ClickHouse.html" rel="next" title="Clickhouse">
+                <i class="fa fa-chevron-left"></i> Clickhouse
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/API%E7%BD%91%E5%85%B3.html" rel="prev" title="API网关">
+                API网关 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive%20%20%20%20%20%20%20%20%20%20/%E5%BD%92%E6%A1%A3">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/BJPotter" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuzhi0531@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/imlzgg" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com/potterhacks" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#REST"><span class="nav-number">1.</span> <span class="nav-text">REST</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-RESTful-API%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 RESTful API？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-API%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">什么是 API？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-REST%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">什么是 REST？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.3.1.</span> <span class="nav-text">统一接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E7%8A%B6%E6%80%81"><span class="nav-number">1.3.2.</span> <span class="nav-text">无状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%82%E6%AC%A1%E5%8C%96%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.3.3.</span> <span class="nav-text">层次化系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E8%83%BD%E5%8A%9B"><span class="nav-number">1.3.4.</span> <span class="nav-text">高速缓存能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E9%9C%80%E7%BC%96%E7%A0%81"><span class="nav-number">1.3.5.</span> <span class="nav-text">按需编码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RESTful-API-%E6%9C%89%E5%93%AA%E4%BA%9B%E4%BC%98%E5%8A%BF%EF%BC%9F"><span class="nav-number">1.4.</span> <span class="nav-text">RESTful API 有哪些优势？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7"><span class="nav-number">1.4.1.</span> <span class="nav-text">可扩展性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%81%B5%E6%B4%BB%E6%80%A7"><span class="nav-number">1.4.2.</span> <span class="nav-text">灵活性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8B%AC%E7%AB%8B%E6%80%A7"><span class="nav-number">1.4.3.</span> <span class="nav-text">独立性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RESTful-API-%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%EF%BC%9F"><span class="nav-number">1.5.</span> <span class="nav-text">RESTful API 如何工作？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RESTful-API-%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AF%B7%E6%B1%82%E5%8C%85%E5%90%AB%E5%93%AA%E4%BA%9B%E5%86%85%E5%AE%B9%EF%BC%9F"><span class="nav-number">1.6.</span> <span class="nav-text">RESTful API 客户端请求包含哪些内容？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%94%AF%E4%B8%80%E7%9A%84%E8%B5%84%E6%BA%90%E6%A0%87%E8%AF%86%E7%AC%A6"><span class="nav-number">1.6.1.</span> <span class="nav-text">唯一的资源标识符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">1.6.2.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-%E5%A4%B4"><span class="nav-number">1.6.3.</span> <span class="nav-text">HTTP 头</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-RESTful-API-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E6%96%B9%E6%B3%95%EF%BC%9F"><span class="nav-number">1.7.</span> <span class="nav-text">什么是 RESTful API 身份验证方法？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="nav-number">1.7.1.</span> <span class="nav-text">HTTP 身份验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API-%E5%AF%86%E9%92%A5"><span class="nav-number">1.7.2.</span> <span class="nav-text">API 密钥</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OAuth"><span class="nav-number">1.7.3.</span> <span class="nav-text">OAuth</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RESTful-API-%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%93%8D%E5%BA%94%E5%8C%85%E5%90%AB%E5%93%AA%E4%BA%9B%E5%86%85%E5%AE%B9%EF%BC%9F"><span class="nav-number">1.8.</span> <span class="nav-text">RESTful API 服务器响应包含哪些内容？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E8%A1%8C"><span class="nav-number">1.8.1.</span> <span class="nav-text">状态行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%AD%A3%E6%96%87"><span class="nav-number">1.8.2.</span> <span class="nav-text">信息正文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%B4"><span class="nav-number">1.8.3.</span> <span class="nav-text">头</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JSON-APIs"><span class="nav-number">2.</span> <span class="nav-text">JSON APIs</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%EF%BC%88Resources%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">资源（Resources）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%EF%BC%88Relationships%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">关系（Relationships）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AB%AF%E7%82%B9%EF%BC%88Endpoints%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">端点（Endpoints）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85%E5%90%AB%EF%BC%88Inclusion%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">包含（Inclusion）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%EF%BC%88Pagination%EF%BC%89"><span class="nav-number">2.5.</span> <span class="nav-text">分页（Pagination）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%EF%BC%88Sorting%EF%BC%89"><span class="nav-number">2.6.</span> <span class="nav-text">排序（Sorting）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%EF%BC%88Filtering%EF%BC%89"><span class="nav-number">2.7.</span> <span class="nav-text">过滤（Filtering）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%EF%BC%88Error-Handling%EF%BC%89"><span class="nav-number">2.8.</span> <span class="nav-text">错误处理（Error Handling）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SOAP"><span class="nav-number">3.</span> <span class="nav-text">SOAP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gRPC"><span class="nav-number">4.</span> <span class="nav-text">gRPC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GraphQL"><span class="nav-number">5.</span> <span class="nav-text">GraphQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hateoas"><span class="nav-number">6.</span> <span class="nav-text">Hateoas</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Open-api-spec"><span class="nav-number">7.</span> <span class="nav-text">Open api spec</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Authentication"><span class="nav-number">8.</span> <span class="nav-text">Authentication</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JWT-Authentication"><span class="nav-number">8.1.</span> <span class="nav-text">JWT Authentication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Token-based-Authentication"><span class="nav-number">8.2.</span> <span class="nav-text">Token based Authentication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session-based-Authentication"><span class="nav-number">8.3.</span> <span class="nav-text">Session based Authentication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Basic-Authentication"><span class="nav-number">8.4.</span> <span class="nav-text">Basic Authentication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OAuth-Open-Authorization"><span class="nav-number">8.5.</span> <span class="nav-text">OAuth - Open Authorization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSO-Single-Sign-On"><span class="nav-number">8.6.</span> <span class="nav-text">SSO - Single Sign On</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Orign Potter</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
